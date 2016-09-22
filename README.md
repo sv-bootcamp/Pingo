@@ -1,2 +1,2 @@
-# GooberRN
+# goober-mobile
 Mobile application
