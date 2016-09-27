@@ -1,0 +1,19 @@
+{
+  "name": "Goober",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "(cd android/ && ./gradlew assembleDebug)",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/"
+  },
+  "dependencies": {
+    "react": "15.3.1",
+    "react-native": "0.32.0",
+    "react-native-maps": "^0.8.2",
+    "react-redux": "4.4.5",
+    "redux": "3.5.2",
+    "redux-actions": "0.11.0",
+    "redux-thunk": "2.1.0"
+  }
+}
