@@ -10,7 +10,7 @@ import {
 	ListView
 } from 'react-native';
 
-const ENDPOINT = ``;
+const API_GETITEMS = "http://goober.herokuapp.com/api/items";
 
 class EventList extends Component {
 	constructor(props) {
@@ -28,12 +28,16 @@ class EventList extends Component {
 	}
 
 	_refreshData() {
-		fetch(ENDPOINT)
+		fetch(API_GETITEMS)
 			.then((response) => response.json())
 			.then((rjson) => {
+				console.log("d:"+rjson);
 				this.setState({
 					dataSource: this.state.dataSource.cloneWithRows(rjson)
 				});
+			})
+			.catch((error) => {
+				console.warn(error);
 			});
 	}
 
