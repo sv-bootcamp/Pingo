@@ -1,13 +1,24 @@
 import React, {
-	Component,
+	PropTypes, Component
 } from 'react';
 
 import {
 	StyleSheet,
 	Text,
-	View,	
-	Image
+	View	
 } from 'react-native';
+
+const styles = StyleSheet.create({
+	bigText: {
+		flex: 2,
+		fontSize: 20,
+		margin: 10
+	},
+	mainText: {
+		flex: 1,
+		fontSize: 16		
+	}
+});
 
 class Card extends Component {
 	render() {
@@ -21,16 +32,9 @@ class Card extends Component {
 	}
 }
 
-const styles = StyleSheet.create({
-	bigText: {
-		flex: 2,
-		fontSize: 20,
-		margin: 10
-	},
-	mainText: {
-		flex: 1,
-		fontSize: 16		
-	}
-});
+Card.propTypes = {
+	title: PropTypes.string,
+	description: PropTypes.string
+}
 
 export default Card;

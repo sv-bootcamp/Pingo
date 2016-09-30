@@ -1,16 +1,24 @@
 import React, {
-	Component,
+	Component
 } from 'react';
 
 import {
 	StyleSheet,
-	Text,
-	View,	
-	Image,
+	Text,	
 	ListView
 } from 'react-native';
 
 const API_GETITEMS = "http://goober.herokuapp.com/api/items";
+
+const styles = StyleSheet.create({
+	row: {
+		flex: 1,
+		fontSize: 24,
+		padding: 42,
+		borderWidth: 1,
+		borderColor: '#DDDDDD'
+	}
+});
 
 class EventList extends Component {
 	constructor(props) {
@@ -53,15 +61,5 @@ class EventList extends Component {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	row: {
-		flex: 1,
-		fontSize: 24,
-		padding: 42,
-		borderWidth: 1,
-		borderColor: '#DDDDDD'
-	}
-});
 
 export default EventList;
