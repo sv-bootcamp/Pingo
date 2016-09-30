@@ -5,7 +5,11 @@
   "scripts": {
     "build": "(cd android/ && ./gradlew assembleDebug)",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/"
+    "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/",
+    "test": "eslint shared/** && eslint __tests__/** && jest"
+  },
+  "jest": {
+    "preset": "jest-react-native"
   },
   "dependencies": {
     "react": "15.3.1",
@@ -16,5 +20,18 @@
     "redux": "3.5.2",
     "redux-actions": "0.11.0",
     "redux-thunk": "2.1.0"
+  },
+  "devDependencies": {
+    "babel-jest": "^15.0.0",
+    "babel-preset-react-native": "^1.9.0",
+    "eslint": "^3.6.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.3.0",
+    "jest": "^15.1.1",
+    "jest-cli": "^15.1.1",
+    "jest-react-native": "^15.0.0",
+    "react-test-renderer": "^15.3.2"
   }
 }
