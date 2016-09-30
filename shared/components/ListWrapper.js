@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class GooberProject extends Component {
+class ListWrapper extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { zip: '', 
@@ -76,4 +76,4 @@ class GooberProject extends Component {
   	}
 }
 
-export default GooberProject;
+export default ListWrapper;
