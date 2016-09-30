@@ -34,7 +34,7 @@ class GooberProject extends Component {
           title={this.state.card.title}
           description={this.state.card.description} />;
 
-      const imgBack = <Image source={require('../static/images/flowers.png')} resizeMode='cover' style={styles.backdrop}>
+      const imgBack = <Image source={require('../../static/images/flowers.png')} resizeMode='cover' style={styles.backdrop}>
           <Text style={styles.welcome}>
             Welcome to React Native!!! {this.state.zip}
           </Text>

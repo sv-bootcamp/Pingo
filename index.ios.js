@@ -2,8 +2,8 @@ import {
   AppRegistry,  
 } from 'react-native';
 
-import gb from './app/GooberProject';
-// import cv from './app/CameraView';
+import gb from './shared/components/GooberProject';
+// import cv from './shared/components/CameraView';
 // import App from './shared/containers/app';
 
 AppRegistry.registerComponent('GooberProject', () => gb);
