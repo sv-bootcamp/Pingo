@@ -30,10 +30,9 @@ class EventList extends Component {
 	_refreshData() {
 		fetch(API_GETITEMS)
 			.then((response) => response.json())
-			.then((rjson) => {
-				console.log("d:"+rjson);
+			.then((rjson) => {				
 				this.setState({
-					dataSource: this.state.dataSource.cloneWithRows(rjson)
+					dataSource: this.state.dataSource.cloneWithRows(rjson.items)
 				});
 			})
 			.catch((error) => {
@@ -42,14 +41,15 @@ class EventList extends Component {
 	}
 
 	_renderRow(rowData) {
-		return <Text style={styles.row}>{rowData}</Text>;
+		return <Text style={styles.row}>{rowData.description}</Text>;
 	}
 
 	render() {
 		return (
 			<ListView
 				dataSource={this.state.dataSource}
-				renderRow={this._renderRow} />
+				renderRow={this._renderRow}
+				enableEmptySections={true} />
 		);
 	}
 }
