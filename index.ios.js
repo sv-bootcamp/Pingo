@@ -1,4 +1,10 @@
-import { AppRegistry } from 'react-native';
-import App from './shared/containers/app';
+import {
+  AppRegistry,  
+} from 'react-native';
 
-AppRegistry.registerComponent('Goober', () => App);
+// import gb from './shared/components/GooberProject';
+// import cv from './shared/components/CameraView';
+import App from './shared/containers/app';
+// import li from './shared/containers/listLayout';
+
+AppRegistry.registerComponent('GooberProject', () => App);
