@@ -14,7 +14,7 @@ const store = createStoreWithMiddleware(reducer);
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>        
+      <Provider store={store}>
         <ListLayout />
       </Provider>
     );
