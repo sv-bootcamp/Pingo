@@ -33,9 +33,11 @@ const styles = StyleSheet.create({
 
 class CameraView extends Component {
   takePicture() {
-	this.camera.capture()
-		.then((data) => console.log(data))
-		.catch(err => console.error(err));
+	  this.camera.capture()
+		  .then((data) => 
+        console.log(data)
+      )
+		  .catch(err => console.error(err));
   }
 
   render() {
