@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-    currentLocation: state.map.currentLocation
+    currentLocation: state.map.currentLocation,
+    markers: state.map.markers
   };
 };
 

@@ -29,7 +29,15 @@ export default class Map extends Component {
           style ={styles.map}
           initialRegion ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
-        />
+        >
+          {this.props.markers.map(marker => (
+            <MapView.Marker
+              coordinate={marker.latlng}
+              title={marker.title}
+              description={marker.description}
+            />
+          ))}
+        </MapView>
       </View>
     );
   }
@@ -37,5 +45,10 @@ export default class Map extends Component {
 
 Map.propTypes = {
   currentLocation: PropTypes.object,
-  onLocationChange: PropTypes.func
+  onLocationChange: PropTypes.func,
+  markers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.object,
+    lat: PropTypes.object,
+    lng: PropTypes.object
+  }))
 };
