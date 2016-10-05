@@ -1,7 +1,8 @@
 import * as types from './actionTypes';
 
-export const TBD = () => {
+export const onLocationChange = (region) => {
   return {
-    type: types.TBD
+    type: types.onLocationChange,
+    region: region
   };
 };

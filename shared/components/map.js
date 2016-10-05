@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -27,14 +27,15 @@ export default class Map extends Component {
       <View style ={styles.container}>
         <MapView
           style ={styles.map}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }}
+          initialRegion ={this.props.currentLocation}
+          onRegionChange ={this.props.onLocationChange}
         />
       </View>
     );
   }
 }
+
+Map.propTypes = {
+  currentLocation: PropTypes.object,
+  onLocationChange: PropTypes.func
+};
