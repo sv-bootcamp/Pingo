@@ -1,4 +1,5 @@
 import * as types from '../actions/actionTypes';
+import update from 'react-addons-update';
 
 const initialState = {
   currentLocation: {
@@ -9,18 +10,15 @@ const initialState = {
   }
 };
 
-export default function map(state = initialState, action = {}) {
+const map = (state = initialState, action = {}) => {
   switch (action.type) {
-  case types.TBD:
-    return {
-      ...state
-    };
   case types.onLocationChange:
-  	console.log('I am in broooo');
-    return {
-    	...state
-    };
+    return update(state, {
+      currentLocation: { $set: action.region }
+    })
   default:
     return state;
   }
 }
+
+export default map;
