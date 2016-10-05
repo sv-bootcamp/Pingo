@@ -5,11 +5,3 @@ export const TBD = () => {
 		type: types.TBD
 	};
 }
-
-/*
-export function TBD() {
-  return {
-    type: types.TBD
-  };
-}
-*/
