@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 
 export default class Map extends Component {
   render() {
-    console.log('np man');
     return (
       <View style ={styles.container}>
         <MapView
@@ -35,3 +34,8 @@ export default class Map extends Component {
     );
   }
 }
+
+Map.propTypes = {
+  currentLocation: PropTypes.object,
+  onLocationChange: PropTypes.func
+};

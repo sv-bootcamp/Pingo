@@ -15,10 +15,10 @@ const map = (state = initialState, action = {}) => {
   case types.onLocationChange:
     return update(state, {
       currentLocation: { $set: action.region }
-    })
+    });
   default:
     return state;
   }
-}
+};
 
 export default map;
