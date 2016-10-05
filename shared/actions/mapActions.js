@@ -1,7 +1,7 @@
 import * as types from './actionTypes';
 
-export function TBD() {
+export const TBD = () => {
   return {
     type: types.TBD
   };
-}
+};

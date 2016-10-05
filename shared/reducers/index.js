@@ -1,5 +1,6 @@
-import map from './map';
+import {combineReducers} from 'redux';
+import mapReducer from './map';
 
-export {
-  map
-};
+export default combineReducers({
+  map: mapReducer
+});

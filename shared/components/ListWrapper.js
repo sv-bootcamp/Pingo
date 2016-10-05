@@ -1,11 +1,11 @@
 import React, {
-	Component
+  Component
 } from 'react';
 
 import {
-	StyleSheet,
-	View,
-	TextInput
+  StyleSheet,
+  View,
+  TextInput
 } from 'react-native';
 
 // import Card from './Card.js';
@@ -42,13 +42,13 @@ class ListWrapper extends Component {
       card: {
         title: 'Title',
         description: 'desc'
-		  }
-	  };
+      }
+    };
   }
 
   handleTextChange(event) {
-	  console.log(event.nativeEvent.text);
-	  this.setState({zip: event.nativeEvent.text});
+    console.log(event.nativeEvent.text);
+    this.setState({zip: event.nativeEvent.text});
   }
 
   render() {
@@ -64,15 +64,15 @@ class ListWrapper extends Component {
     //   </Image>;
 
     return (
-    	<View style={styles.container}>
+      <View style={styles.container}>
         <EventList />
-      	<TextInput
-      		style={styles.input}
-      		returnKeyType='go'
-      		onSubmitEditing={(event) => this.handleTextChange(event)} />
-    	</View>
+        <TextInput
+          style={styles.input}
+          returnKeyType='go'
+          onSubmitEditing={(event) => this.handleTextChange(event)} />
+      </View>
     );
-	}
+  }
 }
 
 export default ListWrapper;

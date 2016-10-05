@@ -1,38 +1,26 @@
 'use strict';
 
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
 import Map from '../components/map';
-import * as mapActions from '../actions/mapActions';
+import { TBD } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
-
-class MapLayout extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { actions } = this.props;
-    return (
-      <Map
-        {...actions} />
-    );
-  }
-}
-
-MapLayout.propTypes = {
-  actions: PropTypes.any
+const mapStateToProps = (state) => {
+  return {
+    map: state.map
+  };
 };
 
-MapLayout.defaultProps = {
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    TBD: () => {
+      return dispatch(TBD());
+    }
+  };
 };
 
-export default connect(() => ({
-        // TBD
-}),
-  (dispatch) => ({
-    actions: bindActionCreators(mapActions, dispatch)
-  })
-)(MapLayout);
+const MapLayout = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Map);
+
+export default MapLayout;
