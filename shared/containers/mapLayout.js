@@ -1,19 +1,19 @@
 'use strict';
 
 import Map from '../components/map';
-import { TBD } from '../actions/mapActions';
+import { onLocationChange } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-    map: state.map
+    currentLocation: state.map.currentLocation
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    TBD: () => {
-      return dispatch(TBD());
+    onLocationChange: (region) => {
+      return dispatch(onLocationChange(region));
     }
   };
 };
