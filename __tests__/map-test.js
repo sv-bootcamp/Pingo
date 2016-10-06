@@ -7,7 +7,9 @@ import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
   const tree = renderer.create(
-    <Map />
+    <Map 
+      markers={[]}
+      getMapMarkers = {() => {}}/>
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });

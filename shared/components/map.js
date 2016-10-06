@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
 });
 
 export default class Map extends Component {
+  componentDidMount() {
+    this.props.getMapMarkers();
+  }
+
   render() {
     return (
       <View style ={styles.container}>
@@ -29,7 +33,14 @@ export default class Map extends Component {
           style ={styles.map}
           initialRegion ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
-        />
+        >
+          {this.props.markers.map(marker => (
+            <MapView.Marker
+              coordinate={marker.latlng}
+              description={marker.description}
+            />
+          ))}
+        </MapView>
       </View>
     );
   }
@@ -37,5 +48,10 @@ export default class Map extends Component {
 
 Map.propTypes = {
   currentLocation: PropTypes.object,
-  onLocationChange: PropTypes.func
+  onLocationChange: PropTypes.func,
+  getMapMarkers: PropTypes.func,
+  markers: PropTypes.arrayOf(PropTypes.shape({
+    coordinate: PropTypes.object,
+    description: PropTypes.string
+  }))
 };
