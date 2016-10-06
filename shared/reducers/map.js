@@ -21,6 +21,8 @@ const map = (state = initialState, action = {}) => {
     return update(state, {
       currentLocation: { $set: action.region }
     });
+  case types.getMapMarkers:
+    return state;
   default:
     return state;
   }

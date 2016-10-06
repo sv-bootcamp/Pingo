@@ -1,7 +1,7 @@
 'use strict';
 
 import Map from '../components/map';
-import { onLocationChange } from '../actions/mapActions';
+import { onLocationChange, getMapMarkers } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
@@ -15,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLocationChange: (region) => {
       return dispatch(onLocationChange(region));
+    },
+    getMapMarkers: () => {
+      return dispatch(getMapMarkers());
     }
   };
 };
