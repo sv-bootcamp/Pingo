@@ -25,3 +25,21 @@ export const getMapMarkers = () => {
     );
   };
 };
+
+export const update_markers_A = () => {
+  return {
+    type: types.update_markers_A
+  };
+};
+
+export const update_markers_B = () => {
+  return {
+    type: types.update_markers_B
+  };
+};
+
+export const update_markers_C = () => {
+  return {
+    type: types.update_markers_C
+  };
+};
