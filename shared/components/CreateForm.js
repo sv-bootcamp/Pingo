@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import TForm from 'tcomb-form-native';
 
+const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
 const Form = TForm.form.Form;
 
 const Event = TForm.struct({
@@ -50,8 +51,29 @@ const styles = StyleSheet.create({
 class CreateForm extends Component {
 	onPress() {
 		const value = this.refs.form.getValue();
-		if(value) {
-			console.log(value);
+		if(value) {						
+			  fetch(API_SETITEMS, {
+			  	method: 'POST',
+			  	headers: {
+			  		'Accept': 'application/json',
+			  		'Content-Type': 'application/json'
+			  	},
+			  	body: JSON.stringify({
+			  		description: value.title,
+			  		lat: 37.565398,
+			  		lng: 126.9908941,
+			  		address: '광화문우체국',
+			  		createdDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)',
+			  		modifiedDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)'			  		
+			  	})
+			  })
+			.then((response) => response.json())
+			.then((rjson) => {
+			  console.log("r:"+JSON.stringify(rjson));
+			})
+			.catch((error) => {
+				console.warn(error);
+			});
 		}
 	}
 
