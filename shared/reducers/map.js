@@ -38,34 +38,12 @@ const map = (state = initialState, action = {}) => {
     });
   case types.getMapMarkers:
     return state;
-  case types.update_markers_A:
-    if(state.category.indexOf('A') === -1) {
-      state.category.push('A')
+  case types.update_markers:
+    if(state.category.indexOf(action.select) === -1) {
+      state.category.push(action.select)
     }
     else {
-      state.category.splice(state.category.indexOf('A'), 1)
-    }
-    state.filter(state);
-    return update(state, {
-      markers: { $set: state.markers }
-    });
-  case types.update_markers_B:
-    if(state.category.indexOf('B') === -1) {
-      state.category.push('B')
-    }
-    else {
-      state.category.splice(state.category.indexOf('B'), 1)
-    }
-    state.filter(state);
-    return update(state, {
-      markers: { $set: state.markers }
-    });
-  case types.update_markers_C:
-    if(state.category.indexOf('C') === -1) {
-      state.category.push('C')
-    }
-    else {
-      state.category.splice(state.category.indexOf('C'), 1)
+      state.category.splice(state.category.indexOf(action.select), 1)
     }
     state.filter(state);
     return update(state, {

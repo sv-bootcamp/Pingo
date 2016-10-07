@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {update_markers_A, update_markers_B, update_markers_C} from '../actions/mapActions';
+import {update_markers} from '../actions/mapActions';
 import Headerbox from '../components/headerbox';
 
 const mapStateToProps = () => {
@@ -10,14 +10,8 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        update_markers_A: () => {
-            return dispatch(update_markers_A());
-        },
-        update_markers_B: () => {
-            return dispatch(update_markers_B());
-        },
-        update_markers_C: () => {
-            return dispatch(update_markers_C());
+        update_markers: (select) => {
+            return dispatch(update_markers(select));
         }
     };
 };
