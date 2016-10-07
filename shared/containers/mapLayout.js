@@ -18,9 +18,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     getMapMarkers: () => {
       return dispatch(getMapMarkers());
-    },
-    do_smt: () => {
-      return dispatch(do_smt());
     }
   };
 };
