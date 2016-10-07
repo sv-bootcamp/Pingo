@@ -25,3 +25,10 @@ export const getMapMarkers = () => {
     );
   };
 };
+
+export const update_markers = (select) => {
+  return {
+    type: types.update_markers,
+    select
+  };
+};

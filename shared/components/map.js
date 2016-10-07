@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
 });
 
 export default class Map extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount() {
     this.props.getMapMarkers();
   }
@@ -53,5 +57,6 @@ Map.propTypes = {
   markers: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string
-  }))
+  })),
+  category: PropTypes.arrayOf(PropTypes.string)
 };

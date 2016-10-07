@@ -1,5 +1,3 @@
-'use strict';
-
 import Map from '../components/map';
 import { onLocationChange, getMapMarkers } from '../actions/mapActions';
 import { connect } from 'react-redux';
@@ -7,7 +5,8 @@ import { connect } from 'react-redux';
 const mapStateToProps = (state) => {
   return {
     currentLocation: state.map.currentLocation,
-    markers: state.map.markers
+    markers: state.map.markers,
+    category: state.map.category
   };
 };
 
