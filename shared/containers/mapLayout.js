@@ -1,7 +1,6 @@
 import Map from '../components/map';
 import { onLocationChange, getMapMarkers } from '../actions/mapActions';
 import { connect } from 'react-redux';
-import {do_smt} from '../actions/mapActions';
 
 const mapStateToProps = (state) => {
   return {
