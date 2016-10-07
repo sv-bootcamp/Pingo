@@ -18,7 +18,16 @@ const initialState = {
     {title: 'A', description: 'up', latlng: {latitude: 37.7925, longitude: -122.4324}},
     {title: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
     {title: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
-  ]
+  ],
+
+  filter: (state) => {
+    state.markers = [];
+    for (let i = 0; i < state.initial_markers.length; i += 1) {
+      if (state.category.indexOf(state.initial_markers[i].title) === -1) {
+        state.markers.push(state.initial_markers[i]);
+      }
+    }
+  }
 };
 
 const map = (state = initialState, action = {}) => {
@@ -36,12 +45,7 @@ const map = (state = initialState, action = {}) => {
     else {
       state.category.splice(state.category.indexOf('A'), 1)
     }
-    state.markers = [];
-    for(let i = 0; i < state.initial_markers.length; i+= 1) {
-      if(state.category.indexOf(state.initial_markers[i].title) === -1) {
-        state.markers.push(state.initial_markers[i]);
-      }
-    }
+    state.filter(state);
     return update(state, {
       markers: { $set: state.markers }
     });
@@ -52,12 +56,7 @@ const map = (state = initialState, action = {}) => {
     else {
       state.category.splice(state.category.indexOf('B'), 1)
     }
-    state.markers = [];
-    for(let i = 0; i < state.initial_markers.length; i+= 1) {
-      if(state.category.indexOf(state.initial_markers[i].title) === -1) {
-        state.markers.push(state.initial_markers[i]);
-      }
-    }
+    state.filter(state);
     return update(state, {
       markers: { $set: state.markers }
     });
@@ -68,12 +67,7 @@ const map = (state = initialState, action = {}) => {
     else {
       state.category.splice(state.category.indexOf('C'), 1)
     }
-    state.markers = [];
-    for(let i = 0; i < state.initial_markers.length; i+= 1) {
-      if(state.category.indexOf(state.initial_markers[i].title) === -1) {
-        state.markers.push(state.initial_markers[i]);
-      }
-    }
+    state.filter(state);
     return update(state, {
       markers: { $set: state.markers }
     });
