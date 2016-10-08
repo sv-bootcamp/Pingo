@@ -1,20 +1,27 @@
-import MapLayout from './mapLayout';
-import HeaderLayout from './headerLayout';
-import {View} from 'react-native';
+import {Navigator} from 'react-native';
 import React, {Component} from 'react';
+import First from './first';
+import Second from './second';
 
 export default class AllLayout extends Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <View style={{flex: 1}}>
-          <HeaderLayout />
-        </View>
-        <View style={{flex: 7}}>
-          <MapLayout />
-        </View>
-      </View>
+      <Navigator
+        initialRoute={{index: 0}}
+        renderScene={this.navigatorRenderScene}
+      />
     );
+  }
+
+  navigatorRenderScene(route, navigator) {
+    switch (route.index) {
+    case 0:
+      return (<First route={route} navigator={navigator}/>);
+    case 1:
+      return (<Second route={route} navigator={navigator}/>);
+    default:
+      return (<First route={route} navigator={navigator}/>);
+    }
   }
 }
 
