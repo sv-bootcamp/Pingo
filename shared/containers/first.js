@@ -14,12 +14,14 @@ export default class First extends Component {
               this.props.navigator.push({
                 index: nextIndex
               });
-              }
+            }
             }
           />
         </View>
         <View style={{flex: 7}}>
-          <MapLayout />
+          <MapLayout
+            navigator={this.props.navigator}
+          />
         </View>
       </View>
     );

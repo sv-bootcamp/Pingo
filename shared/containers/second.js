@@ -10,7 +10,7 @@ export default class Second extends Component {
         <View style={{flex: 1}}>
           <HeaderLayout
             onForward={ () => {
-              if(this.props.route.index > 0) {
+              if (this.props.route.index > 0) {
                 this.props.navigator.pop();
               }
             }
@@ -26,6 +26,6 @@ export default class Second extends Component {
 }
 
 Second.propTypes = {
-    route: PropTypes.any,
-    navigator: PropTypes.any
+  route: PropTypes.any,
+  navigator: PropTypes.any
 };

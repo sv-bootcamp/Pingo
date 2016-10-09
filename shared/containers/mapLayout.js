@@ -1,12 +1,12 @@
 import Map from '../components/map';
-import { onLocationChange, getMapMarkers } from '../actions/mapActions';
+import { onLocationChange, getMapMarkers, setLocation } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-    currentLocation: state.map.currentLocation,
     markers: state.map.markers,
-    category: state.map.category
+    category: state.map.category,
+    currentLocation: state.map.currentLocation
   };
 };
 
@@ -17,6 +17,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getMapMarkers: () => {
       return dispatch(getMapMarkers());
+    },
+    setLocation: (location) => {
+      return dispatch(setLocation(location));
     }
   };
 };

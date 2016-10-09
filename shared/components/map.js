@@ -26,8 +26,19 @@ export default class Map extends Component {
     super(props);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getMapMarkers();
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        let newLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        };
+        this.props.setLocation(newLocation);
+      }
+    );
   }
 
   render() {
@@ -54,6 +65,7 @@ Map.propTypes = {
   currentLocation: PropTypes.object,
   onLocationChange: PropTypes.func,
   getMapMarkers: PropTypes.func,
+  setLocation: PropTypes.func,
   markers: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string

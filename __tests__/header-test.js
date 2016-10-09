@@ -6,8 +6,8 @@ import Headerbox from '../shared/components/headerbox';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
-    const tree = renderer.create(
-        <Headerbox/>
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+  const tree = renderer.create(
+    <Headerbox/>
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
