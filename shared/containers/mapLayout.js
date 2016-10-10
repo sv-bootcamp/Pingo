@@ -1,38 +1,29 @@
-'use strict';
-
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
 import Map from '../components/map';
-import * as mapActions from '../actions/mapActions';
+import { onLocationChange, getMapMarkers } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
-
-class MapLayout extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { actions } = this.props;
-    return (
-      <Map
-        {...actions} />
-    );
-  }
-}
-
-MapLayout.propTypes = {
-  actions: PropTypes.any
+const mapStateToProps = (state) => {
+  return {
+    currentLocation: state.map.currentLocation,
+    markers: state.map.markers,
+    category: state.map.category
+  };
 };
 
-MapLayout.defaultProps = {
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLocationChange: (region) => {
+      return dispatch(onLocationChange(region));
+    },
+    getMapMarkers: () => {
+      return dispatch(getMapMarkers());
+    }
+  };
 };
 
-export default connect(() => ({
-        // TBD
-}),
-  (dispatch) => ({
-    actions: bindActionCreators(mapActions, dispatch)
-  })
-)(MapLayout);
+const MapLayout = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Map);
+
+export default MapLayout;

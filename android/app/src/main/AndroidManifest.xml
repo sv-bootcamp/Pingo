@@ -28,7 +28,7 @@
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAtS2FCWzO4DX9uHw23vt6uHDFU4qp7Mmw"
+        android:value="AIzaSyAGTi1aM1LKuwB5YTOfkam-jyDfsI8WQ_U"
       />
     </application>
 

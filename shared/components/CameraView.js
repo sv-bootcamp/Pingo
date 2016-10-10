@@ -1,18 +1,18 @@
 import React, {
-	Component
+  Component
 } from 'react';
 
 import {
-	StyleSheet,
-	Dimensions,
-	View,
-	Text
+  StyleSheet,
+  Dimensions,
+  View,
+  Text
 } from 'react-native';
 import Camera from 'react-native-camera';
 
 const styles = StyleSheet.create({
   container: {
-	flex: 1
+    flex: 1
   },
   preview: {
     flex: 1,
@@ -33,27 +33,25 @@ const styles = StyleSheet.create({
 
 class CameraView extends Component {
   takePicture() {
-	  this.camera.capture()
-		  .then((data) => 
-        console.log(data)
-      )
-		  .catch(err => console.error(err));
+    this.camera.capture()
+    .then((data) => console.log(data))
+    .catch(err => console.error(err));
   }
 
   render() {
     return (
-		<View style={styles.container}>
-			<Camera
-				ref={(cam) => {
-					this.camera = cam;
-				}}
-				style={styles.preview}
-				aspect={Camera.constants.Aspect.fill}>
-				<Text style={styles.capture}
-					onPress={this.takePicture.bind(this)}>[[CAPTURE]]</Text>
-			</Camera>
-		</View>
-	);
+    <View style={styles.container}>
+      <Camera
+        ref={(cam) => {
+          this.camera = cam;
+        }}
+        style={styles.preview}
+        aspect={Camera.constants.Aspect.fill}>
+        <Text style={styles.capture}
+          onPress={this.takePicture.bind(this)}>[[CAPTURE]]</Text>
+      </Camera>
+    </View>
+  );
   }
 }
 

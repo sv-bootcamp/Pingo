@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -22,18 +22,41 @@ const styles = StyleSheet.create({
 });
 
 export default class Map extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.getMapMarkers();
+  }
+
   render() {
     return (
-            <View style ={styles.container}>
-                <MapView style ={styles.map}
-                         initialRegion={{
-                           latitude: 37.78825,
-                           longitude: -122.4324,
-                           latitudeDelta: 0.0922,
-                           longitudeDelta: 0.0421
-                         }}
-                />
-            </View>
-        );
+      <View style ={styles.container}>
+        <MapView
+          style ={styles.map}
+          initialRegion ={this.props.currentLocation}
+          onRegionChange ={this.props.onLocationChange}
+        >
+          {this.props.markers.map(marker => (
+            <MapView.Marker
+              coordinate={marker.latlng}
+              description={marker.description}
+            />
+          ))}
+        </MapView>
+      </View>
+    );
   }
 }
+
+Map.propTypes = {
+  currentLocation: PropTypes.object,
+  onLocationChange: PropTypes.func,
+  getMapMarkers: PropTypes.func,
+  markers: PropTypes.arrayOf(PropTypes.shape({
+    coordinate: PropTypes.object,
+    description: PropTypes.string
+  })),
+  category: PropTypes.arrayOf(PropTypes.string)
+};
