@@ -46,7 +46,7 @@ export default class Map extends Component {
       <View style ={styles.container}>
         <MapView
           style ={styles.map}
-          initialRegion ={this.props.currentLocation}
+          region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
         >
           {this.props.markers.map(marker => (

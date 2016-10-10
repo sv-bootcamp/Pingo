@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {View} from 'react-native';
-import MapLayout from './mapLayout';
-import HeaderLayout from './headerLayout';
+import MapLayout from '../containers/mapLayout';
+import HeaderLayout from '../containers/headerLayout';
 
 export default class First extends Component {
   render() {

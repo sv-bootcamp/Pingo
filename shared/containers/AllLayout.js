@@ -1,7 +1,7 @@
 import {Navigator} from 'react-native';
 import React, {Component} from 'react';
-import First from './first';
-import Second from './second';
+import First from '../components/first';
+import Second from '../components/second';
 
 export default class AllLayout extends Component {
   render() {
