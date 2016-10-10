@@ -17,9 +17,15 @@ export default class Headerbox extends Component {
     this.handleSelectCategoryC = this.handleSelectCategoryC.bind(this);
   }
 
-  handleSelectCategoryA() { this.props.update_markers('A'); }
-  handleSelectCategoryB() { this.props.update_markers('B'); }
-  handleSelectCategoryC() { this.props.update_markers('C'); }
+  handleSelectCategoryA() {
+    this.props.update_markers('A');
+  }
+  handleSelectCategoryB() {
+    this.props.update_markers('B');
+  }
+  handleSelectCategoryC() {
+    this.props.update_markers('C');
+  }
 
   render() {
     return (
@@ -27,17 +33,22 @@ export default class Headerbox extends Component {
         <TouchableOpacity
           style={{margin: 1, backgroundColor: 'green', flex: 1}}
           onPress={this.handleSelectCategoryA}>
-          <Text style={styles.text}>Click!!!!!</Text>
+          <Text style={styles.text}>A</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{margin: 1, backgroundColor: 'yellow', flex: 1}}
           onPress={this.handleSelectCategoryB}>
-          <Text style={styles.text}>Click!!!!!</Text>
+          <Text style={styles.text}>B</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{margin: 1, backgroundColor: 'red', flex: 1}}
           onPress={this.handleSelectCategoryC}>
-          <Text style={styles.text}>Click!!!!!</Text>
+          <Text style={styles.text}>C</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+            style={{margin: 1, backgroundColor: 'blue', flex: 1}}
+            onPress={this.props.onForward}>
+          <Text style={styles.text}>switch</Text>
         </TouchableOpacity>
       </View>
     );
@@ -46,6 +57,5 @@ export default class Headerbox extends Component {
 
 Headerbox.propTypes = {
   update_markers: PropTypes.func,
-  update_markers_B: PropTypes.func,
-  update_markers_C: PropTypes.func
+  onForward: PropTypes.func
 };

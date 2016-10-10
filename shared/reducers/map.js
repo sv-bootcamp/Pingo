@@ -31,7 +31,7 @@ const initialState = {
 };
 
 const map = (state = initialState, action = {}) => {
-  switch(action.type) {
+  switch (action.type) {
   case types.onLocationChange:
     return update(state, {
       currentLocation: { $set: action.region }
@@ -39,15 +39,19 @@ const map = (state = initialState, action = {}) => {
   case types.getMapMarkers:
     return state;
   case types.update_markers:
-    if(state.category.indexOf(action.select) === -1) {
-      state.category.push(action.select)
+    if (state.category.indexOf(action.select) === -1) {
+      state.category.push(action.select);
     }
     else {
-      state.category.splice(state.category.indexOf(action.select), 1)
+      state.category.splice(state.category.indexOf(action.select), 1);
     }
     state.filter(state);
     return update(state, {
       markers: { $set: state.markers }
+    });
+  case types.setLocation:
+    return update(state, {
+      currentLocation: { $set: action.location}
     });
   default:
     return state;

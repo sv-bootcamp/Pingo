@@ -32,3 +32,10 @@ export const update_markers = (select) => {
     select
   };
 };
+
+export const setLocation = (location) => {
+  return {
+    type: types.setLocation,
+    location
+  };
+};
