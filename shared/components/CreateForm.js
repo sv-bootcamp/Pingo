@@ -1,5 +1,5 @@
 import React, {
-	Component
+	Component, PropTypes
 } from 'react';
 
 import {
@@ -14,9 +14,8 @@ const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
 const Form = TForm.form.Form;
 
 const Event = TForm.struct({
-	location: TForm.String,
-	title: TForm.String,
-	category: TForm.Number
+	// location: TForm.String,
+	title: TForm.String
 });
 
 const styles = StyleSheet.create({
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 50,
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff'
   },
   title: {
     fontSize: 30,
@@ -51,7 +50,8 @@ const styles = StyleSheet.create({
 class CreateForm extends Component {
 	onPress() {
 		const value = this.refs.form.getValue();
-		if(value) {						
+		const location = this.props.location;	
+		if (value) {
 			  fetch(API_SETITEMS, {
 			  	method: 'POST',
 			  	headers: {
@@ -60,16 +60,16 @@ class CreateForm extends Component {
 			  	},
 			  	body: JSON.stringify({
 			  		description: value.title,
-			  		lat: 37.565398,
-			  		lng: 126.9908941,
+			  		lat: location[0],
+			  		lng: location[1],
 			  		address: '광화문우체국',
 			  		createdDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)',
-			  		modifiedDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)'			  		
+			  		modifiedDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)'
 			  	})
 			  })
 			.then((response) => response.json())
 			.then((rjson) => {
-			  console.log("r:"+JSON.stringify(rjson));
+			  console.log('r:'+JSON.stringify(rjson));
 			})
 			.catch((error) => {
 				console.warn(error);
@@ -83,7 +83,7 @@ class CreateForm extends Component {
 				<Form
 					ref="form"
 					type={Event}/>
-				<TouchableHighlight style={styles.button} 
+				<TouchableHighlight style={styles.button}
 					onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
 					<Text style={styles.buttonText}>Save</Text>
 				</TouchableHighlight>
@@ -92,5 +92,13 @@ class CreateForm extends Component {
 	}
 
 }
+
+CreateForm.propTypes = {
+	location: PropTypes.array
+};
+
+CreateForm.defaultProps = {
+	location: [37.563398, 126.9907941]
+};
 
 export default CreateForm;
