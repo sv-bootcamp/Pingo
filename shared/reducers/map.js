@@ -15,11 +15,7 @@ const initialState = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   },
-  items: [
-    {category: 'A', description: 'up', latlng: {latitude: 37.7925, longitude: -122.4324}},
-    {category: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
-    {category: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
-  ],
+  items: [],
   categoryFilter: 'SHOW_ALL'
 };
 
@@ -30,14 +26,16 @@ const map = (state = initialState, action = {}) => {
       currentLocation: { $set: action.region }
     });
   case types.getMapItems:
-    return state;
+    return update(state, {
+      items: { $set: action.items }
+    });
   case types.categorizeItems:
     return update(state, {
-      categoryFilter: { $set: action.category}
+      categoryFilter: { $set: action.category }
     });
   case types.setLocation:
     return update(state, {
-      currentLocation: { $set: action.location}
+      currentLocation: { $set: action.location }
     });
   case types.setTabViewIndex:
     return update(state, {
