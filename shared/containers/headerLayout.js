@@ -12,9 +12,9 @@ const mapStateToProps = (state) => {
   return {
     tabview_index: state.map.tabview_index,
     tabview_routes: state.map.tabview_routes,
-    route: state.map.route,
-    navigator: state.map.navigator,
-    sceneIndex: state.map.sceneIndex
+    route: state.navigator.route,
+    navigator: state.navigator.navigator,
+    sceneIndex: state.navigator.sceneIndex
   };
 };
 
