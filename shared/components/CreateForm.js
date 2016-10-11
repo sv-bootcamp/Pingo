@@ -11,10 +11,13 @@ import {
 import TForm from 'tcomb-form-native';
 
 const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
+const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
+const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 const Form = TForm.form.Form;
 
 const Event = TForm.struct({
 	// location: TForm.String,
+	address: TForm.String,
 	title: TForm.String
 });
 
@@ -48,9 +51,23 @@ const styles = StyleSheet.create({
 });
 
 class CreateForm extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			value: {
+				address: '',
+				title: ''
+			}
+		}
+		
+		this.getAddressData();
+	}
+
 	onPress() {
 		const value = this.refs.form.getValue();
-		const location = this.props.location;	
+		const location = this.props.location;			
+
+		return;
 		if (value) {
 			  fetch(API_SETITEMS, {
 			  	method: 'POST',
@@ -70,6 +87,7 @@ class CreateForm extends Component {
 			.then((response) => response.json())
 			.then((rjson) => {
 			  console.log('r:'+JSON.stringify(rjson));
+			  alert("complete to send post data");
 			})
 			.catch((error) => {
 				console.warn(error);
@@ -77,12 +95,23 @@ class CreateForm extends Component {
 		}
 	}
 
+	getAddressData() {				
+		const location = this.props.location;				
+		fetch(API_GEODATA+'?latlng='+location.toString()+'&key='+API_KEY)
+		.then((response) => response.json())
+		.then((responseJson) => {
+			const address = responseJson.results[0].formatted_address;
+			this.setState({value: {address: address}});
+		})
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
 				<Form
 					ref="form"
-					type={Event}/>
+					type={Event}
+					value={this.state.value}/>
 				<TouchableHighlight style={styles.button}
 					onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
 					<Text style={styles.buttonText}>Save</Text>
