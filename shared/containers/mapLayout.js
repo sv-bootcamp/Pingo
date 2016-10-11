@@ -1,25 +1,25 @@
 import Map from '../components/map';
-import { onLocationChange, getMapMarkers, setLocation } from '../actions/mapActions';
+import { onLocationChange, getMapItems, setLocation } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
-const getCategorizedMarkers = (markers, categoryFilter) => {
+const getCategorizedItems = (items, categoryFilter) => {
   switch (categoryFilter) {
   case 'SHOW_ALL':
-    return markers;
+    return items;
   case 'A':
-    return markers.filter(marker => marker.category === 'A');
+    return items.filter(item => item.category === 'A');
   case 'B':
-    return markers.filter(marker => marker.category === 'B');
+    return items.filter(item => item.category === 'B');
   case 'C':
-    return markers.filter(marker => marker.category === 'C');
+    return items.filter(item => item.category === 'C');
   default:
-    return markers;
+    return items;
   }
 };
 
 const mapStateToProps = (state) => {
   return {
-    markers: getCategorizedMarkers(state.map.markers, state.map.categoryFilter),
+    items: getCategorizedItems(state.map.items, state.map.categoryFilter),
     currentLocation: state.map.currentLocation
   };
 };
@@ -29,8 +29,8 @@ const mapDispatchToProps = (dispatch) => {
     onLocationChange: (region) => {
       return dispatch(onLocationChange(region));
     },
-    getMapMarkers: () => {
-      return dispatch(getMapMarkers());
+    getMapItems: () => {
+      return dispatch(getMapItems());
     },
     setLocation: (location) => {
       return dispatch(setLocation(location));

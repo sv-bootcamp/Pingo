@@ -56,16 +56,16 @@ export default class Headerbox extends Component {
               this.props.setTabViewIndex(index);
               switch (index) {
                 case 0:
-                  this.props.updateMarkers('SHOW_ALL');
+                  this.props.categorizeItems('SHOW_ALL');
                   return;
                 case 1:
-                  this.props.updateMarkers('A');
+                  this.props.categorizeItems('A');
                   return;
                 case 2:
-                  this.props.updateMarkers('B');
+                  this.props.categorizeItems('B');
                   return;
                 case 3:
-                  this.props.updateMarkers('C');
+                  this.props.categorizeItems('C');
                   return;
                 default:
                   return;
@@ -79,7 +79,7 @@ export default class Headerbox extends Component {
 }
 
 Headerbox.propTypes = {
-  updateMarkers: PropTypes.func,
+  categorizeItems: PropTypes.func,
   setTabViewIndex: PropTypes.func,
   onForward: PropTypes.func,
   tabview_index: PropTypes.any,

@@ -27,7 +27,7 @@ export default class Map extends Component {
   }
 
   componentWillMount() {
-    this.props.getMapMarkers();
+    this.props.getMapItems();
     navigator.geolocation.getCurrentPosition(
       (position) => {
         let newLocation = {
@@ -49,10 +49,10 @@ export default class Map extends Component {
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
         >
-          {this.props.markers.map(marker => (
+          {this.props.items.map(item => (
             <MapView.Marker
-              coordinate={marker.latlng}
-              description={marker.description}/>
+              coordinate={item.latlng}
+              description={item.description}/>
           ))}
         </MapView>
       </View>
@@ -63,9 +63,9 @@ export default class Map extends Component {
 Map.propTypes = {
   currentLocation: PropTypes.object,
   onLocationChange: PropTypes.func,
-  getMapMarkers: PropTypes.func,
+  getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
-  markers: PropTypes.arrayOf(PropTypes.shape({
+  items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string
   })),
