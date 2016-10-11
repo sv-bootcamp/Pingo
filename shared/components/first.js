@@ -7,7 +7,7 @@ export default class First extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1.25, backgroundColor: 'white'}}>
           <HeaderLayout
             onForward={ () => {
               const nextIndex = this.props.route.index + 1;
@@ -19,9 +19,7 @@ export default class First extends Component {
           />
         </View>
         <View style={{flex: 7}}>
-          <MapLayout
-            navigator={this.props.navigator}
-          />
+          <MapLayout/>
         </View>
       </View>
     );

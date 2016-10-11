@@ -39,3 +39,10 @@ export const setLocation = (location) => {
     location
   };
 };
+
+export const setTabViewIndex = (index) => {
+  return {
+    type: types.setTabViewIndex,
+    index
+  };
+};

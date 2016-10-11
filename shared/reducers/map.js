@@ -2,7 +2,13 @@ import * as types from '../actions/actionTypes';
 import update from 'react-addons-update';
 
 const initialState = {
-  category: [],
+  tabview_index: 0,
+  tabview_routes: [
+    {key: '1', title: 'All'},
+    {key: '2', title: 'Events'},
+    {key: '3', title: 'Facilities'},
+    {key: '4', title: 'Warning'}
+  ],
   currentLocation: {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -32,6 +38,10 @@ const map = (state = initialState, action = {}) => {
   case types.setLocation:
     return update(state, {
       currentLocation: { $set: action.location}
+    });
+  case types.setTabViewIndex:
+    return update(state, {
+      tabview_index: { $set: action.index }
     });
   default:
     return state;
