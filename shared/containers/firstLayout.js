@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {setRoute, setNavigator} from '../actions/mapActions';
+import {setRoute, setNavigator} from '../actions/navigatorActions';
 import First from '../components/first';
 
 const mapStateToProps = () => {

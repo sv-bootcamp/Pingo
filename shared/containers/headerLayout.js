@@ -1,11 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  categorizeItems,
-  setTabViewIndex,
-  onForward,
-  setRoute,
-  setSceneIndex
-} from '../actions/mapActions';
+import { categorizeItems, setTabViewIndex } from '../actions/mapActions';
+import { setRoute, setSceneIndex, onForward } from '../actions/navigatorActions';
 import Headerbox from '../components/headerbox';
 
 const mapStateToProps = (state) => {
