@@ -1,15 +1,5 @@
-import React, {
-  Component
-} from 'react';
-
-import {
-  StyleSheet,
-  Text,
-  ListView
-} from 'react-native';
-
-const API_GETITEMS = 'http://goober.herokuapp.com/api/items';
-
+import React, { Component, PropTypes } from 'react';
+import { StyleSheet, Text, ListView } from 'react-native';
 const styles = StyleSheet.create({
   row: {
     flex: 1,
@@ -20,46 +10,36 @@ const styles = StyleSheet.create({
   }
 });
 
+
 class EventList extends Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
-    this.state = {
-      dataSource: ds.cloneWithRows(['a', 'b', 'c', 'd', 'e'])
-    };
-  }
-
-  componentDidMount() {
-    this.refreshData();
-  }
-
-  refreshData() {
-    fetch(API_GETITEMS)
-  .then((response) => response.json())
-  .then((rjson) => {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(rjson.items)
-    });
-  })
-  .catch((error) => {
-    console.warn(error);
-  });
   }
 
   renderRowTxt(rowData) {
-    return <Text style={styles.row}>{rowData.description}</Text>;
+    return <Text style={styles.row}>{rowData.title}</Text>;
+  }
+
+  componentDidMount() {
+    this.props.getAllItems();
   }
 
   render() {
+
     return (
     <ListView
-      dataSource={this.state.dataSource}
+      dataSource={this.props.dataSource}
       renderRow={this.renderRowTxt}
       enableEmptySections={true} />
-  );
+    );
   }
 }
+
+EventList.propTypes = {
+  getAllItems: PropTypes.any,
+  dataSource: PropTypes.any,
+  actions: PropTypes.any,
+  getItems: PropTypes.any
+};
 
 export default EventList;
