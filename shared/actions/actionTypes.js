@@ -4,3 +4,6 @@ export const getMapItems = 'GET_MAP_ITEMS';
 export const categorizeItems = 'CATEGORIZE_ITEMS';
 export const setLocation = 'SET_LOCATION';
 export const setTabViewIndex = 'SET_TAB_VIEW_INDEX';
+export const setNavigator = 'SET_NAVIGATOR';
+export const setRoute = 'SET_ROUTE';
+export const onForward = 'ON_FORWARD';

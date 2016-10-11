@@ -6,21 +6,7 @@ import ListLayout from '../containers/listLayout';
 export default class Second extends Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <View style={{flex: 1.25, backgroundColor: 'white'}}>
-          <HeaderLayout
-            onForward={ () => {
-              if (this.props.route.index > 0) {
-                this.props.navigator.pop();
-              }
-            }
-            }
-          />
-        </View>
-        <View style={{flex: 7}}>
-          <ListLayout />
-        </View>
-      </View>
+      <ListLayout />
     );
   }
 }

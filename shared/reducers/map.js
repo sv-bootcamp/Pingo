@@ -20,7 +20,9 @@ const initialState = {
     {category: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
     {category: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
   ],
-  categoryFilter: 'SHOW_ALL'
+  categoryFilter: 'SHOW_ALL',
+  navigator,
+  route
 };
 
 const map = (state = initialState, action = {}) => {
@@ -43,6 +45,24 @@ const map = (state = initialState, action = {}) => {
     return update(state, {
       tabview_index: { $set: action.index }
     });
+  case types.setNavigator:
+    return update(state, {
+      navigator: { $set: action.navigator }
+    });
+  case types.setRoute:
+    return update(state, {
+      route: { $set: action.route }
+    });
+  case types.onForward:
+    if(action.route.index > 0) {
+      action.navigator.pop();
+    }
+    else {
+      action.navigator.push({
+        index: 1
+      });
+    }
+    return;
   default:
     return state;
   }
