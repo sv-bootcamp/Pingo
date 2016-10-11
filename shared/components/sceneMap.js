@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import MapLayout from '../containers/mapLayout';
 
-export default class First extends Component {
+export default class SceneMap extends Component {
   render() {
     this.props.setRoute(this.props.route);
     this.props.setNavigator(this.props.navigator);
@@ -12,7 +12,7 @@ export default class First extends Component {
   }
 }
 
-First.propTypes = {
+SceneMap.propTypes = {
   route: PropTypes.any,
   navigator: PropTypes.any,
   setRoute: PropTypes.func,

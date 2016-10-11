@@ -4,7 +4,9 @@ import update from 'react-addons-update';
 const initialState = {
   navigator: '',
   route: '',
-  sceneIndex: 0
+  myPageNavigator: '',
+  sceneIndex: 0,
+  myPageSceneIndex: 0
 };
 
 const navigator = (state = initialState, action = {}) => {
@@ -30,6 +32,14 @@ const navigator = (state = initialState, action = {}) => {
   case types.setSceneIndex:
     return update(state, {
       sceneIndex: { $set: action.sceneIndex }
+    });
+  case types.setMyPageNavigator:
+    return update(state, {
+      myPageNavigator: { $set: action.navigator }
+    });
+  case types.setMyPageSceneIndex:
+    return update(state, {
+      myPageSceneIndex: { $set: action.index }
     });
   default:
     return state;

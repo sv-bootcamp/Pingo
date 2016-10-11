@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {setRoute, setNavigator} from '../actions/navigatorActions';
-import First from '../components/first';
+import SceneMap from '../components/sceneMap';
 
 const mapStateToProps = () => {
   return {
@@ -19,9 +19,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-const FirstLayout = connect(
+const SceneMapLayout = connect(
   mapStateToProps,
   mapDispatchToProps
-)(First);
+)(SceneMap);
 
-export default FirstLayout;
+export default SceneMapLayout;
