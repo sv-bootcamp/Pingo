@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
-import MapCard from './mapCard';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,7 +55,6 @@ export default class Map extends Component {
               title={item.title}/>
           ))}
         </MapView>
-        <MapCard/>
       </View>
     );
   }

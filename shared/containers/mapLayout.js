@@ -7,11 +7,11 @@ const getCategorizedItems = (items, categoryFilter) => {
   case 'SHOW_ALL':
     return items;
   case 'A':
-    return items.filter(item => item.category === 'A');
+    return items.filter(item => item.category === 'event');
   case 'B':
-    return items.filter(item => item.category === 'B');
+    return items.filter(item => item.category === 'facility');
   case 'C':
-    return items.filter(item => item.category === 'C');
+    return items.filter(item => item.category === 'warning');
   default:
     return items;
   }
