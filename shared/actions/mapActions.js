@@ -26,10 +26,10 @@ export const getMapMarkers = () => {
   };
 };
 
-export const update_markers = (select) => {
+export const updateMarkers = (category) => {
   return {
-    type: types.update_markers,
-    select
+    type: types.updateMarkers,
+    category: category
   };
 };
 

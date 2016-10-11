@@ -52,8 +52,7 @@ export default class Map extends Component {
           {this.props.markers.map(marker => (
             <MapView.Marker
               coordinate={marker.latlng}
-              description={marker.description}
-            />
+              description={marker.description}/>
           ))}
         </MapView>
       </View>

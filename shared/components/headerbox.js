@@ -18,13 +18,13 @@ export default class Headerbox extends Component {
   }
 
   handleSelectCategoryA() {
-    this.props.update_markers('A');
+    this.props.updateMarkers('A');
   }
   handleSelectCategoryB() {
-    this.props.update_markers('B');
+    this.props.updateMarkers('B');
   }
   handleSelectCategoryC() {
-    this.props.update_markers('C');
+    this.props.updateMarkers('C');
   }
 
   render() {
@@ -56,6 +56,6 @@ export default class Headerbox extends Component {
 }
 
 Headerbox.propTypes = {
-  update_markers: PropTypes.func,
+  updateMarkers: PropTypes.func,
   onForward: PropTypes.func
 };
