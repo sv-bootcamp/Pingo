@@ -1,37 +1,25 @@
-'use strict';
-
-import React, {PropTypes, Component} from 'react';
-import {bindActionCreators} from 'redux';
-import ListWrapper from '../components/ListWrapper';
-import * as listActions from '../actions/listActions';
+import EventList from '../components/EventList';
+import{ getAllItems } from '../actions/listActions';
 import { connect } from 'react-redux';
 
-class ListLayout extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { actions } = this.props;
-    return (
-      <ListWrapper
-        {...actions} />
-    );
-  }
-}
-
-ListLayout.propTypes = {
-  actions: PropTypes.any
+const mapStateToProps = (state) => {
+  return {
+    dataSource: state.list.dataSource
+  };
 };
 
-ListLayout.defaultProps = {
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    //actions: bindActionCreators(listActions, dispatch)
+      getAllItems: () => {
+        return dispatch(getAllItems());
+      }
+  };
 };
 
-export default connect(() => ({
-        // TBD
-}),
-  (dispatch) => ({
-    actions: bindActionCreators(listActions, dispatch)
-  })
-)(ListLayout);
+const ListLayout = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(EventList);
+
+export default ListLayout;

@@ -1,13 +1,5 @@
-import React, {
-  Component
-} from 'react';
-
-import {
-  StyleSheet,
-  View,
-  TextInput
-} from 'react-native';
-
+import { StyleSheet, View } from 'react-native';
+import React, { Component } from 'react';
 // import Card from './Card.js';
 import EventList from './EventList.js';
 
@@ -35,20 +27,20 @@ const styles = StyleSheet.create({
 });
 
 class ListWrapper extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      zip: '',
-      card: {
-        title: 'Title',
-        description: 'desc'
-      }
-    };
-  }
-
-  handleTextChange(event) {
-    this.setState({zip: event.nativeEvent.text});
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     zip: '',
+  //     card: {
+  //       title: 'Title',
+  //       description: 'desc'
+  //     }
+  //   };
+  // }
+  //
+  // handleTextChange(event) {
+  //   this.setState({zip: event.nativeEvent.text});
+  // }
 
   render() {
     // const card = <Card
@@ -65,10 +57,6 @@ class ListWrapper extends Component {
     return (
       <View style={styles.container}>
         <EventList />
-        <TextInput
-          style={styles.input}
-          returnKeyType='go'
-          onSubmitEditing={(event) => this.handleTextChange(event)} />
       </View>
     );
   }
