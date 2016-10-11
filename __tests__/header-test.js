@@ -7,7 +7,16 @@ import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
   const tree = renderer.create(
-    <Headerbox/>
+      <Headerbox
+          tabview_index={0}
+          tabview_routes={[
+            {key: '1', title: 'All'},
+            {key: '2', title: 'Events'},
+            {key: '3', title: 'Facilities'}
+          ]}
+          update_markers={()=>{}}
+          setTabViewIndex={()=>{}}
+      />
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });

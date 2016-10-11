@@ -10,6 +10,8 @@ const getCategorizedMarkers = (markers, categoryFilter) => {
     return markers.filter(marker => marker.category === 'A');
   case 'B':
     return markers.filter(marker => marker.category === 'B');
+  case 'C':
+    return markers.filter(marker => marker.category === 'C');
   default:
     return markers;
   }

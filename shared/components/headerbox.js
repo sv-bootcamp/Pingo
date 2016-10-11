@@ -1,7 +1,11 @@
 import React, {PropTypes, Component} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {TabViewAnimated, TabViewPage, TabBarTop} from 'react-native-tab-view';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   text: {
     fontSize: 20,
     textAlign: 'center',
@@ -12,44 +16,63 @@ const styles = StyleSheet.create({
 export default class Headerbox extends Component {
   constructor(props) {
     super(props);
-    this.handleSelectCategoryA = this.handleSelectCategoryA.bind(this);
-    this.handleSelectCategoryB = this.handleSelectCategoryB.bind(this);
-    this.handleSelectCategoryC = this.handleSelectCategoryC.bind(this);
   }
 
-  handleSelectCategoryA() {
-    this.props.updateMarkers('A');
-  }
-  handleSelectCategoryB() {
-    this.props.updateMarkers('B');
-  }
-  handleSelectCategoryC() {
-    this.props.updateMarkers('C');
+  _renderHeader(props) {
+    return <TabBarTop {...props}/>;
   }
 
   render() {
     return (
-      <View style={{flexDirection:'row', flex: 1}}>
-        <TouchableOpacity
-          style={{margin: 1, backgroundColor: 'green', flex: 1}}
-          onPress={this.handleSelectCategoryA}>
-          <Text style={styles.text}>A</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{margin: 1, backgroundColor: 'yellow', flex: 1}}
-          onPress={this.handleSelectCategoryB}>
-          <Text style={styles.text}>B</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{margin: 1, backgroundColor: 'red', flex: 1}}
-          onPress={this.handleSelectCategoryC}>
-          <Text style={styles.text}>C</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={{margin: 1, backgroundColor: 'blue', flex: 1}}
-            onPress={this.props.onForward}>
-          <Text style={styles.text}>switch</Text>
-        </TouchableOpacity>
+      <View style={{flexDirection:'column', flex: 1}}>
+        <View style={{flexDirection:'row'}}>
+          <TouchableOpacity
+              style={{margin: 1, backgroundColor: 'red', flex: 1}}
+              onPress={
+                //todo: callback func of routing to MyPage goes here
+                this.props.onForward
+              }>
+            <Text style={styles.text}>switch</Text>
+          </TouchableOpacity>
+          <Text style={{flex: 3, textAlign: 'center', fontSize: 20}}>AROUND</Text>
+          <TouchableOpacity
+              style={{margin: 1, backgroundColor: 'blue', flex: 1}}
+              onPress={this.props.onForward}>
+            <Text style={styles.text}>switch</Text>
+          </TouchableOpacity>
+        </View>
+        <TabViewAnimated
+            style={styles.container}
+            navigationState={{
+              index: this.props.tabview_index,
+              routes: this.props.tabview_routes
+            }}
+            renderScene={(props) => {
+              return <TabViewPage {...props} renderScene={()=>{}}/>
+            }
+            }
+            renderHeader={this._renderHeader}
+            onRequestChangeTab={(index) => {
+              this.props.setTabViewIndex(index);
+              switch (index) {
+                case 0:
+                  this.props.updateMarkers('SHOW_ALL');
+                  return;
+                case 1:
+                  this.props.updateMarkers('A');
+                  return;
+                case 2:
+                  this.props.updateMarkers('B');
+                  return;
+                case 3:
+                  this.props.updateMarkers('C');
+                  return;
+                default:
+                  return;
+              }
+            }
+            }
+        />
       </View>
     );
   }
@@ -57,5 +80,8 @@ export default class Headerbox extends Component {
 
 Headerbox.propTypes = {
   updateMarkers: PropTypes.func,
-  onForward: PropTypes.func
+  setTabViewIndex: PropTypes.func,
+  onForward: PropTypes.func,
+  tabview_index: PropTypes.any,
+  tabview_routes: PropTypes.any
 };

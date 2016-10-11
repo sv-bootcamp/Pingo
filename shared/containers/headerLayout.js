@@ -1,24 +1,28 @@
 import { connect } from 'react-redux';
-import {updateMarkers} from '../actions/mapActions';
+import {updateMarkers, setTabViewIndex} from '../actions/mapActions';
 import Headerbox from '../components/headerbox';
 
-const mapStateToProps = () => {
-  return {
-    // TBD
-  };
+const mapStateToProps = (state) => {
+    return {
+        tabview_index: state.map.tabview_index,
+        tabview_routes: state.map.tabview_routes
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    updateMarkers: (select) => {
-      return dispatch(updateMarkers(select));
+    return {
+        setTabViewIndex: (index) => {
+            return dispatch(setTabViewIndex(index));
+        },
+        updateMarkers: (select) => {
+            return dispatch(updateMarkers(select));
+        }
     }
-  };
 };
 
 const HeaderLayout = connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Headerbox);
 
 export default HeaderLayout;
