@@ -58,16 +58,14 @@ class CreateForm extends Component {
 				address: '',
 				title: ''
 			}
-		}
-		
+		};
 		this.getAddressData();
 	}
 
 	onPress() {
 		const value = this.refs.form.getValue();
 		const location = this.props.location;			
-
-		return;
+		
 		if (value) {
 			  fetch(API_SETITEMS, {
 			  	method: 'POST',
@@ -86,8 +84,7 @@ class CreateForm extends Component {
 			  })
 			.then((response) => response.json())
 			.then((rjson) => {
-			  console.log('r:'+JSON.stringify(rjson));
-			  alert("complete to send post data");
+			  console.log('r:'+JSON.stringify(rjson));			  
 			})
 			.catch((error) => {
 				console.warn(error);
@@ -96,13 +93,13 @@ class CreateForm extends Component {
 	}
 
 	getAddressData() {				
-		const location = this.props.location;				
+		const location = this.props.location;
 		fetch(API_GEODATA+'?latlng='+location.toString()+'&key='+API_KEY)
 		.then((response) => response.json())
 		.then((responseJson) => {
 			const address = responseJson.results[0].formatted_address;
 			this.setState({value: {address: address}});
-		})
+		});
 	}
 
 	render() {
