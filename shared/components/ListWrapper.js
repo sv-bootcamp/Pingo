@@ -47,7 +47,6 @@ class ListWrapper extends Component {
   }
 
   handleTextChange(event) {
-    console.log(event.nativeEvent.text);
     this.setState({zip: event.nativeEvent.text});
   }
 

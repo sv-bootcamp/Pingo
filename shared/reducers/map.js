@@ -9,25 +9,12 @@ const initialState = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   },
-  initial_markers: [
-    {title: 'A', description: 'up', latlng: {latitude: 37.7925, longitude: -122.4324}},
-    {title: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
-    {title: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
-  ],
   markers: [
-    {title: 'A', description: 'up', latlng: {latitude: 37.7925, longitude: -122.4324}},
-    {title: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
-    {title: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
+    {category: 'A', description: 'up', latlng: {latitude: 37.7925, longitude: -122.4324}},
+    {category: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
+    {category: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
   ],
-
-  filter: (state) => {
-    state.markers = [];
-    for (let i = 0; i < state.initial_markers.length; i += 1) {
-      if (state.category.indexOf(state.initial_markers[i].title) === -1) {
-        state.markers.push(state.initial_markers[i]);
-      }
-    }
-  }
+  categoryFilter: 'SHOW_ALL'
 };
 
 const map = (state = initialState, action = {}) => {
@@ -38,16 +25,9 @@ const map = (state = initialState, action = {}) => {
     });
   case types.getMapMarkers:
     return state;
-  case types.update_markers:
-    if (state.category.indexOf(action.select) === -1) {
-      state.category.push(action.select);
-    }
-    else {
-      state.category.splice(state.category.indexOf(action.select), 1);
-    }
-    state.filter(state);
+  case types.updateMarkers:
     return update(state, {
-      markers: { $set: state.markers }
+      categoryFilter: { $set: action.category}
     });
   case types.setLocation:
     return update(state, {
