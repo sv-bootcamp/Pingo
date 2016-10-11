@@ -21,8 +21,9 @@ const initialState = {
     {category: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
   ],
   categoryFilter: 'SHOW_ALL',
-  navigator,
-  route
+  navigator: '',
+  route: '',
+  sceneIndex: 0
 };
 
 const map = (state = initialState, action = {}) => {
@@ -54,7 +55,8 @@ const map = (state = initialState, action = {}) => {
       route: { $set: action.route }
     });
   case types.onForward:
-    if(action.route.index > 0) {
+    if(action.index > 0) {
+      console.log("popped");
       action.navigator.pop();
     }
     else {
@@ -62,7 +64,11 @@ const map = (state = initialState, action = {}) => {
         index: 1
       });
     }
-    return;
+    return state;
+  case types.setSceneIndex:
+    return update(state, {
+      sceneIndex: { $set: action.sceneIndex }
+    });
   default:
     return state;
   }

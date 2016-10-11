@@ -7,3 +7,4 @@ export const setTabViewIndex = 'SET_TAB_VIEW_INDEX';
 export const setNavigator = 'SET_NAVIGATOR';
 export const setRoute = 'SET_ROUTE';
 export const onForward = 'ON_FORWARD';
+export const setSceneIndex = 'SET_SCENE_INDEX';
