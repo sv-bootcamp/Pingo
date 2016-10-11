@@ -11,7 +11,7 @@ export const onLocationChange = (region) => {
 
 export const receiveItems = (json) => {
   return {
-    type: types.getMapMarkers,
+    type: types.getMapItems,
     items: json.items
   };
 };

@@ -1,31 +1,23 @@
 import React, {PropTypes, Component} from 'react';
-import {View} from 'react-native';
-import HeaderLayout from '../containers/headerLayout';
 import ListLayout from '../containers/listLayout';
 
 export default class Second extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    //this.props.setRoute(this.props.route);
+    //this.props.setNavigator(this.props.navigator);
     return (
-      <View style={{flex: 1}}>
-        <View style={{flex: 1.25, backgroundColor: 'white'}}>
-          <HeaderLayout
-            onForward={ () => {
-              if (this.props.route.index > 0) {
-                this.props.navigator.pop();
-              }
-            }
-            }
-          />
-        </View>
-        <View style={{flex: 7}}>
-          <ListLayout />
-        </View>
-      </View>
+      <ListLayout />
     );
   }
 }
 
 Second.propTypes = {
   route: PropTypes.any,
-  navigator: PropTypes.any
+  navigator: PropTypes.any,
+  setRoute: PropTypes.func,
+  setNavigator: PropTypes.func
 };
