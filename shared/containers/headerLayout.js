@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {updateMarkers, setTabViewIndex} from '../actions/mapActions';
+import {categorizeItems, setTabViewIndex} from '../actions/mapActions';
 import Headerbox from '../components/headerbox';
 
 const mapStateToProps = (state) => {
@@ -14,8 +14,8 @@ const mapDispatchToProps = (dispatch) => {
         setTabViewIndex: (index) => {
             return dispatch(setTabViewIndex(index));
         },
-        updateMarkers: (select) => {
-            return dispatch(updateMarkers(select));
+        categorizeItems: (select) => {
+            return dispatch(categorizeItems(select));
         }
     }
 };

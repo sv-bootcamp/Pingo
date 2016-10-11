@@ -8,8 +8,8 @@ import renderer from 'react-test-renderer';
 it('renders correctly', () => {
   const tree = renderer.create(
     <Map 
-      markers={[]}
-      getMapMarkers = {() => {}}/>
+      items={[]}
+      getMapItems={()=>{}}/>
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });

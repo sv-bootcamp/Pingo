@@ -15,7 +15,7 @@ const initialState = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   },
-  markers: [
+  items: [
     {category: 'A', description: 'up', latlng: {latitude: 37.7925, longitude: -122.4324}},
     {category: 'B', description: 'mid', latlng: {latitude: 37.7825, longitude: -122.4324}},
     {category: 'C', description: 'down', latlng: {latitude: 37.7725, longitude: -122.4324}}
@@ -29,9 +29,9 @@ const map = (state = initialState, action = {}) => {
     return update(state, {
       currentLocation: { $set: action.region }
     });
-  case types.getMapMarkers:
+  case types.getMapItems:
     return state;
-  case types.updateMarkers:
+  case types.categorizeItems:
     return update(state, {
       categoryFilter: { $set: action.category}
     });
