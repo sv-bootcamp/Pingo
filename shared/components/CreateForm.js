@@ -17,8 +17,8 @@ const Form = TForm.form.Form;
 
 const Event = TForm.struct({
 	// location: TForm.String,
-	address: TForm.String,
-	title: TForm.String
+  address: TForm.String,
+  title: TForm.String
 });
 
 const styles = StyleSheet.create({
@@ -51,59 +51,59 @@ const styles = StyleSheet.create({
 });
 
 class CreateForm extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: {
-				address: '',
-				title: ''
-			}
-		};
-		this.getAddressData();
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: {
+        address: '',
+        title: ''
+      }
+    };
+    this.getAddressData();
+  }
 
-	onPress() {
-		const value = this.refs.form.getValue();
-		const location = this.props.location;			
-		
-		if (value) {
-			  fetch(API_SETITEMS, {
-			  	method: 'POST',
-			  	headers: {
-			  		'Accept': 'application/json',
-			  		'Content-Type': 'application/json'
-			  	},
-			  	body: JSON.stringify({
-			  		description: value.title,
-			  		lat: location[0],
-			  		lng: location[1],
-			  		address: '광화문우체국',
-			  		createdDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)',
-			  		modifiedDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)'
-			  	})
-			  })
+  onPress() {
+    const value = this.refs.form.getValue();
+    const location = this.props.location;
+
+    if (value) {
+      fetch(API_SETITEMS, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+        	'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          description: value.title,
+          lat: location[0],
+          lng: location[1],
+          address: '광화문우체국',
+          createdDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)',
+          modifiedDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)'
+        })
+      })
 			.then((response) => response.json())
 			.then((rjson) => {
-			  console.log('r:'+JSON.stringify(rjson));			  
+        console.log('r:' + JSON.stringify(rjson));
 			})
-			.catch((error) => {
-				console.warn(error);
-			});
-		}
-	}
+      .catch((error) => {
+        console.warn(error);
+      });
+    }
+  }
 
-	getAddressData() {				
-		const location = this.props.location;
-		fetch(API_GEODATA+'?latlng='+location.toString()+'&key='+API_KEY)
+  getAddressData() {
+    const location = this.props.location;
+    fetch(API_GEODATA + '?latlng = ' + location.toString() + '&key = '+ API_KEY)
 		.then((response) => response.json())
 		.then((responseJson) => {
-			const address = responseJson.results[0].formatted_address;
-			this.setState({value: {address: address}});
-		});
-	}
+      const address = responseJson.results[0].formatted_address;
+      this.setState({value: {address: address}});
+    });
+  }
 
-	render() {
-		return (
+  render() {
+    return (
 			<View style={styles.container}>
 				<Form
 					ref="form"
@@ -115,16 +115,16 @@ class CreateForm extends Component {
 				</TouchableHighlight>
 			</View>
 		);
-	}
+  }
 
 }
 
 CreateForm.propTypes = {
-	location: PropTypes.array
+  location: PropTypes.array
 };
 
 CreateForm.defaultProps = {
-	location: [37.563398, 126.9907941]
+  location: [37.563398, 126.9907941]
 };
 
 export default CreateForm;

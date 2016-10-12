@@ -9,51 +9,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  },
-  input: {
-    fontSize: 20,
-    borderWidth: 2,
-    height: 40
-  },
-  backdrop: {
-    flex: 1,
-    flexDirection: 'column'
   }
 });
 
 class ListWrapper extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     zip: '',
-  //     card: {
-  //       title: 'Title',
-  //       description: 'desc'
-  //     }
-  //   };
-  // }
-  //
-  // handleTextChange(event) {
-  //   this.setState({zip: event.nativeEvent.text});
-  // }
-
   render() {
-    // const card = <Card
-    //     title={this.state.card.title}
-    //     description={this.state.card.description} />;
-
-    // const imgBack = <Image source={require('../../static/images/flowers.png')}
-    //      resizeMode='cover' style={styles.backdrop}>
-    //     <Text style={styles.welcome}>
-    //       Welcome to React Native!!! {this.state.zip}
-    //     </Text>
-    //   </Image>;
-
     return (
       <View style={styles.container}>
         <EventList />

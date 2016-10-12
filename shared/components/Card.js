@@ -1,20 +1,13 @@
-import React, {
-	PropTypes, Component
-} from 'react';
-
-import {
-	StyleSheet,
-	Text,
-	View
-} from 'react-native';
+import React, { PropTypes, Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
-  bigText: {
+  title: {
     flex: 2,
     fontSize: 20,
     margin: 10
   },
-  mainText: {
+  address: {
     flex: 1,
     fontSize: 16
   }
@@ -24,15 +17,18 @@ class Card extends Component {
   render() {
     return (
 		<View>
-			<Text>tetest</Text>
-			<Text style={styles.bigText}>{this.props.title}</Text>
-			<Text style={styles.mainText}>{this.props.description}</Text>
+			<Text style={styles.title}>{this.props.title}</Text>
+			<Text style={styles.address}>{this.props.address}</Text>
+				<TouchableOpacity	style={{margin: 1, backgroundColor: 'red', flex: 1}}>
+					<Text style={styles.text}>Favorite</Text>
+				</TouchableOpacity>
 		</View>
 	);
   }
 }
 
 Card.propTypes = {
+  address: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string
 };

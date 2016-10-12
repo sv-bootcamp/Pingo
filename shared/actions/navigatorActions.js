@@ -25,19 +25,19 @@ export const setSceneIndex = (sceneIndex) => {
   return {
     type: types.setSceneIndex,
     sceneIndex
-  }
+  };
 };
 
 export const setMyPageNavigator = (navigator) => {
   return {
     type: types.setMyPageNavigator,
     navigator
-  }
+  };
 };
 
 export const setMyPageSceneIndex = (index) => {
   return {
     type: types.setMyPageSceneIndex,
     index
-  }
+  };
 };

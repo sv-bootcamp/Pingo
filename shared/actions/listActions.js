@@ -24,4 +24,4 @@ export const getAllItems = () => {
         dispatch(receiveItems(json))
     );
   };
-}
+};
