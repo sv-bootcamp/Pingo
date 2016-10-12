@@ -44,6 +44,7 @@ export default class Map extends Component {
   render() {
     return (
       <View style ={styles.container}>
+
         <MapView
           style ={styles.map}
           region ={this.props.currentLocation}
@@ -54,7 +55,11 @@ export default class Map extends Component {
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}/>
           ))}
+          <MapView.UrlTile
+              urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
+          />
         </MapView>
+
       </View>
     );
   }
