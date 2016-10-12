@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TouchableHighlight
+	TouchableHighlight	
 } from 'react-native';
 import TForm from 'tcomb-form-native';
 
@@ -18,7 +18,9 @@ const Form = TForm.form.Form;
 const Event = TForm.struct({
 	// location: TForm.String,
 	address: TForm.String,
-	title: TForm.String
+	title: TForm.String,
+	startTime: TForm.Date,
+	endTime: TForm.Date
 });
 
 const styles = StyleSheet.create({
@@ -64,8 +66,8 @@ class CreateForm extends Component {
 
 	onPress() {
 		const value = this.refs.form.getValue();
-		const location = this.props.location;			
-		
+		const location = this.props.location;
+
 		if (value) {
 			  fetch(API_SETITEMS, {
 			  	method: 'POST',
@@ -77,14 +79,14 @@ class CreateForm extends Component {
 			  		description: value.title,
 			  		lat: location[0],
 			  		lng: location[1],
-			  		address: '광화문우체국',
-			  		createdDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)',
-			  		modifiedDate: 'Wed Mar 25 2015 09:00:00 GMT+0900 (KST)'
+			  		address: value.address,	  		
+					startTime: value.startTime,
+					endTime: value.endTime
 			  	})
 			  })
 			.then((response) => response.json())
 			.then((rjson) => {
-			  console.log('r:'+JSON.stringify(rjson));			  
+			  console.log('r:'+JSON.stringify(rjson));
 			})
 			.catch((error) => {
 				console.warn(error);
@@ -92,7 +94,7 @@ class CreateForm extends Component {
 		}
 	}
 
-	getAddressData() {				
+	getAddressData() {
 		const location = this.props.location;
 		fetch(API_GEODATA+'?latlng='+location.toString()+'&key='+API_KEY)
 		.then((response) => response.json())
