@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch) => {
     setMyPageSceneIndex: (sceneIndex) => {
       return dispatch(setMyPageSceneIndex(sceneIndex));
     }
-  }
+  };
 };
 
 const HeaderLayout = connect(

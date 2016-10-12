@@ -1,15 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, Text, ListView } from 'react-native';
-const styles = StyleSheet.create({
-  row: {
-    flex: 1,
-    fontSize: 24,
-    padding: 42,
-    borderWidth: 1,
-    borderColor: '#DDDDDD'
-  }
-});
-
+import { ListView } from 'react-native';
+import Card from './Card';
 
 class EventList extends Component {
   constructor(props) {
@@ -17,7 +8,10 @@ class EventList extends Component {
   }
 
   renderRowTxt(rowData) {
-    return <Text style={styles.row}>{rowData.title}</Text>;
+    return (
+      <Card title = {rowData.title}
+            address = {rowData.address}/>
+    );
   }
 
   componentDidMount() {
@@ -25,7 +19,6 @@ class EventList extends Component {
   }
 
   render() {
-
     return (
     <ListView
       dataSource={this.props.dataSource}

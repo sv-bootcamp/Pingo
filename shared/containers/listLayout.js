@@ -1,5 +1,5 @@
 import EventList from '../components/EventList';
-import{ getAllItems } from '../actions/listActions';
+import { getAllItems } from '../actions/listActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
@@ -10,9 +10,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      getAllItems: () => {
-        return dispatch(getAllItems());
-      }
+    getAllItems: () => {
+      return dispatch(getAllItems());
+    }
   };
 };
 

@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
     setNavigator: (navigator) => {
       return dispatch(setMyPageNavigator(navigator));
     }
-  }
+  };
 };
 
 const sceneInitialLayout = connect(
