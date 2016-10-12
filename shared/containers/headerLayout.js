@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import { categorizeItems, setTabViewIndex } from '../actions/mapActions';
-import { setRoute, setSceneIndex, onForward } from '../actions/navigatorActions';
+import {
+  setRoute,
+  setSceneIndex,
+  onForward,
+  setMyPageSceneIndex
+} from '../actions/navigatorActions';
 import Headerbox from '../components/headerbox';
 
 const mapStateToProps = (state) => {
@@ -9,7 +14,9 @@ const mapStateToProps = (state) => {
     tabview_routes: state.map.tabview_routes,
     route: state.navigator.route,
     navigator: state.navigator.navigator,
-    sceneIndex: state.navigator.sceneIndex
+    sceneIndex: state.navigator.sceneIndex,
+    myPageNavigator: state.navigator.myPageNavigator,
+    myPageSceneIndex: state.navigator.myPageSceneIndex
   };
 };
 
@@ -29,13 +36,16 @@ const mapDispatchToProps = (dispatch) => {
     },
     setSceneIndex: (sceneIndex) => {
       return dispatch(setSceneIndex(sceneIndex));
+    },
+    setMyPageSceneIndex: (sceneIndex) => {
+      return dispatch(setMyPageSceneIndex(sceneIndex));
     }
   }
 };
 
 const HeaderLayout = connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Headerbox);
 
 export default HeaderLayout;

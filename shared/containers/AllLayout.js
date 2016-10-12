@@ -1,36 +1,42 @@
-import {Navigator, View} from 'react-native';
+import {Navigator, View, Text} from 'react-native';
 import React, {Component} from 'react';
-import Second from '../components/second';
-import HeaderLayout from './headerLayout';
-import FirstLayout from './firstLayout';
+import SceneInitialLayout from './sceneInitialLayout';
 
 export default class AllLayout extends Component {
+  constructor (props) {
+    super(props);
+    this.upperRenderScene = this.upperRenderScene.bind(this);
+  }
+
   render() {
     return (
-      <View style={{flex: 1}}>
-        <View style={{flex: 1.25, backgroundColor: 'white'}}>
-          <HeaderLayout/>
-        </View>
-        <View style={{flex: 7}}>
-        <Navigator
-            initialRoute={{index: 0}}
-            renderScene={this.navigatorRenderScene}
-        />
-        </View>
-      </View>
+      <Navigator
+        initialRoute={{index: 0}}
+        renderScene={this.upperRenderScene}
+      />
     );
   }
 
-  navigatorRenderScene(route, navigator) {
+  upperRenderScene(route, navigator) {
     switch (route.index) {
     case 0:
       return (
-        <FirstLayout route={route} navigator={navigator}/>
+        <SceneInitialLayout
+          navigator={navigator}
+        />
       );
     case 1:
-      return (<Second route={route} navigator={navigator}/>);
+      return (
+        <View>
+          <Text>My Page</Text>
+        </View>
+      );
     default:
-      return (<FirstLayout route={route} navigator={navigator}/>);
+      return (
+        <View>
+          <Text> default </Text>
+        </View>
+      );
     }
   }
 }

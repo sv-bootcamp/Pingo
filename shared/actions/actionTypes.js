@@ -9,3 +9,5 @@ export const setRoute = 'SET_ROUTE';
 export const onForward = 'ON_FORWARD';
 export const setSceneIndex = 'SET_SCENE_INDEX';
 export const getAllItems = 'GET_ALL_ITEMS';
+export const setMyPageNavigator = 'SET_MYPAGE_NAVIGATOR';
+export const setMyPageSceneIndex = 'SET_MYPAGE_SCENE_INDEX';

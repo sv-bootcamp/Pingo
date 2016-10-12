@@ -10,7 +10,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    //actions: bindActionCreators(listActions, dispatch)
       getAllItems: () => {
         return dispatch(getAllItems());
       }

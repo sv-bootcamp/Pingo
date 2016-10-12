@@ -20,6 +20,7 @@ export default class Headerbox extends Component {
 
   componentWillMount() {
     this._onForward = this._onForward.bind(this);
+    this._onForwardMyPage = this._onForwardMyPage.bind(this);
   }
 
   _renderHeader(props) {
@@ -27,18 +28,29 @@ export default class Headerbox extends Component {
   }
 
   _onForward() {
-    console.log(this.props.sceneIndex);
     if(this.props.sceneIndex === 0) {
       this.props.setSceneIndex(1);
     }
     else {
       this.props.setSceneIndex(0);
     }
-    console.log("change");
-    console.log(this.props.sceneIndex);
     return this.props.onForward(
       this.props.sceneIndex,
       this.props.navigator
+    )
+  }
+
+  _onForwardMyPage() {
+    console.log(this.props.myPageNavigator);
+    if(this.props.myPageSceneIndex === 0) {
+      this.props.setMyPageSceneIndex(1);
+    }
+    else {
+      this.props.setMyPageSceneIndex(0);
+    }
+    return this.props.onForward(
+      this.props.myPageSceneIndex,
+      this.props.myPageNavigator
     )
   }
 
@@ -48,10 +60,7 @@ export default class Headerbox extends Component {
         <View style={{flexDirection:'row'}}>
           <TouchableOpacity
               style={{margin: 1, backgroundColor: 'red', flex: 1}}
-              onPress={
-                //todo: callback func of routing to MyPage goes here
-                this._onForward
-              }>
+              onPress={this._onForwardMyPage}>
             <Text style={styles.text}>switch</Text>
           </TouchableOpacity>
           <Text style={{flex: 3, textAlign: 'center', fontSize: 20}}>AROUND</Text>
@@ -104,9 +113,12 @@ Headerbox.propTypes = {
   onForward: PropTypes.func,
   setRoute: PropTypes.func,
   setSceneIndex: PropTypes.func,
+  setMyPageSceneIndex: PropTypes.func,
   tabview_index: PropTypes.any,
   tabview_routes: PropTypes.any,
   route: PropTypes.any,
   navigator: PropTypes.any,
-  sceneIndex: PropTypes.any
+  sceneIndex: PropTypes.any,
+  myPageSceneIndex: PropTypes.any,
+  myPageNavigator: PropTypes.any
 };
