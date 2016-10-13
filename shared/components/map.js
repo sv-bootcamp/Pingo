@@ -55,6 +55,7 @@ export default class Map extends Component {
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
+              onPress={()=>{this.props.onMarkerClick(item)}}
               onSelect={()=>{this.props.onMarkerClick(item)}}/>
           ))}
           <MapView.UrlTile
