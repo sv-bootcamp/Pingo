@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import SceneInitialLayout from './sceneInitialLayout';
 
 export default class AllLayout extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.upperRenderScene = this.upperRenderScene.bind(this);
   }
@@ -40,4 +40,3 @@ export default class AllLayout extends Component {
     }
   }
 }
-

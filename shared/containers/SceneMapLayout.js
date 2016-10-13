@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
     setNavigator: (navigator) => {
       return dispatch(setNavigator(navigator));
     }
-  }
+  };
 };
 
 const SceneMapLayout = connect(

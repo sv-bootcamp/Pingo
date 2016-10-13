@@ -22,8 +22,7 @@ const navigator = (state = initialState, action = {}) => {
   case types.onForward:
     if (action.index > 0) {
       action.navigator.pop();
-    }
-    else {
+    } else {
       action.navigator.push({
         index: 1
       });

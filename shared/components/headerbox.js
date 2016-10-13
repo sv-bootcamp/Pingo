@@ -28,36 +28,33 @@ export default class Headerbox extends Component {
   }
 
   _onForward() {
-    if(this.props.sceneIndex === 0) {
+    if (this.props.sceneIndex === 0) {
       this.props.setSceneIndex(1);
-    }
-    else {
+    } else {
       this.props.setSceneIndex(0);
     }
     return this.props.onForward(
       this.props.sceneIndex,
       this.props.navigator
-    )
+    );
   }
 
   _onForwardMyPage() {
-    console.log(this.props.myPageNavigator);
-    if(this.props.myPageSceneIndex === 0) {
+    if (this.props.myPageSceneIndex === 0) {
       this.props.setMyPageSceneIndex(1);
-    }
-    else {
+    } else {
       this.props.setMyPageSceneIndex(0);
     }
     return this.props.onForward(
       this.props.myPageSceneIndex,
       this.props.myPageNavigator
-    )
+    );
   }
 
   render() {
     return (
-      <View style={{flexDirection:'column', flex: 1}}>
-        <View style={{flexDirection:'row'}}>
+      <View style= {{flexDirection:'column', flex: 1}}>
+        <View style= {{flexDirection:'row' }}>
           <TouchableOpacity
               style={{margin: 1, backgroundColor: 'red', flex: 1}}
               onPress={this._onForwardMyPage}>
@@ -77,7 +74,7 @@ export default class Headerbox extends Component {
             routes: this.props.tabview_routes
           }}
           renderScene={(props) => {
-            return <TabViewPage {...props} renderScene={()=>{}}/>
+            return <TabViewPage {...props} renderScene={()=>{}}/>;
           }
           }
           renderHeader={this._renderHeader}
