@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key></key>
+	<dict/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>access photo library</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -34,6 +36,15 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>c.tile.stamen.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+			</dict>
 			<key>goober.herokuapp.com</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
