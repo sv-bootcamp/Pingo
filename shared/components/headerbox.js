@@ -85,13 +85,13 @@ export default class Headerbox extends Component {
               this.props.categorizeItems('SHOW_ALL');
               return;
             case 1:
-              this.props.categorizeItems('A');
+              this.props.categorizeItems('EVENTS');
               return;
             case 2:
-              this.props.categorizeItems('B');
+              this.props.categorizeItems('FACILITIES');
               return;
             case 3:
-              this.props.categorizeItems('C');
+              this.props.categorizeItems('WARNING');
               return;
             default:
               return;
