@@ -21,7 +21,9 @@ class EventList extends Component {
   render() {
     return (
     <ListView
-      dataSource={this.props.dataSource}
+      dataSource={new ListView.DataSource({
+        rowHasChanged: (r1, r2) => r1 !== r2
+      }).cloneWithRows(this.props.dataSource)}
       renderRow={this.renderRowTxt}
       enableEmptySections={true} />
     );
