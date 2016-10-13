@@ -26,6 +26,13 @@ export const getMapItems = () => {
   };
 };
 
+export const onMarkerClick = (item) => {
+  return {
+    type: types.onMarkerClick,
+    item: {'title': item.title, 'address': item.address}
+  };
+};
+
 export const categorizeItems = (category) => {
   return {
     type: types.categorizeItems,

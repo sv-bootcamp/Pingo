@@ -16,6 +16,7 @@ const initialState = {
     longitudeDelta: 0.0421
   },
   items: [],
+  selectedItem: {},
   categoryFilter: 'SHOW_ALL'
 };
 
@@ -40,6 +41,10 @@ const map = (state = initialState, action = {}) => {
   case types.setTabViewIndex:
     return update(state, {
       tabview_index: { $set: action.index }
+    });
+  case types.onMarkerClick:
+    return update(state, {
+      selectedItem: { $set: action.item }
     });
   default:
     return state;

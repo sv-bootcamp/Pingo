@@ -1,5 +1,5 @@
 import Map from '../components/map';
-import { onLocationChange, getMapItems, setLocation } from '../actions/mapActions';
+import { onLocationChange, getMapItems, setLocation, onMarkerClick } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 const getCategorizedItems = (items, categoryFilter) => {
@@ -20,6 +20,7 @@ const getCategorizedItems = (items, categoryFilter) => {
 const mapStateToProps = (state) => {
   return {
     items: getCategorizedItems(state.map.items, state.map.categoryFilter),
+    selectedItem: state.map.selectedItem,
     currentLocation: state.map.currentLocation
   };
 };
@@ -34,6 +35,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setLocation: (location) => {
       return dispatch(setLocation(location));
+    },
+    onMarkerClick: (item) => {
+      return dispatch(onMarkerClick(item));
     }
   };
 };
