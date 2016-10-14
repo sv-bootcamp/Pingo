@@ -9,7 +9,8 @@ it('renders correctly', () => {
   const tree = renderer.create(
     <Map 
       items={[]}
-      getMapItems={()=>{}}/>
+      getMapItems={()=>{}}
+      selectedItem={{}}/>
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });

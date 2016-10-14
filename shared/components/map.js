@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
+import Card from './Card';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,13 +54,18 @@ export default class Map extends Component {
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
-              title={item.title}/>
+              title={item.title}
+              onPress={()=>{this.props.onMarkerClick(item)}}
+              onSelect={()=>{this.props.onMarkerClick(item)}}/>
           ))}
           <MapView.UrlTile
               urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
         </MapView>
-
+        <Card
+          title={this.props.selectedItem.title}
+          address={this.props.selectedItem.address}
+        />
       </View>
     );
   }
@@ -70,6 +76,8 @@ Map.propTypes = {
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
+  selectedItem: PropTypes.any,
+  onMarkerClick: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string
