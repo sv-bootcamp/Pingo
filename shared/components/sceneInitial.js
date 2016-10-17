@@ -4,6 +4,17 @@ import FirstLayout from '../containers/SceneMapLayout';
 import HeaderLayout from '../containers/headerLayout';
 import Second from './sceneList';
 
+const styles = StyleSheet.create({
+  totalView: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        marginTop: 20
+      }
+    })
+  }
+});
+
 export default class SceneInitial extends Component {
   render() {
     this.props.setNavigator(this.props.navigator);
@@ -35,17 +46,6 @@ export default class SceneInitial extends Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  totalView: {
-    flex: 1,
-    ...Platform.select({
-      ios: {
-        marginTop: 20,
-      }
-    })
-  }
-});
 
 SceneInitial.propTypes = {
   route: PropTypes.any,

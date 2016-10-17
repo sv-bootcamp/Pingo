@@ -4,6 +4,35 @@ import MapView from 'react-native-maps';
 import Card from './Card';
 import MapButton from './MapButton';
 
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end'
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  buttonSection: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 10
+  },
+  positionButton: {
+  },
+  cameraButton: {
+  }
+});
+
 export default class Map extends Component {
   constructor(props) {
     super(props);
@@ -66,35 +95,6 @@ export default class Map extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end'
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-  buttonSection: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 10
-  },
-  positionButton: {
-  },
-  cameraButton: {
-  }
-});
 
 Map.propTypes = {
   currentLocation: PropTypes.object,

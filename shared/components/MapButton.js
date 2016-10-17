@@ -1,6 +1,14 @@
 import React, {PropTypes, Component} from 'react';
 import {TouchableHighlight, TouchableNativeFeedback, Platform, Text, StyleSheet, View} from 'react-native';
 
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#f7f7f9',
+    height: 30,
+    width: 30
+  }
+});
+
 export default class MapButton extends Component {
   buttonClicked() {
     console.log('Bro is clicked');
@@ -25,10 +33,6 @@ export default class MapButton extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#f7f7f9',
-    height: 30,
-    width: 30
-  }
-});
+MapButton.propTypes = {
+  setCurrentPosition: PropTypes.func
+};
