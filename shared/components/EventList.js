@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView } from 'react-native';
+import {
+  ListView
+} from 'react-native';
 import Card from './Card';
 
 class EventList extends Component {
@@ -8,10 +10,14 @@ class EventList extends Component {
   }
 
   renderRowTxt(rowData) {
-    return (
-      <Card title = {rowData.title}
-            address = {rowData.address}/>
-    );
+    if (rowData) {
+      return (
+        <Card title = {rowData.title}
+              address = {rowData.address}
+              item = {rowData}/>
+      );
+    }
+    return null;
   }
 
   componentDidMount() {
@@ -20,12 +26,13 @@ class EventList extends Component {
 
   render() {
     return (
-    <ListView
-      dataSource={new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2
-      }).cloneWithRows(this.props.dataSource)}
-      renderRow={this.renderRowTxt}
-      enableEmptySections={true} />
+      <ListView
+        removeClippedSubviews={false}
+        dataSource={new ListView.DataSource({
+          rowHasChanged: (r1, r2) => r1 !== r2
+        }).cloneWithRows(this.props.dataSource)}
+        renderRow={this.renderRowTxt}
+        enableEmptySections={true} />
     );
   }
 }
