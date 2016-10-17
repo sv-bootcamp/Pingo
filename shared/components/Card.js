@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import ImageSwiper from './Imageswiper';
 
 const styles = StyleSheet.create({
   title: {
@@ -10,19 +11,36 @@ const styles = StyleSheet.create({
   address: {
     flex: 1,
     fontSize: 16
+  },
+  favorite: {
+    flex: 1,
+    height: 40,
+    width: 40
   }
 });
 
 class Card extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSaved: false
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState({
+      isSaved: !this.state.isSaved
+    });
+  }
+
   render() {
     return (
-		<View>
-			<Text style={styles.title}>{this.props.title}</Text>
-			<Text style={styles.address}>{this.props.address}</Text>
-				<TouchableOpacity	style={{margin: 1, backgroundColor: 'red', flex: 1}}>
-					<Text style={styles.text}>Favorite</Text>
-				</TouchableOpacity>
-		</View>
+    <View>
+      <Text style= { styles.title }>{this.props.title}</Text>
+			<Text style= { styles.address }>{this.props.address}</Text>
+      <ImageSwiper/>
+    </View>
 	);
   }
 }

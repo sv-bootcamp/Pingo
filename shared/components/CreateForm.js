@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TouchableHighlight	
+	TouchableHighlight
 } from 'react-native';
 import TForm from 'tcomb-form-native';
 
@@ -64,30 +64,30 @@ class CreateForm extends Component {
     this.getAddressData();
   }
 
-	onPress() {
-		const value = this.refs.form.getValue();
-		const location = this.props.location;
+  onPress() {
+    const value = this.refs.form.getValue();
+    const location = this.props.location;
 
-		if (value) {
-			  fetch(API_SETITEMS, {
-			  	method: 'POST',
-			  	headers: {
-			  		'Accept': 'application/json',
-			  		'Content-Type': 'application/json'
-			  	},
-			  	body: JSON.stringify({
-			  		description: value.title,
-			  		lat: location[0],
-			  		lng: location[1],
-			  		address: value.address,
-					  startTime: value.startTime,
-					  endTime: value.endTime
-			  	})
-			  })
-			.then((response) => response.json())
-			.then((rjson) => {
-			  console.log('r:'+JSON.stringify(rjson));
-			})
+    if (value) {
+      fetch(API_SETITEMS, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          description: value.title,
+          lat: location[0],
+          lng: location[1],
+          address: value.address,
+          startTime: value.startTime,
+          endTime: value.endTime
+        })
+      })
+      .then((response) => response.json())
+      .then((rjson) => {
+        console.log('r:'+ JSON.stringify(rjson));
+      })
       .catch((error) => {
         console.warn(error);
       });
@@ -96,7 +96,7 @@ class CreateForm extends Component {
 
   getAddressData() {
     const location = this.props.location;
-    fetch(API_GEODATA + '?latlng = ' + location.toString() + '&key = '+ API_KEY)
+    fetch(API_GEODATA + '?latlng = ' + location.toString() + '&key = ' + API_KEY)
 		.then((response) => response.json())
 		.then((responseJson) => {
       const address = responseJson.results[0].formatted_address;
