@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {TouchableHighlight, Platform, Text, StyleSheet, View} from 'react-native';
+import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
   button: {
