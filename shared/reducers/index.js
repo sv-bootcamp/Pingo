@@ -1,9 +1,10 @@
 import {combineReducers} from 'redux';
 import mapReducer from './map';
 import listReducer from './list';
-import navigatorReducer from './navigator';
+import fluxReducer from './flux';
+
 export default combineReducers({
   map: mapReducer,
-  navigator: navigatorReducer,
-  list: listReducer
+  list: listReducer,
+  flux: fluxReducer
 });

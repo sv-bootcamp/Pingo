@@ -3,7 +3,6 @@ import { getAllItems } from '../actions/listActions';
 import { connect } from 'react-redux';
 
 const getCategorizedItems = (items, categoryFilter) => {
-  console.log("hi");
   switch (categoryFilter) {
   case 'SHOW_ALL':
     return items;

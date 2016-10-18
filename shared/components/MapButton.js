@@ -10,16 +10,12 @@ const styles = StyleSheet.create({
 });
 
 export default class MapButton extends Component {
-  buttonClicked() {
-    console.log('Bro is clicked');
-  }
-
   render() {
     return (
     <View>
       <TouchableHighlight
         style={styles.button}
-        onPress={this.props.setCurrentPosition}>
+        onPress={this.props.handleOnPress}>
         <View>
           <Text>Button!</Text>
         </View>
@@ -30,5 +26,5 @@ export default class MapButton extends Component {
 }
 
 MapButton.propTypes = {
-  setCurrentPosition: PropTypes.func
+  handleOnPress: PropTypes.func
 };

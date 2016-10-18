@@ -18,6 +18,7 @@
     "react-native": "0.34.0",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-maps": "^0.10.1",
+    "react-native-router-flux": "^3.36.0",
     "react-native-tab-view": "0.0.31",
     "react-redux": "4.4.5",
     "redux": "3.5.2",
