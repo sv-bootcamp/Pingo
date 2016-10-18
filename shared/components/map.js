@@ -72,7 +72,7 @@ export default class Map extends Component {
               title={item.title}
               onPress={()=>{this.props.onMarkerClick(item)}}
               onSelect={()=>{this.props.onMarkerClick(item)}}/>
-          ))}
+          ))} 
           <MapView.UrlTile
               urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
