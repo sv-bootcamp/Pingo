@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 import Card from './Card';
+import MapButton from './MapButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,8 +11,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    justifyContent: 'flex-end'
   },
   map: {
     position: 'absolute',
@@ -19,6 +19,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
+  },
+  buttonSection: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 10
+  },
+  positionButton: {
+  },
+  cameraButton: {
   }
 });
 
@@ -27,8 +38,7 @@ export default class Map extends Component {
     super(props);
   }
 
-  componentWillMount() {
-    this.props.getMapItems();
+  setCurrentPosition() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         let newLocation = {
@@ -40,6 +50,11 @@ export default class Map extends Component {
         this.props.setLocation(newLocation);
       }
     );
+  }
+
+  componentWillMount() {
+    this.props.getMapItems();
+    this.setCurrentPosition();
   }
 
   render() {
@@ -62,6 +77,16 @@ export default class Map extends Component {
               urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
         </MapView>
+
+        <View
+          style={styles.buttonSection}>
+          <MapButton
+            style={styles.positionButton}
+            setCurrentPosition={this.setCurrentPosition.bind(this)}/>
+          <MapButton
+            style={styles.cameraButton}/>
+        </View>
+
         <Card
           title={this.props.selectedItem.title}
           address={this.props.selectedItem.address}

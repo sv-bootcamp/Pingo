@@ -1,14 +1,25 @@
 import React, {PropTypes, Component} from 'react';
-import {View, Navigator} from 'react-native';
+import {Platform, StyleSheet, View, Navigator} from 'react-native';
 import FirstLayout from '../containers/SceneMapLayout';
 import HeaderLayout from '../containers/headerLayout';
 import Second from './sceneList';
+
+const styles = StyleSheet.create({
+  totalView: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        marginTop: 20
+      }
+    })
+  }
+});
 
 export default class SceneInitial extends Component {
   render() {
     this.props.setNavigator(this.props.navigator);
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.totalView}>
         <View style={{flex: 1.25, backgroundColor: 'white'}}>
           <HeaderLayout/>
         </View>
