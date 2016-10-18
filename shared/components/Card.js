@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import ImageSwiper from './ImageSwiper';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -25,9 +26,7 @@ class Card extends Component {
 		<View style={styles.wrapper}>
 			<Text style={styles.title}>{this.props.title}</Text>
 			<Text style={styles.address}>{this.props.address}</Text>
-				<TouchableOpacity	style={{margin: 1, backgroundColor: 'red', flex: 1}}>
-					<Text style={styles.text}>Favorite</Text>
-				</TouchableOpacity>
+      <ImageSwiper/>
 		</View>
 	);
   }
