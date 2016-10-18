@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
+import {Actions} from 'react-native-router-flux';
 import Card from './Card';
 import MapButton from './MapButton';
 
@@ -52,6 +53,11 @@ export default class Map extends Component {
     );
   }
 
+  handleCameraButton() {
+    this.props.setCurrentScene('cameraView');
+    Actions.cameraView();
+  }
+
   componentWillMount() {
     this.props.getMapItems();
     this.setCurrentPosition();
@@ -66,13 +72,15 @@ export default class Map extends Component {
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
         >
+
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
               onPress={()=>{this.props.onMarkerClick(item)}}
               onSelect={()=>{this.props.onMarkerClick(item)}}/>
-          ))} 
+          ))}
+
           <MapView.UrlTile
               urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
@@ -82,9 +90,12 @@ export default class Map extends Component {
           style={styles.buttonSection}>
           <MapButton
             style={styles.positionButton}
-            setCurrentPosition={this.setCurrentPosition.bind(this)}/>
+            handleOnPress={this.setCurrentPosition.bind(this)}
+          />
           <MapButton
-            style={styles.cameraButton}/>
+            style={styles.cameraButton}
+            handleOnPress={this.handleCameraButton.bind(this)}
+          />
         </View>
 
         <Card
@@ -103,6 +114,7 @@ Map.propTypes = {
   setLocation: PropTypes.func,
   selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
+  setCurrentScene: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string

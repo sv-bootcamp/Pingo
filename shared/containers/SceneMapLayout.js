@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {setRoute, setNavigator} from '../actions/navigatorActions';
+import {setCurrentScene} from '../actions/fluxActions';
 import SceneMap from '../components/sceneMap';
 
 const mapStateToProps = () => {
@@ -10,11 +10,8 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setRoute: (state) => {
-      return dispatch(setRoute(state));
-    },
-    setNavigator: (navigator) => {
-      return dispatch(setNavigator(navigator));
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
     }
   };
 };
