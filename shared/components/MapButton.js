@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {TouchableHighlight, TouchableNativeFeedback, Platform, Text, StyleSheet, View} from 'react-native';
+import {TouchableHighlight, Platform, Text, StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
   button: {
@@ -15,19 +15,15 @@ export default class MapButton extends Component {
   }
 
   render() {
-    let TouchableElement = TouchableHighlight;
-    if (Platform.OS === 'android') {
-     TouchableElement = TouchableNativeFeedback;
-    }
     return (
     <View>
-      <TouchableElement
+      <TouchableHighlight
         style={styles.button}
         onPress={this.props.setCurrentPosition}>
         <View>
           <Text>Button!</Text>
         </View>
-      </TouchableElement>        
+      </TouchableHighlight>
     </View>
     );
   }
