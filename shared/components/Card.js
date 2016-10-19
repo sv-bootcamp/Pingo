@@ -22,17 +22,23 @@ const styles = StyleSheet.create({
 
 class Card extends Component {
   render() {
+    if (this.props.cardVisible) {
+      return (
+        <View style={styles.wrapper}>
+          <Text style={styles.title}>{this.props.title}</Text>
+          <Text style={styles.address}>{this.props.address}</Text>
+          <ImageSwiper/>
+        </View>
+      );
+    }
     return (
-		<View style={styles.wrapper}>
-			<Text style={styles.title}>{this.props.title}</Text>
-			<Text style={styles.address}>{this.props.address}</Text>
-      <ImageSwiper/>
-		</View>
-	);
+      <View/>
+    );
   }
 }
 
 Card.propTypes = {
+  cardVisible: PropTypes.bool,
   address: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string

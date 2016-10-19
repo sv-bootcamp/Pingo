@@ -71,6 +71,7 @@ export default class Map extends Component {
           style ={styles.map}
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
+          onPress={this.props.hideMapCard}
         >
 
           {this.props.items.map(item => (
@@ -99,6 +100,7 @@ export default class Map extends Component {
         </View>
 
         <Card
+          cardVisible={this.props.cardVisible}
           title={this.props.selectedItem.title}
           address={this.props.selectedItem.address}
         />
@@ -114,6 +116,8 @@ Map.propTypes = {
   setLocation: PropTypes.func,
   selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
+  cardVisible: PropTypes.func,
+  hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,

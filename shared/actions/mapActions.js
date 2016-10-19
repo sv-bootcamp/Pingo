@@ -33,6 +33,12 @@ export const onMarkerClick = (item) => {
   };
 };
 
+export const hideMapCard = () => {
+  return {
+    type: types.hideMapCard
+  };
+};
+
 export const categorizeItems = (category) => {
   return {
     type: types.categorizeItems,
