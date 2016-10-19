@@ -2,8 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import ListLayout from '../containers/listLayout';
 
 export default class SceneList extends Component {
-  constructor(props) {
-    super(props);
+  componentDidMount () {
+    this.props.setCurrentScene('list');
   }
 
   render() {
@@ -14,8 +14,5 @@ export default class SceneList extends Component {
 }
 
 SceneList.propTypes = {
-  route: PropTypes.any,
-  navigator: PropTypes.any,
-  setRoute: PropTypes.func,
-  setNavigator: PropTypes.func
+  setCurrentScene: PropTypes.func
 };

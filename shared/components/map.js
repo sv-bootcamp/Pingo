@@ -1,7 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
+import {Actions} from 'react-native-router-flux';
 import Card from './Card';
+import MapButton from './MapButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,8 +12,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    justifyContent: 'flex-end'
   },
   map: {
     position: 'absolute',
@@ -19,6 +20,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
+  },
+  buttonSection: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 10
+  },
+  positionButton: {
+  },
+  cameraButton: {
   }
 });
 
@@ -27,8 +39,7 @@ export default class Map extends Component {
     super(props);
   }
 
-  componentWillMount() {
-    this.props.getMapItems();
+  setCurrentPosition() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         let newLocation = {
@@ -42,6 +53,16 @@ export default class Map extends Component {
     );
   }
 
+  handleCameraButton() {
+    this.props.setCurrentScene('cameraView');
+    Actions.cameraView();
+  }
+
+  componentWillMount() {
+    this.props.getMapItems();
+    this.setCurrentPosition();
+  }
+
   render() {
     return (
       <View style ={styles.container}>
@@ -51,6 +72,7 @@ export default class Map extends Component {
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
         >
+
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
@@ -58,10 +80,24 @@ export default class Map extends Component {
               onPress={()=>{this.props.onMarkerClick(item)}}
               onSelect={()=>{this.props.onMarkerClick(item)}}/>
           ))}
+
           <MapView.UrlTile
               urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
         </MapView>
+
+        <View
+          style={styles.buttonSection}>
+          <MapButton
+            style={styles.positionButton}
+            handleOnPress={this.setCurrentPosition.bind(this)}
+          />
+          <MapButton
+            style={styles.cameraButton}
+            handleOnPress={this.handleCameraButton.bind(this)}
+          />
+        </View>
+
         <Card
           title={this.props.selectedItem.title}
           address={this.props.selectedItem.address}
@@ -78,6 +114,7 @@ Map.propTypes = {
   setLocation: PropTypes.func,
   selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
+  setCurrentScene: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string
