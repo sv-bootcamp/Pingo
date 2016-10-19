@@ -122,7 +122,8 @@ class CreateForm extends Component {
 }
 
 CreateForm.propTypes = {
-  location: PropTypes.array
+  location: PropTypes.array,
+  img: PropTypes.any
 };
 
 CreateForm.defaultProps = {
