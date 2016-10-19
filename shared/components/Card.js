@@ -4,10 +4,8 @@ import ImageSwiper from './ImageSwiper';
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#f7f7f9',
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10
+    backgroundColor: '#ffffff',
+    height: 199
   },
   title: {
     flex: 2,

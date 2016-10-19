@@ -24,9 +24,9 @@ const styles = StyleSheet.create({
   buttonSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 10
+    marginLeft: 16,
+    marginRight: 16,
+    marginBottom: 16
   },
   positionButton: {
   },
@@ -71,7 +71,6 @@ export default class Map extends Component {
           style ={styles.map}
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
-          onPress={this.props.hideMapCard}
         >
 
           {this.props.items.map(item => (
@@ -91,12 +90,12 @@ export default class Map extends Component {
           style={styles.buttonSection}>
           <MapButton
             style={styles.positionButton}
-            handleOnPress={this.setCurrentPosition.bind(this)}
-          />
+            imageSource={'position'}
+            handleOnPress={this.setCurrentPosition.bind(this)}/>
           <MapButton
             style={styles.cameraButton}
-            handleOnPress={this.handleCameraButton.bind(this)}
-          />
+            imageSource={'camera'}
+            handleOnPress={this.handleCameraButton.bind(this)}/>
         </View>
 
         <Card
@@ -116,7 +115,7 @@ Map.propTypes = {
   setLocation: PropTypes.func,
   selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
-  cardVisible: PropTypes.func,
+  cardVisible: PropTypes.bool,
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({

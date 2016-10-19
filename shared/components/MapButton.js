@@ -1,23 +1,37 @@
 import React, {PropTypes, Component} from 'react';
-import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
+import {TouchableHighlight, Image, StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
-  button: {
+  position: {
     backgroundColor: '#f7f7f9',
-    height: 30,
-    width: 30
+    height: 48,
+    width: 48,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  camera: {
+    backgroundColor: '#1e1e1e',
+    height: 48,
+    width: 48,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
 export default class MapButton extends Component {
   render() {
+    const imageSource = (this.props.imageSource === 'position') ?
+    require('../resources/btn_location/drawable-mdpi/btn_location.png') :
+    require('../resources/btn_camera/drawable-mdpi/btn_camera.png');
+
     return (
     <View>
       <TouchableHighlight
-        style={styles.button}
+        style={(this.props.imageSource === 'position') ? styles.position : styles.camera}
         onPress={this.props.handleOnPress}>
         <View>
-          <Text>Button!</Text>
+          <Image
+            source={imageSource} />
         </View>
       </TouchableHighlight>
     </View>
@@ -26,5 +40,6 @@ export default class MapButton extends Component {
 }
 
 MapButton.propTypes = {
-  handleOnPress: PropTypes.func
+  handleOnPress: PropTypes.func,
+  imageSource: PropTypes.string
 };
