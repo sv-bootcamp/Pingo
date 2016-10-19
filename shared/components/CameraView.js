@@ -8,6 +8,7 @@ import {
   View,
   Text
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import Camera from 'react-native-camera';
 
 const styles = StyleSheet.create({
@@ -34,7 +35,10 @@ const styles = StyleSheet.create({
 class CameraView extends Component {
   takePicture() {
     this.camera.capture()
-    .then((data) => console.log(data))
+    .then((data) => { 
+      console.log(data.path);
+      Actions.createForm();
+    })
     .catch(err => console.error(err));
   }
 
@@ -46,6 +50,7 @@ class CameraView extends Component {
           this.camera = cam;
         }}
         style={styles.preview}
+        captureTarget={Camera.constants.CaptureTarget.disk}
         aspect={Camera.constants.Aspect.fill}>
         <Text style={styles.capture}
           onPress={this.takePicture.bind(this)}>[[CAPTURE]]</Text>
