@@ -32,7 +32,7 @@ export default class AllLayout extends Component {
   render() {
     return (
       <View style={{flex:1}}>
-          <HeaderLayout/>
+        <HeaderLayout/>
         <View style={{flex: 4}}>
           <Router
             scenes={scenes}

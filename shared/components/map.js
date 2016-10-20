@@ -66,20 +66,11 @@ export default class Map extends Component {
   render() {
     return (
       <View style ={styles.container}>
-
         <MapView
           style ={styles.map}
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
         >
-
-          {this.props.items.map(item => (
-            <MapView.Marker
-              coordinate={{latitude: item.lat, longitude: item.lng}}
-              title={item.title}
-              onPress={()=>{this.props.onMarkerClick(item)}}
-              onSelect={()=>{this.props.onMarkerClick(item)}}/>
-          ))}
 
           <MapView.UrlTile
               urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
