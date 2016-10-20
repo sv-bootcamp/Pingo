@@ -7,3 +7,5 @@ export const setLocation = 'SET_LOCATION';
 export const setTabViewIndex = 'SET_TAB_VIEW_INDEX';
 export const getAllItems = 'GET_ALL_ITEMS';
 export const setCurrentScene = 'SET_CURRENT_SCENE';
+export const setCurrentPic = 'SET_CURRENT_PIC';
+export const setEncPic = 'SET_ENC_PIC';

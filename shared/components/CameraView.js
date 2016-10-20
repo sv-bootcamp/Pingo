@@ -1,5 +1,5 @@
 import React, {
-  Component
+  Component, PropTypes
 } from 'react';
 
 import {
@@ -37,6 +37,8 @@ class CameraView extends Component {
     this.camera.capture()
     .then((data) => { 
       console.log(data.path);
+
+      this.props.setCurrentPic(data.path);
       Actions.createForm();
     })
     .catch(err => console.error(err));
@@ -58,6 +60,10 @@ class CameraView extends Component {
     </View>
   );
   }
+}
+
+CameraView.propTypes = {
+  setCurrentPic: PropTypes.func
 }
 
 export default CameraView;

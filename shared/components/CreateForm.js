@@ -7,6 +7,7 @@ import {
   Image,
 	Text,
 	View,
+  ScrollView,
 	TouchableHighlight  
 } from 'react-native';
 import {Buffer} from 'buffer';
@@ -19,9 +20,9 @@ const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 const Form = TForm.form.Form;
 
 const Category = TForm.enums({
-  Event: 'Event',
-  Facility: 'Facility',
-  Warning: 'Warning'
+  Event: 'event',
+  Facility: 'facility',
+  Warning: 'warning'
 });
 
 const Event = TForm.struct({
@@ -35,8 +36,8 @@ const Event = TForm.struct({
 });
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
+  container: {    
+    flex: 1,
     marginTop: 50,
     padding: 20,
     backgroundColor: '#ffffff'
@@ -70,18 +71,21 @@ class CreateForm extends Component {
       value: {
         address: '',        
         title: '',
-        category: 'Event',
-        img: '/Users/elegantuniv/Library/Developer/CoreSimulator/Devices/68C77AD4-A7EB-4395-AF92-28B60950BBC9/data/Containers/Data/Application/25A00196-A2AE-460C-A3C4-575118D55FFF/Documents/EF9E211C-EAE7-4CA9-A729-4AB2B1E618F8.jpg'
-      }
-    };
-    this.getAddressData();
+        category: 'event'
+      }      
+    };    
+  }
 
-    const uri = '/Users/elegantuniv/Library/Developer/CoreSimulator/Devices/68C77AD4-A7EB-4395-AF92-28B60950BBC9/data/Containers/Data/Application/25A00196-A2AE-460C-A3C4-575118D55FFF/Documents/EF9E211C-EAE7-4CA9-A729-4AB2B1E618F8.jpg';
+  componentWillMount() {
+    this.getAddressData();    
+
+    const uri = this.props.pic;    
     
     RNFS.readFile(uri, 'base64')
     .then((file) =>{
       const enc = new Buffer(file, 'binary').toString('base64');
-      console.log("d:"+enc);
+      // console.log(enc);      
+      this.setState({img: enc});
     })
     .catch((err) => {
       console.log(err.message, err.code);
@@ -91,7 +95,7 @@ class CreateForm extends Component {
 	onPress() {
 		const value = this.refs.form.getValue();
 		const location = this.props.location;
-
+    const img = this.state.img;        
 		if (value) {
 			  fetch(API_SETITEMS, {
 			  	method: 'POST',
@@ -100,14 +104,17 @@ class CreateForm extends Component {
 			  		'Content-Type': 'application/json'
 			  	},
 			  	body: JSON.stringify({
-			  		description: value.title,
+			  		title: String(value.title),
 			  		lat: location[0],
 			  		lng: location[1],
-            caption: value.caption,
-			  		address: value.address,
-					  startTime: value.startTime,
-					  endTime: value.endTime
-			  	})
+            address: String(value.address),
+            category: String(value.category),
+			  		image: String(img),
+            userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
+					  startTime: String(value.startTime),
+					  endTime: String(value.endTime),
+            caption: String(value.caption)
+			  	})         
 			  })
 			.then((response) => response.json())
 			.then((rjson) => {
@@ -151,8 +158,9 @@ class CreateForm extends Component {
     };
 
     return (
-			<View style={styles.container}>
-        <Image source={{uri: this.state.value.img}} style={{width: 120, height: 120}} />
+			<ScrollView style={styles.container}>
+        <Text style={styles.title}>{this.props.encpic}</Text>
+        <Image source={{uri: this.props.pic}} style={{width: 120, height: 120}} />
 				<Form
 					ref="form"
 					type={Event}
@@ -162,7 +170,7 @@ class CreateForm extends Component {
 					onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
 					<Text style={styles.buttonText}>Save</Text>
 				</TouchableHighlight>
-			</View>
+			</ScrollView>
 		);
   }
 
@@ -170,7 +178,9 @@ class CreateForm extends Component {
 
 CreateForm.propTypes = {
   location: PropTypes.array,
-  img: PropTypes.string
+  setEncPic: PropTypes.func,
+  pic: PropTypes.string,
+  encpic: PropTypes.string
 };
 
 CreateForm.defaultProps = {

@@ -4,8 +4,8 @@ import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
 import SceneListLayout from './sceneListLayout';
 import SceneMapLayout from './SceneMapLayout';
-import CreateForm from '../components/CreateForm';
-import CameraView from '../components/CameraView';
+import FormLayout from './formLayout';
+import CameraLayout from './cameraLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
@@ -16,10 +16,10 @@ const scenes = Actions.create(
       SceneListLayout
     }/>
     <Scene key="createForm" hideNavBar={true} component={
-      CreateForm
+      FormLayout
     }/>
     <Scene key="cameraView" hideNavBar={true} component={
-      CameraView
+      CameraLayout
     }/>
   </Scene>
 );
