@@ -27,10 +27,6 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginRight: 16,
     marginBottom: 16
-  },
-  positionButton: {
-  },
-  cameraButton: {
   }
 });
 
@@ -63,6 +59,10 @@ export default class Map extends Component {
     this.setCurrentPosition();
   }
 
+  onMapClick(obj) {
+    console.log(obj)
+  }
+
   render() {
     return (
       <View style ={styles.container}>
@@ -71,6 +71,7 @@ export default class Map extends Component {
           style ={styles.map}
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
+          onPress={(obj) => this.onMapClick(obj.bubbles)}
         >
 
           {this.props.items.map(item => (
@@ -89,11 +90,9 @@ export default class Map extends Component {
         <View
           style={styles.buttonSection}>
           <MapButton
-            style={styles.positionButton}
             imageSource={'position'}
             handleOnPress={this.setCurrentPosition.bind(this)}/>
           <MapButton
-            style={styles.cameraButton}
             imageSource={'camera'}
             handleOnPress={this.handleCameraButton.bind(this)}/>
         </View>

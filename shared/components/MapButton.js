@@ -6,6 +6,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f9',
     height: 48,
     width: 48,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e8e8e8',
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -13,6 +16,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#1e1e1e',
     height: 48,
     width: 48,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#111111',
     justifyContent: 'center',
     alignItems: 'center'
   }
