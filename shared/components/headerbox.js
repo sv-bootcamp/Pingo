@@ -87,66 +87,67 @@ export default class Headerbox extends Component {
   render() {
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
-          <View style= {{flexDirection:'column', flex: 1, backgroundColor: 'white'}}>
-            <View style= {{flexDirection:'row' }}>
-              <TouchableOpacity
-                style={styles.button_myPage}
-              >
-                <Image
-                  style={styles.image}
-                  source={require('../../static/images/btn_mypage.png')}
-                />
-              </TouchableOpacity>
-              <Text style={styles.text}>San Francisco</Text>
-              <TouchableOpacity
-                  style={styles.button_refresh}
-                  onPress={this._onRefresh}>
-                <Image
-                  style={styles.image}
-                  source={require('../../static/images/btn_refresh.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button_list}
-                onPress={this._onForward}>
-                <Image
-                  style={styles.image}
-                  source={require('../../static/images/btn_list.png')}
-                />
-              </TouchableOpacity>
-            </View>
-            <TabViewAnimated
-                style={styles.container}
-                navigationState={{
-                  index: this.props.tabview_index,
-                  routes: this.props.tabview_routes
-                }}
-                renderScene={(props) => {
-                  return <TabViewPage {...props} renderScene={()=>{}}/>;
-                }}
-                renderHeader={this._renderHeader}
-                onRequestChangeTab={(index) => {
-                  this.props.setTabViewIndex(index);
-                  switch (index) {
-                    case 0:
-                      this.props.categorizeItems('SHOW_ALL');
-                      return;
-                    case 1:
-                      this.props.categorizeItems('EVENTS');
-                      return;
-                    case 2:
-                      this.props.categorizeItems('FACILITIES');
-                      return;
-                    case 3:
-                      this.props.categorizeItems('WARNING');
-                      return;
-                    default:
-                      return;
-                  }
-                }
-                }
-            />
+        <View style= {{flexDirection:'column', flex: 1, backgroundColor: 'white'}}>
+          <View style= {{flexDirection:'row' }}>
+            <TouchableOpacity
+              style={styles.button_myPage}
+            >
+              <Image
+                style={styles.image}
+                source={require('../../static/images/btn_mypage.png')}
+              />
+            </TouchableOpacity>
+            <Text style={styles.text}>San Francisco</Text>
+            <TouchableOpacity
+                style={styles.button_refresh}
+                onPress={this._onRefresh}>
+              <Image
+                style={styles.image}
+                source={require('../../static/images/btn_refresh.png')}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button_list}
+              onPress={this._onForward}>
+              <Image
+                style={styles.image}
+                source={require('../../static/images/btn_list.png')}
+              />
+            </TouchableOpacity>
           </View>
+          <TabViewAnimated
+            style={styles.container}
+            navigationState={{
+              index: this.props.tabview_index,
+              routes: this.props.tabview_routes
+            }}
+            renderScene={(props) => {
+              return <TabViewPage {...props} renderScene={()=>{}}/>;
+            }}
+            renderHeader={this._renderHeader}
+            onRequestChangeTab={
+              (index) => {
+                this.props.setTabViewIndex(index);
+                switch (index) {
+                case 0:
+                  this.props.categorizeItems('SHOW_ALL');
+                  return;
+                case 1:
+                  this.props.categorizeItems('EVENTS');
+                  return;
+                case 2:
+                  this.props.categorizeItems('FACILITIES');
+                  return;
+                case 3:
+                  this.props.categorizeItems('WARNING');
+                  return;
+                default:
+                  return;
+                }
+              }
+            }
+          />
+        </View>
       );
     }
     return null;
