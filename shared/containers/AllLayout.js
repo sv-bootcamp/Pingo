@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
 import React, {Component} from 'react';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
@@ -24,6 +24,17 @@ const scenes = Actions.create(
   </Scene>
 );
 
+const styles = StyleSheet.create({
+  iosMargin: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        marginTop: 19
+      }
+    })
+  }
+});
+
 export default class AllLayout extends Component {
   constructor(props) {
     super(props);
@@ -31,8 +42,8 @@ export default class AllLayout extends Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
-        <HeaderLayout/>
+      <View style={styles.iosMargin}>
+          <HeaderLayout/>
         <View style={{flex: 4}}>
           <Router
             scenes={scenes}

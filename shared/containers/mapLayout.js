@@ -1,5 +1,5 @@
 import Map from '../components/map';
-import { onLocationChange, getMapItems, setLocation, onMarkerClick } from '../actions/mapActions';
+import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { connect } from 'react-redux';
 
@@ -23,7 +23,8 @@ const mapStateToProps = (state) => {
     items: getCategorizedItems(state.map.items, state.map.categoryFilter),
     selectedItem: state.map.selectedItem,
     currentLocation: state.map.currentLocation,
-    setCurrentScene: state.flux.setCurrentScene
+    setCurrentScene: state.flux.setCurrentScene,
+    cardVisible: state.map.cardVisible
   };
 };
 
@@ -40,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onMarkerClick: (item) => {
       return dispatch(onMarkerClick(item));
+    },
+    hideMapCard: () => {
+      return dispatch(hideMapCard());
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
