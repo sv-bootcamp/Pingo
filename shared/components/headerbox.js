@@ -62,14 +62,14 @@ export default class Headerbox extends Component {
   }
 
   _renderHeader(props) {
-    return <TabBarTop
+    return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
         <Text style={{ margin: 0, color: '#8e8e8e' }}>{routes.route.title}</Text>
       }
       style={{backgroundColor: 'white'}}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
-    />;
+    />);
   }
   _onForward() {
     if (this.props.currentScene === 'map') {
