@@ -24,13 +24,9 @@ const styles = StyleSheet.create({
   buttonSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 10
-  },
-  positionButton: {
-  },
-  cameraButton: {
+    marginLeft: 16,
+    marginRight: 16,
+    marginBottom: 16
   }
 });
 
@@ -63,16 +59,19 @@ export default class Map extends Component {
     this.setCurrentPosition();
   }
 
+  onMapClick(obj) {
+    console.log(obj);
+  }
+
   render() {
     return (
       <View style ={styles.container}>
-
         <MapView
           style ={styles.map}
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
+          onPress={(obj) => this.onMapClick(obj.bubbles)}
         >
-
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
@@ -82,23 +81,22 @@ export default class Map extends Component {
           ))}
 
           <MapView.UrlTile
-              urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
+            urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
         </MapView>
 
         <View
           style={styles.buttonSection}>
           <MapButton
-            style={styles.positionButton}
-            handleOnPress={this.setCurrentPosition.bind(this)}
-          />
+            imageSource={'position'}
+            handleOnPress={this.setCurrentPosition.bind(this)}/>
           <MapButton
-            style={styles.cameraButton}
-            handleOnPress={this.handleCameraButton.bind(this)}
-          />
+            imageSource={'camera'}
+            handleOnPress={this.handleCameraButton.bind(this)}/>
         </View>
 
         <Card
+          cardVisible={this.props.cardVisible}
           title={this.props.selectedItem.title}
           address={this.props.selectedItem.address}
         />
@@ -114,6 +112,8 @@ Map.propTypes = {
   setLocation: PropTypes.func,
   selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
+  cardVisible: PropTypes.bool,
+  hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,

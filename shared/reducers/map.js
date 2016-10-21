@@ -17,7 +17,8 @@ const initialState = {
   },
   items: [],
   selectedItem: {},
-  categoryFilter: 'SHOW_ALL'
+  categoryFilter: 'SHOW_ALL',
+  cardVisible: false
 };
 
 const map = (state = initialState, action = {}) => {
@@ -43,8 +44,14 @@ const map = (state = initialState, action = {}) => {
       tabview_index: { $set: action.index }
     });
   case types.onMarkerClick:
+    console.log('marker is clicked');
     return update(state, {
-      selectedItem: { $set: action.item }
+      selectedItem: { $set: action.item },
+      cardVisible: { $set: true }
+    });
+  case types.hideMapCard:
+    return update(state, {
+      cardVisible: { $set: false }
     });
   default:
     return state;

@@ -4,10 +4,8 @@ import ImageSwiper from './ImageSwiper';
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#f7f7f9',
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10
+    backgroundColor: '#ffffff',
+    height: 199
   },
   title: {
     flex: 2,
@@ -22,17 +20,23 @@ const styles = StyleSheet.create({
 
 class Card extends Component {
   render() {
+    if (this.props.cardVisible) {
+      return (
+        <View style={styles.wrapper}>
+          <Text style={styles.title}>{this.props.title}</Text>
+          <Text style={styles.address}>{this.props.address}</Text>
+          <ImageSwiper/>
+        </View>
+      );
+    }
     return (
-		<View style={styles.wrapper}>
-			<Text style={styles.title}>{this.props.title}</Text>
-			<Text style={styles.address}>{this.props.address}</Text>
-      <ImageSwiper/>
-		</View>
-	);
+      <View/>
+    );
   }
 }
 
 Card.propTypes = {
+  cardVisible: PropTypes.bool,
   address: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string
