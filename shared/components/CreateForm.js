@@ -13,6 +13,7 @@ import {
 import {Buffer} from 'buffer';
 import TForm from 'tcomb-form-native';
 import RNFS from 'react-native-fs';
+import {Actions} from 'react-native-router-flux';
 
 const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
 const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
@@ -20,9 +21,9 @@ const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 const Form = TForm.form.Form;
 
 const Category = TForm.enums({
-  Event: 'event',
-  Facility: 'facility',
-  Warning: 'warning'
+  event: 'event',
+  facility: 'facility',
+  warning: 'warning'
 });
 
 const Event = TForm.struct({
@@ -79,7 +80,7 @@ class CreateForm extends Component {
   componentWillMount() {
     this.getAddressData();    
 
-    const uri = this.props.pic;    
+    const uri = this.props.pic;
     
     RNFS.readFile(uri, 'base64')
     .then((file) =>{
@@ -114,11 +115,12 @@ class CreateForm extends Component {
 					  startTime: String(value.startTime),
 					  endTime: String(value.endTime),
             caption: String(value.caption)
-			  	})         
+			  	})
 			  })
 			.then((response) => response.json())
 			.then((rjson) => {
 			  console.log('r:'+JSON.stringify(rjson));
+        Actions.map();
 			})
       .catch((error) => {
         console.warn(error);
@@ -130,7 +132,7 @@ class CreateForm extends Component {
     const location = this.props.location;
     fetch(API_GEODATA + '?latlng = ' + location.toString() + '&key = '+ API_KEY)
 		.then((response) => response.json())
-		.then((responseJson) => {      
+		.then((responseJson) => {
       const address = responseJson.results[0].formatted_address;
       this.setState({value: {address: address}});
     });
