@@ -8,7 +8,6 @@ export function TBD() {
   };
 }
 
-
 export const receiveItems = (json) => {
   return {
     type: types.getAllItems,

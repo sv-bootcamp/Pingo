@@ -60,20 +60,18 @@ export default class Map extends Component {
   }
 
   onMapClick(obj) {
-    console.log(obj)
+    console.log(obj);
   }
 
   render() {
     return (
       <View style ={styles.container}>
-
         <MapView
           style ={styles.map}
           region ={this.props.currentLocation}
           onRegionChange ={this.props.onLocationChange}
           onPress={(obj) => this.onMapClick(obj.bubbles)}
         >
-
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
@@ -83,7 +81,7 @@ export default class Map extends Component {
           ))}
 
           <MapView.UrlTile
-              urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
+            urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
           />
         </MapView>
 
