@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image, Platform} from 'react-native';
 import {TabViewAnimated, TabViewPage, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
@@ -16,7 +16,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 10,
     color: "#2b2b2b",
-    fontFamily: "Roboto-Medium"
+    ...Platform.select({
+      andorid: {
+        fontFamily: "Roboto-Medium"
+      }
+    })
   },
   button_myPage: {
     height: 24,
@@ -87,7 +91,7 @@ export default class Headerbox extends Component {
   render() {
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
-        <View style= {{flexDirection:'column', flex: 1, backgroundColor: 'white'}}>
+        <View style= {{flexDirection:'column', backgroundColor: 'white'}}>
           <View style= {{flexDirection:'row' }}>
             <TouchableOpacity
               style={styles.button_myPage}
