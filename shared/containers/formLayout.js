@@ -10,7 +10,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    //
+    getAllItems: () => {
+      return dispatch(true);
+    }
   };
 };
 

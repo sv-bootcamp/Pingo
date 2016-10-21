@@ -3,10 +3,10 @@ import React, {
 } from 'react';
 
 import {
+  ActivityIndicator,
 	StyleSheet,
   Image,
-	Text,
-	View,
+	Text,	
   ScrollView,
 	TouchableHighlight  
 } from 'react-native';
@@ -39,8 +39,9 @@ const Event = TForm.struct({
 const styles = StyleSheet.create({
   container: {    
     flex: 1,
-    marginTop: 50,
-    padding: 20,
+    marginTop: 30,
+    marginBottom: 30,
+    padding: 20,    
     backgroundColor: '#ffffff'
   },
   title: {
@@ -62,6 +63,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'stretch',
     justifyContent: 'center'
+  },
+  centering: {
+    position: 'absolute',
+    flex: 1,
+    top: 200, 
+    left: 130,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',    
+    padding: 8
   }
 });
 
@@ -73,7 +84,8 @@ class CreateForm extends Component {
         address: '',        
         title: '',
         category: 'event'
-      }      
+      },
+      animating: false
     };    
   }
 
@@ -94,6 +106,10 @@ class CreateForm extends Component {
   }
 
 	onPress() {
+    if(this.state.animating) return;    
+
+    this.setState({animating: true});
+
 		const value = this.refs.form.getValue();
 		const location = this.props.location;
     const img = this.state.img;        
@@ -120,10 +136,12 @@ class CreateForm extends Component {
 			.then((response) => response.json())
 			.then((rjson) => {
 			  console.log('r:'+JSON.stringify(rjson));
+        this.setState({animating: false});
         Actions.map();
 			})
       .catch((error) => {
         console.warn(error);
+        this.setState({animating: false});
       });
     }
   }
@@ -160,7 +178,7 @@ class CreateForm extends Component {
     };
 
     return (
-			<ScrollView style={styles.container}>
+			<ScrollView style={styles.container}>        
         <Text style={styles.title}>{this.props.encpic}</Text>
         <Image source={{uri: this.props.pic}} style={{width: 120, height: 120}} />
 				<Form
@@ -172,6 +190,10 @@ class CreateForm extends Component {
 					onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
 					<Text style={styles.buttonText}>Save</Text>
 				</TouchableHighlight>
+        <ActivityIndicator
+          animating={this.state.animating}
+          style={[styles.centering, {height: 80}]}
+          size="large" />
 			</ScrollView>
 		);
   }
