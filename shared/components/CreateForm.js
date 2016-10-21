@@ -6,9 +6,9 @@ import {
   ActivityIndicator,
 	StyleSheet,
   Image,
-	Text,	
+	Text,
   ScrollView,
-	TouchableHighlight  
+	TouchableHighlight
 } from 'react-native';
 import {Buffer} from 'buffer';
 import TForm from 'tcomb-form-native';
@@ -37,12 +37,18 @@ const Event = TForm.struct({
 });
 
 const styles = StyleSheet.create({
-  container: {    
+  container: {
     flex: 1,
-    marginTop: 30,
-    marginBottom: 30,
-    padding: 20,    
+    marginTop: 15,
+    marginBottom: 15,
+    padding: 20,
     backgroundColor: '#ffffff'
+  },
+  preview: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,  
+    alignSelf: 'center'
   },
   title: {
     fontSize: 30,
@@ -67,11 +73,10 @@ const styles = StyleSheet.create({
   centering: {
     position: 'absolute',
     flex: 1,
-    top: 200, 
+    top: 200,
     left: 130,
-    textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'center',    
+    justifyContent: 'center',
     padding: 8
   }
 });
@@ -81,23 +86,23 @@ class CreateForm extends Component {
     super(props);
     this.state = {
       value: {
-        address: '',        
+        address: '',
         title: '',
         category: 'event'
       },
       animating: false
-    };    
+    };
   }
 
   componentWillMount() {
-    this.getAddressData();    
+    this.getAddressData();
 
     const uri = this.props.pic;
-    
+
     RNFS.readFile(uri, 'base64')
     .then((file) =>{
       const enc = new Buffer(file, 'binary').toString('base64');
-      // console.log(enc);      
+      // console.log(enc);
       this.setState({img: enc});
     })
     .catch((err) => {
@@ -106,13 +111,15 @@ class CreateForm extends Component {
   }
 
 	onPress() {
-    if(this.state.animating) return;    
+    if (this.state.animating) {
+      return;
+    }
 
     this.setState({animating: true});
 
 		const value = this.refs.form.getValue();
 		const location = this.props.location;
-    const img = this.state.img;        
+    const img = this.state.img;
 		if (value) {
 			  fetch(API_SETITEMS, {
 			  	method: 'POST',
@@ -174,13 +181,13 @@ class CreateForm extends Component {
         endTime: {
           label: '+ End at ...'
         }
-      }       
+      }
     };
 
     return (
-			<ScrollView style={styles.container}>        
+			<ScrollView style={styles.container}>
         <Text style={styles.title}>{this.props.encpic}</Text>
-        <Image source={{uri: this.props.pic}} style={{width: 120, height: 120}} />
+        <Image source={{uri: this.props.pic}} style={styles.preview} />
 				<Form
 					ref="form"
 					type={Event}
