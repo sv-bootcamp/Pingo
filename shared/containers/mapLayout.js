@@ -23,8 +23,7 @@ const mapStateToProps = (state) => {
     items: getCategorizedItems(state.map.items, state.map.categoryFilter),
     selectedItem: state.map.selectedItem,
     currentLocation: state.map.currentLocation,
-    setCurrentScene: state.flux.setCurrentScene,
-    cardVisible: state.map.cardVisible
+    setCurrentScene: state.flux.setCurrentScene
   };
 };
 

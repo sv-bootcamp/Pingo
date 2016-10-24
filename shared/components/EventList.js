@@ -9,8 +9,7 @@ class EventList extends Component {
 
   renderRowTxt(rowData) {
     return (
-      <Card dataSource = {rowData}
-            cardVisible = {this.props.cardVisible}/>
+      <Card dataSource = {rowData}/>
     );
   }
 
@@ -34,8 +33,7 @@ EventList.propTypes = {
   getAllItems: PropTypes.any,
   dataSource: PropTypes.any,
   actions: PropTypes.any,
-  getItems: PropTypes.any,
-  cardVisible: PropTypes.any
+  getItems: PropTypes.any
 };
 
 export default EventList;

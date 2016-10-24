@@ -95,7 +95,7 @@ export default class Map extends Component {
         <MapView
           style ={styles.map}
           region ={this.props.currentLocation}
-          onRegionChange ={this._onLocationChange}
+          onRegionChangeComplete={this._onLocationChange}
           onPress={(obj) => this.onMapClick(obj.bubbles)}
         >
           {this.props.items.map(item => (
@@ -124,7 +124,6 @@ export default class Map extends Component {
           (this.props.selectedItem.title === undefined) ? null :
           <Card
             dataSource = {this.props.selectedItem}
-            cardVisible = {this.props.cardVisible}
           />
         }
 
@@ -141,7 +140,6 @@ Map.propTypes = {
   setLocation: PropTypes.func,
   selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
-  cardVisible: PropTypes.bool,
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
   getZoomLevel: PropTypes.func,
