@@ -9,6 +9,7 @@ it('renders correctly', () => {
   const tree = renderer.create(
     <Map 
       items={[]}
+      currentLocation={[]}
       getMapItems={()=>{}}
       selectedItem={{}}/>
   ).toJSON();
