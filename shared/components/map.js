@@ -84,7 +84,9 @@ export default class Map extends Component {
   }
 
   onMapClick(obj) {
-    console.log(obj);
+    if(obj === undefined) {
+      this.props.hideMapCard();
+    }
   }
 
   render() {
