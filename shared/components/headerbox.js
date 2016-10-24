@@ -90,7 +90,6 @@ export default class Headerbox extends Component {
   }
 
   render() {
-    console.log(this.props.tabview_index);
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
         <View style= {{flexDirection:'column', backgroundColor: 'white'}}>
