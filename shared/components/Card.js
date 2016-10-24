@@ -51,18 +51,16 @@ class Card extends Component {
     let startMid = 'am';
     if (startHours === 0) {
       startHours = 12;
-    }
-    else if (startHours > 12) {
+    } else if (startHours > 12) {
       startMid = 'pm';
-      startHours %= 12;
+      startHours = startHours % 12;
     }
     let endMid = 'am';
     if (endHours === 0) {
       endHours = 12;
-    }
-    else if (endHours > 12) {
+    } else if (endHours > 12) {
       endMid = 'pm';
-      endHours %= 12;
+      endHours = endHours % 12;
     }
     return (
       <Text>
@@ -78,20 +76,20 @@ class Card extends Component {
     return (
       <Image style = {{width: 50, height: 50}}
              source = {{uri: rowData}}/>
-    )
+         );
   }
 
   render() {
     if (this.props.cardVisible) {
       return (
-		    <View style={styles.wrapper}>
-			    <Text style={styles.title}>{this.props.dataSource.title}</Text>
-			    <Text style={styles.address}>{this.props.dataSource.address}</Text>
+        <View style={styles.wrapper}>
+          <Text style={styles.title}>{this.props.dataSource.title}</Text>
+          <Text style={styles.address}>{this.props.dataSource.address}</Text>
           {this.transformTodate()}
 
         <ListView
           dataSource={new ListView.DataSource({
-          rowHasChanged: (r1, r2) => r1 !== r2
+            rowHasChanged: (r1, r2) => r1 !== r2
           }).cloneWithRows(this.props.dataSource.imageUrls)}
           renderRow={this.renderImg}
           horizontal={true}/>
@@ -109,9 +107,9 @@ Card.propTypes = {
   address: PropTypes.string,
   title: PropTypes.string,
   dataSource: PropTypes.objectOf(PropTypes.shape({
-  startTime: PropTypes.string,
-  endTime: PropTypes.string,
-  title: PropTypes.string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
+    title: PropTypes.string,
     address: PropTypes.string,
     imageUrls: PropTypes.array
   }))

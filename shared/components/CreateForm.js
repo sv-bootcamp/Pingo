@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   preview: {
     width: 120,
     height: 120,
-    marginBottom: 20,  
+    marginBottom: 20,
     alignSelf: 'center'
   },
   title: {
@@ -110,42 +110,42 @@ class CreateForm extends Component {
     });
   }
 
-	onPress() {
+  onPress() {
     if (this.state.animating) {
       return;
     }
 
-    this.setState({animating: true});
+  this.setState({animating: true});
 
-		const value = this.refs.form.getValue();
-		const location = this.props.location;
+    const value = this.refs.form.getValue();
+    const location = this.props.location;
     const img = this.state.img;
-		if (value) {
-			  fetch(API_SETITEMS, {
-			  	method: 'POST',
-			  	headers: {
-			  		'Accept': 'application/json',
-			  		'Content-Type': 'application/json'
-			  	},
-			  	body: JSON.stringify({
-			  		title: String(value.title),
-			  		lat: location[0],
-			  		lng: location[1],
-            address: String(value.address),
-            category: String(value.category),
-			  		image: String(img),
-            userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
-					  startTime: String(value.startTime),
-					  endTime: String(value.endTime),
-            caption: String(value.caption)
-			  	})
-			  })
+    if (value) {
+      fetch(API_SETITEMS, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: String(value.title),
+					lat: location[0],
+					lng: location[1],
+					address: String(value.address),
+					category: String(value.category),
+					image: String(img),
+					userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
+					startTime: String(value.startTime),
+					endTime: String(value.endTime),
+					caption: String(value.caption)
+				})
+			})
 			.then((response) => response.json())
 			.then((rjson) => {
 			  console.log('r:'+JSON.stringify(rjson));
         this.setState({animating: false});
         Actions.map();
-			})
+      })
       .catch((error) => {
         console.warn(error);
         this.setState({animating: false});

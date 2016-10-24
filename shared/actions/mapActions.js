@@ -63,7 +63,8 @@ export const setTabViewIndex = (index) => {
 export const getZoomLevel = () => {
   return {
     type: types.getZoomLevel
-  }
+  };
+};
 
 export const showListCard = () => {
   return {

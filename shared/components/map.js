@@ -56,11 +56,9 @@ export default class Map extends Component {
     let zoomLevel = Math.log2(750 / this.props.currentLocation.latitudeDelta);
     if (this.props.currentLocation.latitudeDelta > 50) {
       zoomLevel = 0;
-    }
-    else if (zoomLevel > 21) {
+    } else if (zoomLevel > 21) {
       zoomLevel = 21;
-    }
-    else if (zoomLevel < 0) {
+    } else if (zoomLevel < 0) {
       zoomLevel = 0;
     }
     return zoomLevel;
@@ -90,9 +88,7 @@ export default class Map extends Component {
   }
 
   render() {
-    console.log(this.props.selectedItem);
-    if(this.props.selectedItem.title === undefined){
-      console.log("new start");
+    if (this.props.selectedItem.title === undefined) {
       return (
         <View style ={styles.container}>
           <MapView
@@ -105,12 +101,16 @@ export default class Map extends Component {
               <MapView.Marker
                 coordinate={{latitude: item.lat, longitude: item.lng}}
                 title={item.title}
-                onPress={()=>{this.props.onMarkerClick(item)}}
-                onSelect={()=>{this.props.onMarkerClick(item)}}/>
+                onPress={()=>{
+                  this.props.onMarkerClick(item);
+                }}
+                onSelect={()=>{
+                  this.props.onMarkerClick(item);
+                }}/>
             ))}
 
             <MapView.UrlTile
-              urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
+              urlTemplate={'http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg'}
             />
           </MapView>
 
@@ -126,7 +126,6 @@ export default class Map extends Component {
         </View>
       );
     }
-    console.log("NOT~~");
     return (
       <View style ={styles.container}>
         <MapView
@@ -139,12 +138,16 @@ export default class Map extends Component {
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
-              onPress={()=>{this.props.onMarkerClick(item)}}
-              onSelect={()=>{this.props.onMarkerClick(item)}}/>
+              onPress={()=>{
+                this.props.onMarkerClick(item);
+              }}
+              onSelect={()=>{
+                this.props.onMarkerClick(item);
+              }}/>
           ))}
 
           <MapView.UrlTile
-            urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
+            urlTemplate={'http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg'}
           />
         </MapView>
 

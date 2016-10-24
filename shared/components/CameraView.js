@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 class CameraView extends Component {
   takePicture() {
     this.camera.capture()
-    .then((data) => { 
+    .then((data) => {
       console.log(data.path);
 
       this.props.setCurrentPic(data.path);
@@ -64,6 +64,6 @@ class CameraView extends Component {
 
 CameraView.propTypes = {
   setCurrentPic: PropTypes.func
-}
+};
 
 export default CameraView;

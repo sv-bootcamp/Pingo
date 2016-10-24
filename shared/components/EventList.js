@@ -19,7 +19,6 @@ class EventList extends Component {
   }
 
   render() {
-    console.log("LIST in!!!");
     return (
     <ListView
       dataSource={new ListView.DataSource({

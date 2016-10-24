@@ -10,7 +10,7 @@ const form = (state = initialState, action) => {
   case types.setCurrentPic:
     return update(state, {
       pic: { $set: action.pic }
-    });  
+    });
   default:
     return state;
   }
