@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image, Platform} from 'react-native';
-import {TabViewAnimated, TabViewPage, TabBarTop} from 'react-native-tab-view';
+import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "#2b2b2b",
     ...Platform.select({
-      andorid: {
+      android: {
         fontFamily: "Roboto-Medium"
       }
     })
@@ -75,6 +75,7 @@ export default class Headerbox extends Component {
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
+
   _onForward() {
     if (this.props.currentScene === 'map') {
       Actions.list();
@@ -125,9 +126,7 @@ export default class Headerbox extends Component {
               index: this.props.tabview_index,
               routes: this.props.tabview_routes
             }}
-            renderScene={(props) => {
-              return <TabViewPage {...props} renderScene={()=>{}}/>;
-            }}
+            renderScene={()=>{}}
             renderHeader={this._renderHeader}
             onRequestChangeTab={
               (index) => {

@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
 export default class Map extends Component {
   constructor(props) {
     super(props);
+    this._getCurrentZoomLevel = this._getCurrentZoomLevel.bind(this);
+    this._onLocationChange = this._onLocationChange.bind(this);
+    this.setCurrentPosition = this.setCurrentPosition.bind(this);
   }
 
   setCurrentPosition() {
@@ -49,14 +52,37 @@ export default class Map extends Component {
     );
   }
 
+  _getCurrentZoomLevel() {
+    let zoomLevel = Math.log2(750 / this.props.currentLocation.latitudeDelta);
+    if (this.props.currentLocation.latitudeDelta > 50) {
+      zoomLevel = 0;
+    }
+    else if (zoomLevel > 21) {
+      zoomLevel = 21;
+    }
+    else if (zoomLevel < 0) {
+      zoomLevel = 0;
+    }
+    return zoomLevel;
+  }
+
   handleCameraButton() {
     this.props.setCurrentScene('cameraView');
     Actions.cameraView();
   }
 
   componentWillMount() {
-    this.props.getMapItems();
     this.setCurrentPosition();
+    this.props.getMapItems(this._getCurrentZoomLevel(),
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
+  }
+
+  _onLocationChange(region) {
+    this.props.getMapItems(this._getCurrentZoomLevel(),
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
+    this.props.onLocationChange(region);
   }
 
   onMapClick(obj) {
@@ -69,7 +95,7 @@ export default class Map extends Component {
         <MapView
           style ={styles.map}
           region ={this.props.currentLocation}
-          onRegionChange ={this.props.onLocationChange}
+          onRegionChange ={this._onLocationChange}
           onPress={(obj) => this.onMapClick(obj.bubbles)}
         >
           {this.props.items.map(item => (
@@ -115,6 +141,7 @@ Map.propTypes = {
   cardVisible: PropTypes.bool,
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  getZoomLevel: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string

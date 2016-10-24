@@ -1,5 +1,5 @@
 import Map from '../components/map';
-import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard } from '../actions/mapActions';
+import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard, getZoomLevel } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { connect } from 'react-redux';
 
@@ -33,8 +33,8 @@ const mapDispatchToProps = (dispatch) => {
     onLocationChange: (region) => {
       return dispatch(onLocationChange(region));
     },
-    getMapItems: () => {
-      return dispatch(getMapItems());
+    getMapItems: (zoomLevel, lat, long) => {
+      return dispatch(getMapItems(zoomLevel, lat, long));
     },
     setLocation: (location) => {
       return dispatch(setLocation(location));
@@ -47,6 +47,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    getZoomLevel: () => {
+      return dispatch(getZoomLevel());
     }
   };
 };
