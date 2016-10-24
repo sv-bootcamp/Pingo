@@ -6,7 +6,7 @@
     "build": "(cd android/ && ./gradlew assembleDebug)",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/",
-    "test": "eslint shared/** && eslint __tests__/** && jest"
+    "test": "eslint shared/**/*.js && eslint __tests__/**/*.js && jest"
   },
   "jest": {
     "preset": "jest-react-native"

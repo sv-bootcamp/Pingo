@@ -44,7 +44,6 @@ const map = (state = initialState, action = {}) => {
       tabview_index: { $set: action.index }
     });
   case types.onMarkerClick:
-    console.log('marker is clicked');
     return update(state, {
       selectedItem: { $set: action.item },
       cardVisible: { $set: true }
@@ -53,6 +52,11 @@ const map = (state = initialState, action = {}) => {
     return update(state, {
       cardVisible: { $set: false }
     });
+  case types.showListCard:
+    return update(state, {
+      cardVisible: { $set: true }
+    });
+
   default:
     return state;
   }

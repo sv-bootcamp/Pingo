@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import MapLayout from '../containers/mapLayout';
 
 export default class SceneMap extends Component {
-  componentDidMount () {
+  componentDidMount() {
     this.props.setCurrentScene('map');
   }
 
