@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
-import { categorizeItems, setTabViewIndex } from '../actions/mapActions';
+import { categorizeItems, setTabViewIndex, showListCard, hideMapCard } from '../actions/mapActions';
 import Headerbox from '../components/headerbox';
 
 const mapStateToProps = (state) => {
   return {
     tabview_index: state.map.tabview_index,
     tabview_routes: state.map.tabview_routes,
-    currentScene: state.flux.currentScene
+    currentScene: state.flux.currentScene,
+    selectedItem: state.map.selectedItem
   };
 };
 
@@ -17,6 +18,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     categorizeItems: (select) => {
       return dispatch(categorizeItems(select));
+    },
+    showListCard: () => {
+      return dispatch(showListCard());
+    },
+    hideMapCard: () => {
+      return dispatch(hideMapCard());
     }
   };
 };

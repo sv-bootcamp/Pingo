@@ -90,6 +90,43 @@ export default class Map extends Component {
   }
 
   render() {
+    console.log(this.props.selectedItem);
+    if(this.props.selectedItem.title === undefined){
+      console.log("new start");
+      return (
+        <View style ={styles.container}>
+          <MapView
+            style ={styles.map}
+            region ={this.props.currentLocation}
+            onRegionChange ={this.props.onLocationChange}
+            onPress={(obj) => this.onMapClick(obj.bubbles)}
+          >
+            {this.props.items.map(item => (
+              <MapView.Marker
+                coordinate={{latitude: item.lat, longitude: item.lng}}
+                title={item.title}
+                onPress={()=>{this.props.onMarkerClick(item)}}
+                onSelect={()=>{this.props.onMarkerClick(item)}}/>
+            ))}
+
+            <MapView.UrlTile
+              urlTemplate={"http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg"}
+            />
+          </MapView>
+
+          <View
+            style={styles.buttonSection}>
+            <MapButton
+              imageSource={'position'}
+              handleOnPress={this.setCurrentPosition.bind(this)}/>
+            <MapButton
+              imageSource={'camera'}
+              handleOnPress={this.handleCameraButton.bind(this)}/>
+          </View>
+        </View>
+      );
+    }
+    console.log("NOT~~");
     return (
       <View style ={styles.container}>
         <MapView
@@ -122,9 +159,8 @@ export default class Map extends Component {
         </View>
 
         <Card
-          cardVisible={this.props.cardVisible}
-          title={this.props.selectedItem.title}
-          address={this.props.selectedItem.address}
+            dataSource = {this.props.selectedItem}
+            cardVisible = {this.props.cardVisible}
         />
       </View>
     );

@@ -7,6 +7,7 @@ export default class SceneList extends Component {
   }
 
   render() {
+    console.log("ListLayout");
     return (
       <ListLayout />
     );

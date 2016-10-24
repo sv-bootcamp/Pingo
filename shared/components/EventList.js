@@ -9,8 +9,8 @@ class EventList extends Component {
 
   renderRowTxt(rowData) {
     return (
-      <Card title = {rowData.title}
-            address = {rowData.address}/>
+      <Card dataSource = {rowData}
+            cardVisible = {this.props.cardVisible}/>
     );
   }
 
@@ -19,12 +19,13 @@ class EventList extends Component {
   }
 
   render() {
+    console.log("LIST in!!!");
     return (
     <ListView
       dataSource={new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.dataSource)}
-      renderRow={this.renderRowTxt}
+      renderRow={this.renderRowTxt.bind(this)}
       enableEmptySections={true} />
     );
   }
@@ -34,7 +35,8 @@ EventList.propTypes = {
   getAllItems: PropTypes.any,
   dataSource: PropTypes.any,
   actions: PropTypes.any,
-  getItems: PropTypes.any
+  getItems: PropTypes.any,
+  cardVisible: PropTypes.any
 };
 
 export default EventList;

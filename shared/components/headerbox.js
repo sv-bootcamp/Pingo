@@ -78,9 +78,14 @@ export default class Headerbox extends Component {
 
   _onForward() {
     if (this.props.currentScene === 'map') {
+      console.log("hey~~");
+      this.props.showListCard();
       Actions.list();
     }
     else if (this.props.currentScene === 'list') {
+        if(this.props.selectedItem.title === undefined){
+          this.props.hideMapCard();
+        }
       Actions.map();
     }
   }
@@ -90,6 +95,7 @@ export default class Headerbox extends Component {
   }
 
   render() {
+    console.log("Im in!");
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
         <View style= {{flexDirection:'column', backgroundColor: 'white'}}>
@@ -113,7 +119,7 @@ export default class Headerbox extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button_list}
-              onPress={this._onForward}>
+              onPress={this._onForward.bind(this)}>
               <Image
                 style={styles.image}
                 source={require('../../static/images/btn_list.png')}
@@ -158,6 +164,9 @@ export default class Headerbox extends Component {
 }
 
 Headerbox.propTypes = {
+  hideMapCard: PropTypes.any,
+  showListCard: PropTypes.any,
+  selectedItem: PropTypes.any,
   categorizeItems: PropTypes.func,
   setTabViewIndex: PropTypes.func,
   tabview_index: PropTypes.any,

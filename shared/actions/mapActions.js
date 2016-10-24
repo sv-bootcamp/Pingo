@@ -29,7 +29,7 @@ export const getMapItems = (zoomLevel, lat, long) => {
 export const onMarkerClick = (item) => {
   return {
     type: types.onMarkerClick,
-    item: {'title': item.title, 'address': item.address}
+    item: item
   };
 };
 
@@ -64,4 +64,9 @@ export const getZoomLevel = () => {
   return {
     type: types.getZoomLevel
   }
+
+export const showListCard = () => {
+  return {
+    type: types.showListCard
+  };
 };

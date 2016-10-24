@@ -19,7 +19,8 @@ const getCategorizedItems = (items, categoryFilter) => {
 
 const mapStateToProps = (state) => {
   return {
-    dataSource: getCategorizedItems(state.list.dataSource, state.map.categoryFilter)
+    dataSource: getCategorizedItems(state.list.dataSource, state.map.categoryFilter),
+    cardVisible: state.map.cardVisible
   };
 };
 
