@@ -17,8 +17,7 @@ const initialState = {
   },
   items: [],
   selectedItem: {},
-  categoryFilter: 'SHOW_ALL',
-  cardVisible: false
+  categoryFilter: 'SHOW_ALL'
 };
 
 const map = (state = initialState, action = {}) => {
@@ -45,17 +44,12 @@ const map = (state = initialState, action = {}) => {
     });
   case types.onMarkerClick:
     return update(state, {
-      selectedItem: { $set: action.item },
-      cardVisible: { $set: true }
+      selectedItem: { $set: action.item }
     });
   case types.hideMapCard:
-    return update(state, {
-      cardVisible: { $set: false }
-    });
+    return state;
   case types.showListCard:
-    return update(state, {
-      cardVisible: { $set: true }
-    });
+    return state;
 
   default:
     return state;

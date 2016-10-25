@@ -80,30 +80,24 @@ class Card extends Component {
   }
 
   render() {
-    if (this.props.cardVisible) {
-      return (
-        <View style={styles.wrapper}>
-          <Text style={styles.title}>{this.props.dataSource.title}</Text>
-          <Text style={styles.address}>{this.props.dataSource.address}</Text>
-          {this.transformTodate()}
-
-        <ListView
-          dataSource={new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
-          }).cloneWithRows(this.props.dataSource.imageUrls)}
-          renderRow={this.renderImg}
-          horizontal={true}/>
-        </View>
-      );
-    }
     return (
-      <View/>
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>{this.props.dataSource.title}</Text>
+        <Text style={styles.address}>{this.props.dataSource.address}</Text>
+        {this.transformTodate()}
+
+      <ListView
+        dataSource={new ListView.DataSource({
+          rowHasChanged: (r1, r2) => r1 !== r2
+        }).cloneWithRows(this.props.dataSource.imageUrls)}
+        renderRow={this.renderImg}
+        horizontal={true}/>
+      </View>
     );
   }
 }
 
 Card.propTypes = {
-  cardVisible: PropTypes.bool,
   address: PropTypes.string,
   title: PropTypes.string,
   dataSource: PropTypes.objectOf(PropTypes.shape({
