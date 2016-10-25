@@ -10,7 +10,6 @@ import {
   ScrollView,
 	TouchableHighlight
 } from 'react-native';
-import {Buffer} from 'buffer';
 import TForm from 'tcomb-form-native';
 import RNFS from 'react-native-fs';
 import {Actions} from 'react-native-router-flux';
@@ -94,13 +93,13 @@ class CreateForm extends Component {
     };
   }
 
-  componentWillMount() {    
+  componentWillMount() {
     this.getAddressData();
 
     const uri = this.props.pic;
 
     RNFS.readFile(uri, 'base64')
-    .then((file) =>{      
+    .then((file) =>{
       this.setState({img: file});
     })
     .catch((err) => {
@@ -142,6 +141,7 @@ class CreateForm extends Component {
 			})
 			.then((response) => response.json())
 			.then((rjson) => {			  
+        console.log(rjson);
         this.setState({animating: false});
         Actions.map();
       })
@@ -154,7 +154,9 @@ class CreateForm extends Component {
 
   getAddressData() {
     const location = this.props.location;        
-    if(location==null) return;
+    if(location===null) {
+      return;
+    }
 
     const uri = API_GEODATA + '?latlng=' + location.latitude +","+location.longitude + '&key='+ API_KEY;    
     fetch(uri)
@@ -214,7 +216,7 @@ CreateForm.propTypes = {
   location: PropTypes.any,
   setEncPic: PropTypes.func,
   pic: PropTypes.string,
-  encpic: PropTypes.string,  
+  encpic: PropTypes.string
 };
 
 export default CreateForm;
