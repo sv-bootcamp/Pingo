@@ -108,7 +108,6 @@ export default class Map extends Component {
                 require('../resources/marker/warning_small.png')
                 }
               onPress={()=>{
-                console.log(item.category);
                 this.props.onMarkerClick(item);
               }}
               onSelect={()=>{
@@ -139,10 +138,10 @@ export default class Map extends Component {
 
 Map.propTypes = {
   currentLocation: PropTypes.object,
+  selectedItem: PropTypes.any,
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
-  selectedItem: PropTypes.any,
   onMarkerClick: PropTypes.func,
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
