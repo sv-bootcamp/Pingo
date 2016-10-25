@@ -1,30 +1,56 @@
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, Text, View, ListView, Image } from 'react-native';
+import { StyleSheet, Text, View, ListView, Image, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#ffffff',
-    height: 199
+    height: 199,
+    borderBottomWidth: 1,
+    borderColor: '#e7e7e7'
   },
   title: {
-    width: 360,
+    marginLeft: 16,
+    marginTop: 16,
     height: 19,
-    margin: 8,
-    fontSize: 19
+    fontSize: 19,
+    fontWeight: 'bold',
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
   },
   address: {
-    width: 360,
+    marginTop: 8,
+    marginLeft: 16,
     height: 14,
-    fontSize: 14
+    fontSize: 14,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
   },
   term: {
-    width: 360,
-    height: 14
+    marginTop: 9,
+    marginLeft: 16,
+    height: 14,
+    fontSize: 14,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
   },
-  thumb: {
+  listWrapper: {
+    marginLeft: 16,
+    height: 119
+  },
+  image: {
+    marginTop: 15,
     width: 88,
     height: 88,
-    margin: 4
+    marginRight: 8
   }
 });
 
@@ -63,20 +89,18 @@ class Card extends Component {
       endHours = endHours % 12;
     }
     return (
-      <Text>
-        {monthNames[startMonth]}.{startDate}-
-        {monthNames[endMonth]}.{endDate},
-        {startHours}:{startMinutes}{startMid}~
-        {endHours}:{endMinutes}{endMid}
+      <Text style={styles.term}>
+        {monthNames[startMonth]}. {startDate}-{(endMonth === startMonth) ? '' : monthNames[endMonth] + '. '}
+        {endDate}, {startHours}:{startMinutes}{startMid} - {endHours}:{endMinutes}{endMid}
       </Text>
     );
   }
 
   renderImg(rowData) {
     return (
-      <Image style = {{width: 50, height: 50}}
+      <Image style={styles.image}
              source = {{uri: rowData}}/>
-         );
+    );
   }
 
   render() {
@@ -84,14 +108,18 @@ class Card extends Component {
       <View style={styles.wrapper}>
         <Text style={styles.title}>{this.props.dataSource.title}</Text>
         <Text style={styles.address}>{this.props.dataSource.address}</Text>
-        {this.transformTodate()}
-
-      <ListView
-        dataSource={new ListView.DataSource({
-          rowHasChanged: (r1, r2) => r1 !== r2
-        }).cloneWithRows(this.props.dataSource.imageUrls)}
-        renderRow={this.renderImg}
-        horizontal={true}/>
+        { (this.props.dataSource.category === 'facility') ? null : this.transformTodate() }
+        <View style={styles.listWrapper}>
+          <ListView
+            dataSource={new ListView.DataSource({
+              rowHasChanged: (r1, r2) => r1 !== r2
+            }).cloneWithRows(this.props.dataSource.imageUrls)}
+            renderRow={this.renderImg}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            horizontal={true}
+            />
+        </View>
       </View>
     );
   }
