@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-    pic: state.form.pic
+    pic: state.form.pic,
+    location: state.map.currentLocation
   };
 };
 
