@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
   preview: {
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     marginBottom: 20,
     alignSelf: 'center'
   },
@@ -94,16 +94,14 @@ class CreateForm extends Component {
     };
   }
 
-  componentWillMount() {
+  componentWillMount() {    
     this.getAddressData();
 
     const uri = this.props.pic;
 
     RNFS.readFile(uri, 'base64')
-    .then((file) =>{
-      const enc = new Buffer(file, 'binary').toString('base64');
-      // console.log(enc);
-      this.setState({img: enc});
+    .then((file) =>{      
+      this.setState({img: file});
     })
     .catch((err) => {
       console.log(err.message, err.code);
@@ -115,11 +113,24 @@ class CreateForm extends Component {
       return;
     }
 
-  this.setState({animating: true});
+    this.setState({animating: true});
 
     const value = this.refs.form.getValue();
     const location = this.props.location;
+
     const img = this.state.img;
+    const data = JSON.stringify({
+          title: String(value.title),
+          lat: location.latitude,
+          lng: location.longitude,
+          address: String(value.address),
+          category: String(value.category),
+          image: String(img),
+          userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
+          startTime: String(value.startTime),
+          endTime: String(value.endTime),
+          caption: String(value.caption)
+        });    
     if (value) {
       fetch(API_SETITEMS, {
         method: 'POST',
@@ -127,22 +138,10 @@ class CreateForm extends Component {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          title: String(value.title),
-					lat: location[0],
-					lng: location[1],
-					address: String(value.address),
-					category: String(value.category),
-					image: String(img),
-					userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
-					startTime: String(value.startTime),
-					endTime: String(value.endTime),
-					caption: String(value.caption)
-				})
+        body: data
 			})
 			.then((response) => response.json())
-			.then((rjson) => {
-			  console.log('r:'+JSON.stringify(rjson));
+			.then((rjson) => {			  
         this.setState({animating: false});
         Actions.map();
       })
@@ -154,12 +153,16 @@ class CreateForm extends Component {
   }
 
   getAddressData() {
-    const location = this.props.location;
-    fetch(API_GEODATA + '?latlng = ' + location.toString() + '&key = '+ API_KEY)
+    const location = this.props.location;        
+    if(location==null) return;
+
+    const uri = API_GEODATA + '?latlng=' + location.latitude +","+location.longitude + '&key='+ API_KEY;    
+    fetch(uri)
 		.then((response) => response.json())
 		.then((responseJson) => {
+      console.log(JSON.stringify(responseJson));
       const address = responseJson.results[0].formatted_address;
-      this.setState({value: {address: address}});
+      this.setState({value: {address: address, title: '', category: 'event'}});
     });
   }
 
@@ -208,14 +211,10 @@ class CreateForm extends Component {
 }
 
 CreateForm.propTypes = {
-  location: PropTypes.array,
+  location: PropTypes.any,
   setEncPic: PropTypes.func,
   pic: PropTypes.string,
-  encpic: PropTypes.string
-};
-
-CreateForm.defaultProps = {
-  location: [37.563398, 126.9907941]
+  encpic: PropTypes.string,  
 };
 
 export default CreateForm;
