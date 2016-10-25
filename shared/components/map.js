@@ -102,7 +102,13 @@ export default class Map extends Component {
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
+              image={
+                (item.category === 'event') ? require('../resources/marker/event_small.png') :
+                (item.category === 'facility') ? require('../resources/marker/facility_small.png') :
+                require('../resources/marker/warning_small.png')
+                }
               onPress={()=>{
+                console.log(item.category);
                 this.props.onMarkerClick(item);
               }}
               onSelect={()=>{
@@ -126,8 +132,6 @@ export default class Map extends Component {
             dataSource = {this.props.selectedItem}
           />
         }
-
-
       </View>
     );
   }
