@@ -98,7 +98,7 @@ class CreateForm extends Component {
 
     const uri = this.props.pic;
 
-    RNFS.readFile(uri, 'base64')
+    RNFS.readFile(uri.replace('file:///',''), 'base64')
     .then((file) =>{
       this.setState({img: file});
     })
@@ -140,7 +140,7 @@ class CreateForm extends Component {
         body: data
 			})
 			.then((response) => response.json())
-			.then((rjson) => {			  
+			.then((rjson) => {
         console.log(rjson);
         this.setState({animating: false});
         Actions.map();
@@ -188,7 +188,6 @@ class CreateForm extends Component {
         }
       }
     };
-
     return (
 			<ScrollView style={styles.container}>
         <Text style={styles.title}>{this.props.encpic}</Text>
