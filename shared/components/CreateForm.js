@@ -141,12 +141,13 @@ class CreateForm extends Component {
     this.setState({animating: true});
 
     const value = this.refs.form.getValue();
+    const location = this.props.location;
 
     const img = this.state.img;
     const data = JSON.stringify({
           title: String(value.title),
-          lat: 30,
-          lng: 30,
+          lat: location.latitude,
+          lng: location.longitude,
           address: String(value.address),
           category: String(value.category),
           image: String(img),
