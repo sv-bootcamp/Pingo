@@ -44,7 +44,7 @@ export default class AllLayout extends Component {
     return (
       <View style={styles.iosMargin}>
           <HeaderLayout/>
-        <View style={{flex: 4}}>
+        <View style={{flex: 1}}>
           <Router
             scenes={scenes}
           />
