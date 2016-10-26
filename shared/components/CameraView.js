@@ -36,8 +36,6 @@ class CameraView extends Component {
   takePicture() {
     this.camera.capture()
     .then((data) => {
-      console.log(data.path);
-
       this.props.setCurrentPic(data.path);
       Actions.createForm();
     })
@@ -52,7 +50,6 @@ class CameraView extends Component {
           this.camera = cam;
         }}
         style={styles.preview}
-        captureTarget={Camera.constants.CaptureTarget.disk}
         aspect={Camera.constants.Aspect.fill}>
         <Text style={styles.capture}
           onPress={this.takePicture.bind(this)}>[[CAPTURE]]</Text>

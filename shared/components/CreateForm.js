@@ -98,7 +98,7 @@ class CreateForm extends Component {
 
     const uri = this.props.pic;
 
-    RNFS.readFile(uri, 'base64')
+    RNFS.readFile(uri.replace('file:///',''), 'base64')
     .then((file) =>{
       this.setState({img: file});
     })
