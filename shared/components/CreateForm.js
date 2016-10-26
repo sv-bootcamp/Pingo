@@ -19,6 +19,31 @@ const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
 const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 const Form = TForm.form.Form;
 
+TForm.form.Form.stylesheet.controlLabel.normal.fontSize = 14;
+TForm.form.Form.stylesheet.controlLabel.normal.color = '#8e8e8e';
+TForm.form.Form.stylesheet.controlLabel.normal.marginBottom = 8;
+
+TForm.form.Form.stylesheet.textbox.normal.height = 46;
+TForm.form.Form.stylesheet.textbox.normal.borderRadius = 0;
+TForm.form.Form.stylesheet.textbox.normal.borderColor = '#e7e7e7';
+TForm.form.Form.stylesheet.textbox.normal.borderWidth = 1;
+
+TForm.form.Form.stylesheet.textbox.normal.fontSize = 14;
+TForm.form.Form.stylesheet.textbox.normal.color = '#2b2b2b';
+TForm.form.Form.stylesheet.textbox.normal.padding = 16;
+
+TForm.form.Form.stylesheet.dateValue.normal.padding = 16;
+TForm.form.Form.stylesheet.dateValue.normal.fontSize = 14;
+TForm.form.Form.stylesheet.dateValue.normal.color = '#2b2b2b';
+
+TForm.form.Form.stylesheet.dateValue.normal.height = 46;
+TForm.form.Form.stylesheet.dateValue.normal.borderColor = '#e7e7e7';
+TForm.form.Form.stylesheet.dateValue.normal.borderWidth = 1;
+
+TForm.form.Form.stylesheet.dateTouchable.normal.marginBottom = 10;
+
+TForm.form.Form.stylesheet.formGroup.normal.marginBottom = 19;
+
 const Category = TForm.enums({
   event: 'event',
   facility: 'facility',
@@ -40,14 +65,15 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 15,
     marginBottom: 15,
-    padding: 20,
+    padding: 16,
     backgroundColor: '#ffffff'
   },
   preview: {
     width: 140,
     height: 140,
     marginBottom: 20,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    backgroundColor: '#111111'
   },
   title: {
     fontSize: 30,
@@ -115,13 +141,12 @@ class CreateForm extends Component {
     this.setState({animating: true});
 
     const value = this.refs.form.getValue();
-    const location = this.props.location;
 
     const img = this.state.img;
     const data = JSON.stringify({
           title: String(value.title),
-          lat: location.latitude,
-          lng: location.longitude,
+          lat: 30,
+          lng: 30,
           address: String(value.address),
           category: String(value.category),
           image: String(img),
@@ -158,7 +183,7 @@ class CreateForm extends Component {
       return;
     }
 
-    const uri = API_GEODATA + '?latlng=' + location.latitude +","+location.longitude + '&key='+ API_KEY;    
+    const uri = API_GEODATA + '?latlng=' + location.latitude +","+ location.longtitude + '&key='+ API_KEY;    
     fetch(uri)
 		.then((response) => response.json())
 		.then((responseJson) => {
@@ -170,6 +195,7 @@ class CreateForm extends Component {
 
   render() {
     const options = {
+      /*
       fields: {
         caption: {
           auto: 'placeholders'
@@ -187,11 +213,11 @@ class CreateForm extends Component {
           label: '+ End at ...'
         }
       }
+      */
     };
 
     return (
 			<ScrollView style={styles.container}>
-        <Text style={styles.title}>{this.props.encpic}</Text>
         <Image source={{uri: this.props.pic}} style={styles.preview} />
 				<Form
 					ref="form"
