@@ -7,11 +7,12 @@ import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
   const tree = renderer.create(
-    <Map 
+    <Map
       items={[]}
       currentLocation={[]}
       getMapItems={()=>{}}
-      selectedItem={{}}/>
+      selectedItem={{}}
+      getZoomLevel={()=>{}}/>
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });

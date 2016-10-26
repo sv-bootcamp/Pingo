@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
 export default class Map extends Component {
   constructor(props) {
     super(props);
-    this._getCurrentZoomLevel = this._getCurrentZoomLevel.bind(this);
     this._onLocationChange = this._onLocationChange.bind(this);
     this.setCurrentPosition = this.setCurrentPosition.bind(this);
   }
@@ -52,18 +51,6 @@ export default class Map extends Component {
     );
   }
 
-  _getCurrentZoomLevel() {
-    let zoomLevel = Math.log2(750 / this.props.currentLocation.latitudeDelta);
-    if (this.props.currentLocation.latitudeDelta > 50) {
-      zoomLevel = 0;
-    } else if (zoomLevel > 21) {
-      zoomLevel = 21;
-    } else if (zoomLevel < 0) {
-      zoomLevel = 0;
-    }
-    return zoomLevel;
-  }
-
   handleCameraButton() {
     this.props.setCurrentScene('cameraView');
     Actions.cameraView();
@@ -71,20 +58,22 @@ export default class Map extends Component {
 
   componentWillMount() {
     this.setCurrentPosition();
-    this.props.getMapItems(this._getCurrentZoomLevel(),
+    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
   }
 
   _onLocationChange(region) {
-    this.props.getMapItems(this._getCurrentZoomLevel(),
+    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
     this.props.onLocationChange(region);
   }
 
   onMapClick(obj) {
-    if(obj === undefined) {
+    if (obj === undefined) {
       this.props.hideMapCard();
     }
   }
@@ -150,5 +139,6 @@ Map.propTypes = {
     coordinate: PropTypes.object,
     description: PropTypes.string
   })),
-  category: PropTypes.arrayOf(PropTypes.string)
+  category: PropTypes.arrayOf(PropTypes.string),
+  zoomLevel: PropTypes.any
 };

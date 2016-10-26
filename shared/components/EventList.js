@@ -14,7 +14,8 @@ class EventList extends Component {
   }
 
   componentDidMount() {
-    this.props.getAllItems();
+    this.props.getAllItems(this.props.zoomLevel, this.props.currentLocation.latitude,
+    this.props.currentLocation.longitude);
   }
 
   render() {
@@ -33,7 +34,9 @@ EventList.propTypes = {
   getAllItems: PropTypes.any,
   dataSource: PropTypes.any,
   actions: PropTypes.any,
-  getItems: PropTypes.any
+  getItems: PropTypes.any,
+  currentLocation: PropTypes.object,
+  zoomLevel: PropTypes.any
 };
 
 export default EventList;
