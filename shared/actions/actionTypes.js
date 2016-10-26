@@ -11,3 +11,4 @@ export const setCurrentScene = 'SET_CURRENT_SCENE';
 export const setCurrentPic = 'SET_CURRENT_PIC';
 export const setEncPic = 'SET_ENC_PIC';
 export const showListCard = 'SHOW_LIST_CARD';
+export const getZoomLevel = 'GET_ZOOM_LEVEL';

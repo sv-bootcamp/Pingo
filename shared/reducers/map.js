@@ -15,6 +15,7 @@ const initialState = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   },
+  zoomLevel: 14,
   items: [],
   selectedItem: {},
   categoryFilter: 'SHOW_ALL'
@@ -46,11 +47,14 @@ const map = (state = initialState, action = {}) => {
     return update(state, {
       selectedItem: { $set: action.item }
     });
+  case types.getZoomLevel:
+    return update(state, {
+      zoomLevel: { $set: action.zoomLevel }
+    });
   case types.hideMapCard:
     return state;
   case types.showListCard:
     return state;
-
   default:
     return state;
   }

@@ -60,9 +60,18 @@ export const setTabViewIndex = (index) => {
   };
 };
 
-export const getZoomLevel = () => {
+export const getZoomLevel = (latitudeDelta) => {
+  let zoomLevel = Math.log2(750 / latitudeDelta);
+  if (latitudeDelta > 50) {
+    zoomLevel = 0;
+  } else if (zoomLevel > 21) {
+    zoomLevel = 21;
+  } else if (zoomLevel < 0) {
+    zoomLevel = 0;
+  }
   return {
-    type: types.getZoomLevel
+    type: types.getZoomLevel,
+    zoomLevel
   };
 };
 

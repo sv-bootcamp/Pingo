@@ -19,14 +19,16 @@ const getCategorizedItems = (items, categoryFilter) => {
 
 const mapStateToProps = (state) => {
   return {
-    dataSource: getCategorizedItems(state.list.dataSource, state.map.categoryFilter)
+    dataSource: getCategorizedItems(state.list.dataSource, state.map.categoryFilter),
+    currentLocation: state.map.currentLocation,
+    zoomLevel: state.map.zoomLevel
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAllItems: () => {
-      return dispatch(getAllItems());
+    getAllItems: (zoomLevel, lat, long) => {
+      return dispatch(getAllItems(zoomLevel, lat, long));
     }
   };
 };

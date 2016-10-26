@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 
-const API_GET_ITEMS = 'http://goober.herokuapp.com/api/items?isThumbnail=true&lat=37.78825&lng=-122.4324&zoom=14';
+const API_GET_ITEMS = 'http://goober.herokuapp.com/api/items?isThumbnail=true&lat=';
 
 export function TBD() {
   return {
@@ -15,9 +15,9 @@ export const receiveItems = (json) => {
   };
 };
 
-export const getAllItems = () => {
+export const getAllItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
-    return fetch(API_GET_ITEMS)
+    return fetch(API_GET_ITEMS + lat.toString() + '&lng=' + long.toString() + '&zoom=' + zoomLevel.toString())
       .then(response => response.json())
       .then(json =>
         dispatch(receiveItems(json))
