@@ -58,9 +58,6 @@ const styles = StyleSheet.create({
 export default class Headerbox extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentWillMount() {
     this._onForward = this._onForward.bind(this);
     this._renderHeader = this._renderHeader.bind(this);
   }
@@ -78,12 +75,14 @@ export default class Headerbox extends Component {
   _onForward() {
     if (this.props.currentScene === 'map') {
       this.props.showListCard();
+      this.props.setCurrentScene('list');
       Actions.list();
     } else if (this.props.currentScene === 'list') {
       if (this.props.selectedItem.title === undefined) {
         this.props.hideMapCard();
       }
-      Actions.map();
+      this.props.setCurrentScene('map');
+      Actions.pop();
     }
   }
 
@@ -165,6 +164,7 @@ Headerbox.propTypes = {
   selectedItem: PropTypes.any,
   categorizeItems: PropTypes.func,
   setTabViewIndex: PropTypes.func,
+  setCurrentScene: PropTypes.func,
   tabview_index: PropTypes.any,
   tabview_routes: PropTypes.any,
   currentScene: PropTypes.string

@@ -1,7 +1,6 @@
 import CreateForm from '../components/CreateForm';
 import { connect } from 'react-redux';
 
-
 const mapStateToProps = (state) => {
   return {
     pic: state.form.pic,
