@@ -1,14 +1,14 @@
 import React, {
-	Component, PropTypes
+  Component, PropTypes
 } from 'react';
 
 import {
   ActivityIndicator,
-	StyleSheet,
+  StyleSheet,
   Image,
-	Text,
+  Text,
   ScrollView,
-	TouchableHighlight
+  TouchableHighlight
 } from 'react-native';
 import TForm from 'tcomb-form-native';
 import RNFS from 'react-native-fs';
@@ -51,11 +51,11 @@ const Category = TForm.enums({
 });
 
 const Event = TForm.struct({
-	// location: TForm.String,
+  // location: TForm.String,
   caption: TForm.String,
   address: TForm.String,
   title: TForm.String,
-  category: Category, // enum
+  category: Category,
   startTime: TForm.Date,
   endTime: TForm.Date
 });
@@ -124,7 +124,7 @@ class CreateForm extends Component {
 
     const uri = this.props.pic;
 
-    RNFS.readFile(uri.replace('file:///',''), 'base64')
+    RNFS.readFile(uri.replace('file:///', ''), 'base64')
     .then((file) =>{
       this.setState({img: file});
     })
@@ -145,17 +145,17 @@ class CreateForm extends Component {
 
     const img = this.state.img;
     const data = JSON.stringify({
-          title: String(value.title),
-          lat: location.latitude,
-          lng: location.longitude,
-          address: String(value.address),
-          category: String(value.category),
-          image: String(img),
-          userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
-          startTime: String(value.startTime),
-          endTime: String(value.endTime),
-          caption: String(value.caption)
-        });    
+      title: String(value.title),
+      lat: location.latitude,
+      lng: location.longitude,
+      address: String(value.address),
+      category: String(value.category),
+      image: String(img),
+      userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
+      startTime: String(value.startTime),
+      endTime: String(value.endTime),
+      caption: String(value.caption)
+    });
     if (value) {
       fetch(API_SETITEMS, {
         method: 'POST',
@@ -164,12 +164,14 @@ class CreateForm extends Component {
           'Content-Type': 'application/json'
         },
         body: data
-			})
-			.then((response) => response.json())
-			.then((rjson) => {			  
+      })
+      .then((response) => response.json())
+      .then((rjson) => {
         console.log(rjson);
         this.setState({animating: false});
-        Actions.map();
+
+        this.props.setCurrentScene('map');
+        Actions.pop();
       })
       .catch((error) => {
         console.warn(error);
@@ -186,8 +188,8 @@ class CreateForm extends Component {
 
     const uri = API_GEODATA + '?latlng=' + location.latitude +","+ location.longtitude + '&key='+ API_KEY;    
     fetch(uri)
-		.then((response) => response.json())
-		.then((responseJson) => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       console.log(JSON.stringify(responseJson));
       const address = responseJson.results[0].formatted_address;
       this.setState({value: {address: address, title: '', category: 'event'}});
@@ -218,30 +220,32 @@ class CreateForm extends Component {
     };
 
     return (
-			<ScrollView style={styles.container}>
+      <ScrollView style={styles.container}>
         <Image source={{uri: this.props.pic}} style={styles.preview} />
-				<Form
-					ref="form"
-					type={Event}
-					value={this.state.value}
-          options={options} />
-				<TouchableHighlight style={styles.button}
-					onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
-					<Text style={styles.buttonText}>Save</Text>
-				</TouchableHighlight>
+          <Form
+            ref="form"
+            type={Event}
+            value={this.state.value}
+            options={options}
+          />
+          <TouchableHighlight style={styles.button}
+            onPress={this.onPress.bind(this)} underlayColor='#99d9f4'>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableHighlight>
         <ActivityIndicator
           animating={this.state.animating}
           style={[styles.centering, {height: 80}]}
-          size="large" />
-			</ScrollView>
-		);
+          size="large"
+        />
+      </ScrollView>
+    );
   }
-
 }
 
 CreateForm.propTypes = {
   location: PropTypes.any,
   setEncPic: PropTypes.func,
+  setCurrentScene: PropTypes.func,
   pic: PropTypes.string,
   encpic: PropTypes.string
 };

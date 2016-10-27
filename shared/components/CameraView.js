@@ -37,7 +37,7 @@ class CameraView extends Component {
     this.camera.capture()
     .then((data) => {
       this.props.setCurrentPic(data.path);
-      Actions.createForm();
+      Actions.createForm({type: 'replace'});
     })
     .catch(err => console.error(err));
   }
