@@ -2,18 +2,18 @@ import {View, StyleSheet, Platform} from 'react-native';
 import React, {Component} from 'react';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
-import SceneListLayout from './sceneListLayout';
-import SceneMapLayout from './SceneMapLayout';
 import FormLayout from './formLayout';
 import CameraLayout from './cameraLayout';
+import MapLayout from './mapLayout';
+import ListLayout from './listLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
     <Scene key="map" hideNavBar={true} component={
-      SceneMapLayout
+      MapLayout
     }/>
     <Scene key="list" hideNavBar={true} component={
-      SceneListLayout
+      ListLayout
     }/>
     <Scene key="createForm" hideNavBar={true} component={
       FormLayout

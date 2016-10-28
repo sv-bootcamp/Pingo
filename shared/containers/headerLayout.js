@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { categorizeItems, setTabViewIndex, showListCard, hideMapCard } from '../actions/mapActions';
+import { setCurrentScene } from '../actions/fluxActions';
 import Headerbox from '../components/headerbox';
 
 const mapStateToProps = (state) => {
@@ -24,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     hideMapCard: () => {
       return dispatch(hideMapCard());
+    },
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
     }
   };
 };
