@@ -16,21 +16,29 @@ const styles = StyleSheet.create({
     flex: 1
   },
   preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width
+    height: 360,
+    left: 0,
+    top: 67
   },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40
+  top: {
+    height: 67,
+    width: Dimensions.get('window').width,
+    backgroundColor: '#2b2b2b',
+    position: 'absolute',
+    left: 0,
+    top: 0
+  },
+  bottom: {
+    height: 573 - 360,
+    width: Dimensions.get('window').width,
+    backgroundColor: '#2b2b2b',
+    position: 'absolute',
+    bottom: 0
   }
 });
+
+//height: Dimensions.get('window').height,
+//width: Dimensions.get('window').width
 
 class CameraView extends Component {
   takePicture() {
@@ -44,18 +52,22 @@ class CameraView extends Component {
 
   render() {
     return (
-    <View style={styles.container}>
-      <Camera
-        ref={(cam) => {
-          this.camera = cam;
-        }}
-        style={styles.preview}
-        aspect={Camera.constants.Aspect.fill}>
-        <Text style={styles.capture}
-          onPress={this.takePicture.bind(this)}>[[CAPTURE]]</Text>
+      <View style={styles.container}>
+        <View style={styles.top}>
+          <Text> PHOOTTOO </Text>
+        </View>
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
+          style={styles.preview}
+          aspect={Camera.constants.Aspect.fill}>
+        <Text> asdfasdfsafsdafsdafs </Text>
       </Camera>
-    </View>
-  );
+      <View style={styles.bottom}>
+      </View>
+      </View>
+    );
   }
 }
 
