@@ -13,6 +13,7 @@ import {
     ScrollView,
     TouchableOpacity
 } from 'react-native';
+import DatePicker from 'react-native-datepicker';
 
 const styles = StyleSheet.create({
   preview: {
@@ -127,7 +128,8 @@ class Create extends Component {
     super(props);
     this.state = {
       text: '',
-      addingNewLocation: false
+      addingNewLocation: false,
+      date:"5-15 12:31"
     };
   }
 
@@ -151,6 +153,58 @@ class Create extends Component {
 
   handleAddExistingLocation() {
     //todo: implement adding photo to an existing location
+  }
+
+  renderDatePickerStart() {
+    return (
+      <DatePicker
+        style={{width: 328, marginLeft: 16}}
+        date={""}
+        placeholder={"Start"}
+        mode="datetime"
+        format="YYYY-MM-DD HH:mm"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        showIcon={false}
+        customStyles={{
+          dateInput: {
+            borderColor: '#e7e7e7'
+          },
+          placeholderText: {
+            color: '#8e8e8e',
+            fontSize: 14,
+            left: -130
+          }
+        }}
+        onDateChange={(datetime) => {this.setState({datetime: datetime});}}
+      />
+    )
+  }
+
+  renderDatePickerEnd() {
+    return (
+      <DatePicker
+        style={{width: 328, marginLeft: 16, marginTop: 8}}
+        date={""}
+        placeholder={"End"}
+        mode="datetime"
+        format="YYYY-MM-DD HH:mm"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        showIcon={false}
+        customStyles={{
+          dateInput: {
+            borderColor: '#e7e7e7'
+          },
+          placeholderText: {
+            color: '#8e8e8e',
+            fontSize: 14,
+            left: -130
+          }
+        }}
+        onDateChange={(datetime) => {this.setState({datetime: datetime});}}
+      />
+    )
   }
 
   render() {
@@ -215,20 +269,8 @@ class Create extends Component {
                   </TouchableOpacity>
                 </View>
                 <Text style={styles.text_location}> Time (optional) </Text>
-                <TextInput
-                    style={styles.input_location}
-                    onChangeText={(text) => this.setState({text})}
-                    value={this.state.text}
-                    multiline={false}
-                    underlineColorAndroid="rgba(0,0,0,0)"
-                />
-                <TextInput
-                    style={[styles.input_location, {marginTop: 8}]}
-                    onChangeText={(text) => this.setState({text})}
-                    value={this.state.text}
-                    multiline={false}
-                    underlineColorAndroid="rgba(0,0,0,0)"
-                />
+                {this.renderDatePickerStart()}
+                {this.renderDatePickerEnd()}
               </View>
               :
               <View>
