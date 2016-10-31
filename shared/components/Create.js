@@ -92,12 +92,13 @@ const styles = StyleSheet.create({
     top: 24
   },
   btn_location: {
-    left: 15,
     height: 75,
-    width: 328,
+    flex: 1,
     borderColor: '#dcdcdc',
     borderWidth: 1,
-    marginBottom: 8
+    marginBottom: 8,
+    marginRight: 16,
+    marginLeft: 15
   },
   btn_category: {
     flex: 1,
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
   },
   input_text: {
     height: 104,
-    width: 216,
+    flex: 1,
     borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 8,
@@ -337,7 +338,7 @@ class Create extends Component {
                     multiline={true}
                     underlineColorAndroid="rgba(0,0,0,0)"
                   />
-                  <Image source={{uri: this.props.pic}} style={styles.preview}/>
+                  <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
                 </View>
                 <Text style={styles.text_caption}> Location </Text>
                 <TouchableOpacity

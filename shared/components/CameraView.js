@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   preview: {
-    height: 360,
+    flex: 1,
     left: 0,
     top: 67
   },
