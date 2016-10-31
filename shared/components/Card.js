@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, Text, View, ListView, Image, Platform } from 'react-native';
+import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -98,8 +99,13 @@ class Card extends Component {
 
   renderImg(rowData) {
     return (
-      <Image style={styles.image}
+      <TouchableOpacity onPress={()=>{
+        this.props.getDetailImage(this.props.dataSource.key, 1);
+        Actions.detailView({type: 'replace'});
+      }}>
+        <Image style={styles.image}
              source = {{uri: rowData}}/>
+      </TouchableOpacity>
     );
   }
 
@@ -114,7 +120,7 @@ class Card extends Component {
             dataSource={new ListView.DataSource({
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.dataSource.imageUrls)}
-            renderRow={this.renderImg}
+            renderRow={this.renderImg.bind(this)}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             horizontal={true}
@@ -134,7 +140,8 @@ Card.propTypes = {
     title: PropTypes.string,
     address: PropTypes.string,
     imageUrls: PropTypes.array
-  }))
+  })),
+  getDetailImage: PropTypes.function
 };
 
 export default Card;

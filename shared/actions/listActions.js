@@ -1,6 +1,7 @@
 import * as types from './actionTypes';
 
 const API_GET_ITEMS = 'http://goober.herokuapp.com/api/items?isThumbnail=true&lat=';
+const API_GET_IMAGES = 'http://goober.herokuapp.com/api/images?item=';
 
 export function TBD() {
   return {
@@ -21,6 +22,24 @@ export const getAllItems = (zoomLevel, lat, long) => {
       .then(response => response.json())
       .then(json =>
         dispatch(receiveItems(json))
+    );
+  };
+};
+
+export const receiveImages = (json, index) => {
+  return {
+    type: types.getDetailImage,
+    items: json.values,
+    index
+  };
+};
+
+export const getDetailImage = (key, index) => {
+  return (dispatch) => {
+    return fetch(API_GET_IMAGES + key)
+      .then(response => response.json())
+      .then(json =>
+        dispatch(receiveImages(json, index))
     );
   };
 };
