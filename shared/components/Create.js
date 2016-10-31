@@ -14,6 +14,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
+import Date from 'moment';
 
 const styles = StyleSheet.create({
   preview: {
@@ -115,7 +116,15 @@ const styles = StyleSheet.create({
   },
   input_location: {
     height: 46,
-    width: 328,
+    flex: 1,
+    borderColor: '#e7e7e7',
+    borderWidth: 1,
+    marginRight: 16,
+    marginLeft: 16
+  },
+  DatePicker: {
+    height: 46,
+    width: Dimensions.get('window').width - 32,
     borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 16,
@@ -129,8 +138,12 @@ class Create extends Component {
     this.state = {
       text: '',
       addingNewLocation: false,
-      date:"5-15 12:31"
+      dateStart: "",
+      dateEnd: "",
+      placeholderStart: "Start",
+      placeholderEnd: "End"
     };
+    this.convertMonth = this.convertMonth.bind(this);
   }
 
   handleBefore() {
@@ -155,12 +168,29 @@ class Create extends Component {
     //todo: implement adding photo to an existing location
   }
 
+  convertMonth(m) {
+    switch (m) {
+    case '1': return 'Jan.';
+    case '2': return 'Feb.';
+    case '3': return 'Mar.';
+    case '4': return 'Apr.';
+    case '5': return 'May';
+    case '6': return 'Jun.';
+    case '7': return 'Jul.';
+    case '8': return 'Aug.';
+    case '9': return 'Sept.';
+    case '10': return 'Oct.';
+    case '11': return 'Nov.';
+    case '12': return 'Dec.';
+    }
+  }
+
   renderDatePickerStart() {
     return (
       <DatePicker
-        style={{width: 328, marginLeft: 16}}
+        style={[styles.DatePicker]}
         date={""}
-        placeholder={"Start"}
+        placeholder={this.state.placeholderStart}
         mode="datetime"
         format="YYYY-MM-DD HH:mm"
         confirmBtnText="Confirm"
@@ -168,15 +198,26 @@ class Create extends Component {
         showIcon={false}
         customStyles={{
           dateInput: {
-            borderColor: '#e7e7e7'
+            borderWidth: 0
           },
           placeholderText: {
             color: '#8e8e8e',
             fontSize: 14,
-            left: -130
+            left: 95,
+            top: 2
           }
         }}
-        onDateChange={(datetime) => {this.setState({datetime: datetime});}}
+        onDateChange={(datetime) => {
+          this.setState({dateStart: datetime});
+          let a = new Date(datetime);
+          let txtDate = this.convertMonth(
+            a.format('MM')) + ' ' +
+            a.format('DD') + ', ' +
+            a.format('hh') + ':' +
+            a.format('mm') +
+            a.format('a');
+          this.setState({placeholderStart: txtDate});
+        }}
       />
     )
   }
@@ -184,9 +225,9 @@ class Create extends Component {
   renderDatePickerEnd() {
     return (
       <DatePicker
-        style={{width: 328, marginLeft: 16, marginTop: 8}}
+        style={[styles.DatePicker, {marginTop: 8}]}
         date={""}
-        placeholder={"End"}
+        placeholder={this.state.placeholderEnd}
         mode="datetime"
         format="YYYY-MM-DD HH:mm"
         confirmBtnText="Confirm"
@@ -194,15 +235,25 @@ class Create extends Component {
         showIcon={false}
         customStyles={{
           dateInput: {
-            borderColor: '#e7e7e7'
+            borderWidth: 0
           },
           placeholderText: {
             color: '#8e8e8e',
             fontSize: 14,
-            left: -130
+            left: 95
           }
         }}
-        onDateChange={(datetime) => {this.setState({datetime: datetime});}}
+        onDateChange={(datetime) => {
+          this.setState({dateEnd: datetime});
+          let a = new Date(datetime);
+          let txtDate = this.convertMonth(
+              a.format('MM')) + ' ' +
+              a.format('DD') + ', ' +
+              a.format('hh') + ':' +
+              a.format('mm') +
+              a.format('a');
+          this.setState({placeholderEnd: txtDate});
+        }}
       />
     )
   }
@@ -268,9 +319,11 @@ class Create extends Component {
                     <Text style={styles.text_done}> Warning </Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.text_location}> Time (optional) </Text>
-                {this.renderDatePickerStart()}
-                {this.renderDatePickerEnd()}
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={styles.text_location}> Time (optional) </Text>
+                  {this.renderDatePickerStart()}
+                  {this.renderDatePickerEnd()}
+                </View>
               </View>
               :
               <View>
