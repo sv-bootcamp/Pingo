@@ -100,7 +100,7 @@ export default class Headerbox extends Component {
             >
               <Image
                 style={styles.image}
-                source={require('../../static/images/btn_mypage.png')}
+                source={require('../resources/header/btn_mypage.png')}
               />
             </TouchableOpacity>
             <Text style={styles.text}>San Francisco</Text>
@@ -109,7 +109,7 @@ export default class Headerbox extends Component {
                 onPress={this._onRefresh}>
               <Image
                 style={styles.image}
-                source={require('../../static/images/btn_refresh.png')}
+                source={require('../resources/header/btn_refresh.png')}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -117,7 +117,7 @@ export default class Headerbox extends Component {
               onPress={this._onForward.bind(this)}>
               <Image
                 style={styles.image}
-                source={require('../../static/images/btn_list.png')}
+                source={require('../resources/header/btn_list.png')}
               />
             </TouchableOpacity>
           </View>
