@@ -57,6 +57,23 @@ const styles = StyleSheet.create({
 });
 
 class CameraView extends Component {
+  constructor(props) {
+    super(props);
+
+    this.camera = null;
+
+    this.state = {
+      camera: {
+        aspect: Camera.constants.Aspect.fill,
+        captureTarget: Camera.constants.CaptureTarget.cameraRoll,
+        type: Camera.constants.Type.back,
+        orientation: Camera.constants.Orientation.auto,
+        flashMode: Camera.constants.FlashMode.auto,
+      },
+      isRecording: false
+    };
+  }
+
   takePicture() {
     this.camera.capture()
     .then((data) => {
@@ -64,6 +81,28 @@ class CameraView extends Component {
       Actions.createForm({type: 'replace'});
     })
     .catch(err => console.error(err));
+  }
+
+  handleFlash() {
+    //todo: handle camera flash here
+  }
+
+  switchType() {
+    let newType;
+    const { back, front } = Camera.constants.Type;
+
+    if (this.state.camera.type === back) {
+      newType = front;
+    } else if (this.state.camera.type === front) {
+      newType = back;
+    }
+
+    this.setState({
+      camera: {
+        ...this.state.camera,
+        type: newType
+      }
+    });
   }
 
   render() {
@@ -77,11 +116,14 @@ class CameraView extends Component {
             this.camera = cam;
           }}
           style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}/>
+          type={this.state.camera.type}
+          aspect={Camera.constants.Aspect.fill}
+          flashMode={this.state.camera.flashMode}
+        />
       <View style={styles.bottom}>
           <TouchableOpacity
               style={styles.btn_camera_switch}
-              onPress={()=>{}}>
+              onPress={this.switchType.bind(this)}>
             <Image
                 style={{height: 48, width: 48}}
                 source={require('../resources/camera/icon_camera_switch.png')}
@@ -97,7 +139,7 @@ class CameraView extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_flash}
-            onPress={()=>{}}>
+            onPress={this.handleFlash.bind(this)}>
             <Image
               style={{height: 48, width: 48}}
               source={require('../resources/camera/icon_flash.png')}
