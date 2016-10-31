@@ -57,6 +57,29 @@ const styles = StyleSheet.create({
       }
     })
   },
+  text_location: {
+    fontSize: 14,
+    color: "#8e8e8e",
+    left: 12,
+    marginBottom: 5,
+    marginTop: 20,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
+  },
+  text_addNewLocation: {
+    fontSize: 17,
+    left: Dimensions.get('window').width / 2 - 95,
+    top: 24,
+    color: "#2b2b2b",
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
+  },
   btn_before: {
     left: 15,
     top: 24
@@ -74,6 +97,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 8
   },
+  btn_category: {
+    flex: 1,
+    height: 46,
+    width: 104,
+    borderWidth: 1,
+    borderColor: "#e7e7e7"
+  },
   input_text: {
     height: 104,
     width: 216,
@@ -81,21 +111,46 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 8,
     marginLeft: 16
+  },
+  input_location: {
+    height: 46,
+    width: 328,
+    borderColor: '#e7e7e7',
+    borderWidth: 1,
+    marginRight: 16,
+    marginLeft: 16
   }
 });
 
 class Create extends Component {
-    constructor(props) {
-      super(props);
-      this.state = { text: '' };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+      addingNewLocation: false
+    };
+  }
 
   handleBefore() {
-    //todo: handle before button here
+    if(this.state.addingNewLocation === true) {
+      this.setState({
+        addingNewLocation: false
+      })
+    }
   }
 
   handleDone() {
     //todo: handle Done button here
+  }
+
+  handleAddNewLocation() {
+    this.setState({
+      addingNewLocation: true
+    })
+  }
+
+  handleAddExistingLocation() {
+    //todo: implement adding photo to an existing location
   }
 
   render() {
@@ -110,36 +165,98 @@ class Create extends Component {
               source={require('../resources/camera/btn_before.png')}
             />
           </TouchableOpacity>
-          <Text style={styles.text_header}>Post Photo</Text>
+          {this.state.addingNewLocation === true ?
+            <Text style={styles.text_addNewLocation}>Add new location</Text>
+            :
+            <Text style={styles.text_header}>Post Photo</Text>
+          }
           <TouchableOpacity
             style={styles.btn_done}
             onPress={this.handleDone.bind(this)}>
             <Text style={styles.text_done}> Done </Text>
           </TouchableOpacity>
         </View>
-        <ScrollView style={styles.container}>
-          <Text style={styles.text_caption}> Caption </Text>
-          <View style={{flexDirection: 'row', marginBottom: 20}}>
-            <TextInput
-              style={styles.input_text}
-              onChangeText={(text) => this.setState({text})}
-              value={this.state.text}
-              multiline={true}
-            />
-            <Image source={{uri: this.props.pic}} style={styles.preview} />
-          </View>
-          <Text style={styles.text_caption}> Location </Text>
-          <TouchableOpacity
-            style={styles.btn_location}
-            onPress={()=>{}}>
-            <Text style={styles.text_done}> Location </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn_location}
-            onPress={()=>{}}>
-            <Text style={styles.text_done}> Location </Text>
-          </TouchableOpacity>
-        </ScrollView>
+
+          <ScrollView style={styles.container}>
+            {this.state.addingNewLocation === true ?
+              <View>
+                <Text style={styles.text_caption}> Location </Text>
+                <TextInput
+                  style={styles.input_location}
+                  onChangeText={(text) => this.setState({text})}
+                  value={this.state.text}
+                  multiline={false}
+                  underlineColorAndroid="rgba(0,0,0,0)"
+                />
+                <Text style={styles.text_location}> Title </Text>
+                <TextInput
+                  style={styles.input_location}
+                  onChangeText={(text) => this.setState({text})}
+                  value={this.state.text}
+                  multiline={false}
+                  underlineColorAndroid="rgba(0,0,0,0)"
+                />
+                <Text style={styles.text_location}> Category </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity
+                    style={[styles.btn_category, {marginLeft: 16, marginRight: 8}]}
+                    onPress={()=>{}}>
+                    <Text style={styles.text_done}> Event </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.btn_category, {marginRight: 8}]}
+                    onPress={()=>{}}>
+                    <Text style={styles.text_done}> Facility </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.btn_category, {marginRight: 16}]}
+                    onPress={()=>{}}>
+                    <Text style={styles.text_done}> Warning </Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.text_location}> Time (optional) </Text>
+                <TextInput
+                    style={styles.input_location}
+                    onChangeText={(text) => this.setState({text})}
+                    value={this.state.text}
+                    multiline={false}
+                    underlineColorAndroid="rgba(0,0,0,0)"
+                />
+                <TextInput
+                    style={[styles.input_location, {marginTop: 8}]}
+                    onChangeText={(text) => this.setState({text})}
+                    value={this.state.text}
+                    multiline={false}
+                    underlineColorAndroid="rgba(0,0,0,0)"
+                />
+              </View>
+              :
+              <View>
+                <Text style={styles.text_caption}> Caption </Text>
+                <View style={{flexDirection: 'row', marginBottom: 20}}>
+                  <TextInput
+                    style={styles.input_text}
+                    onChangeText={(text) => this.setState({text})}
+                    value={this.state.text}
+                    multiline={true}
+                    underlineColorAndroid="rgba(0,0,0,0)"
+                  />
+                  <Image source={{uri: this.props.pic}} style={styles.preview}/>
+                </View>
+                <Text style={styles.text_caption}> Location </Text>
+                <TouchableOpacity
+                  style={styles.btn_location}
+                  onPress={this.handleAddNewLocation.bind(this)}>
+                  <Text style={styles.text_done}> Location </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btn_location}
+                  onPress={this.handleAddExistingLocation.bind(this)}>
+                  <Text style={styles.text_done}> Location </Text>
+                </TouchableOpacity>
+              </View>
+            }
+          </ScrollView>
       </View>
     );
   }
