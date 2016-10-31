@@ -63,7 +63,6 @@ const Event = TForm.struct({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 15,
     marginBottom: 15,
     padding: 16,
     backgroundColor: '#ffffff'
