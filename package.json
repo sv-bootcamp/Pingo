@@ -41,6 +41,7 @@
     "jest": "^15.1.1",
     "jest-cli": "^15.1.1",
     "jest-react-native": "^15.0.0",
+    "react-native-swiper": "^1.5.2",
     "react-test-renderer": "^15.3.2"
   }
 }

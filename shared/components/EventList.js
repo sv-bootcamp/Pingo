@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { ListView } from 'react-native';
-import Card from './Card';
+import CardLayout from '../containers/cardLayout';
 
 class EventList extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class EventList extends Component {
 
   renderRowTxt(rowData) {
     return (
-      <Card dataSource = {rowData}/>
+      <CardLayout dataSource = {rowData}/>
     );
   }
 

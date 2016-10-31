@@ -6,6 +6,7 @@ import FormLayout from './formLayout';
 import CameraLayout from './cameraLayout';
 import MapLayout from './mapLayout';
 import ListLayout from './listLayout';
+import DetailViewLayout from './detailViewLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
@@ -20,6 +21,9 @@ const scenes = Actions.create(
     }/>
     <Scene key="cameraView" hideNavBar={true} component={
       CameraLayout
+    }/>
+    <Scene key="detailView" hideNavBar={true} component={
+      DetailViewLayout
     }/>
   </Scene>
 );
