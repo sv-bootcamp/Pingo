@@ -68,7 +68,7 @@ class CameraView extends Component {
         captureTarget: Camera.constants.CaptureTarget.cameraRoll,
         type: Camera.constants.Type.back,
         orientation: Camera.constants.Orientation.auto,
-        flashMode: Camera.constants.FlashMode.auto,
+        flashMode: Camera.constants.FlashMode.auto
       },
       isRecording: false
     };
