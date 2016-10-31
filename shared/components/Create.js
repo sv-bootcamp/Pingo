@@ -66,10 +66,18 @@ const styles = StyleSheet.create({
     right: 15,
     top: 24
   },
+  btn_location: {
+    left: 15,
+    height: 75,
+    width: 328,
+    borderColor: '#dcdcdc',
+    borderWidth: 1,
+    marginBottom: 8
+  },
   input_text: {
     height: 104,
     width: 216,
-    borderColor: 'gray',
+    borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 8,
     marginLeft: 16
@@ -110,8 +118,8 @@ class Create extends Component {
           </TouchableOpacity>
         </View>
         <ScrollView style={styles.container}>
-          <Text style={styles.text_caption}> Done </Text>
-          <View style={{flexDirection: 'row'}}>
+          <Text style={styles.text_caption}> Caption </Text>
+          <View style={{flexDirection: 'row', marginBottom: 20}}>
             <TextInput
               style={styles.input_text}
               onChangeText={(text) => this.setState({text})}
@@ -120,6 +128,17 @@ class Create extends Component {
             />
             <Image source={{uri: this.props.pic}} style={styles.preview} />
           </View>
+          <Text style={styles.text_caption}> Location </Text>
+          <TouchableOpacity
+            style={styles.btn_location}
+            onPress={()=>{}}>
+            <Text style={styles.text_done}> Location </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn_location}
+            onPress={()=>{}}>
+            <Text style={styles.text_done}> Location </Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     );
