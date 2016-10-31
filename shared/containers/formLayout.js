@@ -1,4 +1,4 @@
-import CreateForm from '../components/CreateForm';
+import Create from '../components/Create';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 
@@ -23,6 +23,6 @@ const mapDispatchToProps = (dispatch) => {
 const FormLayout = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateForm);
+)(Create);
 
 export default FormLayout;
