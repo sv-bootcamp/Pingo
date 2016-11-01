@@ -383,7 +383,7 @@ class Create extends Component {
 }
 
 Create.propTypes = {
-    pic: PropTypes.string,
+    pic: PropTypes.string
 };
 
 export default Create;
