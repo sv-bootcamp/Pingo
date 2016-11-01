@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   },
   text_done: {
     fontSize: 17,
-    color: "#8e8e8e",
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
@@ -132,9 +131,11 @@ const styles = StyleSheet.create({
   btn_category: {
     flex: 1,
     height: 46,
-    width: 104,
     borderWidth: 1,
-    borderColor: "#e7e7e7"
+    borderRadius: 10,
+    borderColor: "#e7e7e7",
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   input_text: {
     height: 104,
@@ -172,11 +173,14 @@ class Create extends Component {
       dateStart: "",
       dateEnd: "",
       placeholderStart: "Start",
-      placeholderEnd: "End"
+      placeholderEnd: "End",
+      category: {
+        colorEvent: 'white',
+        colorFacility: 'white',
+        colorWarning: 'white',
+        select: ''
+      }
     };
-
-    this.convertMonth = this.convertMonth.bind(this);
-    this.handleOnDateChange = this.handleOnDateChange.bind(this);
   }
 
   //todo: implement function getting markers around the user's location
@@ -219,6 +223,52 @@ class Create extends Component {
     //todo: implement adding photo to an existing location
   }
 
+  handleCategoryButton(select) {
+    if (select === 'event') {
+      if (this.state.category.select === 'event') {
+        this.state.category.colorEvent = 'white';
+        this.state.category.colorFacility = 'white';
+        this.state.category.colorWarning = 'white';
+        this.state.category.select = '';
+        this.setState({});
+      } else {
+        this.state.category.colorEvent = '#f6a302';
+        this.state.category.colorFacility = 'white';
+        this.state.category.colorWarning = 'white';
+        this.state.category.select = 'event';
+        this.setState({});
+      }
+    } else if (select === 'facility') {
+      if (this.state.category.select === 'facility') {
+        this.state.category.colorEvent = 'white';
+        this.state.category.colorFacility = 'white';
+        this.state.category.colorWarning = 'white';
+        this.state.category.select = '';
+        this.setState({});
+      } else {
+        this.state.category.colorEvent = 'white';
+        this.state.category.colorFacility = '#2c8cff';
+        this.state.category.colorWarning = 'white';
+        this.state.category.select = 'facility';
+        this.setState({});
+      }
+    } else if (select === 'warning') {
+      if (this.state.category.select === 'warning') {
+        this.state.category.colorEvent = 'white';
+        this.state.category.colorFacility = 'white';
+        this.state.category.colorWarning = 'white';
+        this.state.category.select = '';
+        this.setState({});
+      } else {
+        this.state.category.colorEvent = 'white';
+        this.state.category.colorFacility = 'white';
+        this.state.category.colorWarning = '#ff5250';
+        this.state.category.select = 'warning';
+        this.setState({});
+      }
+    }
+  }
+
   convertMonth(m) {
     switch (m) {
     case '1': return 'Jan.';
@@ -237,7 +287,7 @@ class Create extends Component {
     }
   }
 
-  handleOnDateChange(datetime) {
+  handleOnDateChangeStart(datetime) {
     this.setState({dateStart: datetime});
     let a = new Date(datetime);
     let txtDate = this.convertMonth(
@@ -247,6 +297,18 @@ class Create extends Component {
       a.format('mm') +
       a.format('a');
     this.setState({placeholderStart: txtDate});
+  }
+
+  handleOnDateChangeEnd(datetime) {
+    this.setState({dateEnd: datetime});
+    let a = new Date(datetime);
+    let txtDate = this.convertMonth(
+      a.format('MM')) + ' ' +
+      a.format('DD') + ', ' +
+      a.format('hh') + ':' +
+      a.format('mm') +
+      a.format('a');
+    this.setState({placeholderEnd: txtDate});
   }
 
   renderDatePickerStart() {
@@ -270,7 +332,7 @@ class Create extends Component {
           left: 95,
           top: 2
         }}}
-        onDateChange={(datetime) => {this.handleOnDateChange(datetime);}}
+        onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
       />
     )
   }
@@ -295,7 +357,7 @@ class Create extends Component {
           fontSize: 14,
           left: 95
         }}}
-        onDateChange={(datetime) => {this.handleOnDateChange(datetime);}}
+        onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
       />
     )
   }
@@ -394,19 +456,25 @@ class Create extends Component {
         <Text style={styles.text_location}> Category </Text>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            style={[styles.btn_category, {marginLeft: 16, marginRight: 8}]}
-            onPress={()=>{}}>
-            <Text style={styles.text_done}> Event </Text>
+            style={[styles.btn_category,
+              {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent}]}
+            onPress={()=>{this.handleCategoryButton('event')}}>
+            <Text style={[styles.text_done,
+              {color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.btn_category, {marginRight: 8}]}
-            onPress={()=>{}}>
-            <Text style={styles.text_done}> Facility </Text>
+            style={[styles.btn_category,
+              {marginRight: 8, backgroundColor: this.state.category.colorFacility}]}
+            onPress={()=>{this.handleCategoryButton('facility')}}>
+            <Text style={[styles.text_done,
+              {color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.btn_category, {marginRight: 16}]}
-            onPress={()=>{}}>
-            <Text style={styles.text_done}> Warning </Text>
+            style={[styles.btn_category,
+              {marginRight: 16, backgroundColor: this.state.category.colorWarning}]}
+            onPress={()=>{this.handleCategoryButton('warning')}}>
+            <Text style={[styles.text_done,
+              {color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'column'}}>
