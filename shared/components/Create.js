@@ -193,8 +193,8 @@ class Create extends Component {
       Done: false,
       streetName: '',
       streetNumber: '',
-      placeholderStart: "Start",
-      placeholderEnd: "End",
+      placeholderStart: " ",
+      placeholderEnd: " ",
       inputTextCaption: '',
       inputTextLocation: '',
       inputTextTitle: '',
@@ -364,12 +364,13 @@ class Create extends Component {
     this.setState({placeholderEnd: txtDate});
   }
 
+  // todo: change placeholder style
   renderDatePickerStart() {
     return (
       <DatePicker
         style={[styles.DatePicker]}
         date={""}
-        placeholder={this.state.placeholderStart}
+        placeholder={`start ${this.state.placeholderStart}`}
         mode="datetime"
         format="YYYY-MM-DD HH:mm"
         confirmBtnText="Confirm"
@@ -380,10 +381,8 @@ class Create extends Component {
           borderWidth: 0
         },
           placeholderText: {
-          color: '#8e8e8e',
-          fontSize: 14,
-          left: 95,
-          top: 2
+          color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b',
+          fontSize: 14
         }}}
         onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
       />
@@ -395,7 +394,7 @@ class Create extends Component {
       <DatePicker
         style={[styles.DatePicker, {marginTop: 8}]}
         date={""}
-        placeholder={this.state.placeholderEnd}
+        placeholder={`end ${this.state.placeholderEnd}`}
         mode="datetime"
         format="YYYY-MM-DD HH:mm"
         confirmBtnText="Confirm"
@@ -406,9 +405,8 @@ class Create extends Component {
           borderWidth: 0
         },
           placeholderText: {
-          color: '#8e8e8e',
-          fontSize: 14,
-          left: 95
+          color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b',
+          fontSize: 14
         }}}
         onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
       />
