@@ -278,7 +278,7 @@ class Create extends Component {
 
   handleOnDateChangeStart(datetime) {
     this.setState({dateStart: datetime});
-    let a = new Date(datetime);
+    const a = new Date(datetime);
     const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderStart: txtDate});
   }
@@ -376,16 +376,16 @@ class Create extends Component {
     )
   }
 
-  getDistanceFromLatLonInKm(lat1,lon1) {
-    let lat2 = this.props.currentLocation.latitude;
-    let lon2 = this.props.currentLocation.longitude;
-    let R = 6371;
-    let dLat = (lat2-lat1) * (Math.PI/180);
-    let dLon = (lon2-lon1) * (Math.PI/180);
-    let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos((lat1) * (Math.PI/180)) * Math.cos((lat2) * (Math.PI/180)) *
+  getDistanceFromLatLonInKm(ItemLat,ItemLong) {
+    const UserLat = this.props.currentLocation.latitude;
+    const UserLong = this.props.currentLocation.longitude;
+    const R = 6371;
+    const dLat = (UserLat-ItemLat) * (Math.PI/180);
+    const dLon = (UserLong-ItemLong) * (Math.PI/180);
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos((ItemLat) * (Math.PI/180)) * Math.cos((UserLat) * (Math.PI/180)) *
             Math.sin(dLon/2) * Math.sin(dLon/2);
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return (R * c).toFixed(2);
   }
 
