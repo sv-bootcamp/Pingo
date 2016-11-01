@@ -11,12 +11,18 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
 
+import ImgBtnClose from '../resources/camera/btn_close.png';
+import ImgCameraSwitch from '../resources/camera/icon_camera_switch.png';
+import ImgBtnTakingPhoto from '../resources/camera/btn_taking_photo.png';
+import ImgFlash from '../resources/camera/icon_flash.png';
+import ImgCameraAgain from '../resources/camera/icon_camera_again.png';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
   preview: {
-    height: 360,
+    flex: 1,
     left: 0,
     top: 67
   },
@@ -36,24 +42,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0
   },
-  bottom_buttons: {
-    position: 'absolute',
-    bottom: 60,
-    alignSelf: 'center',
-    backgroundColor: 'blue',
-    width: Dimensions.get('window').width
-  },
   btn_taking_photo: {
     alignSelf: 'center',
-    left: Dimensions.get('window').width / 2 - 90
+    flex: 1
   },
   btn_camera_switch: {
     alignSelf: 'center',
-    left: 32
+    flex: 1
   },
   btn_flash: {
     alignSelf: 'center',
-    left: Dimensions.get('window').width / 2 - 32
+    flex: 1
   },
   btn_again: {
     alignSelf: 'center',
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
   },
   text_top: {
     alignSelf: 'center',
-    left: Dimensions.get('window').width / 2 - 180,
+    flex: 1,
     color: 'white',
     fontSize: 17,
     ...Platform.select({
@@ -98,7 +97,7 @@ class CameraView extends Component {
     this.state = {
       camera: {
         aspect: Camera.constants.Aspect.fill,
-        captureTarget: Camera.constants.CaptureTarget.cameraRoll,
+        captureTarget: Camera.constants.CaptureTarget.temp,
         type: Camera.constants.Type.back,
         orientation: Camera.constants.Orientation.auto,
         flashMode: Camera.constants.FlashMode.auto
@@ -137,10 +136,7 @@ class CameraView extends Component {
   }
 
   handleUse() {
-    this.setState({
-      Done: false
-    });
-    Actions.createForm({type: 'replace'});
+    Actions.createForm();
   }
 
   switchType() {
@@ -161,79 +157,110 @@ class CameraView extends Component {
     });
   }
 
+  renderBtnClose() {
+    return (
+      <TouchableOpacity
+        style={styles.btn_close}
+        onPress={this.handleClose.bind(this)}>
+        <Image
+          style={{height:24, width: 24}}
+          source={ImgBtnClose}
+        />
+      </TouchableOpacity>
+    )
+  }
+
+  renderBtnUse() {
+    return (
+      (this.state.Done === true) ?
+        <TouchableOpacity
+          style={styles.btn_use}
+          onPress={this.handleUse.bind(this)}>
+          <Text style={styles.text_use}> Use </Text>
+        </TouchableOpacity>
+      : null
+    )
+  }
+
+  renderCameraOrAfter() {
+    return (
+      (this.state.Done === true) ?
+        <Image source={{uri: this.props.pic}} style={styles.preview} />
+      :
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
+          style={styles.preview}
+          type={this.state.camera.type}
+          aspect={Camera.constants.Aspect.fill}
+          flashMode={this.state.camera.flashMode}
+        />
+    )
+  }
+
+  renderBottom() {
+    return (
+      <View style={styles.bottom}>
+        <TouchableOpacity
+          style={styles.btn_camera_switch}
+          onPress={this.switchType.bind(this)}>
+          <Image
+            style={{height: 48, width: 48, left: 32}}
+            source={ImgCameraSwitch}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn_taking_photo}
+          onPress={this.takePicture.bind(this)}>
+          <Image
+            style={{
+              height: 80, width: 80,
+              left: Dimensions.get('window').width / 6 - 40}}
+            source={ImgBtnTakingPhoto}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn_flash}
+          onPress={this.handleFlash.bind(this)}>
+          <Image
+            style={{
+              height: 48, width: 48,
+              left: Dimensions.get('window').width / 3 - 48 - 32}}
+            source={ImgFlash}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  renderBottomAfter() {
+    return (
+      <View style={styles.bottom}>
+        <TouchableOpacity
+          style={styles.btn_again}
+          onPress={this.takeAgain.bind(this)}>
+          <Image
+            style={{height: 48, width: 48}}
+            source={ImgCameraAgain}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.top}>
-          <TouchableOpacity
-            style={styles.btn_close}
-            onPress={this.handleClose.bind(this)}>
-            <Image
-              style={{height:24, width: 24}}
-              source={require('../resources/camera/btn_close.png')}
-            />
-          </TouchableOpacity>
+          {this.renderBtnClose()}
           <Text style={styles.text_top}> Photo </Text>
-          {(this.state.Done === true) ?
-            <TouchableOpacity
-              style={styles.btn_use}
-              onPress={this.handleUse.bind(this)}>
-              <Text style={styles.text_use}> Use </Text>
-            </TouchableOpacity>
-            : null
-          }
+          {this.renderBtnUse()}
         </View>
+        {this.renderCameraOrAfter()}
         {(this.state.Done === true) ?
-          <Image source={{uri: this.props.pic}} style={styles.preview} />
-            :
-          <Camera
-            ref={(cam) => {
-              this.camera = cam;
-            }}
-            style={styles.preview}
-            type={this.state.camera.type}
-            aspect={Camera.constants.Aspect.fill}
-            flashMode={this.state.camera.flashMode}
-          />
-        }
-        {(this.state.Done === true) ?
-          <View style={styles.bottom}>
-            <TouchableOpacity
-              style={styles.btn_again}
-              onPress={this.takeAgain.bind(this)}>
-              <Image
-                style={{height: 48, width: 48}}
-                source={require('../resources/camera/icon_camera_again.png')}
-              />
-            </TouchableOpacity>
-          </View>
-          :
-          <View style={styles.bottom}>
-            <TouchableOpacity
-              style={styles.btn_camera_switch}
-              onPress={this.switchType.bind(this)}>
-              <Image
-                style={{height: 48, width: 48}}
-                source={require('../resources/camera/icon_camera_switch.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn_taking_photo}
-              onPress={this.takePicture.bind(this)}>
-              <Image
-                style={{height: 80, width: 80}}
-                source={require('../resources/camera/btn_taking_photo.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn_flash}
-              onPress={this.handleFlash.bind(this)}>
-              <Image
-                style={{height: 48, width: 48}}
-                source={require('../resources/camera/icon_flash.png')}
-              />
-            </TouchableOpacity>
-          </View>
+          <View>{this.renderBottomAfter()}</View> :
+          <View>{this.renderBottom()}</View>
         }
       </View>
     );
