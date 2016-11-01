@@ -80,6 +80,38 @@ const styles = StyleSheet.create({
       }
     })
   },
+  textItemAddress: {
+    fontSize: 14,
+    color: '#8e8e8e',
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    }),
+    marginLeft: 16
+  },
+  textItemTitle: {
+    fontSize: 19,
+    color: '#8e8e8e',
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    }),
+    marginLeft: 16,
+    marginTop: 4
+  },
+  textItemUnit: {
+    marginRight: 16,
+    textAlign: 'right',
+    fontSize: 14,
+    color: '#8e8e8e',
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
+  },
   btn_before: {
     left: 15,
     top: 24
@@ -286,14 +318,24 @@ class Create extends Component {
         <TouchableOpacity
           style={styles.btn_location}
           onPress={this.handleAddNewLocation.bind(this)}>
-          <Text style={styles.text_done}> Location </Text>
+          <View style={{flexDirection: 'row', flex: 1}}>
+            <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
+              <Text style={styles.textItemAddress}>75 St. Nicholas St.</Text>
+              <Text style={styles.textItemTitle}>Add New Location</Text>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <Text style={styles.textItemUnit}>
+                0 km
+              </Text>
+            </View>
+          </View>
         </TouchableOpacity>
-        {this.renderAroundLocation()}
+        {this.renderAroundLocations()}
       </View>
     )
   }
 
-  getDistanceFromLatLonInMeter(lat1,lon1) {
+  getDistanceFromLatLonInKm(lat1,lon1) {
     let lat2 = this.props.currentLocation.latitude;
     let lon2 = this.props.currentLocation.longitude;
     let R = 6371;
@@ -303,20 +345,28 @@ class Create extends Component {
             Math.cos((lat1) * (Math.PI/180)) * Math.cos((lat2) * (Math.PI/180)) *
             Math.sin(dLon/2) * Math.sin(dLon/2);
     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return (R * c * 1000).toFixed(0);
+    return (R * c).toFixed(2);
   }
 
-  renderAroundLocation() {
+  // todo: remove item.address.substring(n,cnt) after changing post address func
+  // todo: should limit item.title length if it is too long
+  renderAroundLocations() {
     return (
       this.props.dataSource.map(item => (
       <TouchableOpacity
         style={styles.btn_location}
         onPress={this.handleAddExistingLocation.bind(this)}>
-        <Text>{item.address}</Text>
-        <Text>{item.title}</Text>
-        <Text style={styles.text_done}>
-          {this.getDistanceFromLatLonInMeter(item.lat, item.lng)} m
-        </Text>
+        <View style={{flexDirection: 'row', flex: 1}}>
+          <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
+            <Text style={styles.textItemAddress}>{item.address.substring(0,18)}</Text>
+            <Text style={styles.textItemTitle}>{item.title}</Text>
+          </View>
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <Text style={styles.textItemUnit}>
+              {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
+            </Text>
+          </View>
+        </View>
       </TouchableOpacity>
       ))
     )
