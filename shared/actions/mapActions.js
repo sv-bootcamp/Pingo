@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 
-const API_GET_ITEMS = 'http://goober.herokuapp.com/api/items?isThumbnail=true&lat=';
+const API_GET_ITEMS = 'http://ec2-52-78-96-168.ap-northeast-2.compute.amazonaws.com/api/items?isThumbnail=true&lat=';
 
 export const onLocationChange = (region) => {
   return {
