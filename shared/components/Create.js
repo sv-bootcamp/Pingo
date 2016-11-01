@@ -14,6 +14,8 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 
+import ImgBtnBefore from '../resources/camera/btn_before.png';
+
 const styles = StyleSheet.create({
   preview: {
     height: 104,
@@ -493,7 +495,7 @@ class Create extends Component {
         onPress={this.handleBefore.bind(this)}>
         <Image
           style={{height:24, width: 24}}
-          source={require('../resources/camera/btn_before.png')}
+          source={ImgBtnBefore}
         />
       </TouchableOpacity>
     )

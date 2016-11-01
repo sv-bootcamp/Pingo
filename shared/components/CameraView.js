@@ -11,6 +11,12 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
 
+import ImgBtnClose from '../resources/camera/btn_close.png';
+import ImgCameraSwitch from '../resources/camera/icon_camera_switch.png';
+import ImgBtnTakingPhoto from '../resources/camera/btn_taking_photo.png';
+import ImgFlash from '../resources/camera/icon_flash.png';
+import ImgCameraAgain from '../resources/camera/icon_camera_again.png';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -158,7 +164,7 @@ class CameraView extends Component {
         onPress={this.handleClose.bind(this)}>
         <Image
           style={{height:24, width: 24}}
-          source={require('../resources/camera/btn_close.png')}
+          source={ImgBtnClose}
         />
       </TouchableOpacity>
     )
@@ -201,7 +207,7 @@ class CameraView extends Component {
           onPress={this.switchType.bind(this)}>
           <Image
             style={{height: 48, width: 48, left: 32}}
-            source={require('../resources/camera/icon_camera_switch.png')}
+            source={ImgCameraSwitch}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -211,7 +217,7 @@ class CameraView extends Component {
             style={{
               height: 80, width: 80,
               left: Dimensions.get('window').width / 6 - 40}}
-            source={require('../resources/camera/btn_taking_photo.png')}
+            source={ImgBtnTakingPhoto}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -221,7 +227,7 @@ class CameraView extends Component {
             style={{
               height: 48, width: 48,
               left: Dimensions.get('window').width / 3 - 48 - 32}}
-            source={require('../resources/camera/icon_flash.png')}
+            source={ImgFlash}
           />
         </TouchableOpacity>
       </View>
@@ -236,7 +242,7 @@ class CameraView extends Component {
           onPress={this.takeAgain.bind(this)}>
           <Image
             style={{height: 48, width: 48}}
-            source={require('../resources/camera/icon_camera_again.png')}
+            source={ImgCameraAgain}
           />
         </TouchableOpacity>
       </View>
