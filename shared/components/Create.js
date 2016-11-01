@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
+import { Actions } from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
   preview: {
@@ -145,13 +146,19 @@ class Create extends Component {
       placeholderEnd: "End"
     };
     this.convertMonth = this.convertMonth.bind(this);
+    this.handleOnDateChange = this.handleOnDateChange.bind(this);
   }
 
   handleBefore() {
     if(this.state.addingNewLocation === true) {
       this.setState({
         addingNewLocation: false
-      })
+      });
+    } else if(this.state.addingNewLocation === false) {
+      this.setState({
+        addingNewLocation: false
+      });
+      Actions.pop();
     }
   }
 
@@ -187,6 +194,18 @@ class Create extends Component {
     }
   }
 
+  handleOnDateChange(datetime) {
+    this.setState({dateStart: datetime});
+    let a = new Date(datetime);
+    let txtDate = this.convertMonth(
+      a.format('MM')) + ' ' +
+      a.format('DD') + ', ' +
+      a.format('hh') + ':' +
+      a.format('mm') +
+      a.format('a');
+    this.setState({placeholderStart: txtDate});
+  }
+
   renderDatePickerStart() {
     return (
       <DatePicker
@@ -200,26 +219,15 @@ class Create extends Component {
         showIcon={false}
         customStyles={{
           dateInput: {
-            borderWidth: 0
-          },
+          borderWidth: 0
+        },
           placeholderText: {
-            color: '#8e8e8e',
-            fontSize: 14,
-            left: 95,
-            top: 2
-          }
-        }}
-        onDateChange={(datetime) => {
-          this.setState({dateStart: datetime});
-          let a = new Date(datetime);
-          let txtDate = this.convertMonth(
-            a.format('MM')) + ' ' +
-            a.format('DD') + ', ' +
-            a.format('hh') + ':' +
-            a.format('mm') +
-            a.format('a');
-          this.setState({placeholderStart: txtDate});
-        }}
+          color: '#8e8e8e',
+          fontSize: 14,
+          left: 95,
+          top: 2
+        }}}
+        onDateChange={(datetime) => {this.handleOnDateChange(datetime);}}
       />
     )
   }
@@ -237,26 +245,121 @@ class Create extends Component {
         showIcon={false}
         customStyles={{
           dateInput: {
-            borderWidth: 0
-          },
+          borderWidth: 0
+        },
           placeholderText: {
-            color: '#8e8e8e',
-            fontSize: 14,
-            left: 95
-          }
-        }}
-        onDateChange={(datetime) => {
-          this.setState({dateEnd: datetime});
-          let a = new Date(datetime);
-          let txtDate = this.convertMonth(
-              a.format('MM')) + ' ' +
-              a.format('DD') + ', ' +
-              a.format('hh') + ':' +
-              a.format('mm') +
-              a.format('a');
-          this.setState({placeholderEnd: txtDate});
-        }}
+          color: '#8e8e8e',
+          fontSize: 14,
+          left: 95
+        }}}
+        onDateChange={(datetime) => {this.handleOnDateChange(datetime);}}
       />
+    )
+  }
+
+  renderCaption() {
+    return (
+      <View>
+        <Text style={styles.text_caption}> Caption </Text>
+        <View style={{flexDirection: 'row', marginBottom: 20}}>
+          <TextInput
+            style={styles.input_text}
+            onChangeText={(text) => this.setState({text})}
+            value={this.state.text}
+            multiline={true}
+            underlineColorAndroid="rgba(0,0,0,0)"
+          />
+          <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
+        </View>
+        <Text style={styles.text_caption}> Location </Text>
+        <TouchableOpacity
+          style={styles.btn_location}
+          onPress={this.handleAddNewLocation.bind(this)}>
+          <Text style={styles.text_done}> Location </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn_location}
+          onPress={this.handleAddExistingLocation.bind(this)}>
+          <Text style={styles.text_done}> Location </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  renderAddNewLocation() {
+    return (
+      <View>
+        <Text style={styles.text_caption}> Location </Text>
+        <TextInput
+          style={styles.input_location}
+          onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
+          multiline={false}
+          underlineColorAndroid="rgba(0,0,0,0)"
+        />
+        <Text style={styles.text_location}> Title </Text>
+        <TextInput
+          style={styles.input_location}
+          onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
+          multiline={false}
+          underlineColorAndroid="rgba(0,0,0,0)"
+        />
+        <Text style={styles.text_location}> Category </Text>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={[styles.btn_category, {marginLeft: 16, marginRight: 8}]}
+            onPress={()=>{}}>
+            <Text style={styles.text_done}> Event </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.btn_category, {marginRight: 8}]}
+            onPress={()=>{}}>
+            <Text style={styles.text_done}> Facility </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.btn_category, {marginRight: 16}]}
+            onPress={()=>{}}>
+            <Text style={styles.text_done}> Warning </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'column'}}>
+          <Text style={styles.text_location}> Time (optional) </Text>
+          {this.renderDatePickerStart()}
+          {this.renderDatePickerEnd()}
+        </View>
+      </View>
+    )
+  }
+
+  renderBtnBefore() {
+    return (
+      <TouchableOpacity
+        style={styles.btn_before}
+        onPress={this.handleBefore.bind(this)}>
+        <Image
+          style={{height:24, width: 24}}
+          source={require('../resources/camera/btn_before.png')}
+        />
+      </TouchableOpacity>
+    )
+  }
+
+  renderHeaderTitle() {
+    return (
+      this.state.addingNewLocation === true ?
+        <Text style={styles.text_addNewLocation}>Add new location</Text> :
+        <Text style={styles.text_header}>Post Photo</Text>
+    )
+  }
+
+  renderBtnDone() {
+    return (
+      <TouchableOpacity
+        style={styles.btn_done}
+        onPress={this.handleDone.bind(this)}>
+        <Text style={styles.text_done}> Done </Text>
+      </TouchableOpacity>
     )
   }
 
@@ -264,107 +367,23 @@ class Create extends Component {
     return (
       <View style={{flexDirection: 'column'}}>
         <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.btn_before}
-            onPress={this.handleBefore.bind(this)}>
-            <Image
-              style={{height:24, width: 24}}
-              source={require('../resources/camera/btn_before.png')}
-            />
-          </TouchableOpacity>
-          {this.state.addingNewLocation === true ?
-            <Text style={styles.text_addNewLocation}>Add new location</Text>
-            :
-            <Text style={styles.text_header}>Post Photo</Text>
-          }
-          <TouchableOpacity
-            style={styles.btn_done}
-            onPress={this.handleDone.bind(this)}>
-            <Text style={styles.text_done}> Done </Text>
-          </TouchableOpacity>
+          {this.renderBtnBefore()}
+          {this.renderHeaderTitle()}
+          {this.renderBtnDone()}
         </View>
-
-          <ScrollView style={styles.container}>
-            {this.state.addingNewLocation === true ?
-              <View>
-                <Text style={styles.text_caption}> Location </Text>
-                <TextInput
-                  style={styles.input_location}
-                  onChangeText={(text) => this.setState({text})}
-                  value={this.state.text}
-                  multiline={false}
-                  underlineColorAndroid="rgba(0,0,0,0)"
-                />
-                <Text style={styles.text_location}> Title </Text>
-                <TextInput
-                  style={styles.input_location}
-                  onChangeText={(text) => this.setState({text})}
-                  value={this.state.text}
-                  multiline={false}
-                  underlineColorAndroid="rgba(0,0,0,0)"
-                />
-                <Text style={styles.text_location}> Category </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                    style={[styles.btn_category, {marginLeft: 16, marginRight: 8}]}
-                    onPress={()=>{}}>
-                    <Text style={styles.text_done}> Event </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.btn_category, {marginRight: 8}]}
-                    onPress={()=>{}}>
-                    <Text style={styles.text_done}> Facility </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.btn_category, {marginRight: 16}]}
-                    onPress={()=>{}}>
-                    <Text style={styles.text_done}> Warning </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={{flexDirection: 'column'}}>
-                  <Text style={styles.text_location}> Time (optional) </Text>
-                  {this.renderDatePickerStart()}
-                  {this.renderDatePickerEnd()}
-                </View>
-              </View>
-              :
-              <View>
-                <Text style={styles.text_caption}> Caption </Text>
-                <View style={{flexDirection: 'row', marginBottom: 20}}>
-                  <TextInput
-                    style={styles.input_text}
-                    onChangeText={(text) => this.setState({text})}
-                    value={this.state.text}
-                    multiline={true}
-                    underlineColorAndroid="rgba(0,0,0,0)"
-                  />
-                  <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
-                </View>
-                <Text style={styles.text_caption}> Location </Text>
-                <TouchableOpacity
-                  style={styles.btn_location}
-                  onPress={this.handleAddNewLocation.bind(this)}>
-                  <Text style={styles.text_done}> Location </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.btn_location}
-                  onPress={this.handleAddExistingLocation.bind(this)}>
-                  <Text style={styles.text_done}> Location </Text>
-                </TouchableOpacity>
-              </View>
-            }
-          </ScrollView>
+        <ScrollView style={styles.container}>
+          {this.state.addingNewLocation === true ?
+            <View>{this.renderAddNewLocation()}</View> :
+            <View>{this.renderCaption()}</View>
+          }
+        </ScrollView>
       </View>
     );
   }
 }
 
 Create.propTypes = {
-    location: PropTypes.any,
-    setEncPic: PropTypes.func,
-    setCurrentScene: PropTypes.func,
     pic: PropTypes.string,
-    encpic: PropTypes.string
 };
 
 export default Create;
