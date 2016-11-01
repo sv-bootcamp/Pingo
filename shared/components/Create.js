@@ -1,20 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    Dimensions,
-    StyleSheet,
-    Image,
-    View,
-    Text,
-    TextInput,
-    Platform,
-    ScrollView,
-    TouchableOpacity
+  Dimensions,
+  StyleSheet,
+  Image,
+  View,
+  Text,
+  TextInput,
+  Platform,
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 
 import ImgBtnBefore from '../resources/camera/btn_before.png';
+import ImgBtnCheck from '../resources/camera/btn_check.png';
 
 const styles = StyleSheet.create({
   preview: {
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
   },
   btn_location: {
     height: 75,
-    borderColor: '#dcdcdc',
     borderWidth: 1,
     marginBottom: 8,
     marginRight: 16,
@@ -138,6 +138,12 @@ const styles = StyleSheet.create({
     borderColor: "#e7e7e7",
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  btn_check: {
+    height: 24,
+    width: 24,
+    alignSelf: 'flex-end',
+    marginRight: 16
   },
   input_text: {
     height: 104,
@@ -170,18 +176,21 @@ class Create extends Component {
     super(props);
 
     this.state = {
-      text: '',
       addingNewLocation: false,
-      dateStart: "",
-      dateEnd: "",
-      placeholderStart: "Start",
-      placeholderEnd: "End",
       category: {
         colorEvent: 'white',
         colorFacility: 'white',
         colorWarning: 'white',
         select: ''
-      }
+      },
+      dateStart: "",
+      dateEnd: "",
+      Done: false,
+      placeholderStart: "Start",
+      placeholderEnd: "End",
+      inputTextCaption: '',
+      inputTextLocation: '',
+      inputTextTitle: ''
     };
   }
 
@@ -199,20 +208,27 @@ class Create extends Component {
   */
 
   handleBefore() {
-    if(this.state.addingNewLocation === true) {
-      this.setState({
-        addingNewLocation: false
-      });
-    } else if(this.state.addingNewLocation === false) {
-      this.setState({
-        addingNewLocation: false
-      });
+    if (this.state.addingNewLocation === true) {
+      this.setState({addingNewLocation: false});
+    } else if (this.state.addingNewLocation === false) {
       Actions.pop();
     }
   }
 
   handleDone() {
-    //todo: handle Done button here
+    if (this.state.addingNewLocation === true && this.state.Done === true) {
+      this.setState({addingNewLocation: false});
+    }
+  }
+
+  checkDone() {
+    if (this.state.inputTextLocation !== '' &&
+        this.state.inputTextTitle !== '' &&
+        this.state.category.select !== '') {
+      this.setState({Done: true});
+    } else if (this.state.Done !== false) {
+      this.setState({Done: false});
+    }
   }
 
   handleAddNewLocation() {
@@ -232,13 +248,11 @@ class Create extends Component {
         this.state.category.colorFacility = 'white';
         this.state.category.colorWarning = 'white';
         this.state.category.select = '';
-        this.setState({});
       } else {
         this.state.category.colorEvent = '#f6a302';
         this.state.category.colorFacility = 'white';
         this.state.category.colorWarning = 'white';
         this.state.category.select = 'event';
-        this.setState({});
       }
     } else if (select === 'facility') {
       if (this.state.category.select === 'facility') {
@@ -246,13 +260,11 @@ class Create extends Component {
         this.state.category.colorFacility = 'white';
         this.state.category.colorWarning = 'white';
         this.state.category.select = '';
-        this.setState({});
       } else {
         this.state.category.colorEvent = 'white';
         this.state.category.colorFacility = '#2c8cff';
         this.state.category.colorWarning = 'white';
         this.state.category.select = 'facility';
-        this.setState({});
       }
     } else if (select === 'warning') {
       if (this.state.category.select === 'warning') {
@@ -260,15 +272,15 @@ class Create extends Component {
         this.state.category.colorFacility = 'white';
         this.state.category.colorWarning = 'white';
         this.state.category.select = '';
-        this.setState({});
       } else {
         this.state.category.colorEvent = 'white';
         this.state.category.colorFacility = 'white';
         this.state.category.colorWarning = '#ff5250';
         this.state.category.select = 'warning';
-        this.setState({});
       }
     }
+    this.setState({});
+    this.checkDone();
   }
 
   convertMonth(m) {
@@ -285,7 +297,7 @@ class Create extends Component {
 
   handleOnDateChangeEnd(datetime) {
     this.setState({dateEnd: datetime});
-    let a = new Date(datetime);
+    const a = new Date(datetime);
     const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderEnd: txtDate});
   }
@@ -348,8 +360,8 @@ class Create extends Component {
         <View style={{flexDirection: 'row', marginBottom: 20}}>
           <TextInput
             style={styles.input_text}
-            onChangeText={(text) => this.setState({text})}
-            value={this.state.text}
+            onChangeText={(text) => this.setState({inputTextCaption: text})}
+            value={this.state.inputTextCaption}
             multiline={true}
             underlineColorAndroid="rgba(0,0,0,0)"
           />
@@ -357,7 +369,7 @@ class Create extends Component {
         </View>
         <Text style={styles.text_caption}> Location </Text>
         <TouchableOpacity
-          style={styles.btn_location}
+          style={[styles.btn_location, {borderColor: (this.state.Done === true) ? '#8e8e8e' : '#e7e7e7'}]}
           onPress={this.handleAddNewLocation.bind(this)}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
@@ -365,9 +377,10 @@ class Create extends Component {
               <Text style={styles.textItemTitle}>Add New Location</Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
-              <Text style={styles.textItemUnit}>
-                0 km
-              </Text>
+              {(this.state.Done === true) ?
+                <Image source={ImgBtnCheck} style={styles.btn_check}/> :
+                <Text style={styles.textItemUnit}> 0 km </Text>
+              }
             </View>
           </View>
         </TouchableOpacity>
@@ -395,7 +408,7 @@ class Create extends Component {
     return (
       this.props.dataSource.map(item => (
       <TouchableOpacity
-        style={styles.btn_location}
+        style={[styles.btn_location, {borderColor: '#e7e7e7'}]}
         onPress={this.handleAddExistingLocation.bind(this)}>
         <View style={{flexDirection: 'row', flex: 1}}>
           <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
@@ -419,16 +432,24 @@ class Create extends Component {
         <Text style={styles.text_caption}> Location </Text>
         <TextInput
           style={styles.input_location}
-          onChangeText={(text) => this.setState({text})}
-          value={this.state.text}
+          onChangeText={(text) => {
+              this.setState({inputTextLocation: text});
+              this.checkDone();
+            }
+          }
+          value={this.state.inputTextLocation}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
         />
         <Text style={styles.text_location}> Title </Text>
         <TextInput
           style={styles.input_location}
-          onChangeText={(text) => this.setState({text})}
-          value={this.state.text}
+          onChangeText={(text) => {
+              this.setState({inputTextTitle: text});
+              this.checkDone();
+            }
+          }
+          value={this.state.inputTextTitle}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
         />
@@ -491,7 +512,7 @@ class Create extends Component {
       <TouchableOpacity
         style={styles.btn_done}
         onPress={this.handleDone.bind(this)}>
-        <Text style={styles.text_done}> Done </Text>
+        <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
       </TouchableOpacity>
     )
   }
