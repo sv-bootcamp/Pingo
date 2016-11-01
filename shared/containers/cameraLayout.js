@@ -1,5 +1,6 @@
 import CameraView from '../components/CameraView';
 import { setCurrentPic } from '../actions/formActions';
+import { setCurrentScene } from '../actions/fluxActions';
 import { connect } from 'react-redux';
 
 
@@ -13,6 +14,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentPic: (pic) => {
       return dispatch(setCurrentPic(pic));
+    },
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
     }
   };
 };
