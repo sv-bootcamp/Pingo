@@ -100,7 +100,8 @@ class CameraView extends Component {
         captureTarget: Camera.constants.CaptureTarget.temp,
         type: Camera.constants.Type.back,
         orientation: Camera.constants.Orientation.auto,
-        flashMode: Camera.constants.FlashMode.auto
+        flashMode: Camera.constants.FlashMode.auto,
+        captureAudio: false
       },
       isRecording: false,
       Done: false
@@ -193,8 +194,11 @@ class CameraView extends Component {
           }}
           style={styles.preview}
           type={this.state.camera.type}
-          aspect={Camera.constants.Aspect.fill}
+          aspect={this.state.camera.aspect}
           flashMode={this.state.camera.flashMode}
+          captureTarget={this.state.camera.captureTarget}
+          orientation={this.state.camera.orientation}
+          captureAudio={this.state.camera.captureAudio}
         />
     )
   }
