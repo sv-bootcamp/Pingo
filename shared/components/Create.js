@@ -13,10 +13,12 @@ import {
 import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
+import RNFS from 'react-native-fs';
 
 import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 
+const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
 const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
 const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
@@ -195,10 +197,12 @@ class Create extends Component {
       placeholderEnd: "End",
       inputTextCaption: '',
       inputTextLocation: '',
-      inputTextTitle: ''
+      inputTextTitle: '',
+      img: ''
     };
 
     this.getAddressData();
+    this.encodePictureBase64();
   }
 
   //todo: implement function getting markers around the user's location
@@ -214,6 +218,12 @@ class Create extends Component {
     }
   */
 
+  encodePictureBase64() {
+    RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
+    .then((file) =>{this.setState({img: file});})
+    .catch((err) => {console.log(err.message, err.code);});
+  }
+
   handleBefore() {
     if (this.state.addingNewLocation === true) {
       this.setState({addingNewLocation: false});
@@ -226,8 +236,40 @@ class Create extends Component {
     if (this.state.addingNewLocation === true && this.state.Done === true) {
       this.setState({addingNewLocation: false});
     } else if (this.state.addingNewLocation === false && this.state.Done === true) {
-      // todo : ochanje210
+      this.postNewItem();
     }
+  }
+
+  postNewItem() {
+    const data = JSON.stringify({
+      title: this.state.inputTextTitle,
+      lat: this.props.currentLocation.latitude,
+      lng: this.props.currentLocation.longitude,
+      address: `${this.state.streetNumber} ${this.state.streetName}`,
+      category: this.state.category.select,
+      image: String(this.state.img),
+      userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
+      startTime: this.state.dateStart,
+      endTime: this.state.dateEnd,
+      caption: this.state.inputTextCaption
+    });
+
+    fetch(API_SETITEMS, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+    .then((response) => response.json())
+    .then(() => {
+      this.props.setCurrentScene('map');
+      Actions.pop({popNum: 2});
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
   }
 
   getAddressData() {
@@ -243,8 +285,7 @@ class Create extends Component {
   }
 
   checkDone() {
-    if (this.state.inputTextLocation !== '' &&
-        this.state.inputTextTitle !== '' &&
+    if (this.state.inputTextTitle !== '' &&
         this.state.category.select !== '') {
       this.setState({Done: true});
     } else if (this.state.Done !== false) {
@@ -400,7 +441,7 @@ class Create extends Component {
             <View style={{flex: 1, justifyContent: 'center'}}>
               {(this.state.Done === true) ?
                 <Image source={ImgBtnCheck} style={styles.btn_check}/> :
-                <Text style={styles.textItemUnit}> 0 km </Text>
+                <Text style={styles.textItemUnit}>0 km</Text>
               }
             </View>
           </View>
@@ -455,10 +496,9 @@ class Create extends Component {
           style={styles.input_location}
           onChangeText={(text) => {
               this.setState({inputTextLocation: text});
-              this.checkDone();
             }
           }
-          value={this.state.inputTextLocation}
+          value={`${this.state.streetNumber} ${this.state.streetName}`}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
         />
@@ -563,6 +603,7 @@ class Create extends Component {
 Create.propTypes = {
   pic: PropTypes.string,
   getAllItems: PropTypes.func,
+  setCurrentScene: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
   currentLocation: PropTypes.any

@@ -1,5 +1,6 @@
 import Create from '../components/Create';
 import { connect } from 'react-redux';
+import { setCurrentScene } from '../actions/fluxActions';
 
 const mapStateToProps = (state) => {
   return {
@@ -14,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getAllItems: () => {
       return dispatch(true);
+    },
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
     }
   };
 };
