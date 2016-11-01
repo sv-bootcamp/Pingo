@@ -17,6 +17,9 @@ import { Actions } from 'react-native-router-flux';
 import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 
+const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
+const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
+
 const styles = StyleSheet.create({
   preview: {
     height: 104,
@@ -186,12 +189,16 @@ class Create extends Component {
       dateStart: "",
       dateEnd: "",
       Done: false,
+      streetName: '',
+      streetNumber: '',
       placeholderStart: "Start",
       placeholderEnd: "End",
       inputTextCaption: '',
       inputTextLocation: '',
       inputTextTitle: ''
     };
+
+    this.getAddressData();
   }
 
   //todo: implement function getting markers around the user's location
@@ -218,7 +225,21 @@ class Create extends Component {
   handleDone() {
     if (this.state.addingNewLocation === true && this.state.Done === true) {
       this.setState({addingNewLocation: false});
+    } else if (this.state.addingNewLocation === false && this.state.Done === true) {
+      // todo : ochanje210
     }
+  }
+
+  getAddressData() {
+    const uri = API_GEODATA + '?latlng=' + this.props.currentLocation.latitude +","+
+      this.props.currentLocation.longitude + '&key='+ API_KEY;
+    fetch(uri)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"','').replace('"','');
+      const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"','').replace('"','');
+      this.setState({streetName: streetName, streetNumber: streetNumber});
+    });
   }
 
   checkDone() {
@@ -373,7 +394,7 @@ class Create extends Component {
           onPress={this.handleAddNewLocation.bind(this)}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={styles.textItemAddress}>75 St. Nicholas St.</Text>
+              <Text style={styles.textItemAddress}>{this.state.streetNumber} {this.state.streetName}</Text>
               <Text style={styles.textItemTitle}>Add New Location</Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
