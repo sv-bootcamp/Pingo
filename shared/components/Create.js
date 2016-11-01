@@ -1,7 +1,4 @@
-import React, {
-    Component, PropTypes
-} from 'react';
-
+import React, { Component, PropTypes } from 'react';
 import {
     Dimensions,
     StyleSheet,
@@ -94,7 +91,6 @@ const styles = StyleSheet.create({
   },
   btn_location: {
     height: 75,
-    flex: 1,
     borderColor: '#dcdcdc',
     borderWidth: 1,
     marginBottom: 8,
@@ -137,6 +133,7 @@ const styles = StyleSheet.create({
 class Create extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       text: '',
       addingNewLocation: false,
@@ -145,9 +142,23 @@ class Create extends Component {
       placeholderStart: "Start",
       placeholderEnd: "End"
     };
+
     this.convertMonth = this.convertMonth.bind(this);
     this.handleOnDateChange = this.handleOnDateChange.bind(this);
   }
+
+  //todo: implement function getting markers around the user's location
+  /*
+    async getItemsAroundUser() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.props.getAllItems(
+          this.props.zoomLevel,
+          position.coords.latitude,
+          position.coords.longitude);
+        }
+      );
+    }
+  */
 
   handleBefore() {
     if(this.state.addingNewLocation === true) {
@@ -277,12 +288,37 @@ class Create extends Component {
           onPress={this.handleAddNewLocation.bind(this)}>
           <Text style={styles.text_done}> Location </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn_location}
-          onPress={this.handleAddExistingLocation.bind(this)}>
-          <Text style={styles.text_done}> Location </Text>
-        </TouchableOpacity>
+        {this.renderAroundLocation()}
       </View>
+    )
+  }
+
+  getDistanceFromLatLonInMeter(lat1,lon1) {
+    let lat2 = this.props.currentLocation.latitude;
+    let lon2 = this.props.currentLocation.longitude;
+    let R = 6371;
+    let dLat = (lat2-lat1) * (Math.PI/180);
+    let dLon = (lon2-lon1) * (Math.PI/180);
+    let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos((lat1) * (Math.PI/180)) * Math.cos((lat2) * (Math.PI/180)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return (R * c * 1000).toFixed(0);
+  }
+
+  renderAroundLocation() {
+    return (
+      this.props.dataSource.map(item => (
+      <TouchableOpacity
+        style={styles.btn_location}
+        onPress={this.handleAddExistingLocation.bind(this)}>
+        <Text>{item.address}</Text>
+        <Text>{item.title}</Text>
+        <Text style={styles.text_done}>
+          {this.getDistanceFromLatLonInMeter(item.lat, item.lng)} m
+        </Text>
+      </TouchableOpacity>
+      ))
     )
   }
 
@@ -363,6 +399,7 @@ class Create extends Component {
     )
   }
 
+  // todo: the View wrapping scrollView style.height must be changed
   render() {
     return (
       <View style={{flexDirection: 'column'}}>
@@ -371,19 +408,25 @@ class Create extends Component {
           {this.renderHeaderTitle()}
           {this.renderBtnDone()}
         </View>
-        <ScrollView style={styles.container}>
-          {this.state.addingNewLocation === true ?
-            <View>{this.renderAddNewLocation()}</View> :
-            <View>{this.renderCaption()}</View>
-          }
-        </ScrollView>
+          <View style={{height: 669 - 75}}>
+            <ScrollView>
+              {this.state.addingNewLocation === true ?
+                <View>{this.renderAddNewLocation()}</View> :
+                <View>{this.renderCaption()}</View>
+              }
+            </ScrollView>
+          </View>
       </View>
     );
   }
 }
 
 Create.propTypes = {
-    pic: PropTypes.string
+  pic: PropTypes.string,
+  getAllItems: PropTypes.func,
+  zoomLevel: PropTypes.any,
+  dataSource: PropTypes.any,
+  currentLocation: PropTypes.any
 };
 
 export default Create;
