@@ -19,6 +19,7 @@ import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 
 const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
+const API_ADDIMAGE = 'http://goober.herokuapp.com/api/images';
 const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
 const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
@@ -301,8 +302,30 @@ class Create extends Component {
     })
   }
 
-  handleAddExistingLocation() {
-    //todo: implement adding photo to an existing location
+  handleAddExistingLocation(itemKey, userKey, caption, image) {
+    const data = JSON.stringify({
+      itemKey: itemKey,
+      userKey: userKey,
+      caption: caption,
+      image: image
+    });
+
+    fetch(API_ADDIMAGE, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+    .then((response) => response.json())
+    .then(() => {
+      this.props.setCurrentScene('map');
+      Actions.pop({popNum: 2});
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
   }
 
   handleCategoryButton(select) {
@@ -477,7 +500,9 @@ class Create extends Component {
       this.props.dataSource.map(item => (
       <TouchableOpacity
         style={[styles.btn_location, {borderColor: '#e7e7e7'}]}
-        onPress={this.handleAddExistingLocation.bind(this)}>
+        onPress={() => {
+          this.handleAddExistingLocation(item.key, item.userKey, this.state.inputTextCaption, this.state.img);
+        }}>
         <View style={{flexDirection: 'row', flex: 1}}>
           <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
             <Text style={styles.textItemAddress}>{item.address.substring(0,18)}</Text>
