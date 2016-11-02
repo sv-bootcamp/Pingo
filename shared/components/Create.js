@@ -257,7 +257,7 @@ class Create extends Component {
     });
 
     const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
-    fetch(API_SETITEMS, {
+    fetch(address, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
