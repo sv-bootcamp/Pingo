@@ -45,7 +45,7 @@
 				<key>NSTemporaryExceptionMinimumTLSVersion</key>
 				<string>TLSv1.1</string>
 			</dict>
-			<key>goober.herokuapp.com</key>
+			<key>ec2-52-78-96-168.ap-northeast-2.compute.amazonaws.com</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>

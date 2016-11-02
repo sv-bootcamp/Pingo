@@ -1,7 +1,6 @@
 import * as types from './actionTypes';
-
-const API_GET_ITEMS = 'http://goober.herokuapp.com/api/items?isThumbnail=true&lat=';
-const API_GET_IMAGES = 'http://goober.herokuapp.com/api/images?item=';
+import {SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, HTTP,
+  queryBuilder, createQueryObject} from '../utils';
 
 export function TBD() {
   return {
@@ -18,7 +17,14 @@ export const receiveItems = (json) => {
 
 export const getAllItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
-    return fetch(API_GET_ITEMS + lat.toString() + '&lng=' + long.toString() + '&zoom=' + zoomLevel.toString())
+    const queries = [];
+    queries.push(createQueryObject('isThumbnail', true));
+    queries.push(createQueryObject('zoom', zoomLevel));
+    queries.push(createQueryObject('lat', lat));
+    queries.push(createQueryObject('lng', long));
+
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
+    return fetch(address)
       .then(response => response.json())
       .then(json =>
         dispatch(receiveItems(json))
@@ -36,7 +42,11 @@ export const receiveImages = (json, index) => {
 
 export const getDetailImage = (key, index) => {
   return (dispatch) => {
-    return fetch(API_GET_IMAGES + key)
+    const queries = [];
+    queries.push(createQueryObject('item', key));
+
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
+    return fetch(address)
       .then(response => response.json())
       .then(json =>
         dispatch(receiveImages(json, index))
