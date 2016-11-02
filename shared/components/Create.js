@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
   input_text: {
     height: 104,
     flex: 1,
-    borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 8,
     marginLeft: 16
@@ -160,7 +159,6 @@ const styles = StyleSheet.create({
   input_location: {
     height: 46,
     flex: 1,
-    borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 16,
     marginLeft: 16
@@ -197,7 +195,12 @@ class Create extends Component {
       inputTextCaption: '',
       inputTextLocation: '',
       inputTextTitle: '',
-      img: ''
+      img: '',
+      onFocusCaption: false,
+      onFocusLocation: false,
+      onFocusTitle: false,
+      onFocusDateStart: false,
+      onFocusDateEnd: false
     };
 
     this.getAddressData();
@@ -418,11 +421,13 @@ class Create extends Component {
         <Text style={styles.text_caption}> Caption </Text>
         <View style={{flexDirection: 'row', marginBottom: 20}}>
           <TextInput
-            style={styles.input_text}
+            style={[styles.input_text, {padding: 16, borderColor: (this.state.onFocusCaption === true) ? '#2c8cff' : '#dcdcdc'}]}
             onChangeText={(text) => this.setState({inputTextCaption: text})}
             value={this.state.inputTextCaption}
             multiline={true}
             underlineColorAndroid="rgba(0,0,0,0)"
+            onFocus={() => {this.setState({onFocusCaption: true})}}
+            onEndEditing={() => {this.setState({onFocusCaption: false})}}
           />
           <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
         </View>
@@ -494,26 +499,34 @@ class Create extends Component {
       <View>
         <Text style={styles.text_caption}> Location </Text>
         <TextInput
-          style={styles.input_location}
+          style={[styles.input_location, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
           onChangeText={(text) => {
               this.setState({inputTextLocation: text});
+              if (this.state.onFocusLocation === false) {this.setState({onFocusLocation: true})}
             }
           }
           value={`${this.state.streetNumber} ${this.state.streetName}`}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
+          onFocus={() => {this.setState({onFocusLocation: true})}}
+          onEndEditing={() => {this.setState({onFocusLocation: false})}}
+          onSubmitEditing={() => {this.setState({onFocusLocation: false})}}
         />
         <Text style={styles.text_location}> Title </Text>
         <TextInput
-          style={styles.input_location}
+          style={[styles.input_location, {borderColor: (this.state.onFocusTitle === true) ? '#2c8cff' : '#dcdcdc'}]}
           onChangeText={(text) => {
               this.setState({inputTextTitle: text});
               this.checkDone();
+              if (this.state.onFocusTitle === false) {this.setState({onFocusTitle: true})}
             }
           }
           value={this.state.inputTextTitle}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
+          onFocus={() => {this.setState({onFocusTitle: true})}}
+          onEndEditing={() => {this.setState({onFocusTitle: false})}}
+          onSubmitEditing={() => {this.setState({onFocusTitle: false})}}
         />
         <Text style={styles.text_location}> Category </Text>
         <View style={{flexDirection: 'row'}}>
@@ -588,7 +601,7 @@ class Create extends Component {
   render() {
     return (
       <View style={{flexDirection: 'column'}}>
-        <View style={styles.header}>
+        <View style={[styles.header, {elevation: 5}]}>
           {this.renderBtnBefore()}
           {this.renderHeaderTitle()}
           {this.renderBtnDone()}
