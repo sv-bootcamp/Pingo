@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     height: 46,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: "#e7e7e7",
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -520,31 +519,36 @@ class Create extends Component {
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             style={[styles.btn_category,
-              {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent}]}
+              {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
+               borderColor: (this.state.category.select === 'event') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('event')}}>
-            <Text style={[styles.text_done,
-              {color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
+            <Text style={[styles.text_done, { fontSize: 14,
+              color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn_category,
-              {marginRight: 8, backgroundColor: this.state.category.colorFacility}]}
+              {marginRight: 8, backgroundColor: this.state.category.colorFacility,
+               borderColor: (this.state.category.select === 'facility') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('facility')}}>
-            <Text style={[styles.text_done,
-              {color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
+            <Text style={[styles.text_done, { fontSize: 14,
+              color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn_category,
-              {marginRight: 16, backgroundColor: this.state.category.colorWarning}]}
+              {marginRight: 16, backgroundColor: this.state.category.colorWarning,
+               borderColor: (this.state.category.select === 'warning') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('warning')}}>
-            <Text style={[styles.text_done,
-              {color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
+            <Text style={[styles.text_done, { fontSize: 14,
+              color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'column'}}>
-          <Text style={styles.text_location}> Time (optional) </Text>
-          {this.renderDatePickerStart()}
-          {this.renderDatePickerEnd()}
-        </View>
+        {(this.state.category.select === 'facility') ? null :
+          <View style={{flexDirection: 'column'}}>
+            <Text style={styles.text_location}> Time (optional) </Text>
+            {this.renderDatePickerStart()}
+            {this.renderDatePickerEnd()}
+          </View>
+        }
       </View>
     )
   }
