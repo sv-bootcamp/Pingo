@@ -392,49 +392,67 @@ class Create extends Component {
   // todo: change placeholder style
   renderDatePickerStart() {
     return (
-      <DatePicker
-        style={[styles.DatePicker]}
-        date={""}
-        placeholder={`start ${this.state.placeholderStart}`}
-        mode="datetime"
-        format="YYYY-MM-DD HH:mm"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        showIcon={false}
-        customStyles={{
-          dateInput: {
-          borderWidth: 0
-        },
-          placeholderText: {
-          color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b',
-          fontSize: 14
-        }}}
-        onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
-      />
+      <View>
+        <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
+          <Text style={{marginTop: 12, color: (this.state.dateStart === '') ? '#e7e7e7' : '#2b2b2b'}}>
+            Starts
+          </Text>
+        </View>
+        <DatePicker
+          style={styles.DatePicker}
+          date={""}
+          placeholder={` ${this.state.placeholderStart}`}
+          mode="datetime"
+          format="YYYY-MM-DD HH:mm"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          showIcon={false}
+          customStyles={{
+            dateInput: {
+            borderWidth: 0
+          },
+            placeholderText: {
+            color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b',
+            fontSize: 14,
+            alignSelf: 'flex-end',
+            marginRight: 16
+          }}}
+          onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
+        />
+      </View>
     )
   }
 
   renderDatePickerEnd() {
     return (
-      <DatePicker
-        style={[styles.DatePicker, {marginTop: 8}]}
-        date={""}
-        placeholder={`end ${this.state.placeholderEnd}`}
-        mode="datetime"
-        format="YYYY-MM-DD HH:mm"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        showIcon={false}
-        customStyles={{
-          dateInput: {
-          borderWidth: 0
-        },
-          placeholderText: {
-          color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b',
-          fontSize: 14
-        }}}
-        onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
-      />
+      <View>
+        <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
+          <Text style={{marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#e7e7e7' : '#2b2b2b'}}>
+            Ends
+          </Text>
+        </View>
+        <DatePicker
+          style={[styles.DatePicker, {marginTop: 8}]}
+          date={""}
+          placeholder={` ${this.state.placeholderEnd}`}
+          mode="datetime"
+          format="YYYY-MM-DD HH:mm"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          showIcon={false}
+          customStyles={{
+            dateInput: {
+            borderWidth: 0
+          },
+            placeholderText: {
+            color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b',
+            fontSize: 14,
+            alignSelf: 'flex-end',
+            marginRight: 16
+          }}}
+          onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
+        />
+      </View>
     )
   }
 
