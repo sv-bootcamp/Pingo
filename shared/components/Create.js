@@ -493,7 +493,6 @@ class Create extends Component {
     return (R * c).toFixed(2);
   }
 
-  // todo: remove item.address.substring(n,cnt) after changing post address func
   // todo: should limit item.title length if it is too long
   renderAroundLocations() {
     return (
@@ -616,7 +615,9 @@ class Create extends Component {
     return (
       <TouchableOpacity
         style={styles.btn_done}
-        onPress={this.handleDone.bind(this)}>
+        onPress={this.handleDone.bind(this)}
+        activeOpacity={(this.state.Done === true) ? 0.2 : 1}
+      >
         <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
       </TouchableOpacity>
     )
