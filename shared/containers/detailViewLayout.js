@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-    detailSource: state.list.detailSource
+    detailSource: state.list.detailSource,
+    detailIndex: state.list.detailIndex
   };
 };
 
