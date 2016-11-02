@@ -14,7 +14,7 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
-import {HTTP, SERVER_ADDR, ENDPOINT_ITEM} from '../utils';
+import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE} from '../utils';
 
 import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
@@ -310,7 +310,8 @@ class Create extends Component {
       image: image
     });
 
-    fetch(API_ADDIMAGE, {
+    const address =`${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
+    fetch(address, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
