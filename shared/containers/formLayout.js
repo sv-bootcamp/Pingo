@@ -5,7 +5,9 @@ import { setCurrentScene } from '../actions/fluxActions';
 const mapStateToProps = (state) => {
   return {
     pic: state.form.pic,
-    location: state.map.currentLocation
+    zoomLevel: state.map.zoomLevel,
+    dataSource: state.list.dataSource,
+    currentLocation: state.map.currentLocation
   };
 };
 
