@@ -433,8 +433,12 @@ class Create extends Component {
           onPress={this.handleAddNewLocation.bind(this)}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={styles.textItemAddress}>{this.state.streetNumber} {this.state.streetName}</Text>
-              <Text style={styles.textItemTitle}>Add New Location</Text>
+              <Text style={[styles.textItemAddress, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
+                {this.state.streetNumber} {this.state.streetName}
+              </Text>
+              <Text style={[styles.textItemTitle, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
+                {(this.state.Done === true) ? this.state.inputTextTitle : "Add New Location"}
+              </Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
               {(this.state.Done === true) ?
