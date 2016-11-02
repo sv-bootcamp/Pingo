@@ -119,6 +119,16 @@ const styles = StyleSheet.create({
       }
     })
   },
+  textPlaceholder: {
+    fontSize: 14,
+    alignSelf: 'flex-end',
+    marginRight: 16,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
+  },
   btn_before: {
     left: 15,
     top: 24
@@ -161,7 +171,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     marginRight: 16,
-    marginLeft: 16
+    marginLeft: 16,
+    padding: 16
   },
   DatePicker: {
     height: 46,
@@ -170,6 +181,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 16,
     marginLeft: 16
+  },
+  fontRobotoRegular: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
   }
 });
 
@@ -395,14 +413,15 @@ class Create extends Component {
     return (
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
-          <Text style={{marginTop: 12, color: (this.state.dateStart === '') ? '#e7e7e7' : '#2b2b2b'}}>
+          <Text style={[styles.fontRobotoRegular,
+            {marginTop: 12, color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Starts
           </Text>
         </View>
         <DatePicker
           style={styles.DatePicker}
           date={""}
-          placeholder={` ${this.state.placeholderStart}`}
+          placeholder={this.renderPlaceholderStart(this.state.placeholderStart)}
           mode="datetime"
           format="YYYY-MM-DD HH:mm"
           confirmBtnText="Confirm"
@@ -410,14 +429,11 @@ class Create extends Component {
           showIcon={false}
           customStyles={{
             dateInput: {
-            borderWidth: 0
+              borderWidth: 0
           },
-            placeholderText: {
-            color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b',
-            fontSize: 14,
-            alignSelf: 'flex-end',
-            marginRight: 16
-          }}}
+            placeholderText: [styles.textPlaceholder,
+              {color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]
+          }}
           onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
         />
       </View>
@@ -428,14 +444,15 @@ class Create extends Component {
     return (
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
-          <Text style={{marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#e7e7e7' : '#2b2b2b'}}>
+          <Text style={[styles.fontRobotoRegular,
+              {marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Ends
           </Text>
         </View>
         <DatePicker
           style={[styles.DatePicker, {marginTop: 8}]}
           date={""}
-          placeholder={` ${this.state.placeholderEnd}`}
+          placeholder={this.renderPlaceholderEnd(this.state.placeholderEnd)}
           mode="datetime"
           format="YYYY-MM-DD HH:mm"
           confirmBtnText="Confirm"
@@ -445,16 +462,35 @@ class Create extends Component {
             dateInput: {
             borderWidth: 0
           },
-            placeholderText: {
-            color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b',
-            fontSize: 14,
-            alignSelf: 'flex-end',
-            marginRight: 16
-          }}}
+            placeholderText: [styles.textPlaceholder,
+              {color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]
+          }}
           onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
         />
       </View>
     )
+  }
+
+  renderPlaceholderStart(text) {
+    if (this.state.dateStart !== '' && this.state.dateEnd === '') {
+      return (` ${text}`);
+    } else if ((this.state.dateStart === '' && this.state.dateEnd === '')) {
+      return ' ';
+    } else if (this.state.dateStart !== '' && this.state.dateEnd !== '') {
+      return (` ${text}`);
+    }
+    return '-';
+  }
+
+  renderPlaceholderEnd(text) {
+    if (this.state.dateStart === '' && this.state.dateEnd !== '') {
+      return (` ${text}`);
+    } else if (this.state.dateStart === '' && this.state.dateEnd === '') {
+      return ' ';
+    } else if (this.state.dateStart !== '' && this.state.dateEnd !== '') {
+      return (` ${text}`);
+    }
+    return '-';
   }
 
   renderCaption() {
@@ -470,6 +506,7 @@ class Create extends Component {
             underlineColorAndroid="rgba(0,0,0,0)"
             onFocus={() => {this.setState({onFocusCaption: true})}}
             onEndEditing={() => {this.setState({onFocusCaption: false})}}
+            autoFocus={true}
           />
           <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
         </View>
@@ -570,6 +607,7 @@ class Create extends Component {
           onFocus={() => {this.setState({onFocusTitle: true})}}
           onEndEditing={() => {this.setState({onFocusTitle: false})}}
           onSubmitEditing={() => {this.setState({onFocusTitle: false})}}
+          autoFocus={true}
         />
         <Text style={styles.text_location}> Category </Text>
         <View style={{flexDirection: 'row'}}>
@@ -578,7 +616,7 @@ class Create extends Component {
               {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
                borderColor: (this.state.category.select === 'event') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('event')}}>
-            <Text style={[styles.text_done, { fontSize: 14,
+            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -586,7 +624,7 @@ class Create extends Component {
               {marginRight: 8, backgroundColor: this.state.category.colorFacility,
                borderColor: (this.state.category.select === 'facility') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('facility')}}>
-            <Text style={[styles.text_done, { fontSize: 14,
+            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -594,7 +632,7 @@ class Create extends Component {
               {marginRight: 16, backgroundColor: this.state.category.colorWarning,
                borderColor: (this.state.category.select === 'warning') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('warning')}}>
-            <Text style={[styles.text_done, { fontSize: 14,
+            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
           </TouchableOpacity>
         </View>
@@ -646,7 +684,7 @@ class Create extends Component {
   render() {
     return (
       <View style={{flexDirection: 'column'}}>
-        <View style={[styles.header, {elevation: 5}]}>
+        <View style={[styles.header, {elevation: 3}]}>
           {this.renderBtnBefore()}
           {this.renderHeaderTitle()}
           {this.renderBtnDone()}
