@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
-
-const API_GET_ITEMS = 'http://ec2-52-78-96-168.ap-northeast-2.compute.amazonaws.com/api/items?isThumbnail=true&lat=';
+import {HTTP, SERVER_ADDR, ENDPOINT_ITEM,
+  queryBuilder, createQueryObject} from '../utils'
 
 export const onLocationChange = (region) => {
   return {
@@ -18,7 +18,14 @@ export const receiveItems = (json) => {
 
 export const getMapItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
-    return fetch(API_GET_ITEMS + lat.toString() + '&lng=' + long.toString() + '&zoom=' + zoomLevel.toString())
+    const queries = [];
+    queries.push(createQueryObject('isThumbnail', true));
+    queries.push(createQueryObject('zoom', zoomLevel));
+    queries.push(createQueryObject('lat', lat));
+    queries.push(createQueryObject('lng', long));
+
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
+    return fetch(address)
       .then(response => response.json())
       .then(json =>
         dispatch(receiveItems(json))

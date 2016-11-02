@@ -14,11 +14,11 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
+import {HTTP, SERVER_ADDR, ENDPOINT_ITEM} from '../utils';
 
 import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 
-const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
 const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
 const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
@@ -256,6 +256,7 @@ class Create extends Component {
       caption: this.state.inputTextCaption
     });
 
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
     fetch(API_SETITEMS, {
       method: 'POST',
       headers: {
