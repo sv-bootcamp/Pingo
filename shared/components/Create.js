@@ -365,15 +365,15 @@ class Create extends Component {
   }
 
   handleOnDateChangeStart(datetime) {
-    this.setState({dateStart: datetime});
     const a = new Date(datetime);
+    this.setState({dateStart: a.toISOString()});
     const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderStart: txtDate});
   }
 
   handleOnDateChangeEnd(datetime) {
-    this.setState({dateEnd: datetime});
     const a = new Date(datetime);
+    this.setState({dateEnd: a.toISOString()});
     const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderEnd: txtDate});
   }
