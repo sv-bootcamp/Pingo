@@ -227,7 +227,7 @@ class Create extends Component {
   }
 
   postNewItem() {
-    const data = {
+    const data = JSON.stringify({
       title: this.state.inputTextTitle,
       lat: this.props.currentLocation.latitude,
       lng: this.props.currentLocation.longitude,
@@ -238,7 +238,7 @@ class Create extends Component {
       startTime: this.state.dateStart,
       endTime: this.state.dateEnd,
       caption: this.state.inputTextCaption
-    };
+    });
 
     const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
     fetch(address, {
@@ -291,12 +291,12 @@ class Create extends Component {
   // Check out APIDoc
   // https://goober.herokuapp.com/docs/#api-Image-addAnImage
   handleAddExistingLocation(itemKey, userKey, caption, image) {
-    const data = {
+    const data = JSON.stringify({
       itemKey: itemKey,
       userKey: userKey,
       caption: caption,
       image: image
-    };
+    });
 
     const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
     fetch(address, {
