@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setMyPageTabViewIndex } from '../actions/myPageActions';
 
+// todo: change items later
 const mapStateToProps = (state) => {
   return {
     myPageTabViewIndex: state.myPage.myPageTabViewIndex,
-    myPageTabViewRoutes: state.myPage.myPageTabViewRoutes
+    myPageTabViewRoutes: state.myPage.myPageTabViewRoutes,
+    items: state.map.items
   };
 };
 

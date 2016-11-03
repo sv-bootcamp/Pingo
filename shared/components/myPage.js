@@ -5,10 +5,12 @@ import {
   Image,
   Text,
   StyleSheet,
-  Platform
+  Platform,
+  ListView
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
+import CardLayout from '../containers/cardLayout';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -44,6 +46,8 @@ const styles = StyleSheet.create({
 class MyPage extends Component {
   constructor(props) {
     super(props);
+    this.renderTabViewContents = this.renderTabViewContents.bind(this);
+    this.renderTabView = this.renderTabView.bind(this);
   }
   renderImageButtonSetting() {
     return (
@@ -108,7 +112,7 @@ class MyPage extends Component {
           index: this.props.myPageTabViewIndex,
           routes: this.props.myPageTabViewRoutes
         }}
-        renderScene={this.renderTabViewContents}
+        renderScene={this.renderTabViewContents.bind(this)}
         renderHeader={this.renderTabViewHeader}
         onRequestChangeTab={
           (index) => {
@@ -119,7 +123,14 @@ class MyPage extends Component {
   }
 
   renderTabViewContents() {
-    // TBD
+    return (
+      <ListView
+        dataSource={new ListView.DataSource({
+          rowHasChanged: (r1, r2) => r1 !== r2
+        }).cloneWithRows(this.props.items)}
+        renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+        enableEmptySections={true} />
+    );
   }
 
   renderTabViewHeader(props) {
@@ -155,7 +166,8 @@ MyPage.propTypes = {
   setCurrentScene: PropTypes.func,
   setMyPageTabViewIndex: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
-  myPageTabViewRoutes: PropTypes.any
+  myPageTabViewRoutes: PropTypes.any,
+  items: PropTypes.any
 };
 
 export default MyPage;
