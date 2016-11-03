@@ -286,6 +286,10 @@ class Create extends Component {
     });
   }
 
+  // todo:  should check whether response contain error or not.
+  // If response contain error property, It was a fail post
+  // Check out APIDoc
+  // https://goober.herokuapp.com/docs/#api-Image-addAnImage
   handleAddExistingLocation(itemKey, userKey, caption, image) {
     const data = {
       itemKey: itemKey,
