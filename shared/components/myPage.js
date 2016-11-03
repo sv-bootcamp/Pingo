@@ -22,6 +22,9 @@ const styles = StyleSheet.create({
   myPageTextLogInFacebook: {
     color: '#2c8cff'
   },
+  myPageTabViewContainer: {
+    flex: 1
+  },
   fontRobotoRegular: {
     ...Platform.select({
       android: {
@@ -100,28 +103,32 @@ class MyPage extends Component {
   renderTabView() {
     return (
       <TabViewAnimated
-        style={styles.container}
+        style={styles.myPageTabViewContainer}
         navigationState={{
           index: this.props.myPageTabViewIndex,
           routes: this.props.myPageTabViewRoutes
         }}
-        renderScene={()=>{}}
-        renderHeader={this._renderHeader}
+        renderScene={this.renderTabViewContents}
+        renderHeader={this.renderTabViewHeader}
         onRequestChangeTab={
           (index) => {
-            console.log(index);
+            this.props.setMyPageTabViewIndex(index);
           }
         }/>
     );
   }
 
-  _renderHeader(props) {
+  renderTabViewContents() {
+    // TBD
+  }
+
+  renderTabViewHeader(props) {
     return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
-        <Text style={{ margin: 0, color: '#8e8e8e' }}>{routes.route.title}</Text>
+        <Text style={[styles.fontRobotoMedium, { fontSize: 14, color: '#8e8e8e' }]}>{routes.route.title}</Text>
       }
-      style={{backgroundColor: 'white'}}
+      style={{backgroundColor: 'white', flex: 0.1}}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
