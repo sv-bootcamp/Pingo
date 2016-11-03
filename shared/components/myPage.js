@@ -6,7 +6,8 @@ import {
   Text,
   StyleSheet,
   Platform,
-  ListView
+  ListView,
+  TouchableOpacity
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
@@ -98,7 +99,11 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>Log in with Facebook</Text>
+          <TouchableOpacity
+            style={{}}
+            onPress={()=> Actions.logInFacebook()}>
+            <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>Log in with Facebook</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
