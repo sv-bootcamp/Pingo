@@ -126,7 +126,7 @@ class MyPage extends Component {
     return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
-        <Text style={[styles.fontRobotoMedium, { fontSize: 14, color: '#8e8e8e' }]}>{routes.route.title}</Text>
+        <Text style={[styles.fontRobotoMedium, { fontSize: 14, color: '#2b2b2b' }]}>{routes.route.title}</Text>
       }
       style={{backgroundColor: 'white', flex: 0.1}}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
@@ -140,7 +140,7 @@ class MyPage extends Component {
           btnRight={this.renderImageButtonSetting()}
           handleBtnLeft={this.handleButtonPrev.bind(this)}
           handleBtnRight={this.handleButtonSetting.bind(this)}
-          headerText={'myPage'}
+          headerText={'My Page'}
         />
         {this.renderUserBox()}
         <View style={{backgroundColor: 'white', flex: 440}}>
