@@ -8,6 +8,7 @@ import {
   Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -96,6 +97,35 @@ class MyPage extends Component {
     );
   }
 
+  renderTabView() {
+    return (
+      <TabViewAnimated
+        style={styles.container}
+        navigationState={{
+          index: this.props.myPageTabViewIndex,
+          routes: this.props.myPageTabViewRoutes
+        }}
+        renderScene={()=>{}}
+        renderHeader={this._renderHeader}
+        onRequestChangeTab={
+          (index) => {
+            console.log(index);
+          }
+        }/>
+    );
+  }
+
+  _renderHeader(props) {
+    return (<TabBarTop
+      {...props}
+      renderLabel={(routes) =>
+        <Text style={{ margin: 0, color: '#8e8e8e' }}>{routes.route.title}</Text>
+      }
+      style={{backgroundColor: 'white'}}
+      indicatorStyle={{backgroundColor: '#2b2b2b'}}
+    />);
+  }
+
   render() {
     return (
       <View style={{flexDirection: 'column', flex: 1}}>
@@ -107,7 +137,7 @@ class MyPage extends Component {
         />
         {this.renderUserBox()}
         <View style={{backgroundColor: 'white', flex: 440}}>
-          <Text> tab view </Text>
+          {this.renderTabView()}
         </View>
       </View>
     );
@@ -115,7 +145,10 @@ class MyPage extends Component {
 }
 
 MyPage.propTypes = {
-  setCurrentScene: PropTypes.func
+  setCurrentScene: PropTypes.func,
+  setMyPageTabViewIndex: PropTypes.func,
+  myPageTabViewIndex: PropTypes.number,
+  myPageTabViewRoutes: PropTypes.any
 };
 
 export default MyPage;

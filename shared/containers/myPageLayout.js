@@ -1,10 +1,12 @@
 import MyPage from '../components/myPage';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
+import { setMyPageTabViewIndex } from '../actions/myPageActions';
 
-const mapStateToProps = () => {
+const mapStateToProps = (state) => {
   return {
-    // TBD
+    myPageTabViewIndex: state.myPage.myPageTabViewIndex,
+    myPageTabViewRoutes: state.myPage.myPageTabViewRoutes
   };
 };
 
@@ -12,13 +14,16 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    setMyPageTabViewIndex: (myPageTabViewIndex) => {
+      return dispatch(setMyPageTabViewIndex(myPageTabViewIndex));
     }
   };
 };
 
 const MyPageLayout = connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(MyPage);
 
 export default MyPageLayout;

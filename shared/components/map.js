@@ -60,15 +60,15 @@ export default class Map extends Component {
     this.setCurrentPosition();
     this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
     this.props.getMapItems(this.props.zoomLevel,
-        this.props.currentLocation.latitude,
-        this.props.currentLocation.longitude);
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
   }
 
   _onLocationChange(region) {
     this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
     this.props.getMapItems(this.props.zoomLevel,
-        this.props.currentLocation.latitude,
-        this.props.currentLocation.longitude);
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
     this.props.onLocationChange(region);
   }
 
@@ -93,8 +93,8 @@ export default class Map extends Component {
               title={item.title}
               image={
                 (item.category === 'event') ? require('../resources/marker/event_small.png') :
-                    (item.category === 'facility') ? require('../resources/marker/facility_small.png') :
-                        require('../resources/marker/warning_small.png')
+                (item.category === 'facility') ? require('../resources/marker/facility_small.png') :
+                require('../resources/marker/warning_small.png')
               }
               onPress={()=>{
                 this.props.onMarkerClick(item);
@@ -104,21 +104,16 @@ export default class Map extends Component {
               }}/>
           ))}
         </MapView>
-
-        <View
-            style={styles.buttonSection}>
+        <View style={styles.buttonSection}>
           <MapButton
-              imageSource={'position'}
-              handleOnPress={this.setCurrentPosition.bind(this)}/>
+            imageSource={'position'}
+            handleOnPress={this.setCurrentPosition.bind(this)}/>
           <MapButton
-              imageSource={'camera'}
-              handleOnPress={this.handleCameraButton.bind(this)}/>
+            imageSource={'camera'}
+            handleOnPress={this.handleCameraButton.bind(this)}/>
         </View>
-        {
-          (this.props.selectedItem.title === undefined) ? null :
-              <Card
-                  dataSource = {this.props.selectedItem}
-              />
+        {(this.props.selectedItem.title === undefined) ? null :
+          <Card dataSource = {this.props.selectedItem}/>
         }
       </View>
     );
