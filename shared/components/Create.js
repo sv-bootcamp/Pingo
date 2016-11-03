@@ -628,6 +628,7 @@ class Create extends Component {
           headerText={
             this.state.addingNewLocation === true ? 'Add new location' : 'Post Photo'
           }
+          activeOpacity={(this.state.Done === true) ? 0.2 : 1}
         />
         <View style={{height: 669 - 75}}>
           <ScrollView>

@@ -11,6 +11,8 @@ import {
 
 import ImgBtnBefore from '../resources/camera/btn_before.png';
 
+const DEFAULT_ACTIVE_OPACITY = 0.2;
+
 const styles = StyleSheet.create({
   header: {
     height: 64,
@@ -29,11 +31,11 @@ const styles = StyleSheet.create({
       }
     })
   },
-  btn_before: {
+  btn_left: {
     left: 15,
     top: 24
   },
-  btn_done: {
+  btn_right: {
     position: 'absolute',
     right: 15,
     top: 24
@@ -48,7 +50,7 @@ class SmallHeader extends Component {
   renderBtnLeft() {
     return (
       <TouchableOpacity
-        style={styles.btn_before}
+        style={styles.btn_left}
         onPress={()=>{
           this.props.handleBtnLeft();
         }}>
@@ -69,11 +71,11 @@ class SmallHeader extends Component {
   renderBtnRight() {
     return (
       <TouchableOpacity
-        style={styles.btn_done}
+        style={styles.btn_right}
         onPress={()=>{
           this.props.handleBtnRight();
         }}
-        activeOpacity={(this.props.Done === true) ? 0.2 : 1}
+        activeOpacity={this.props.activeOpacity || DEFAULT_ACTIVE_OPACITY}
       >
         {this.props.btnRight}
       </TouchableOpacity>
@@ -98,12 +100,11 @@ class SmallHeader extends Component {
 }
 
 SmallHeader.propTypes = {
-  Done: PropTypes.any.isRequired,
-  addingNewLocation: PropTypes.any.isRequired,
   btnRight: PropTypes.any.isRequired,
   handleBtnLeft: PropTypes.func.isRequired,
   handleBtnRight: PropTypes.func.isRequired,
-  headerText: PropTypes.string.isRequired
+  headerText: PropTypes.string.isRequired,
+  activeOpacity: PropTypes.any
 };
 
 export default SmallHeader;
