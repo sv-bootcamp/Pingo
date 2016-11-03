@@ -7,6 +7,7 @@ import CameraLayout from './cameraLayout';
 import MapLayout from './mapLayout';
 import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
+import MyPageLayout from './myPageLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
@@ -24,6 +25,9 @@ const scenes = Actions.create(
     }/>
     <Scene key="detailView" hideNavBar={true} component={
       DetailViewLayout
+    }/>
+    <Scene key="myPage" hideNavBar={true} component={
+      MyPageLayout
     }/>
   </Scene>
 );

@@ -61,7 +61,6 @@ export default class MainHeader extends Component {
     this._onForward = this._onForward.bind(this);
     this._renderHeader = this._renderHeader.bind(this);
   }
-
   _renderHeader(props) {
     return (<TabBarTop
       {...props}
@@ -85,11 +84,13 @@ export default class MainHeader extends Component {
       Actions.pop();
     }
   }
-
   _onRefresh() {
     // todo: implement refresh button handling function here
   }
-
+  handleButtonMyPage() {
+    this.props.setCurrentScene('myPage');
+    Actions.myPage({type: 'replace'});
+  }
   render() {
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
@@ -97,6 +98,7 @@ export default class MainHeader extends Component {
           <View style= {{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={styles.button_myPage}
+              onPress={this.handleButtonMyPage.bind(this)}
             >
               <Image
                 style={styles.image}
