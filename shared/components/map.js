@@ -4,6 +4,9 @@ import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import Card from './Card';
 import MapButton from './MapButton';
+import eventPng from '../resources/marker/event_small.png';
+import facilityPng from '../resources/marker/facility_small.png';
+import warningPng from '../resources/marker/warning_small.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,22 +36,22 @@ const styles = StyleSheet.create({
 export default class Map extends Component {
   constructor(props) {
     super(props);
-    this._onLocationChange = this._onLocationChange.bind(this);
+    this.onLocationChange = this.onLocationChange.bind(this);
     this.setCurrentPosition = this.setCurrentPosition.bind(this);
+    this.setMarkerClickTime = this.setMarkerClickTime.bind(this);
+    this.onMapClick = this.onMapClick.bind(this);
   }
 
   setCurrentPosition() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        let newLocation = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        };
-        this.props.setLocation(newLocation);
-      }
-    );
+    navigator.geolocation.getCurrentPosition((position) => {
+      const newLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      };
+      this.props.setLocation(newLocation);
+    });
   }
 
   handleCameraButton() {
@@ -56,15 +59,7 @@ export default class Map extends Component {
     Actions.cameraView();
   }
 
-  componentWillMount() {
-    this.setCurrentPosition();
-    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-    this.props.getMapItems(this.props.zoomLevel,
-      this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
-  }
-
-  _onLocationChange(region) {
+  onLocationChange(region) {
     this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
@@ -72,10 +67,15 @@ export default class Map extends Component {
     this.props.onLocationChange(region);
   }
 
-  onMapClick(obj) {
-    if (obj === undefined) {
-      this.props.hideMapCard();
+  onMapClick() {
+    const curTime = new Date();
+    if (this.markerClickTime && curTime - this.markerClickTime > 100) {
+      this.props.hideMapCard()
     }
+  }
+
+  setMarkerClickTime() {
+    this.markerClickTime = new Date();
   }
 
   render() {
@@ -83,25 +83,23 @@ export default class Map extends Component {
       <View style ={styles.container}>
         <MapView
           style ={styles.map}
+          onRegionChangeComplete={this.onLocationChange}
           region ={this.props.currentLocation}
-          onRegionChangeComplete={this._onLocationChange}
-          onPress={(obj) => this.onMapClick(obj.bubbles)}
+          onPress={this.onMapClick}
         >
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
               image={
-                (item.category === 'event') ? require('../resources/marker/event_small.png') :
-                (item.category === 'facility') ? require('../resources/marker/facility_small.png') :
-                require('../resources/marker/warning_small.png')
+                (item.category === 'event') ? eventPng :
+                  (item.category === 'facility') ? facilityPng : warningPng
               }
               onPress={()=>{
+                this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
               }}
-              onSelect={()=>{
-                this.props.onMarkerClick(item);
-              }}/>
+            />
           ))}
         </MapView>
         <View style={styles.buttonSection}>
@@ -112,8 +110,9 @@ export default class Map extends Component {
             imageSource={'camera'}
             handleOnPress={this.handleCameraButton.bind(this)}/>
         </View>
-        {(this.props.selectedItem.title === undefined) ? null :
-          <Card dataSource = {this.props.selectedItem}/>
+        {
+          (this.props.selectedItem.title === undefined) ? null :
+            <Card dataSource = {this.props.selectedItem} />
         }
       </View>
     );
