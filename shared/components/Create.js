@@ -227,7 +227,7 @@ class Create extends Component {
   }
 
   postNewItem() {
-    const data = JSON.stringify({
+    const data = {
       title: this.state.inputTextTitle,
       lat: this.props.currentLocation.latitude,
       lng: this.props.currentLocation.longitude,
@@ -238,7 +238,7 @@ class Create extends Component {
       startTime: this.state.dateStart,
       endTime: this.state.dateEnd,
       caption: this.state.inputTextCaption
-    });
+    };
 
     const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
     fetch(address, {
@@ -260,8 +260,8 @@ class Create extends Component {
   }
 
   getAddressData() {
-    const uri = API_GEODATA + '?latlng=' + this.props.currentLocation.latitude +","+
-      this.props.currentLocation.longitude + '&key='+ API_KEY;
+    const uri = API_GEODATA + '?latlng=' + this.props.currentLocation.latitude + ',' +
+      this.props.currentLocation.longitude + '&key=' + API_KEY;
     fetch(uri)
     .then((response) => response.json())
     .then((responseJson) => {
@@ -283,18 +283,18 @@ class Create extends Component {
   handleAddNewLocation() {
     this.setState({
       addingNewLocation: true
-    })
+    });
   }
 
   handleAddExistingLocation(itemKey, userKey, caption, image) {
-    const data = JSON.stringify({
+    const data = {
       itemKey: itemKey,
       userKey: userKey,
       caption: caption,
       image: image
-    });
+    };
 
-    const address =`${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
     fetch(address, {
       method: 'POST',
       headers: {
@@ -357,7 +357,7 @@ class Create extends Component {
 
   convertMonth(m) {
     const month = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
-    return month[m-'1'];
+    return month[m - '1'];
   }
 
   handleOnDateChangeStart(datetime) {
@@ -386,7 +386,7 @@ class Create extends Component {
         </View>
         <DatePicker
           style={styles.DatePicker}
-          date={""}
+          date={''}
           placeholder={this.renderPlaceholderStart(this.state.placeholderStart)}
           mode="datetime"
           format="YYYY-MM-DD HH:mm"
@@ -417,7 +417,7 @@ class Create extends Component {
         </View>
         <DatePicker
           style={[styles.DatePicker, {marginTop: 8}]}
-          date={""}
+          date={''}
           placeholder={this.renderPlaceholderEnd(this.state.placeholderEnd)}
           mode="datetime"
           format="YYYY-MM-DD HH:mm"
@@ -426,8 +426,8 @@ class Create extends Component {
           showIcon={false}
           customStyles={{
             dateInput: {
-            borderWidth: 0
-          },
+              borderWidth: 0
+            },
             placeholderText: [styles.textPlaceholder,
               {color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]
           }}
@@ -486,7 +486,7 @@ class Create extends Component {
                 {this.state.streetNumber} {this.state.streetName}
               </Text>
               <Text style={[styles.textItemTitle, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
-                {(this.state.Done === true) ? this.state.inputTextTitle : "Add New Location"}
+                {(this.state.Done === true) ? this.state.inputTextTitle : 'Add New Location'}
               </Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
@@ -526,7 +526,7 @@ class Create extends Component {
         }}>
         <View style={{flexDirection: 'row', flex: 1}}>
           <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={styles.textItemAddress}>{item.address.substring(0,18)}</Text>
+            <Text style={styles.textItemAddress}>{item.address.substring(0, 18)}</Text>
             <Text style={styles.textItemTitle}>{item.title}</Text>
           </View>
           <View style={{flex: 1, justifyContent: 'center'}}>
