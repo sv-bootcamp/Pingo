@@ -15,8 +15,8 @@ import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
 import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE} from '../utils';
+import SmallHeader from '../components/smallHeader';
 
-import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 
 const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
@@ -26,24 +26,6 @@ const styles = StyleSheet.create({
   preview: {
     height: 104,
     width: 104
-  },
-  header: {
-    height: 64,
-    width: Dimensions.get('window').width,
-    backgroundColor: "#f8f8f8",
-    flexDirection: 'row',
-    marginBottom: 20
-  },
-  text_header: {
-    fontSize: 17,
-    left: Dimensions.get('window').width / 2 - 70,
-    top: 24,
-    color: "#2b2b2b",
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Medium'
-      }
-    })
   },
   text_done: {
     fontSize: 17,
@@ -55,7 +37,7 @@ const styles = StyleSheet.create({
   },
   text_caption: {
     fontSize: 14,
-    color: "#8e8e8e",
+    color: '#8e8e8e',
     left: 12,
     marginBottom: 5,
     ...Platform.select({
@@ -66,21 +48,10 @@ const styles = StyleSheet.create({
   },
   text_location: {
     fontSize: 14,
-    color: "#8e8e8e",
+    color: '#8e8e8e',
     left: 12,
     marginBottom: 5,
     marginTop: 20,
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Medium'
-      }
-    })
-  },
-  text_addNewLocation: {
-    fontSize: 17,
-    left: Dimensions.get('window').width / 2 - 95,
-    top: 24,
-    color: "#2b2b2b",
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
@@ -128,15 +99,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-Medium'
       }
     })
-  },
-  btn_before: {
-    left: 15,
-    top: 24
-  },
-  btn_done: {
-    position: 'absolute',
-    right: 15,
-    top: 24
   },
   btn_location: {
     height: 75,
@@ -203,13 +165,13 @@ class Create extends Component {
         colorWarning: 'white',
         select: ''
       },
-      dateStart: "",
-      dateEnd: "",
+      dateStart: '',
+      dateEnd: '',
       Done: false,
       streetName: '',
       streetNumber: '',
-      placeholderStart: " ",
-      placeholderEnd: " ",
+      placeholderStart: ' ',
+      placeholderEnd: ' ',
       inputTextCaption: '',
       inputTextLocation: '',
       inputTextTitle: '',
@@ -225,7 +187,7 @@ class Create extends Component {
     this.encodePictureBase64();
   }
 
-  //todo: implement function getting markers around the user's location
+  // todo: implement function getting markers around the user's location
   /*
     async getItemsAroundUser() {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -240,8 +202,12 @@ class Create extends Component {
 
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
-    .then((file) =>{this.setState({img: file});})
-    .catch((err) => {console.log(err.message, err.code);});
+    .then((file) =>{
+      this.setState({img: file});
+    })
+    .catch((err) => {
+      console.log(err.message, err.code);
+    });
   }
 
   handleBefore() {
@@ -615,7 +581,7 @@ class Create extends Component {
             style={[styles.btn_category,
               {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
                borderColor: (this.state.category.select === 'event') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('event')}}>
+            onPress={()=>{this.handleCategoryButton('event');}}>
             <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
@@ -623,7 +589,7 @@ class Create extends Component {
             style={[styles.btn_category,
               {marginRight: 8, backgroundColor: this.state.category.colorFacility,
                borderColor: (this.state.category.select === 'facility') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('facility')}}>
+            onPress={()=>{this.handleCategoryButton('facility');}}>
             <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
@@ -644,59 +610,33 @@ class Create extends Component {
           </View>
         }
       </View>
-    )
-  }
-
-  renderBtnBefore() {
-    return (
-      <TouchableOpacity
-        style={styles.btn_before}
-        onPress={this.handleBefore.bind(this)}>
-        <Image
-          style={{height:24, width: 24}}
-          source={ImgBtnBefore}
-        />
-      </TouchableOpacity>
-    )
-  }
-
-  renderHeaderTitle() {
-    return (
-      this.state.addingNewLocation === true ?
-        <Text style={styles.text_addNewLocation}>Add new location</Text> :
-        <Text style={styles.text_header}>Post Photo</Text>
-    )
-  }
-
-  renderBtnDone() {
-    return (
-      <TouchableOpacity
-        style={styles.btn_done}
-        onPress={this.handleDone.bind(this)}
-        activeOpacity={(this.state.Done === true) ? 0.2 : 1}
-      >
-        <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
-      </TouchableOpacity>
-    )
+    );
   }
 
   // todo: the View wrapping scrollView style.height must be changed
   render() {
     return (
       <View style={{flexDirection: 'column'}}>
-        <View style={[styles.header, {elevation: 3}]}>
-          {this.renderBtnBefore()}
-          {this.renderHeaderTitle()}
-          {this.renderBtnDone()}
+        <SmallHeader
+          addingNewLocation={this.state.addingNewLocation}
+          Done={this.state.Done}
+          handleBtnLeft={this.handleBefore.bind(this)}
+          handleBtnRight={this.handleDone.bind(this)}
+          btnRight={
+            <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
+          }
+          headerText={
+            this.state.addingNewLocation === true ? 'Add new location' : 'Post Photo'
+          }
+        />
+        <View style={{height: 669 - 75}}>
+          <ScrollView>
+            {this.state.addingNewLocation === true ?
+              <View>{this.renderAddNewLocation()}</View> :
+              <View>{this.renderCaption()}</View>
+            }
+          </ScrollView>
         </View>
-          <View style={{height: 669 - 75}}>
-            <ScrollView>
-              {this.state.addingNewLocation === true ?
-                <View>{this.renderAddNewLocation()}</View> :
-                <View>{this.renderCaption()}</View>
-              }
-            </ScrollView>
-          </View>
       </View>
     );
   }

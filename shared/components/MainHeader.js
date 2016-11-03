@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Headerbox extends Component {
+export default class MainHeader extends Component {
   constructor(props) {
     super(props);
     this._onForward = this._onForward.bind(this);
@@ -158,7 +158,7 @@ export default class Headerbox extends Component {
   }
 }
 
-Headerbox.propTypes = {
+MainHeader.propTypes = {
   hideMapCard: PropTypes.any,
   showListCard: PropTypes.any,
   selectedItem: PropTypes.any,

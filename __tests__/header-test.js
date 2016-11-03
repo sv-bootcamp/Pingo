@@ -1,13 +1,13 @@
 import 'react-native';
 import React from 'react';
-import Headerbox from '../shared/components/headerbox';
+import MainHeader from '../shared/components/MainHeader';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
   const tree = renderer.create(
-      <Headerbox
+      <MainHeader
         tabview_index={0}
         tabview_routes={[
           {key: '1', title: 'All'},
