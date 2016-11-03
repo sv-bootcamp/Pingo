@@ -630,7 +630,7 @@ class Create extends Component {
           }
           activeOpacity={(this.state.Done === true) ? 0.2 : 1}
         />
-        <View style={{height: 669 - 75}}>
+        <View style={{height: 669 - 75, marginTop: 20}}>
           <ScrollView>
             {this.state.addingNewLocation === true ?
               <View>{this.renderAddNewLocation()}</View> :

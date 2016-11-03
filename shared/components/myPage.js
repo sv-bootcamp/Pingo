@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import SmallHeader from './smallHeader';
 import {
-  Image
+  View,
+  Image,
+  Text
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -25,12 +27,20 @@ class MyPage extends Component {
   }
   render() {
     return (
-      <SmallHeader
-        btnRight={this.renderImageButtonSetting()}
-        handleBtnLeft={this.handleButtonPrev.bind(this)}
-        handleBtnRight={()=>{}}
-        headerText={'myPage'}
-      />
+      <View style={{flexDirection: 'column', flex: 1}}>
+        <SmallHeader
+          btnRight={this.renderImageButtonSetting()}
+          handleBtnLeft={this.handleButtonPrev.bind(this)}
+          handleBtnRight={()=>{}}
+          headerText={'myPage'}
+        />
+        <View style={{backgroundColor: 'blue', flex: 1}}>
+          <Text> testing </Text>
+        </View>
+        <View style={{backgroundColor: 'black', flex: 1}}>
+          <Text> testing </Text>
+        </View>
+      </View>
     );
   }
 }

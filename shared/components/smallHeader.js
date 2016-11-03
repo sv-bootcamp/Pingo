@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     backgroundColor: '#f8f8f8',
     flexDirection: 'row',
-    marginBottom: 20
+    marginBottom: 0
   },
   text_header: {
     fontSize: 17,
