@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
-import Card from './Card';
+import CardLayout from '../containers/cardLayout';
 import MapButton from './MapButton';
 
 const styles = StyleSheet.create({
@@ -116,7 +116,7 @@ export default class Map extends Component {
         </View>
         {
           (this.props.selectedItem.title === undefined) ? null :
-              <Card
+              <CardLayout
                   dataSource = {this.props.selectedItem}
               />
         }

@@ -59,6 +59,7 @@ class Card extends Component {
 
   constructor(props) {
     super(props);
+    this.renderImg = this.renderImg.bind(this);
   }
 
   transformTodate() {
@@ -97,11 +98,13 @@ class Card extends Component {
     );
   }
 
-  renderImg(rowData) {
+  renderImg(rowData, sectionID, rowID) {
+
     return (
       <TouchableOpacity onPress={()=>{
-        this.props.getDetailImage(this.props.dataSource.key, 1);
-        Actions.detailView({type: 'replace'});
+        console.log(rowID);
+        this.props.getDetailImage(this.props.dataSource.key, rowID);
+        Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, date: this.props.dataSource.startTime});
       }}>
         <Image style={styles.image}
              source = {{uri: rowData}}/>
@@ -120,7 +123,7 @@ class Card extends Component {
             dataSource={new ListView.DataSource({
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.dataSource.imageUrls)}
-            renderRow={this.renderImg.bind(this)}
+            renderRow={(rowData, sectionID, rowID) => this.renderImg(rowData, sectionID, rowID)}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             horizontal={true}

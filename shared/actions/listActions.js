@@ -36,7 +36,7 @@ export const receiveImages = (json, index) => {
   return {
     type: types.getDetailImage,
     items: json.values,
-    index
+    index: index
   };
 };
 

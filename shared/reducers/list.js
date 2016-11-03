@@ -4,7 +4,7 @@ import update from 'react-addons-update';
 const initialState = {
   dataSource: [],
   detailSource: [],
-  index: 0
+  detailIndex: 0
 };
 
 const list = (state = initialState, action) => {
@@ -14,9 +14,10 @@ const list = (state = initialState, action) => {
       dataSource: { $set: action.items }
     });
   case types.getDetailImage:
+    console.log(action.index);
     return update(state, {
       detailSource: { $set: action.items },
-      index: { $set: action.index}
+      detailIndex: { $set: action.index }
     });
   default:
     return state;
