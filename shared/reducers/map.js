@@ -52,7 +52,9 @@ const map = (state = initialState, action = {}) => {
       zoomLevel: { $set: action.zoomLevel }
     });
   case types.hideMapCard:
-    return state;
+    return update(state, {
+      selectedItem: { $set: {} }
+    });
   case types.showListCard:
     return state;
   default:
