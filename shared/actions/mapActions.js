@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 import {HTTP, SERVER_ADDR, ENDPOINT_ITEM,
-  queryBuilder, createQueryObject} from '../utils'
+  queryBuilder, createQueryObject} from '../utils';
 
 export const onLocationChange = (region) => {
   return {

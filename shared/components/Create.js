@@ -14,36 +14,15 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
-import {HTTP, SERVER_ADDR, ENDPOINT_ITEM} from '../utils';
+import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} from '../utils';
+import SmallHeader from '../components/smallHeader';
 
-import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
-
-const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
-const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 const styles = StyleSheet.create({
   preview: {
     height: 104,
     width: 104
-  },
-  header: {
-    height: 64,
-    width: Dimensions.get('window').width,
-    backgroundColor: "#f8f8f8",
-    flexDirection: 'row',
-    marginBottom: 20
-  },
-  text_header: {
-    fontSize: 17,
-    left: Dimensions.get('window').width / 2 - 70,
-    top: 24,
-    color: "#2b2b2b",
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Medium'
-      }
-    })
   },
   text_done: {
     fontSize: 17,
@@ -55,7 +34,7 @@ const styles = StyleSheet.create({
   },
   text_caption: {
     fontSize: 14,
-    color: "#8e8e8e",
+    color: '#8e8e8e',
     left: 12,
     marginBottom: 5,
     ...Platform.select({
@@ -66,21 +45,10 @@ const styles = StyleSheet.create({
   },
   text_location: {
     fontSize: 14,
-    color: "#8e8e8e",
+    color: '#8e8e8e',
     left: 12,
     marginBottom: 5,
     marginTop: 20,
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Medium'
-      }
-    })
-  },
-  text_addNewLocation: {
-    fontSize: 17,
-    left: Dimensions.get('window').width / 2 - 95,
-    top: 24,
-    color: "#2b2b2b",
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
@@ -119,14 +87,15 @@ const styles = StyleSheet.create({
       }
     })
   },
-  btn_before: {
-    left: 15,
-    top: 24
-  },
-  btn_done: {
-    position: 'absolute',
-    right: 15,
-    top: 24
+  textPlaceholder: {
+    fontSize: 14,
+    alignSelf: 'flex-end',
+    marginRight: 16,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
   },
   btn_location: {
     height: 75,
@@ -161,7 +130,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     marginRight: 16,
-    marginLeft: 16
+    marginLeft: 16,
+    padding: 16
   },
   DatePicker: {
     height: 46,
@@ -170,6 +140,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 16,
     marginLeft: 16
+  },
+  fontRobotoRegular: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
   }
 });
 
@@ -185,13 +162,13 @@ class Create extends Component {
         colorWarning: 'white',
         select: ''
       },
-      dateStart: "",
-      dateEnd: "",
+      dateStart: '',
+      dateEnd: '',
       Done: false,
       streetName: '',
       streetNumber: '',
-      placeholderStart: " ",
-      placeholderEnd: " ",
+      placeholderStart: ' ',
+      placeholderEnd: ' ',
       inputTextCaption: '',
       inputTextLocation: '',
       inputTextTitle: '',
@@ -207,7 +184,7 @@ class Create extends Component {
     this.encodePictureBase64();
   }
 
-  //todo: implement function getting markers around the user's location
+  // todo: implement function getting markers around the user's location
   /*
     async getItemsAroundUser() {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -222,8 +199,12 @@ class Create extends Component {
 
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
-    .then((file) =>{this.setState({img: file});})
-    .catch((err) => {console.log(err.message, err.code);});
+    .then((file) =>{
+      this.setState({img: file});
+    })
+    .catch((err) => {
+      console.log(err.message, err.code);
+    });
   }
 
   handleBefore() {
@@ -276,13 +257,12 @@ class Create extends Component {
   }
 
   getAddressData() {
-    const uri = API_GEODATA + '?latlng=' + this.props.currentLocation.latitude +","+
-      this.props.currentLocation.longitude + '&key='+ API_KEY;
+    const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
     fetch(uri)
     .then((response) => response.json())
     .then((responseJson) => {
-      const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"','').replace('"','');
-      const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"','').replace('"','');
+      const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
+      const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
       this.setState({streetName: streetName, streetNumber: streetNumber});
     });
   }
@@ -299,11 +279,38 @@ class Create extends Component {
   handleAddNewLocation() {
     this.setState({
       addingNewLocation: true
-    })
+    });
   }
 
-  handleAddExistingLocation() {
-    //todo: implement adding photo to an existing location
+  // todo:  should check whether response contain error or not.
+  // If response contain error property, It was a fail post
+  // Check out APIDoc
+  // https://goober.herokuapp.com/docs/#api-Image-addAnImage
+  handleAddExistingLocation(itemKey, userKey, caption, image) {
+    const data = JSON.stringify({
+      itemKey: itemKey,
+      userKey: userKey,
+      caption: caption,
+      image: image
+    });
+
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
+    fetch(address, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+    .then((response) => response.json())
+    .then(() => {
+      this.props.setCurrentScene('map');
+      Actions.pop({popNum: 2});
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
   }
 
   handleCategoryButton(select) {
@@ -350,7 +357,7 @@ class Create extends Component {
 
   convertMonth(m) {
     const month = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
-    return month[m-'1'];
+    return month[m - '1'];
   }
 
   handleOnDateChangeStart(datetime) {
@@ -370,50 +377,86 @@ class Create extends Component {
   // todo: change placeholder style
   renderDatePickerStart() {
     return (
-      <DatePicker
-        style={[styles.DatePicker]}
-        date={""}
-        placeholder={`start ${this.state.placeholderStart}`}
-        mode="datetime"
-        format="YYYY-MM-DD HH:mm"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        showIcon={false}
-        customStyles={{
-          dateInput: {
-          borderWidth: 0
-        },
-          placeholderText: {
-          color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b',
-          fontSize: 14
-        }}}
-        onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
-      />
+      <View>
+        <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
+          <Text style={[styles.fontRobotoRegular,
+            {marginTop: 12, color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            Starts
+          </Text>
+        </View>
+        <DatePicker
+          style={styles.DatePicker}
+          date={''}
+          placeholder={this.renderPlaceholderStart(this.state.placeholderStart)}
+          mode="datetime"
+          format="YYYY-MM-DD HH:mm"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          showIcon={false}
+          customStyles={{
+            dateInput: {
+              borderWidth: 0
+          },
+            placeholderText: [styles.textPlaceholder,
+              {color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]
+          }}
+          onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
+        />
+      </View>
     )
   }
 
   renderDatePickerEnd() {
     return (
-      <DatePicker
-        style={[styles.DatePicker, {marginTop: 8}]}
-        date={""}
-        placeholder={`end ${this.state.placeholderEnd}`}
-        mode="datetime"
-        format="YYYY-MM-DD HH:mm"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        showIcon={false}
-        customStyles={{
-          dateInput: {
-          borderWidth: 0
-        },
-          placeholderText: {
-          color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b',
-          fontSize: 14
-        }}}
-        onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
-      />
+      <View>
+        <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
+          <Text style={[styles.fontRobotoRegular,
+              {marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            Ends
+          </Text>
+        </View>
+        <DatePicker
+          style={[styles.DatePicker, {marginTop: 8}]}
+          date={''}
+          placeholder={this.renderPlaceholderEnd(this.state.placeholderEnd)}
+          mode="datetime"
+          format="YYYY-MM-DD HH:mm"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          showIcon={false}
+          customStyles={{
+            dateInput: {
+              borderWidth: 0
+            },
+            placeholderText: [styles.textPlaceholder,
+              {color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]
+          }}
+          onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
+        />
+      </View>
     )
+  }
+
+  renderPlaceholderStart(text) {
+    if (this.state.dateStart !== '' && this.state.dateEnd === '') {
+      return (` ${text}`);
+    } else if ((this.state.dateStart === '' && this.state.dateEnd === '')) {
+      return ' ';
+    } else if (this.state.dateStart !== '' && this.state.dateEnd !== '') {
+      return (` ${text}`);
+    }
+    return '-';
+  }
+
+  renderPlaceholderEnd(text) {
+    if (this.state.dateStart === '' && this.state.dateEnd !== '') {
+      return (` ${text}`);
+    } else if (this.state.dateStart === '' && this.state.dateEnd === '') {
+      return ' ';
+    } else if (this.state.dateStart !== '' && this.state.dateEnd !== '') {
+      return (` ${text}`);
+    }
+    return '-';
   }
 
   renderCaption() {
@@ -429,6 +472,7 @@ class Create extends Component {
             underlineColorAndroid="rgba(0,0,0,0)"
             onFocus={() => {this.setState({onFocusCaption: true})}}
             onEndEditing={() => {this.setState({onFocusCaption: false})}}
+            autoFocus={true}
           />
           <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
         </View>
@@ -442,7 +486,7 @@ class Create extends Component {
                 {this.state.streetNumber} {this.state.streetName}
               </Text>
               <Text style={[styles.textItemTitle, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
-                {(this.state.Done === true) ? this.state.inputTextTitle : "Add New Location"}
+                {(this.state.Done === true) ? this.state.inputTextTitle : 'Add New Location'}
               </Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
@@ -471,17 +515,18 @@ class Create extends Component {
     return (R * c).toFixed(2);
   }
 
-  // todo: remove item.address.substring(n,cnt) after changing post address func
   // todo: should limit item.title length if it is too long
   renderAroundLocations() {
     return (
       this.props.dataSource.map(item => (
       <TouchableOpacity
         style={[styles.btn_location, {borderColor: '#e7e7e7'}]}
-        onPress={this.handleAddExistingLocation.bind(this)}>
+        onPress={() => {
+          this.handleAddExistingLocation(item.key, item.userKey, this.state.inputTextCaption, this.state.img);
+        }}>
         <View style={{flexDirection: 'row', flex: 1}}>
           <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={styles.textItemAddress}>{item.address.substring(0,18)}</Text>
+            <Text style={styles.textItemAddress}>{item.address.substring(0, 18)}</Text>
             <Text style={styles.textItemTitle}>{item.title}</Text>
           </View>
           <View style={{flex: 1, justifyContent: 'center'}}>
@@ -528,6 +573,7 @@ class Create extends Component {
           onFocus={() => {this.setState({onFocusTitle: true})}}
           onEndEditing={() => {this.setState({onFocusTitle: false})}}
           onSubmitEditing={() => {this.setState({onFocusTitle: false})}}
+          autoFocus={true}
         />
         <Text style={styles.text_location}> Category </Text>
         <View style={{flexDirection: 'row'}}>
@@ -535,16 +581,16 @@ class Create extends Component {
             style={[styles.btn_category,
               {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
                borderColor: (this.state.category.select === 'event') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('event')}}>
-            <Text style={[styles.text_done, { fontSize: 14,
+            onPress={()=>{this.handleCategoryButton('event');}}>
+            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn_category,
               {marginRight: 8, backgroundColor: this.state.category.colorFacility,
                borderColor: (this.state.category.select === 'facility') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('facility')}}>
-            <Text style={[styles.text_done, { fontSize: 14,
+            onPress={()=>{this.handleCategoryButton('facility');}}>
+            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -552,7 +598,7 @@ class Create extends Component {
               {marginRight: 16, backgroundColor: this.state.category.colorWarning,
                borderColor: (this.state.category.select === 'warning') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('warning')}}>
-            <Text style={[styles.text_done, { fontSize: 14,
+            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
           </TouchableOpacity>
         </View>
@@ -564,57 +610,34 @@ class Create extends Component {
           </View>
         }
       </View>
-    )
-  }
-
-  renderBtnBefore() {
-    return (
-      <TouchableOpacity
-        style={styles.btn_before}
-        onPress={this.handleBefore.bind(this)}>
-        <Image
-          style={{height:24, width: 24}}
-          source={ImgBtnBefore}
-        />
-      </TouchableOpacity>
-    )
-  }
-
-  renderHeaderTitle() {
-    return (
-      this.state.addingNewLocation === true ?
-        <Text style={styles.text_addNewLocation}>Add new location</Text> :
-        <Text style={styles.text_header}>Post Photo</Text>
-    )
-  }
-
-  renderBtnDone() {
-    return (
-      <TouchableOpacity
-        style={styles.btn_done}
-        onPress={this.handleDone.bind(this)}>
-        <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
-      </TouchableOpacity>
-    )
+    );
   }
 
   // todo: the View wrapping scrollView style.height must be changed
   render() {
     return (
       <View style={{flexDirection: 'column'}}>
-        <View style={[styles.header, {elevation: 5}]}>
-          {this.renderBtnBefore()}
-          {this.renderHeaderTitle()}
-          {this.renderBtnDone()}
+        <SmallHeader
+          addingNewLocation={this.state.addingNewLocation}
+          Done={this.state.Done}
+          handleBtnLeft={this.handleBefore.bind(this)}
+          handleBtnRight={this.handleDone.bind(this)}
+          btnRight={
+            <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
+          }
+          headerText={
+            this.state.addingNewLocation === true ? 'Add new location' : 'Post Photo'
+          }
+          activeOpacity={(this.state.Done === true) ? 0.2 : 1}
+        />
+        <View style={{height: 669 - 75, marginTop: 20}}>
+          <ScrollView>
+            {this.state.addingNewLocation === true ?
+              <View>{this.renderAddNewLocation()}</View> :
+              <View>{this.renderCaption()}</View>
+            }
+          </ScrollView>
         </View>
-          <View style={{height: 669 - 75}}>
-            <ScrollView>
-              {this.state.addingNewLocation === true ?
-                <View>{this.renderAddNewLocation()}</View> :
-                <View>{this.renderCaption()}</View>
-              }
-            </ScrollView>
-          </View>
       </View>
     );
   }

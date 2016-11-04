@@ -102,9 +102,7 @@ export default class Map extends Component {
             />
           ))}
         </MapView>
-
-        <View
-            style={styles.buttonSection}>
+        <View style={styles.buttonSection}>
           <MapButton
             imageSource={'position'}
             handleOnPress={this.setCurrentPosition.bind(this)}/>
