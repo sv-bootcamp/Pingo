@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { categorizeItems, setTabViewIndex, showListCard, hideMapCard } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
-import Headerbox from '../components/headerbox';
+import MainHeader from '../components/MainHeader';
 
 const mapStateToProps = (state) => {
   return {
@@ -35,6 +35,6 @@ const mapDispatchToProps = (dispatch) => {
 const HeaderLayout = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Headerbox);
+)(MainHeader);
 
 export default HeaderLayout;

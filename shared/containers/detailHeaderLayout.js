@@ -1,28 +1,22 @@
-import Card from '../components/Card';
-import { getDetailImage } from '../actions/listActions';
+import DetailHeader from '../components/detailHeader';
 import { setCurrentScene } from '../actions/fluxActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
-  return {
-    currentScene: state.flux.currentScene
-  };
+  return state;
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getDetailImage: (key) => {
-      return dispatch(getDetailImage(key));
-    },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
     }
   };
 };
 
-const CardLayout = connect(
+const DetailHeaderLayout = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Card);
+)(DetailHeader);
 
-export default CardLayout;
+export default DetailHeaderLayout;

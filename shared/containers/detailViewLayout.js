@@ -1,5 +1,6 @@
 import DetailView from '../components/detailView';
 import { getAllItems } from '../actions/listActions';
+import { setCurrentScene } from '../actions/listActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
@@ -12,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getAllItems: (zoomLevel, lat, long) => {
       return dispatch(getAllItems(zoomLevel, lat, long));
+    },
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
     }
   };
 };

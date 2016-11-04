@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
-import Card from './Card';
+import CardLayout from '../containers/cardLayout';
 import MapButton from './MapButton';
 import eventPng from '../resources/marker/event_small.png';
 import facilityPng from '../resources/marker/facility_small.png';
@@ -70,7 +70,7 @@ export default class Map extends Component {
   onMapClick() {
     const curTime = new Date();
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
-      this.props.hideMapCard()
+      this.props.hideMapCard();
     }
   }
 
@@ -102,9 +102,7 @@ export default class Map extends Component {
             />
           ))}
         </MapView>
-
-        <View
-            style={styles.buttonSection}>
+        <View style={styles.buttonSection}>
           <MapButton
             imageSource={'position'}
             handleOnPress={this.setCurrentPosition.bind(this)}/>
@@ -114,7 +112,7 @@ export default class Map extends Component {
         </View>
         {
           (this.props.selectedItem.title === undefined) ? null :
-            <Card dataSource = {this.props.selectedItem} />
+            <CardLayout dataSource = {this.props.selectedItem} />
         }
       </View>
     );
