@@ -9,6 +9,7 @@ import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import LogInFacebook from '../components/LogInFacebook';
+import SettingLayout from './settingLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
@@ -32,6 +33,9 @@ const scenes = Actions.create(
     }/>
     <Scene key="logInFacebook" hideNavBar={true} component={
       LogInFacebook
+    }/>
+    <Scene key="setting" hideNavBar={true} component={
+      SettingLayout
     }/>
   </Scene>
 );
