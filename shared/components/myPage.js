@@ -64,7 +64,8 @@ class MyPage extends Component {
   }
 
   handleButtonSetting() {
-    // todo
+    this.props.setCurrentScene('setting');
+    Actions.setting({type: 'replace'});
   }
 
   renderUserBox() {
