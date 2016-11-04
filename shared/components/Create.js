@@ -14,11 +14,11 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
+import {HTTP, SERVER_ADDR, ENDPOINT_ITEM} from '../utils';
 
 import ImgBtnBefore from '../resources/camera/btn_before.png';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 
-const API_SETITEMS = 'http://goober.herokuapp.com/api/items';
 const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
 const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     height: 46,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: "#e7e7e7",
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -153,7 +152,6 @@ const styles = StyleSheet.create({
   input_text: {
     height: 104,
     flex: 1,
-    borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 8,
     marginLeft: 16
@@ -161,7 +159,6 @@ const styles = StyleSheet.create({
   input_location: {
     height: 46,
     flex: 1,
-    borderColor: '#e7e7e7',
     borderWidth: 1,
     marginRight: 16,
     marginLeft: 16
@@ -198,7 +195,12 @@ class Create extends Component {
       inputTextCaption: '',
       inputTextLocation: '',
       inputTextTitle: '',
-      img: ''
+      img: '',
+      onFocusCaption: false,
+      onFocusLocation: false,
+      onFocusTitle: false,
+      onFocusDateStart: false,
+      onFocusDateEnd: false
     };
 
     this.getAddressData();
@@ -254,7 +256,8 @@ class Create extends Component {
       caption: this.state.inputTextCaption
     });
 
-    fetch(API_SETITEMS, {
+    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
+    fetch(address, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -351,15 +354,15 @@ class Create extends Component {
   }
 
   handleOnDateChangeStart(datetime) {
-    this.setState({dateStart: datetime});
     const a = new Date(datetime);
+    this.setState({dateStart: a.toISOString()});
     const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderStart: txtDate});
   }
 
   handleOnDateChangeEnd(datetime) {
-    this.setState({dateEnd: datetime});
     const a = new Date(datetime);
+    this.setState({dateEnd: a.toISOString()});
     const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderEnd: txtDate});
   }
@@ -419,11 +422,13 @@ class Create extends Component {
         <Text style={styles.text_caption}> Caption </Text>
         <View style={{flexDirection: 'row', marginBottom: 20}}>
           <TextInput
-            style={styles.input_text}
+            style={[styles.input_text, {padding: 16, borderColor: (this.state.onFocusCaption === true) ? '#2c8cff' : '#dcdcdc'}]}
             onChangeText={(text) => this.setState({inputTextCaption: text})}
             value={this.state.inputTextCaption}
             multiline={true}
             underlineColorAndroid="rgba(0,0,0,0)"
+            onFocus={() => {this.setState({onFocusCaption: true})}}
+            onEndEditing={() => {this.setState({onFocusCaption: false})}}
           />
           <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
         </View>
@@ -433,8 +438,12 @@ class Create extends Component {
           onPress={this.handleAddNewLocation.bind(this)}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={styles.textItemAddress}>{this.state.streetNumber} {this.state.streetName}</Text>
-              <Text style={styles.textItemTitle}>Add New Location</Text>
+              <Text style={[styles.textItemAddress, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
+                {this.state.streetNumber} {this.state.streetName}
+              </Text>
+              <Text style={[styles.textItemTitle, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
+                {(this.state.Done === true) ? this.state.inputTextTitle : "Add New Location"}
+              </Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
               {(this.state.Done === true) ?
@@ -491,56 +500,69 @@ class Create extends Component {
       <View>
         <Text style={styles.text_caption}> Location </Text>
         <TextInput
-          style={styles.input_location}
+          style={[styles.input_location, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
           onChangeText={(text) => {
               this.setState({inputTextLocation: text});
+              if (this.state.onFocusLocation === false) {this.setState({onFocusLocation: true})}
             }
           }
           value={`${this.state.streetNumber} ${this.state.streetName}`}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
+          onFocus={() => {this.setState({onFocusLocation: true})}}
+          onEndEditing={() => {this.setState({onFocusLocation: false})}}
+          onSubmitEditing={() => {this.setState({onFocusLocation: false})}}
         />
         <Text style={styles.text_location}> Title </Text>
         <TextInput
-          style={styles.input_location}
+          style={[styles.input_location, {borderColor: (this.state.onFocusTitle === true) ? '#2c8cff' : '#dcdcdc'}]}
           onChangeText={(text) => {
               this.setState({inputTextTitle: text});
               this.checkDone();
+              if (this.state.onFocusTitle === false) {this.setState({onFocusTitle: true})}
             }
           }
           value={this.state.inputTextTitle}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
+          onFocus={() => {this.setState({onFocusTitle: true})}}
+          onEndEditing={() => {this.setState({onFocusTitle: false})}}
+          onSubmitEditing={() => {this.setState({onFocusTitle: false})}}
         />
         <Text style={styles.text_location}> Category </Text>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             style={[styles.btn_category,
-              {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent}]}
+              {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
+               borderColor: (this.state.category.select === 'event') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('event')}}>
-            <Text style={[styles.text_done,
-              {color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
+            <Text style={[styles.text_done, { fontSize: 14,
+              color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn_category,
-              {marginRight: 8, backgroundColor: this.state.category.colorFacility}]}
+              {marginRight: 8, backgroundColor: this.state.category.colorFacility,
+               borderColor: (this.state.category.select === 'facility') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('facility')}}>
-            <Text style={[styles.text_done,
-              {color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
+            <Text style={[styles.text_done, { fontSize: 14,
+              color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn_category,
-              {marginRight: 16, backgroundColor: this.state.category.colorWarning}]}
+              {marginRight: 16, backgroundColor: this.state.category.colorWarning,
+               borderColor: (this.state.category.select === 'warning') ? 'white' : "#e7e7e7"}]}
             onPress={()=>{this.handleCategoryButton('warning')}}>
-            <Text style={[styles.text_done,
-              {color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
+            <Text style={[styles.text_done, { fontSize: 14,
+              color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'column'}}>
-          <Text style={styles.text_location}> Time (optional) </Text>
-          {this.renderDatePickerStart()}
-          {this.renderDatePickerEnd()}
-        </View>
+        {(this.state.category.select === 'facility') ? null :
+          <View style={{flexDirection: 'column'}}>
+            <Text style={styles.text_location}> Time (optional) </Text>
+            {this.renderDatePickerStart()}
+            {this.renderDatePickerEnd()}
+          </View>
+        }
       </View>
     )
   }
@@ -580,7 +602,7 @@ class Create extends Component {
   render() {
     return (
       <View style={{flexDirection: 'column'}}>
-        <View style={styles.header}>
+        <View style={[styles.header, {elevation: 5}]}>
           {this.renderBtnBefore()}
           {this.renderHeaderTitle()}
           {this.renderBtnDone()}
