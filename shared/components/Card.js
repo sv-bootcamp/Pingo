@@ -59,49 +59,48 @@ class Card extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      date: '',
+      numOfImage: 0
+    };
+    this.renderImg = this.renderImg.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.dataSource.category !== 'facility') {
+      this.transformTodate();
+    }
   }
 
   transformTodate() {
     let startTime = new Date(this.props.dataSource.startTime);
     let endTime = new Date(this.props.dataSource.endTime);
+    let date = '';
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
       'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
-    let startMonth = startTime.getMonth();
-    let startDate = startTime.getDate();
-    let startHours = startTime.getHours();
-    let startMinutes = startTime.getMinutes();
-    let endMonth = endTime.getMonth();
-    let endDate = endTime.getDate();
-    let endHours = endTime.getHours();
-    let endMinutes = endTime.getMinutes();
-    let startMid = 'am';
-    if (startHours === 0) {
-      startHours = 12;
-    } else if (startHours > 12) {
-      startMid = 'pm';
-      startHours = startHours % 12;
+    date += monthNames[startTime.getMonth()] + '. ' + startTime.getDate() + ', ';
+    (startTime.getHours() === 0) ? date += '12:' + startTime.getMinutes() + 'am' :
+    (startTime.getHours() > 12) ? date += startTime.getHours() % 12 + ':' + startTime.getMinutes() + 'pm' :
+    date += startTime.getHours() + ':' + startTime.getMinutes() + 'am';
+    date += ' - ';
+    if (endTime) {
+      date += monthNames[endTime.getMonth()] + '. ' + endTime.getDate() + ', ';
+      (endTime.getHours() === 0) ? date += '12:' + endTime.getMinutes() + 'am' :
+      (endTime.getHours() > 12) ? date += endTime.getHours() % 12 + ':' + endTime.getMinutes() + 'pm' :
+      date += endTime.getHours() + ':' + endTime.getMinutes() + 'am';
+    } else {
+      date += '?';
     }
-    let endMid = 'am';
-    if (endHours === 0) {
-      endHours = 12;
-    } else if (endHours > 12) {
-      endMid = 'pm';
-      endHours = endHours % 12;
-    }
-    return (
-      <Text style={styles.term}>
-        {monthNames[startMonth]}. {startDate}-{(endMonth === startMonth) ? '' : monthNames[endMonth] + '. '}
-        {endDate}, {startHours}:{startMinutes}{startMid} - {endHours}:{endMinutes}{endMid}
-      </Text>
-    );
+    this.setState({ date : date });
   }
 
-  renderImg(rowData) {
+  renderImg(rowData, sectionID, rowID) {
     return (
       <TouchableOpacity onPress={()=>{
-        this.props.getDetailImage(this.props.dataSource.key, 1);
-        Actions.detailView({type: 'replace'});
+        this.props.setCurrentScene('detail');
+        this.props.getDetailImage(this.props.dataSource.key);
+        Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene, date: this.state.date});
       }}>
         <Image style={styles.image}
              source = {{uri: rowData}}/>
@@ -114,7 +113,7 @@ class Card extends Component {
       <View style={styles.wrapper}>
         <Text style={styles.title}>{this.props.dataSource.title}</Text>
         <Text style={styles.address}>{this.props.dataSource.address}</Text>
-        { (this.props.dataSource.category === 'facility') ? null : this.transformTodate() }
+        { (this.props.dataSource.category === 'facility') ? null : <Text style={styles.term}> {this.state.date} </Text>}
         <View style={styles.listWrapper}>
           <ListView
             dataSource={new ListView.DataSource({
@@ -141,7 +140,9 @@ Card.propTypes = {
     address: PropTypes.string,
     imageUrls: PropTypes.array
   })),
-  getDetailImage: PropTypes.function
+  getDetailImage: PropTypes.function,
+  currentScene: PropTypes.string,
+  setCurrentScene: PropTypes.function
 };
 
 export default Card;
