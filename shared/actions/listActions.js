@@ -44,7 +44,6 @@ export const getDetailImage = (key) => {
     const queries = [];
     queries.push(createQueryObject('item', key));
     const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
-    console.log(address);
     return fetch(address)
       .then(response => response.json())
       .then(json =>

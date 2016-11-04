@@ -70,7 +70,7 @@ export default class Map extends Component {
   onMapClick() {
     const curTime = new Date();
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
-      this.props.hideMapCard()
+      this.props.hideMapCard();
     }
   }
 

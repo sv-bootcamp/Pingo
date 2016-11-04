@@ -53,7 +53,6 @@ export default class DetailView extends Component {
 
   constructor(props) {
     super(props);
-    console.log(JSON.stringify(this.props));
   }
 
   componentDidMount() {
