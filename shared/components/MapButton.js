@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
 export default class MapButton extends Component {
   render() {
     const imageSource = (this.props.imageSource === 'position') ?
-    require('../resources/btn_location/drawable-mdpi/btn_location.png') :
-    require('../resources/btn_camera/drawable-mdpi/btn_camera.png');
+    require('../resources/btn_location/btn_location.png') :
+    require('../resources/btn_camera/btn_camera.png');
 
     return (
     <View>
@@ -37,6 +37,7 @@ export default class MapButton extends Component {
         onPress={this.props.handleOnPress}>
         <View>
           <Image
+            style={{height: 24, width: 24}}
             source={imageSource} />
         </View>
       </TouchableHighlight>
