@@ -3,8 +3,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   dataSource: [],
-  detailSource: [],
-  index: 0
+  detailSource: []
 };
 
 const list = (state = initialState, action) => {
@@ -15,8 +14,7 @@ const list = (state = initialState, action) => {
     });
   case types.getDetailImage:
     return update(state, {
-      detailSource: { $set: action.items },
-      index: { $set: action.index}
+      detailSource: { $set: action.items }
     });
   default:
     return state;
