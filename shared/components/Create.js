@@ -14,13 +14,10 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
-import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE} from '../utils';
+import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} from '../utils';
 import SmallHeader from '../components/smallHeader';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
-
-const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
-const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 const styles = StyleSheet.create({
   preview: {
@@ -260,13 +257,12 @@ class Create extends Component {
   }
 
   getAddressData() {
-    const uri = API_GEODATA + '?latlng=' + this.props.currentLocation.latitude + ',' +
-      this.props.currentLocation.longitude + '&key=' + API_KEY;
+    const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
     fetch(uri)
     .then((response) => response.json())
     .then((responseJson) => {
-      const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"','').replace('"','');
-      const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"','').replace('"','');
+      const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
+      const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
       this.setState({streetName: streetName, streetNumber: streetNumber});
     });
   }
