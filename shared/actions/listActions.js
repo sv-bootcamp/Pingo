@@ -32,24 +32,22 @@ export const getAllItems = (zoomLevel, lat, long) => {
   };
 };
 
-export const receiveImages = (json, index) => {
+export const receiveImages = (json) => {
   return {
     type: types.getDetailImage,
-    items: json.values,
-    index
+    items: json.values
   };
 };
 
-export const getDetailImage = (key, index) => {
+export const getDetailImage = (key) => {
   return (dispatch) => {
     const queries = [];
     queries.push(createQueryObject('item', key));
-
     const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
     return fetch(address)
       .then(response => response.json())
       .then(json =>
-        dispatch(receiveImages(json, index))
+        dispatch(receiveImages(json))
     );
   };
 };
