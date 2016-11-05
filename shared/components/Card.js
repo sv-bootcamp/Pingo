@@ -3,28 +3,16 @@ import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity } f
 import {Actions} from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: '#ffffff',
-    height: 199,
-    borderBottomWidth: 1,
-    borderColor: '#e7e7e7'
-  },
-  title: {
-    marginLeft: 16,
-    marginTop: 16,
-    height: 19,
+  TextTitle: {
     fontSize: 19,
-    fontWeight: 'bold',
+    color: '#2b2b2b',
     ...Platform.select({
       android: {
-        fontFamily: 'Roboto-Regular'
+        fontFamily: 'Roboto-Medium'
       }
     })
   },
   address: {
-    marginTop: 8,
-    marginLeft: 16,
-    height: 14,
     fontSize: 14,
     ...Platform.select({
       android: {
@@ -33,9 +21,6 @@ const styles = StyleSheet.create({
     })
   },
   term: {
-    marginTop: 9,
-    marginLeft: 16,
-    height: 14,
     fontSize: 14,
     ...Platform.select({
       android: {
@@ -43,12 +28,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  listWrapper: {
-    marginLeft: 16,
-    height: 119
-  },
-  image: {
-    marginTop: 15,
+  CardImage: {
     width: 88,
     height: 88,
     marginRight: 8
@@ -102,29 +82,65 @@ class Card extends Component {
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene, date: this.state.date});
       }}>
-        <Image style={styles.image}
+        <Image style={styles.CardImage}
              source = {{uri: rowData}}/>
       </TouchableOpacity>
     );
   }
 
+  renderCardText() {
+    return (
+      <View style={{
+        flex: (this.props.dataSource.category === 'facility') ? 64 : 64 + 16,
+        backgroundColor: 'white',
+        flexDirection: 'column'
+      }}>
+        <View style={{flex: 19 + 8, justifyContent: 'flex-start'}}>
+          <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
+        </View>
+        <View style={{flex: 15 + 8, justifyContent: (this.props.dataSource.category === 'facility') ? 'flex-start' : 'center'}}>
+          <Text style={styles.address}>{this.props.dataSource.address}</Text>
+        </View>
+        { (this.props.dataSource.category === 'facility') ? null :
+          <View style={{flex: 14 + 16}}>
+            <Text style={styles.term}>
+              {this.state.date}
+            </Text>
+          </View>
+        }
+      </View>
+    );
+  }
+
+  renderListView() {
+    return (
+      <View style={{flex: 120 - 36}}>
+        <ListView
+          dataSource={new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+          }).cloneWithRows(this.props.dataSource.imageUrls)}
+          renderRow={this.renderImg.bind(this)}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          horizontal={true}
+        />
+      </View>
+    );
+  }
+
   render() {
     return (
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>{this.props.dataSource.title}</Text>
-        <Text style={styles.address}>{this.props.dataSource.address}</Text>
-        { (this.props.dataSource.category === 'facility') ? null : <Text style={styles.term}> {this.state.date} </Text>}
-        <View style={styles.listWrapper}>
-          <ListView
-            dataSource={new ListView.DataSource({
-              rowHasChanged: (r1, r2) => r1 !== r2
-            }).cloneWithRows(this.props.dataSource.imageUrls)}
-            renderRow={this.renderImg.bind(this)}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            horizontal={true}
-            />
+      <View style={{height: (this.props.dataSource.category === 'facility') ? 199 - 24 : 199, flexDirection: 'column'}}>
+        <View style={{flex: 16, backgroundColor: 'white'}}/>
+        <View style={{flex: 199 - 32, backgroundColor: 'white', flexDirection: 'row'}}>
+          <View style={{flex: 16}}/>
+          <View style={{flex: 360 - 16}}>
+            {this.renderCardText()}
+            {this.renderListView()}
+          </View>
         </View>
+        <View style={{flex: 16}}/>
+
       </View>
     );
   }
