@@ -140,7 +140,6 @@ class Card extends Component {
           </View>
         </View>
         <View style={{flex: 16}}/>
-
       </View>
     );
   }
