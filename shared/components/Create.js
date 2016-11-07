@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     height: 104,
     width: 104
   },
-  text_done: {
+  textDone: {
     fontSize: 17,
     ...Platform.select({
       android: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  text_caption: {
+  textCaption: {
     fontSize: 14,
     color: '#8e8e8e',
     left: 12,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  text_location: {
+  textLocation: {
     fontSize: 14,
     color: '#8e8e8e',
     left: 12,
@@ -97,14 +97,14 @@ const styles = StyleSheet.create({
       }
     })
   },
-  btn_location: {
+  btnLocation: {
     height: 75,
     borderWidth: 1,
     marginBottom: 8,
     marginRight: 16,
     marginLeft: 15
   },
-  btn_category: {
+  btnCategory: {
     flex: 1,
     height: 46,
     borderWidth: 1,
@@ -112,20 +112,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  btn_check: {
+  btnCheck: {
     height: 24,
     width: 24,
     alignSelf: 'flex-end',
     marginRight: 16
   },
-  input_text: {
+  inputText: {
     height: 104,
     flex: 1,
     borderWidth: 1,
     marginRight: 8,
     marginLeft: 16
   },
-  input_location: {
+  inputLocation: {
     height: 46,
     flex: 1,
     borderWidth: 1,
@@ -186,25 +186,25 @@ class Create extends Component {
 
   // todo: implement function getting markers around the user's location
   /*
-    async getItemsAroundUser() {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.props.getAllItems(
-          this.props.zoomLevel,
-          position.coords.latitude,
-          position.coords.longitude);
-        }
-      );
-    }
-  */
+   async getItemsAroundUser() {
+   navigator.geolocation.getCurrentPosition((position) => {
+   this.props.getAllItems(
+   this.props.zoomLevel,
+   position.coords.latitude,
+   position.coords.longitude);
+   }
+   );
+   }
+   */
 
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
-    .then((file) =>{
-      this.setState({img: file});
-    })
-    .catch((err) => {
-      console.log(err.message, err.code);
-    });
+      .then((file) =>{
+        this.setState({img: file});
+      })
+      .catch((err) => {
+        console.log(err.message, err.code);
+      });
   }
 
   handleBefore() {
@@ -246,30 +246,30 @@ class Create extends Component {
       },
       body: data
     })
-    .then((response) => response.json())
-    .then(() => {
-      this.props.setCurrentScene('map');
-      Actions.pop({popNum: 2});
-    })
-    .catch((error) => {
-      console.warn(error);
-    });
+      .then((response) => response.json())
+      .then(() => {
+        this.props.setCurrentScene('map');
+        Actions.pop({popNum: 2});
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   }
 
   getAddressData() {
     const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
     fetch(uri)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
-      const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
-      this.setState({streetName: streetName, streetNumber: streetNumber});
-    });
+      .then((response) => response.json())
+      .then((responseJson) => {
+        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
+        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
+        this.setState({streetName: streetName, streetNumber: streetNumber});
+      });
   }
 
   checkDone() {
     if (this.state.inputTextTitle !== '' &&
-        this.state.category.select !== '') {
+      this.state.category.select !== '') {
       this.setState({Done: true});
     } else if (this.state.Done !== false) {
       this.setState({Done: false});
@@ -303,14 +303,14 @@ class Create extends Component {
       },
       body: data
     })
-    .then((response) => response.json())
-    .then(() => {
-      this.props.setCurrentScene('map');
-      Actions.pop({popNum: 2});
-    })
-    .catch((error) => {
-      console.warn(error);
-    });
+      .then((response) => response.json())
+      .then(() => {
+        this.props.setCurrentScene('map');
+        Actions.pop({popNum: 2});
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   }
 
   handleCategoryButton(select) {
@@ -396,14 +396,16 @@ class Create extends Component {
           customStyles={{
             dateInput: {
               borderWidth: 0
-          },
+            },
             placeholderText: [styles.textPlaceholder,
               {color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]
           }}
-          onDateChange={(datetime) => {this.handleOnDateChangeStart(datetime);}}
+          onDateChange={(datetime) => {
+            this.handleOnDateChangeStart(datetime);
+          }}
         />
       </View>
-    )
+    );
   }
 
   renderDatePickerEnd() {
@@ -411,7 +413,7 @@ class Create extends Component {
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
           <Text style={[styles.fontRobotoRegular,
-              {marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            {marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Ends
           </Text>
         </View>
@@ -431,10 +433,12 @@ class Create extends Component {
             placeholderText: [styles.textPlaceholder,
               {color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]
           }}
-          onDateChange={(datetime) => {this.handleOnDateChangeEnd(datetime);}}
+          onDateChange={(datetime) => {
+            this.handleOnDateChangeEnd(datetime);
+          }}
         />
       </View>
-    )
+    );
   }
 
   renderPlaceholderStart(text) {
@@ -462,23 +466,27 @@ class Create extends Component {
   renderCaption() {
     return (
       <View>
-        <Text style={styles.text_caption}> Caption </Text>
+        <Text style={styles.textCaption}> Caption </Text>
         <View style={{flexDirection: 'row', marginBottom: 20}}>
           <TextInput
-            style={[styles.input_text, {padding: 16, borderColor: (this.state.onFocusCaption === true) ? '#2c8cff' : '#dcdcdc'}]}
+            style={[styles.inputText, {padding: 16, borderColor: (this.state.onFocusCaption === true) ? '#2c8cff' : '#dcdcdc'}]}
             onChangeText={(text) => this.setState({inputTextCaption: text})}
             value={this.state.inputTextCaption}
             multiline={true}
             underlineColorAndroid="rgba(0,0,0,0)"
-            onFocus={() => {this.setState({onFocusCaption: true})}}
-            onEndEditing={() => {this.setState({onFocusCaption: false})}}
+            onFocus={() => {
+              this.setState({onFocusCaption: true});
+            }}
+            onEndEditing={() => {
+              this.setState({onFocusCaption: false});
+            }}
             autoFocus={true}
           />
           <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
         </View>
-        <Text style={styles.text_caption}> Location </Text>
+        <Text style={styles.textCaption}> Location </Text>
         <TouchableOpacity
-          style={[styles.btn_location, {borderColor: (this.state.Done === true) ? '#8e8e8e' : '#e7e7e7'}]}
+          style={[styles.btnLocation, {borderColor: (this.state.Done === true) ? '#8e8e8e' : '#e7e7e7'}]}
           onPress={this.handleAddNewLocation.bind(this)}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
@@ -491,7 +499,7 @@ class Create extends Component {
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
               {(this.state.Done === true) ?
-                <Image source={ImgBtnCheck} style={styles.btn_check}/> :
+                <Image source={ImgBtnCheck} style={styles.btnCheck}/> :
                 <Text style={styles.textItemUnit}>0 km</Text>
               }
             </View>
@@ -499,19 +507,19 @@ class Create extends Component {
         </TouchableOpacity>
         {this.renderAroundLocations()}
       </View>
-    )
+    );
   }
 
-  getDistanceFromLatLonInKm(ItemLat,ItemLong) {
+  getDistanceFromLatLonInKm(ItemLat, ItemLong) {
     const UserLat = this.props.currentLocation.latitude;
     const UserLong = this.props.currentLocation.longitude;
     const R = 6371;
-    const dLat = (UserLat-ItemLat) * (Math.PI/180);
-    const dLon = (UserLong-ItemLong) * (Math.PI/180);
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos((ItemLat) * (Math.PI/180)) * Math.cos((UserLat) * (Math.PI/180)) *
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const dLat = (UserLat - ItemLat) * (Math.PI / 180);
+    const dLon = (UserLong - ItemLong) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((ItemLat) * (Math.PI / 180)) * Math.cos((UserLat) * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return (R * c).toFixed(2);
   }
 
@@ -519,23 +527,23 @@ class Create extends Component {
   renderAroundLocations() {
     return (
       this.props.dataSource.map(item => (
-      <TouchableOpacity
-        style={[styles.btn_location, {borderColor: '#e7e7e7'}]}
-        onPress={() => {
-          this.handleAddExistingLocation(item.key, item.userKey, this.state.inputTextCaption, this.state.img);
-        }}>
-        <View style={{flexDirection: 'row', flex: 1}}>
-          <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={styles.textItemAddress}>{item.address.substring(0, 18)}</Text>
-            <Text style={styles.textItemTitle}>{item.title}</Text>
+        <TouchableOpacity
+          style={[styles.btnLocation, {borderColor: '#e7e7e7'}]}
+          onPress={() => {
+            this.handleAddExistingLocation(item.key, item.userKey, this.state.inputTextCaption, this.state.img);
+          }}>
+          <View style={{flexDirection: 'row', flex: 1}}>
+            <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
+              <Text style={styles.textItemAddress}>{item.address.substring(0, 18)}</Text>
+              <Text style={styles.textItemTitle}>{item.title}</Text>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <Text style={styles.textItemUnit}>
+                {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
+              </Text>
+            </View>
           </View>
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <Text style={styles.textItemUnit}>
-              {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
       ))
     )
   }
@@ -543,68 +551,88 @@ class Create extends Component {
   renderAddNewLocation() {
     return (
       <View>
-        <Text style={styles.text_caption}> Location </Text>
+        <Text style={styles.textCaption}> Location </Text>
         <TextInput
-          style={[styles.input_location, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
+          style={[styles.inputLocation, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
           onChangeText={(text) => {
-              this.setState({inputTextLocation: text});
-              if (this.state.onFocusLocation === false) {this.setState({onFocusLocation: true})}
+            this.setState({inputTextLocation: text});
+            if (this.state.onFocusLocation === false) {
+              this.setState({onFocusLocation: true});
             }
-          }
+          }}
           value={`${this.state.streetNumber} ${this.state.streetName}`}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
-          onFocus={() => {this.setState({onFocusLocation: true})}}
-          onEndEditing={() => {this.setState({onFocusLocation: false})}}
-          onSubmitEditing={() => {this.setState({onFocusLocation: false})}}
+          onFocus={() => {
+            this.setState({onFocusLocation: true});
+          }}
+          onEndEditing={() => {
+            this.setState({onFocusLocation: false});
+          }}
+          onSubmitEditing={() => {
+            this.setState({onFocusLocation: false});
+          }}
         />
-        <Text style={styles.text_location}> Title </Text>
+        <Text style={styles.textLocation}> Title </Text>
         <TextInput
-          style={[styles.input_location, {borderColor: (this.state.onFocusTitle === true) ? '#2c8cff' : '#dcdcdc'}]}
+          style={[styles.inputLocation, {borderColor: (this.state.onFocusTitle === true) ? '#2c8cff' : '#dcdcdc'}]}
           onChangeText={(text) => {
-              this.setState({inputTextTitle: text});
-              this.checkDone();
-              if (this.state.onFocusTitle === false) {this.setState({onFocusTitle: true})}
+            this.setState({inputTextTitle: text});
+            this.checkDone();
+            if (this.state.onFocusTitle === false) {
+              this.setState({onFocusTitle: true});
             }
-          }
+          }}
           value={this.state.inputTextTitle}
           multiline={false}
           underlineColorAndroid="rgba(0,0,0,0)"
-          onFocus={() => {this.setState({onFocusTitle: true})}}
-          onEndEditing={() => {this.setState({onFocusTitle: false})}}
-          onSubmitEditing={() => {this.setState({onFocusTitle: false})}}
+          onFocus={() => {
+            this.setState({onFocusTitle: true});
+          }}
+          onEndEditing={() => {
+            this.setState({onFocusTitle: false});
+          }}
+          onSubmitEditing={() => {
+            this.setState({onFocusTitle: false});
+          }}
           autoFocus={true}
         />
-        <Text style={styles.text_location}> Category </Text>
+        <Text style={styles.textLocation}> Category </Text>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            style={[styles.btn_category,
+            style={[styles.btnCategory,
               {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
-               borderColor: (this.state.category.select === 'event') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('event');}}>
-            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
+                borderColor: (this.state.category.select === 'event') ? 'white' : '#e7e7e7'}]}
+            onPress={()=>{
+              this.handleCategoryButton('event');
+            }}>
+            <Text style={[styles.textDone, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'event') ? '#ffffff' : '#8e8e8e'}]}> Event </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.btn_category,
+            style={[styles.btnCategory,
               {marginRight: 8, backgroundColor: this.state.category.colorFacility,
-               borderColor: (this.state.category.select === 'facility') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('facility');}}>
-            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
+                borderColor: (this.state.category.select === 'facility') ? 'white' : '#e7e7e7'}]}
+            onPress={()=>{
+              this.handleCategoryButton('facility');
+            }}>
+            <Text style={[styles.textDone, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'facility') ? '#ffffff' : '#8e8e8e'}]}> Facility </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.btn_category,
+            style={[styles.btnCategory,
               {marginRight: 16, backgroundColor: this.state.category.colorWarning,
-               borderColor: (this.state.category.select === 'warning') ? 'white' : "#e7e7e7"}]}
-            onPress={()=>{this.handleCategoryButton('warning')}}>
-            <Text style={[styles.text_done, styles.fontRobotoRegular, { fontSize: 14,
+                borderColor: (this.state.category.select === 'warning') ? 'white' : '#e7e7e7'}]}
+            onPress={()=>{
+              this.handleCategoryButton('warning');
+            }}>
+            <Text style={[styles.textDone, styles.fontRobotoRegular, { fontSize: 14,
               color: (this.state.category.select === 'warning') ? '#ffffff' : '#8e8e8e'}]}> Warning </Text>
           </TouchableOpacity>
         </View>
         {(this.state.category.select === 'facility') ? null :
           <View style={{flexDirection: 'column'}}>
-            <Text style={styles.text_location}> Time (optional) </Text>
+            <Text style={styles.textLocation}> Time (optional) </Text>
             {this.renderDatePickerStart()}
             {this.renderDatePickerEnd()}
           </View>
@@ -623,7 +651,7 @@ class Create extends Component {
           handleBtnLeft={this.handleBefore.bind(this)}
           handleBtnRight={this.handleDone.bind(this)}
           btnRight={
-            <Text style={[styles.text_done, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
+            <Text style={[styles.textDone, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
           }
           headerText={
             this.state.addingNewLocation === true ? 'Add new location' : 'Post Photo'
