@@ -41,7 +41,7 @@ const map = (state = initialState, action = {}) => {
     });
   case types.setTabViewIndex:
     return update(state, {
-      tabview_index: { $set: action.index }
+      tabviewIndex: { $set: action.index }
     });
   case types.onMarkerClick:
     return update(state, {

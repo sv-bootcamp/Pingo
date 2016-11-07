@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  button_myPage: {
+  buttonMyPage: {
     height: 24,
     width: 24,
     backgroundColor: 'white',
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 10
   },
-  button_refresh: {
+  buttonRefresh: {
     height: 24,
     width: 24,
     backgroundColor: 'white',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 10
   },
-  button_list: {
+  buttonList: {
     height: 24,
     width: 24,
     backgroundColor: 'white',
@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
 export default class MainHeader extends Component {
   constructor(props) {
     super(props);
-    this._onForward = this._onForward.bind(this);
-    this._renderHeader = this._renderHeader.bind(this);
+    this.handleSwitchButton = this.handleSwitchButton.bind(this);
+    this.renderHeaderTabBar = this.renderHeaderTabBar.bind(this);
   }
-  _renderHeader(props) {
+  renderHeaderTabBar(props) {
     return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
@@ -71,7 +71,7 @@ export default class MainHeader extends Component {
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
-  _onForward() {
+  handleSwitchButton() {
     if (this.props.currentScene === 'map') {
       this.props.showListCard();
       this.props.setCurrentScene('list');
@@ -84,7 +84,7 @@ export default class MainHeader extends Component {
       Actions.pop();
     }
   }
-  _onRefresh() {
+  handleRefreshButton() {
     // todo: implement refresh button handling function here
   }
   handleButtonMyPage() {
@@ -97,7 +97,7 @@ export default class MainHeader extends Component {
         <View style= {{ flexDirection: 'column', backgroundColor: 'white' }}>
           <View style= {{ flexDirection: 'row' }}>
             <TouchableOpacity
-              style={styles.button_myPage}
+              style={styles.buttonMyPage}
               onPress={this.handleButtonMyPage.bind(this)}
             >
               <Image
@@ -107,16 +107,16 @@ export default class MainHeader extends Component {
             </TouchableOpacity>
             <Text style={styles.text}>San Francisco</Text>
             <TouchableOpacity
-                style={styles.button_refresh}
-                onPress={this._onRefresh}>
+                style={styles.buttonRefresh}
+                onPress={this.handleRefreshButton}>
               <Image
                 style={styles.image}
                 source={require('../resources/header/btn_refresh.png')}
               />
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.button_list}
-              onPress={this._onForward.bind(this)}>
+              style={styles.buttonList}
+              onPress={this.handleSwitchButton.bind(this)}>
               <Image
                 style={styles.image}
                 source={require('../resources/header/btn_list.png')}
@@ -126,11 +126,11 @@ export default class MainHeader extends Component {
           <TabViewAnimated
             style={styles.container}
             navigationState={{
-              index: this.props.tabview_index,
-              routes: this.props.tabview_routes
+              index: this.props.tabviewIndex,
+              routes: this.props.tabviewRoutes
             }}
             renderScene={()=>{}}
-            renderHeader={this._renderHeader}
+            renderHeader={this.renderHeaderTabBar}
             onRequestChangeTab={
               (index) => {
                 this.props.setTabViewIndex(index);
@@ -167,7 +167,7 @@ MainHeader.propTypes = {
   categorizeItems: PropTypes.func,
   setTabViewIndex: PropTypes.func,
   setCurrentScene: PropTypes.func,
-  tabview_index: PropTypes.any,
-  tabview_routes: PropTypes.any,
+  tabviewIndex: PropTypes.any,
+  tabviewRoutes: PropTypes.any,
   currentScene: PropTypes.string
 };

@@ -92,7 +92,7 @@ class Card extends Component {
     } else {
       date += '?';
     }
-    this.setState({ date : date });
+    this.setState({ date: date });
   }
 
   renderImg(rowData, sectionID, rowID) {
