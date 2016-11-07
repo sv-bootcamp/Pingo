@@ -98,6 +98,21 @@ export default class Map extends Component {
     return null;
   }
 
+  renderMarkerImage(key, select, category) {
+    if (key === select) {
+      return this.renderMarkerSelectImage(category);
+    } else {
+      if (category === 'event') {
+        return eventPng;
+      } else if (category === 'facility') {
+        return facilityPng;
+      } else if (category === 'warning') {
+        return warningPng;
+      }
+    }
+    return null;
+  }
+
   render() {
     return (
       <View style ={styles.container}>
@@ -111,11 +126,7 @@ export default class Map extends Component {
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
-              image={
-                (item.key === this.state.markerSelect) ? this.renderMarkerSelectImage(item.category) :
-                  (item.category === 'event') ? eventPng :
-                    (item.category === 'facility') ? facilityPng : warningPng
-              }
+              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
