@@ -101,14 +101,13 @@ export default class Map extends Component {
   renderMarkerImage(key, select, category) {
     if (key === select) {
       return this.renderMarkerSelectImage(category);
-    } else {
-      if (category === 'event') {
-        return eventPng;
-      } else if (category === 'facility') {
-        return facilityPng;
-      } else if (category === 'warning') {
-        return warningPng;
-      }
+    }
+    if (category === 'event') {
+      return eventPng;
+    } else if (category === 'facility') {
+      return facilityPng;
+    } else if (category === 'warning') {
+      return warningPng;
     }
     return null;
   }
