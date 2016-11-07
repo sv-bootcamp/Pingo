@@ -40,6 +40,17 @@ export default class Map extends Component {
     this.setCurrentPosition = this.setCurrentPosition.bind(this);
     this.setMarkerClickTime = this.setMarkerClickTime.bind(this);
     this.onMapClick = this.onMapClick.bind(this);
+    this.prevLat = null;
+    this.prevLng = null;
+    this.prevZoom = null;
+  }
+
+  componentWillMount() {
+    this.setCurrentPosition();
+    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    this.props.getMapItems(this.props.zoomLevel,
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
   }
 
   setCurrentPosition() {
@@ -59,11 +70,36 @@ export default class Map extends Component {
     Actions.cameraView();
   }
 
+  updatePrevValues() {
+    this.prevLat = this.props.currentLocation.latitude;
+    this.prevLng = this.props.currentLocation.longitude;
+    this.prevZoom = Math.round(this.props.zoomLevel * 100) / 100;
+  }
+
   onLocationChange(region) {
-    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    const needToFetch = () => {
+      if (!this.prevZoom || this.prevZoom !== Math.round(this.props.zoomLevel * 100) / 100) {
+        return true;
+      }
+      if (Math.abs(this.prevLat - this.props.currentLocation.latitude) >
+        this.props.currentLocation.latitudeDelta) {
+        return true;
+      } else if (Math.abs(this.prevLng - this.props.currentLocation.longitude) >
+        this.props.currentLocation.longitudeDelta) {
+        return true;
+      }
+      return false;
+    };
+
+    this.props.setLocation(region);
+    this.props.getZoomLevel(region.latitudeDelta);
+    if (!needToFetch()) {
+      return;
+    }
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
+    this.updatePrevValues();
     this.props.onLocationChange(region);
   }
 
@@ -84,7 +120,7 @@ export default class Map extends Component {
         <MapView
           style ={styles.map}
           onRegionChangeComplete={this.onLocationChange}
-          region ={this.props.currentLocation}
+          region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
           {this.props.items.map(item => (
