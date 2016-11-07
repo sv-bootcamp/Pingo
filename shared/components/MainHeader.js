@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image, Platform} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image, Platform, Animated, Easing} from 'react-native';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
@@ -60,6 +60,24 @@ export default class MainHeader extends Component {
     super(props);
     this._onForward = this._onForward.bind(this);
     this._renderHeader = this._renderHeader.bind(this);
+    this.spin = this.spin.bind(this);
+    this.state = {
+      spinValue: new Animated.Value(0)
+    };
+  }
+  spin() {
+    this.state.spinValue.setValue(0);
+    Animated.timing(
+      this.state.spinValue,
+      {
+        toValue: 1,
+        duration: 1000,
+        easing: Easing.linear
+      }
+    ).start();
+  }
+  componentDidMount() {
+    this.spin();
   }
   _renderHeader(props) {
     return (<TabBarTop
@@ -86,12 +104,17 @@ export default class MainHeader extends Component {
   }
   _onRefresh() {
     // todo: implement refresh button handling function here
+    this.spin();
   }
   handleButtonMyPage() {
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
   render() {
+    const spin = this.state.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    });
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
         <View style= {{ flexDirection: 'column', backgroundColor: 'white' }}>
@@ -108,9 +131,9 @@ export default class MainHeader extends Component {
             <Text style={styles.text}>San Francisco</Text>
             <TouchableOpacity
                 style={styles.button_refresh}
-                onPress={this._onRefresh}>
-              <Image
-                style={styles.image}
+                onPress={this._onRefresh.bind(this)}>
+              <Animated.Image
+                style={[styles.image, {transform: [{rotate: spin}]}]}
                 source={require('../resources/header/btn_refresh.png')}
               />
             </TouchableOpacity>
