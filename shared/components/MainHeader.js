@@ -3,6 +3,11 @@ import {Text, StyleSheet, View, TouchableOpacity, Image, Platform} from 'react-n
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
+import IMG_BUTTON_MYPAGE from '../resources/header/btn_mypage.png';
+import IMG_BUTTON_REFRESH from '../resources/header/btn_refresh.png';
+import IMG_BUTTON_SWITCH_MAP from '../resources/header/btn_switch_map.png';
+import IMG_BUTTON_SWITCH_LIST from '../resources/header/btn_switch_list.png';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -102,7 +107,7 @@ export default class MainHeader extends Component {
             >
               <Image
                 style={styles.image}
-                source={require('../resources/header/btn_mypage.png')}
+                source={IMG_BUTTON_MYPAGE}
               />
             </TouchableOpacity>
             <Text style={styles.text}>San Francisco</Text>
@@ -111,7 +116,7 @@ export default class MainHeader extends Component {
                 onPress={this.handleRefreshButton}>
               <Image
                 style={styles.image}
-                source={require('../resources/header/btn_refresh.png')}
+                source={IMG_BUTTON_REFRESH}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -119,7 +124,7 @@ export default class MainHeader extends Component {
               onPress={this.handleSwitchButton.bind(this)}>
               <Image
                 style={styles.image}
-                source={require('../resources/header/btn_list.png')}
+                source={(this.props.currentScene === 'map') ? IMG_BUTTON_SWITCH_MAP : IMG_BUTTON_SWITCH_LIST}
               />
             </TouchableOpacity>
           </View>
