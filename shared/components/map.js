@@ -7,6 +7,9 @@ import MapButton from './MapButton';
 import eventPng from '../resources/marker/event_small.png';
 import facilityPng from '../resources/marker/facility_small.png';
 import warningPng from '../resources/marker/warning_small.png';
+import eventClickPng from '../resources/marker/event_big.png';
+import facilityClickPng from '../resources/marker/facility_big.png';
+import warningClickPng from '../resources/marker/warning_big.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,6 +43,20 @@ export default class Map extends Component {
     this.setCurrentPosition = this.setCurrentPosition.bind(this);
     this.setMarkerClickTime = this.setMarkerClickTime.bind(this);
     this.onMapClick = this.onMapClick.bind(this);
+    this.prevLat = null;
+    this.prevLng = null;
+    this.prevZoom = null;
+    this.state = {
+      markerSelect: ''
+    };
+  }
+
+  componentWillMount() {
+    this.setCurrentPosition();
+    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    this.props.getMapItems(this.props.zoomLevel,
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
   }
 
   setCurrentPosition() {
@@ -50,6 +67,7 @@ export default class Map extends Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       };
+      this.prevZoom = null;
       this.props.setLocation(newLocation);
     });
   }
@@ -59,11 +77,36 @@ export default class Map extends Component {
     Actions.cameraView();
   }
 
+  updatePrevValues() {
+    this.prevLat = this.props.currentLocation.latitude;
+    this.prevLng = this.props.currentLocation.longitude;
+    this.prevZoom = Math.round(this.props.zoomLevel * 100) / 100;
+  }
+
   onLocationChange(region) {
-    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    const needToFetch = () => {
+      if (!this.prevZoom || this.prevZoom !== Math.round(this.props.zoomLevel * 100) / 100) {
+        return true;
+      }
+      if (Math.abs(this.prevLat - this.props.currentLocation.latitude) >
+        this.props.currentLocation.latitudeDelta) {
+        return true;
+      } else if (Math.abs(this.prevLng - this.props.currentLocation.longitude) >
+        this.props.currentLocation.longitudeDelta) {
+        return true;
+      }
+      return false;
+    };
+
+    this.props.setLocation(region);
+    this.props.getZoomLevel(region.latitudeDelta);
+    if (!needToFetch()) {
+      return;
+    }
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
+    this.updatePrevValues();
     this.props.onLocationChange(region);
   }
 
@@ -72,10 +115,38 @@ export default class Map extends Component {
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
       this.props.hideMapCard();
     }
+    if (this.state.markerSelect !== '') {
+      this.setState({markerSelect: ''});
+    }
   }
 
   setMarkerClickTime() {
     this.markerClickTime = new Date();
+  }
+
+  renderMarkerSelectImage(category) {
+    if (category === 'event') {
+      return eventClickPng;
+    } else if (category === 'facility') {
+      return facilityClickPng;
+    } else if (category === 'warning') {
+      return warningClickPng;
+    }
+    return null;
+  }
+
+  renderMarkerImage(key, select, category) {
+    if (key === select) {
+      return this.renderMarkerSelectImage(category);
+    }
+    if (category === 'event') {
+      return eventPng;
+    } else if (category === 'facility') {
+      return facilityPng;
+    } else if (category === 'warning') {
+      return warningPng;
+    }
+    return null;
   }
 
   render() {
@@ -84,20 +155,18 @@ export default class Map extends Component {
         <MapView
           style ={styles.map}
           onRegionChangeComplete={this.onLocationChange}
-          region ={this.props.currentLocation}
+          region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
-              image={
-                (item.category === 'event') ? eventPng :
-                  (item.category === 'facility') ? facilityPng : warningPng
-              }
+              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
+                this.setState({markerSelect: item.key});
               }}
             />
           ))}

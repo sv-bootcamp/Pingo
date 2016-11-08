@@ -2,29 +2,28 @@ import React, { PropTypes, Component } from 'react';
 import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
+const FLEX_MARGIN_ROW = 16;
+const FLEX_MARGIN_TEXT_ROW = 8;
+const FLEX_LIST_WRAPPER = 120 - 36;
+const FLEX_TEXT_WRAPPER = 64;
+const FLEX_TEXT_TITLE = 19;
+const FLEX_TEXT_ADDRESS = 15;
+const FLEX_TEXT_DATE = 14;
+const HEIGHT_CARD = 199;
+const HEIGHT_CARD_FACILITY = 175;
+const WIDTH_CARD = 360;
+
 const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: '#ffffff',
-    height: 199,
-    borderBottomWidth: 1,
-    borderColor: '#e7e7e7'
-  },
-  title: {
-    marginLeft: 16,
-    marginTop: 16,
-    height: 19,
+  TextTitle: {
     fontSize: 19,
-    fontWeight: 'bold',
+    color: '#2b2b2b',
     ...Platform.select({
       android: {
-        fontFamily: 'Roboto-Regular'
+        fontFamily: 'Roboto-Medium'
       }
     })
   },
   address: {
-    marginTop: 8,
-    marginLeft: 16,
-    height: 14,
     fontSize: 14,
     ...Platform.select({
       android: {
@@ -33,9 +32,6 @@ const styles = StyleSheet.create({
     })
   },
   term: {
-    marginTop: 9,
-    marginLeft: 16,
-    height: 14,
     fontSize: 14,
     ...Platform.select({
       android: {
@@ -43,12 +39,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  listWrapper: {
-    marginLeft: 16,
-    height: 119
-  },
-  image: {
-    marginTop: 15,
+  CardImage: {
     width: 88,
     height: 88,
     marginRight: 8
@@ -102,29 +93,65 @@ class Card extends Component {
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene, date: this.state.date});
       }}>
-        <Image style={styles.image}
+        <Image style={styles.CardImage}
              source = {{uri: rowData}}/>
       </TouchableOpacity>
     );
   }
 
+  renderCardText() {
+    return (
+      <View style={{
+        flex: (this.props.dataSource.category === 'facility') ? FLEX_TEXT_WRAPPER : FLEX_TEXT_WRAPPER + FLEX_MARGIN_ROW,
+        backgroundColor: 'white',
+        flexDirection: 'column'
+      }}>
+        <View style={{flex: FLEX_TEXT_TITLE + FLEX_MARGIN_TEXT_ROW, justifyContent: 'flex-start'}}>
+          <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
+        </View>
+        <View style={{
+          flex: FLEX_TEXT_ADDRESS + FLEX_MARGIN_TEXT_ROW, justifyContent: (this.props.dataSource.category === 'facility') ? 'flex-start' : 'center'}}>
+          <Text style={styles.address}>{this.props.dataSource.address}</Text>
+        </View>
+        { (this.props.dataSource.category === 'facility') ? null :
+          <View style={{flex: FLEX_TEXT_DATE + FLEX_MARGIN_TEXT_ROW * 2}}>
+            <Text style={styles.term}>
+              {this.state.date}
+            </Text>
+          </View>
+        }
+      </View>
+    );
+  }
+
+  renderListView() {
+    return (
+      <View style={{flex: FLEX_LIST_WRAPPER}}>
+        <ListView
+          dataSource={new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+          }).cloneWithRows(this.props.dataSource.imageUrls)}
+          renderRow={this.renderImg.bind(this)}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          horizontal={true}
+        />
+      </View>
+    );
+  }
+
   render() {
     return (
-      <View style={styles.wrapper}>
-        <Text style={styles.title} hi>{this.props.dataSource.title}</Text>
-        <Text style={styles.address}>{this.props.dataSource.address}</Text>
-        { (this.props.dataSource.category === 'facility') ? null : <Text style={styles.term}> {this.state.date} </Text>}
-        <View style={styles.listWrapper}>
-          <ListView
-            dataSource={new ListView.DataSource({
-              rowHasChanged: (r1, r2) => r1 !== r2
-            }).cloneWithRows(this.props.dataSource.imageUrls)}
-            renderRow={this.renderImg.bind(this)}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            horizontal={true}
-            />
+      <View style={{height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD, flexDirection: 'column'}}>
+        <View style={{flex: FLEX_MARGIN_ROW, backgroundColor: 'white'}}/>
+        <View style={{flex: HEIGHT_CARD - FLEX_MARGIN_ROW * 2, backgroundColor: 'white', flexDirection: 'row'}}>
+          <View style={{flex: FLEX_MARGIN_ROW}}/>
+          <View style={{flex: WIDTH_CARD - FLEX_MARGIN_ROW}}>
+            {this.renderCardText()}
+            {this.renderListView()}
+          </View>
         </View>
+        <View style={{flex: FLEX_MARGIN_ROW}}/>
       </View>
     );
   }
