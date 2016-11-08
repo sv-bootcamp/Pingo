@@ -14,6 +14,12 @@ const HEIGHT_CARD_FACILITY = 175;
 const WIDTH_CARD = 360;
 
 const styles = StyleSheet.create({
+  cardWrapper: {
+    backgroundColor: 'white',
+    flexDirection: 'column',
+    borderBottomWidth: 1,
+    borderBottomColor: '#8e8e8e'
+  },
   TextTitle: {
     fontSize: 19,
     color: '#2b2b2b',
@@ -142,7 +148,7 @@ class Card extends Component {
 
   render() {
     return (
-      <View style={{height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD, flexDirection: 'column'}}>
+      <View style={[styles.cardWrapper, {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD}]}>
         <View style={{flex: FLEX_MARGIN_ROW, backgroundColor: 'white'}}/>
         <View style={{flex: HEIGHT_CARD - FLEX_MARGIN_ROW * 2, backgroundColor: 'white', flexDirection: 'row'}}>
           <View style={{flex: FLEX_MARGIN_ROW}}/>
