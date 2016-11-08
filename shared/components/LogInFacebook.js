@@ -11,7 +11,7 @@ class LogInFacebook extends Component {
         buttonView={this.props.buttonView}
         ref={(fbLogin) => { this.fbLogin = fbLogin; }}
         loginBehavior={FBLoginManager.LoginBehaviors.Native}
-        permissions={['email', 'user_friends']}
+        permissions={['email', 'user_about_me']}
         onLogin={function(e){console.log(e);}}
         onLoginFound={function(e){console.log(e);}}
         onLoginNotFound={function(e){console.log(e);}}

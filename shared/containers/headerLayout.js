@@ -5,8 +5,8 @@ import MainHeader from '../components/MainHeader';
 
 const mapStateToProps = (state) => {
   return {
-    tabview_index: state.map.tabview_index,
-    tabview_routes: state.map.tabview_routes,
+    tabviewIndex: state.map.tabviewIndex,
+    tabviewRoutes: state.map.tabviewRoutes,
     currentScene: state.flux.currentScene,
     selectedItem: state.map.selectedItem
   };
