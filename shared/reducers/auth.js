@@ -7,7 +7,7 @@ const initialState = {
 
 const auth = (state = initialState, action = {}) => {
   switch (action.type) {
-  case types.getToken:
+  case types.setToken:
     return update(state, {
       token: { $set: action.token }
     });

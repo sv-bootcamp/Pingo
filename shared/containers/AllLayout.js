@@ -8,7 +8,6 @@ import MapLayout from './mapLayout';
 import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
-import LogInFacebook from '../components/LoginFacebook';
 import SettingLayout from './settingLayout';
 
 const scenes = Actions.create(
