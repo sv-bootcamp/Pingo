@@ -111,7 +111,7 @@ class Card extends Component {
   render() {
     return (
       <View style={styles.wrapper}>
-        <Text style={styles.title}>{this.props.dataSource.title}</Text>
+        <Text style={styles.title} hi>{this.props.dataSource.title}</Text>
         <Text style={styles.address}>{this.props.dataSource.address}</Text>
         { (this.props.dataSource.category === 'facility') ? null : <Text style={styles.term}> {this.state.date} </Text>}
         <View style={styles.listWrapper}>
