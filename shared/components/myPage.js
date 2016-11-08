@@ -6,12 +6,12 @@ import {
   Text,
   StyleSheet,
   Platform,
-  ListView,
-  TouchableOpacity
+  ListView
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
+import LogInFacebook from './LogInFacebook';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -92,6 +92,16 @@ class MyPage extends Component {
     );
   }
 
+  renderFacebookLoginButton() {
+    return (
+      <View style={{backgroundColor: 'white'}}>
+        <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
+          Log in with Facebook
+        </Text>
+      </View>
+    );
+  }
+
   renderTextBoxInUserBox() {
     return (
       <View style={{flexDirection: 'column', flex: 225}}>
@@ -100,11 +110,7 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          <TouchableOpacity
-            style={{}}
-            onPress={()=> Actions.logInFacebook()}>
-            <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>Log in with Facebook</Text>
-          </TouchableOpacity>
+          <LogInFacebook buttonView={this.renderFacebookLoginButton()}/>
         </View>
       </View>
     );
