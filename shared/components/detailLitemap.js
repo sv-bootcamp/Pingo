@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import MapView from 'react-native-maps';
 import { Image, View, Dimensions } from 'react-native';
-import IMG from '../resources/marker/event_big.png';
+import ImgMarkerEvent from '../resources/marker/event_big.png';
+import ImgMarkerFacility from '../resources/marker/facility_big.png';
+import ImgMarkerWarning from '../resources/marker/warning_big.png';
 
 const styles = {
   marker: {
@@ -17,8 +19,16 @@ const styles = {
 class DetailLitemap extends Component {
   constructor(props) {
     super(props);
+    this.renderImgMarker = this.renderImgMarker.bind(this);
   }
-
+  renderImgMarker() {
+    if (this.props.category === 'event') {
+      return ImgMarkerEvent;
+    } else if (this.props.category === 'facility') {
+      return ImgMarkerFacility;
+    }
+    return ImgMarkerWarning;
+  }
   render() {
     return (
       <View style={{alignItems: 'center'}}>
@@ -27,14 +37,15 @@ class DetailLitemap extends Component {
           region={this.props.currentLocation}
           litemode={true}
         />
-        <Image source={IMG} style={styles.marker}/>
+        <Image source={this.renderImgMarker()} style={styles.marker}/>
       </View>
     );
   }
 }
 
 DetailLitemap.propTypes = {
-  currentLocation: PropTypes.any.isRequired
+  currentLocation: PropTypes.any.isRequired,
+  category: PropTypes.string
 };
 
 export default DetailLitemap;
