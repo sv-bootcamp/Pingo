@@ -7,6 +7,9 @@ import MapButton from './MapButton';
 import eventPng from '../resources/marker/event_small.png';
 import facilityPng from '../resources/marker/facility_small.png';
 import warningPng from '../resources/marker/warning_small.png';
+import eventClickPng from '../resources/marker/event_big.png';
+import facilityClickPng from '../resources/marker/facility_big.png';
+import warningClickPng from '../resources/marker/warning_big.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +46,9 @@ export default class Map extends Component {
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
+    this.state = {
+      markerSelect: ''
+    };
   }
 
   componentWillMount() {
@@ -109,10 +115,38 @@ export default class Map extends Component {
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
       this.props.hideMapCard();
     }
+    if (this.state.markerSelect !== '') {
+      this.setState({markerSelect: ''});
+    }
   }
 
   setMarkerClickTime() {
     this.markerClickTime = new Date();
+  }
+
+  renderMarkerSelectImage(category) {
+    if (category === 'event') {
+      return eventClickPng;
+    } else if (category === 'facility') {
+      return facilityClickPng;
+    } else if (category === 'warning') {
+      return warningClickPng;
+    }
+    return null;
+  }
+
+  renderMarkerImage(key, select, category) {
+    if (key === select) {
+      return this.renderMarkerSelectImage(category);
+    }
+    if (category === 'event') {
+      return eventPng;
+    } else if (category === 'facility') {
+      return facilityPng;
+    } else if (category === 'warning') {
+      return warningPng;
+    }
+    return null;
   }
 
   render() {
@@ -128,13 +162,11 @@ export default class Map extends Component {
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
               title={item.title}
-              image={
-                (item.category === 'event') ? eventPng :
-                  (item.category === 'facility') ? facilityPng : warningPng
-              }
+              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
+                this.setState({markerSelect: item.key});
               }}
             />
           ))}

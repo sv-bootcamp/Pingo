@@ -2,8 +2,8 @@ import * as types from '../actions/actionTypes';
 import update from 'react-addons-update';
 
 const initialState = {
-  tabview_index: 0,
-  tabview_routes: [
+  tabviewIndex: 0,
+  tabviewRoutes: [
     {key: '1', title: 'All'},
     {key: '2', title: 'Events'},
     {key: '3', title: 'Facilities'},
@@ -41,7 +41,7 @@ const map = (state = initialState, action = {}) => {
     });
   case types.setTabViewIndex:
     return update(state, {
-      tabview_index: { $set: action.index }
+      tabviewIndex: { $set: action.index }
     });
   case types.onMarkerClick:
     return update(state, {
