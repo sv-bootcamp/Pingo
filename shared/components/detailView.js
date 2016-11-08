@@ -1,7 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import Swiper from 'react-native-swiper';
 import DetailHeaderLayout from '../containers/detailHeaderLayout';
-import { View, Image, Text, TouchableHighlight, Platform } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Platform, TouchableHighlight } from 'react-native';
+import IMG_BUTTON_LEFT from '../resources/arrow_left/drawable-xxxhdpi/arrow.png';
+import IMG_BUTTON_RIGHT from '../resources/arrow_right/drawable-xxxhdpi/arrow.png';
+import IMG_BUTTON_FLAG from '../resources/btn_flag/drawable-xxxhdpi/btn_flag.png';
 
 const styles = {
   wrapper: {
@@ -56,6 +59,7 @@ export default class DetailView extends Component {
   componentDidMount() {
     this._swiper.scrollBy(this.props.rowID * 1);
   }
+
   handleClick() {
     this.setState({isClicked: !this.state.isClicked});
   }
@@ -70,9 +74,14 @@ export default class DetailView extends Component {
         bottom: 0
       }}>
         <View style = {{flex: 32, justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableHighlight>
-            <Image source = {require('../resources/arrow_left/drawable-mdpi/arrow.png')}/>
-          </TouchableHighlight>
+          <TouchableOpacity onPress={() => {
+            if (index > 0) {
+              this._swiper.scrollBy(-1);
+            }
+          }}>
+            <Image source = {IMG_BUTTON_LEFT}
+                   style = {{height: 16, width: 16}}/>
+          </TouchableOpacity>
         </View>
         <View style = {{flex: 296, height: 45, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}>
           <View style = {{ alignItems: 'center', flex: 1, justifyContent: 'center'}}>
@@ -82,9 +91,14 @@ export default class DetailView extends Component {
           </View>
         </View>
         <View style = {{flex: 32, justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableHighlight>
-            <Image source = {require('../resources/arrow_right/drawable-mdpi/arrow.png')}/>
-          </TouchableHighlight>
+          <TouchableOpacity onPress={() => {
+            if (index + 1 < total) {
+              this._swiper.scrollBy(1);
+            }
+          }}>
+            <Image source = {IMG_BUTTON_RIGHT}
+                   style = {{height: 16, width: 16}}/>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -105,7 +119,7 @@ export default class DetailView extends Component {
   }
   render() {
     return (
-      <View style = {{ flex: 1, backgroundColor: '#ffffff'}}>
+      <View style = {{ flex: 1, backgroundColor: 'black'}}>
       {
         (this.state.isClicked) ? <View style = {{height: 67, backgroundColor: 'black'}}/> :
           <View style = {{height: 67}}>
@@ -115,8 +129,11 @@ export default class DetailView extends Component {
           </View>
       }
 
-        <View style = {{flex: 573}}>
-          <Swiper ref={(swiper) => {this._swiper = swiper;}}
+
+        <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
+          <Swiper ref={(swiper) => {
+            this._swiper = swiper;
+          }}
             showsButtons = {false}
             renderPagination={this.renderPagination}
             height= {549}
@@ -132,7 +149,7 @@ export default class DetailView extends Component {
                         <View style = {{flex: 274}}>
                           <View style = {{flex: 16}}/>
                           <View style = {{flex: 14}}>
-                            <Text style = {styles.name}> Name 2</Text>
+                            <Text style = {styles.name}> Name </Text>
                           </View>
                           <View style = {{flex: 4}}/>
                           <View style = {{flex: 14}}>
@@ -141,21 +158,22 @@ export default class DetailView extends Component {
                           <View style = {{flex: 16}}/>
                         </View>
                         <View style = {styles.btn_flag}>
-                          <TouchableHighlight>
-                            <Image source = {require('../resources/btn_flag/drawable-mdpi/btn_flag.png')}/>
-                          </TouchableHighlight>
+                          <TouchableOpacity>
+                            <Image source = {IMG_BUTTON_FLAG}
+                                   style = {{height: 24, width: 24}}/>
+                          </TouchableOpacity>
                         </View>
                       </View>
                     }
                     <View style={styles.slide}>
-                      <TouchableHighlight style = {{flex : 1}}
+                      <TouchableHighlight style = {{flex: 1}}
                                           onPress = {this.handleClick}>
                         <Image source = {{uri: value.url}}
                                style = {{flex: 1}}/>
                       </TouchableHighlight>
                     </View>
                     {(this.state.isClicked) ? <View style = {{flex: 103, backgroundColor: 'black'}}/> :
-                    <View style = {{flex: 103, flexDirection : 'row'}}>
+                    <View style = {{flex: 103, flexDirection: 'row'}}>
                       <View style = {{flex: 16}}/>
                       <View style = {{flex: 328}}>
                         <View style = {{flex: 15}}/>
