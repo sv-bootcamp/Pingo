@@ -60,7 +60,6 @@ export default class DetailView extends Component {
     this._swiper.scrollBy(this.props.rowID * 1);
   }
 
-
   handleClick() {
     this.setState({isClicked: !this.state.isClicked});
   }
@@ -130,6 +129,7 @@ export default class DetailView extends Component {
           </View>
       }
 
+
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
           <Swiper ref={(swiper) => {
             this._swiper = swiper;
@@ -149,7 +149,7 @@ export default class DetailView extends Component {
                         <View style = {{flex: 274}}>
                           <View style = {{flex: 16}}/>
                           <View style = {{flex: 14}}>
-                            <Text style = {styles.name}> Name 3</Text>
+                            <Text style = {styles.name}> Name </Text>
                           </View>
                           <View style = {{flex: 4}}/>
                           <View style = {{flex: 14}}>
