@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image, Platform} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image, Platform, Animated, Easing} from 'react-native';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
@@ -65,6 +65,24 @@ export default class MainHeader extends Component {
     super(props);
     this.handleSwitchButton = this.handleSwitchButton.bind(this);
     this.renderHeaderTabBar = this.renderHeaderTabBar.bind(this);
+    this.spin = this.spin.bind(this);
+    this.state = {
+      spinValue: new Animated.Value(0)
+    };
+  }
+  spin() {
+    this.state.spinValue.setValue(0);
+    Animated.timing(
+      this.state.spinValue,
+      {
+        toValue: 1,
+        duration: 1000,
+        easing: Easing.linear
+      }
+    ).start();
+  }
+  componentDidMount() {
+    this.spin();
   }
   renderHeaderTabBar(props) {
     return (<TabBarTop
@@ -91,12 +109,17 @@ export default class MainHeader extends Component {
   }
   handleRefreshButton() {
     // todo: implement refresh button handling function here
+    this.spin();
   }
   handleButtonMyPage() {
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
   render() {
+    const spin = this.state.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    });
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
         <View style= {{ flexDirection: 'column', backgroundColor: 'white' }}>
@@ -114,8 +137,8 @@ export default class MainHeader extends Component {
             <TouchableOpacity
                 style={styles.buttonRefresh}
                 onPress={this.handleRefreshButton}>
-              <Image
-                style={styles.image}
+              <Animated.Image
+                style={[styles.image, {transform: [{rotate: spin}]}]}
                 source={IMG_BUTTON_REFRESH}
               />
             </TouchableOpacity>
