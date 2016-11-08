@@ -11,7 +11,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
-import LogInFacebook from './LogInFacebook';
+import LoginFacebook from './LoginFacebook';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -110,7 +110,7 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          <LogInFacebook buttonView={this.renderFacebookLoginButton()}/>
+          <LoginFacebook buttonView={this.renderFacebookLoginButton()}/>
         </View>
       </View>
     );

@@ -8,7 +8,7 @@ import MapLayout from './mapLayout';
 import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
-import LogInFacebook from '../components/LogInFacebook';
+import LogInFacebook from '../components/LoginFacebook';
 import SettingLayout from './settingLayout';
 
 const scenes = Actions.create(
@@ -30,9 +30,6 @@ const scenes = Actions.create(
     }/>
     <Scene key="myPage" hideNavBar={true} component={
       MyPageLayout
-    }/>
-    <Scene key="logInFacebook" hideNavBar={true} component={
-      LogInFacebook
     }/>
     <Scene key="setting" hideNavBar={true} component={
       SettingLayout
