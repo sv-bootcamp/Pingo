@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Image, Platform, View, Text, Dimensions, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
+import LoginFacebookLayout from '../containers/loginFacebookLayout';
 
 import ImgLogin1 from '../resources/initialScene/loginImage1.png';
 import ImgLogin2 from '../resources/initialScene/loginImage2.png';
@@ -143,8 +144,12 @@ class InitialScene extends Component {
       </View>
     );
   }
-  handleLoginButton() {
-    // todo: connect fb login
+  renderBottomLoginButton() {
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end', bottom: 10}}>
+        <LoginFacebookLayout/>
+      </View>
+    );
   }
   handleGuestButton() {
     this.props.setCurrentScene('map');
@@ -157,13 +162,7 @@ class InitialScene extends Component {
           {this.renderSwiper()}
         </View>
         <View style={[styles.bottomBox, {height: Dimensions.get('window').height * BottomBoxHeight / (SwiperHeight + BottomBoxHeight)}]}>
-          {this.renderBottomButton(
-            'Login with Facebook',
-            {backgroundColor: '#4267b2', bottom: 10},
-            {color: 'white'},
-            {justifyContent: 'flex-end'},
-            this.handleLoginButton.bind(this)
-          )}
+          {this.renderBottomLoginButton()}
           {this.renderBottomButton(
             'Continue as guest',
             {backgroundColor: 'white'},

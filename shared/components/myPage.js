@@ -100,7 +100,7 @@ class MyPage extends Component {
 
   renderFacebookLoginButton(text) {
     return (
-      <View style={{backgroundColor: 'white'}}>
+      <View>
         <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
           {text}
         </Text>
