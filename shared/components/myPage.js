@@ -98,7 +98,7 @@ class MyPage extends Component {
     );
   }
 
-  renderFacebookLoginButton(text) {
+  renderTextAfterLogin(text) {
     return (
       <View>
         <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
@@ -116,11 +116,8 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          {(this.props.token !== '') ? this.renderFacebookLoginButton('Change Profile Photo') :
-            <LoginFacebookLayout
-              buttonView={this.renderFacebookLoginButton('Log in with Facebook')}
-              currentScene={this.props.currentScene}
-            />
+          {(this.props.token !== '') ? this.renderTextAfterLogin('Change Profile Photo') :
+            <LoginFacebookLayout/>
           }
         </View>
       </View>
@@ -190,7 +187,6 @@ MyPage.propTypes = {
   setMyPageTabViewIndex: PropTypes.func,
   setToken: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
-  currentScene: PropTypes.string,
   token: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
   items: PropTypes.any

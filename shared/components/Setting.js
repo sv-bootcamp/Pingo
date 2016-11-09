@@ -95,22 +95,7 @@ class Setting extends Component {
 
   renderSignOut() {
     return (
-      <LoginFacebookLayout
-        buttonView={this.renderSignOutText()}
-      />
-    );
-  }
-
-  renderSignOutText() {
-    return (
-      <View>
-        <View style={[styles.settingGreyBox, {height: 24}]}/>
-        <View style={[styles.settingListBox, {backgroundColor: 'white'}]}>
-          <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
-            Sign Out
-          </Text>
-        </View>
-      </View>
+      <LoginFacebookLayout/>
     );
   }
 
