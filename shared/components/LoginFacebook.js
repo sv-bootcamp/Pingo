@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Platform, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
-import { setUserToken, removeUserToken } from '../actions/authActions';
+import { getUserToken, setUserToken, removeUserToken } from '../actions/authActions';
+import { Actions } from 'react-native-router-flux';
 
 const WindowHeight = 477.8 + 162;
 const WindowWidth = 360;
@@ -54,10 +55,25 @@ class LoginFacebook extends Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount() {
+    if (this.props.currentScene === 'initialScene') {
+      getUserToken().then((data) => {
+        if (data !== null) {
+          this.props.setToken(data);
+          this.props.setCurrentScene('map');
+          Actions.map({type: 'replace'});
+        }
+      });
+    }
+  }
   render() {
     return (
       <FBLogin
-        buttonView={<FBLoginView currentScene={this.props.currentScene}/>}
+        buttonView={
+          <FBLoginView
+            currentScene={this.props.currentScene}
+            setCurrentScene={this.props.setCurrentScene}
+          />}
         ref={(fbLogin) => {
           this.fbLogin = fbLogin;
         }}
@@ -66,6 +82,10 @@ class LoginFacebook extends Component {
         onLogin={(data) => {
           this.props.setToken(data.credentials.token);
           setUserToken(data.credentials.token);
+          if (this.props.currentScene === 'initialScene') {
+            this.props.setCurrentScene('map');
+            Actions.map({type: 'replace'});
+          }
         }}
         onLoginFound={()=>{}}
         onLoginNotFound={()=>{}}
@@ -84,9 +104,9 @@ class FBLoginView extends Component {
   constructor(props) {
     super(props);
     this.renderButton.bind(this);
+    this.handleOnPress.bind(this);
   }
   handleOnPress() {
-    console.log(this.context.isLoggedIn);
     if (!this.context.isLoggedIn) {
       this.context.login();
     } else {
@@ -94,7 +114,6 @@ class FBLoginView extends Component {
     }
   }
   renderButton() {
-    console.log(this.props.currentScene);
     if (this.props.currentScene === 'setting') {
       return (
         <View>
@@ -128,7 +147,15 @@ class FBLoginView extends Component {
             elevation: 1,
             backgroundColor: '#4267b2'
           }}
-          onPress={this.handleOnPress.bind(this)}
+          onPress={() => {
+            if (!this.context.isLoggedIn) {
+              this.context.login();
+            }
+            if (this.context.isLoggedIn) {
+              this.props.setCurrentScene('map');
+              Actions.map({type: 'replace'});
+            }
+          }}
         >
           <Text style={[{alignSelf: 'center', fontSize: 14, color: 'white'}, styles.fontRobotoMedium]}>
             Login with Facebook
@@ -153,12 +180,14 @@ FBLoginView.contextTypes = {
 };
 
 FBLoginView.propTypes = {
-  currentScene: PropTypes.string
+  currentScene: PropTypes.string,
+  setCurrentScene: PropTypes.func
 };
 
 LoginFacebook.propTypes = {
   style: PropTypes.any,
   setToken: PropTypes.func,
+  setCurrentScene: PropTypes.func,
   token: PropTypes.string,
   currentScene: PropTypes.string
 };

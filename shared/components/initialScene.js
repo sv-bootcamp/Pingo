@@ -177,7 +177,8 @@ class InitialScene extends Component {
 }
 
 InitialScene.propTypes = {
-  setCurrentScene: PropTypes.func
+  setCurrentScene: PropTypes.func,
+  setToken: PropTypes.func
 };
 
 export default InitialScene;
