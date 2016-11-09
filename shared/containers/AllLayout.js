@@ -9,9 +9,13 @@ import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import SettingLayout from './settingLayout';
+import InitialSceneLayout from './InitialSceneLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
+    <Scene key="initialScene" hideNavBar={true} component={
+      InitialSceneLayout
+    }/>
     <Scene key="map" hideNavBar={true} component={
       MapLayout
     }/>
