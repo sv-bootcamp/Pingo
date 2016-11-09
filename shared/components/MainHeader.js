@@ -122,7 +122,7 @@ export default class MainHeader extends Component {
     });
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
-        <View style= {{ flexDirection: 'column', backgroundColor: 'white' }}>
+        <View style= {{ flexDirection: 'column', backgroundColor: 'white', elevation: 3 }}>
           <View style= {{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={styles.buttonMyPage}
