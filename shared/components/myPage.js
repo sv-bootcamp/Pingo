@@ -11,7 +11,8 @@ import {
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
-import LogInFacebook from './LogInFacebook';
+import LoginFacebookLayout from '../containers/loginFacebookLayout';
+import { getUserToken } from '../actions/authActions';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -49,6 +50,11 @@ class MyPage extends Component {
     super(props);
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
+    getUserToken().then((data) => {
+      if (data !== null) {
+        this.props.setToken(data);
+      }
+    });
   }
   renderImageButtonSetting() {
     return (
@@ -92,11 +98,11 @@ class MyPage extends Component {
     );
   }
 
-  renderFacebookLoginButton() {
+  renderFacebookLoginButton(text) {
     return (
       <View style={{backgroundColor: 'white'}}>
         <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
-          Log in with Facebook
+          {text}
         </Text>
       </View>
     );
@@ -110,7 +116,12 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          <LogInFacebook buttonView={this.renderFacebookLoginButton()}/>
+          {(this.props.token !== '') ? this.renderFacebookLoginButton('Change Profile Photo') :
+            <LoginFacebookLayout
+              buttonView={this.renderFacebookLoginButton('Log in with Facebook')}
+              currentScene={this.props.currentScene}
+            />
+          }
         </View>
       </View>
     );
@@ -177,7 +188,10 @@ class MyPage extends Component {
 MyPage.propTypes = {
   setCurrentScene: PropTypes.func,
   setMyPageTabViewIndex: PropTypes.func,
+  setToken: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
+  currentScene: PropTypes.string,
+  token: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
   items: PropTypes.any
 };

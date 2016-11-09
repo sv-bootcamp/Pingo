@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import Setting from '../components/Setting';
 
-const mapStateToProps = () => {
+const mapStateToProps = (state) => {
   return {
-    // TBD
+    token: state.auth.token
   };
 };
 

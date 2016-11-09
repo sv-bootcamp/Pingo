@@ -136,7 +136,7 @@ export default class MainHeader extends Component {
             <Text style={styles.text}>San Francisco</Text>
             <TouchableOpacity
                 style={styles.buttonRefresh}
-                onPress={this.handleRefreshButton}>
+                onPress={this.handleRefreshButton.bind(this)}>
               <Animated.Image
                 style={[styles.image, {transform: [{rotate: spin}]}]}
                 source={IMG_BUTTON_REFRESH}
