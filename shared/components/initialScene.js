@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Image, Platform, View, Text, Dimensions, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
+import LoginFacebookLayout from '../containers/loginFacebookLayout';
 
 import ImgLogin1 from '../resources/initialScene/loginImage1.png';
 import ImgLogin2 from '../resources/initialScene/loginImage2.png';
@@ -125,7 +126,30 @@ class InitialScene extends Component {
     );
   }
   // todo: change borderRadius to relative
-  renderBottomButton(text, btnStyle, txtStyle, wrapperStyle, handleButtonPress) {
+  renderBottomButton(text, btnStyle, txtStyle, wrapperStyle) {
+    return (
+      <View style={[{flex: 1, alignItems: 'center'}, wrapperStyle]}>
+        <View
+          style={[{
+            width: Dimensions.get('window').width * 280 / WindowWidth,
+            height: Dimensions.get('window').height * 48 / WindowHeight,
+            justifyContent: 'center',
+            borderRadius: 10,
+            elevation: 1
+          }, btnStyle]}
+        >
+          <LoginFacebookLayout
+            buttonView={
+              <Text style={[{alignSelf: 'center', fontSize: 14}, txtStyle, styles.fontRobotoMedium]}>
+                {text}
+              </Text>
+            }
+          />
+        </View>
+      </View>
+    );
+  }
+  renderBottomButtonGuest(text, btnStyle, txtStyle, wrapperStyle, handleButtonPress) {
     return (
       <View style={[{flex: 1, alignItems: 'center'}, wrapperStyle]}>
         <TouchableOpacity
@@ -143,9 +167,6 @@ class InitialScene extends Component {
       </View>
     );
   }
-  handleLoginButton() {
-    // todo: connect fb login
-  }
   handleGuestButton() {
     this.props.setCurrentScene('map');
     Actions.map({type: 'replace'});
@@ -161,10 +182,9 @@ class InitialScene extends Component {
             'Login with Facebook',
             {backgroundColor: '#4267b2', bottom: 10},
             {color: 'white'},
-            {justifyContent: 'flex-end'},
-            this.handleLoginButton.bind(this)
+            {justifyContent: 'flex-end'}
           )}
-          {this.renderBottomButton(
+          {this.renderBottomButtonGuest(
             'Continue as guest',
             {backgroundColor: 'white'},
             {color: '#2b2b2b'},
