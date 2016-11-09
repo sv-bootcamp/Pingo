@@ -119,7 +119,6 @@ class MyPage extends Component {
           {(this.props.token !== '') ? this.renderFacebookLoginButton('Change Profile Photo') :
             <LoginFacebookLayout
               buttonView={this.renderFacebookLoginButton('Log in with Facebook')}
-              currentScene={this.props.currentScene}
             />
           }
         </View>
