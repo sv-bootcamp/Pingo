@@ -10,9 +10,13 @@ import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import LogInFacebook from '../components/LogInFacebook';
 import SettingLayout from './settingLayout';
+import InitialSceneLayout from './InitialSceneLayout';
 
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
+    <Scene key="initialScene" hideNavBar={true} component={
+      InitialSceneLayout
+    }/>
     <Scene key="map" hideNavBar={true} component={
       MapLayout
     }/>
