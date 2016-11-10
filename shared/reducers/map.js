@@ -18,7 +18,8 @@ const initialState = {
   zoomLevel: 14,
   items: [],
   selectedItem: {},
-  categoryFilter: 'SHOW_ALL'
+  categoryFilter: 'SHOW_ALL',
+  currentCity: ''
 };
 
 const map = (state = initialState, action = {}) => {
@@ -42,6 +43,10 @@ const map = (state = initialState, action = {}) => {
   case types.setTabViewIndex:
     return update(state, {
       tabviewIndex: { $set: action.index }
+    });
+  case types.setCurrentCity:
+    return update(state, {
+      currentCity: { $set: action.city }
     });
   case types.onMarkerClick:
     return update(state, {
