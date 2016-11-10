@@ -108,6 +108,20 @@ class CameraView extends Component {
     };
   }
 
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // todo: determine what to do here
+        console.log(position);
+      },
+      (error) => {
+        // todo: implement what to do when GPS is off
+        console.log(error);
+        this.props.setCurrentScene('map');
+        Actions.pop();
+      });
+  }
+
   takePicture() {
     this.camera.capture()
     .then((data) => {
