@@ -12,7 +12,7 @@ import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
-import { getUserToken } from '../actions/authActions';
+import { getLoginType } from '../actions/authActions';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -50,8 +50,14 @@ class MyPage extends Component {
     super(props);
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
-    getUserToken().then((data) => {
-      if (data !== null) {
+  }
+  componentDidMount() {
+    getLoginType().then((data) => {
+      if (data === null) {
+        console.log(data);
+        this.props.setToken('');
+      } else {
+        console.log(data);
         this.props.setToken(data);
       }
     });
@@ -116,7 +122,7 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          {(this.props.token !== '') ? this.renderTextAfterLogin('Change Profile Photo') :
+          {(this.props.token !== '' && this.props.token !== 'guest') ? this.renderTextAfterLogin('Change Profile Photo') :
             <LoginFacebookLayout/>
           }
         </View>

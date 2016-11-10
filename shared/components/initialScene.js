@@ -3,6 +3,12 @@ import {Image, Platform, View, Text, Dimensions, TouchableOpacity} from 'react-n
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
+import {
+  getSecretToken,
+  grantAnonymousUser,
+  signupGuestUser,
+  setLoginType
+} from '../actions/authActions';
 
 import ImgLogin1 from '../resources/initialScene/loginImage1.png';
 import ImgLogin2 from '../resources/initialScene/loginImage2.png';
@@ -152,6 +158,15 @@ class InitialScene extends Component {
     );
   }
   handleGuestButton() {
+    getSecretToken().then((data) => {
+      if (data === null) {
+        signupGuestUser();
+      } else {
+        grantAnonymousUser(data);
+      }
+    });
+    setLoginType('guest');
+    this.props.setToken('guest');
     this.props.setCurrentScene('map');
     Actions.map({type: 'replace'});
   }

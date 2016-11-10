@@ -122,7 +122,7 @@ class Setting extends Component {
         {this.renderSettingListBox('Viewing Preference', 'Recent', this.handleSettingRecent.bind(this))}
         {this.renderSettingListBox('AUTO Refresh Using WIFI Only', 'Off', this.handleSettingOff.bind(this))}
         {this.renderSettingListBox('City', 'San Francisco', this.handleSettingCityName.bind(this))}
-        {(this.props.token !== '') ?
+        {(this.props.token !== 'guest' && this.props.token !== '') ?
           <View>
             {this.renderSettingGreyBox('Account', 42)}
             {this.renderSettingListBox('Change Name', '', ()=>{})}
@@ -133,7 +133,7 @@ class Setting extends Component {
         {this.renderSettingListBox('Privacy & Terms', '', ()=>{})}
         {this.renderSettingListBox('Help', '', ()=>{})}
         {this.renderSettingListBox('Send Feedback', '', ()=>{})}
-        {(this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
+        {(this.props.token !== 'guest' && this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
         <View style={[styles.settingGreyBox, {height: 42}]}>
           <Text style={{marginLeft: 16}}>Version 1.0.0</Text>
         </View>

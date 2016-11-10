@@ -1,7 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Platform, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
-import { getUserToken, setUserToken, removeUserToken } from '../actions/authActions';
+import {
+  removeUserToken,
+  grantFacebookUser,
+  getLoginType,
+  setLoginType,
+  removeLoginType
+} from '../actions/authActions';
 import { Actions } from 'react-native-router-flux';
 
 const WindowHeight = 477.8 + 162;
@@ -57,8 +63,8 @@ class LoginFacebook extends Component {
   }
   componentDidMount() {
     if (this.props.currentScene === 'initialScene') {
-      getUserToken().then((data) => {
-        if (data !== null) {
+      getLoginType().then((data) => {
+        if (data === 'facebook') {
           this.props.setToken(data);
           this.props.setCurrentScene('map');
           Actions.map({type: 'replace'});
@@ -80,8 +86,9 @@ class LoginFacebook extends Component {
         loginBehavior={FBLoginManager.LoginBehaviors.Web}
         permissions={['email', 'user_about_me']}
         onLogin={(data) => {
-          this.props.setToken(data.credentials.token);
-          setUserToken(data.credentials.token);
+          setLoginType('facebook');
+          grantFacebookUser(data.credentials.token);
+          this.props.setToken('facebook');
           if (this.props.currentScene === 'initialScene') {
             this.props.setCurrentScene('map');
             Actions.map({type: 'replace'});
@@ -92,6 +99,7 @@ class LoginFacebook extends Component {
         onLogout={() => {
           this.props.setToken('');
           removeUserToken();
+          removeLoginType();
         }}
         onCancel={()=>{}}
         onPermissionsMissing={()=>{}}
