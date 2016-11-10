@@ -2,18 +2,18 @@ import * as types from '../actions/actionTypes';
 import update from 'react-addons-update';
 
 const initialState = {
-  currentScene: 'initialScene'
+  token: ''
 };
 
-const flux = (state = initialState, action = {}) => {
+const auth = (state = initialState, action = {}) => {
   switch (action.type) {
-  case types.setCurrentScene:
+  case types.setToken:
     return update(state, {
-      currentScene: { $set: action.currentScene }
+      token: { $set: action.token }
     });
   default:
     return state;
   }
 };
 
-export default flux;
+export default auth;
