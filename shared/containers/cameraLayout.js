@@ -1,6 +1,7 @@
 import CameraView from '../components/CameraView';
 import { setCurrentPic } from '../actions/formActions';
 import { setCurrentScene } from '../actions/fluxActions';
+import { setUserLocation } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 
@@ -17,6 +18,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    setUserLocation: (userLocation) => {
+      return dispatch(setUserLocation(userLocation));
     }
   };
 };

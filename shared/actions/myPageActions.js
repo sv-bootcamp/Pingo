@@ -65,7 +65,7 @@ export const saveEvent = (eventKey) => {
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
     });
   };
 };
@@ -94,7 +94,7 @@ export const deleteEvent = (eventKey) => {
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
     });
   };
 };
