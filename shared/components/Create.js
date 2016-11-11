@@ -178,25 +178,13 @@ class Create extends Component {
       onFocusLocation: false,
       onFocusTitle: false,
       onFocusDateStart: false,
-      onFocusDateEnd: false
+      onFocusDateEnd: false,
+      busyPosting: false
     };
 
     this.getAddressData();
     this.encodePictureBase64();
   }
-
-  // todo: implement function getting markers around the user's location
-  /*
-   async getItemsAroundUser() {
-   navigator.geolocation.getCurrentPosition((position) => {
-   this.props.getAllItems(
-   this.props.zoomLevel,
-   position.coords.latitude,
-   position.coords.longitude);
-   }
-   );
-   }
-   */
 
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
@@ -219,7 +207,8 @@ class Create extends Component {
   handleDone() {
     if (this.state.addingNewLocation === true && this.state.Done === true) {
       this.setState({addingNewLocation: false});
-    } else if (this.state.addingNewLocation === false && this.state.Done === true) {
+    } else if (this.state.addingNewLocation === false && this.state.Done === true && this.state.busyPosting === false) {
+      this.setState({busyPosting: true});
       this.postNewItem();
     }
   }
