@@ -173,6 +173,7 @@ export default class Map extends Component {
     return null;
   }
 
+  // todo: use centerOffset for IOS
   render() {
     return (
       <View style ={styles.container}>
@@ -192,6 +193,7 @@ export default class Map extends Component {
                 this.props.onMarkerClick(item);
                 this.setState({markerSelect: item.key});
               }}
+              anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.7} : null}
             />
           ))}
         </MapView>
