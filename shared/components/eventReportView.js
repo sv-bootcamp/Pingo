@@ -89,7 +89,8 @@ export default class EventReportView extends Component {
             <View style = {{flex: 32}}/>
             <View style = {{flex: 16}}>
               {
-                <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> {(this.props.aboutPhoto) ? 'What\'s wrong this photo?' : 'What\'s wrong this location?' } </Text>
+                <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> {(this.props.aboutPhoto) ?
+                    'What\'s wrong this photo?' : 'What\'s wrong this location?' } </Text>
               }
             </View>
             {
