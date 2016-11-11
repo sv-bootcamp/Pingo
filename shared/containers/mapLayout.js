@@ -1,6 +1,7 @@
 import Map from '../components/map';
 import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard, getZoomLevel } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
+import { setCurrentCity } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 const getCategorizedItems = (items, categoryFilter) => {
@@ -50,6 +51,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getZoomLevel: (latitudeDelta) => {
       return dispatch(getZoomLevel(latitudeDelta));
+    },
+    setCurrentCity: (city) => {
+      return dispatch(setCurrentCity(city));
     }
   };
 };

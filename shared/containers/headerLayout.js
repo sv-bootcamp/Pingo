@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
     tabviewIndex: state.map.tabviewIndex,
     tabviewRoutes: state.map.tabviewRoutes,
     currentScene: state.flux.currentScene,
-    selectedItem: state.map.selectedItem
+    selectedItem: state.map.selectedItem,
+    currentCity: state.map.currentCity
   };
 };
 
