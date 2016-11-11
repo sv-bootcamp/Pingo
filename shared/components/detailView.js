@@ -82,7 +82,7 @@ export default class DetailView extends Component {
   }
 
   messageUnvisible() {
-    if(this.state.messageVisible === true) {
+    if (this.state.messageVisible === true) {
       this.setState({messageVisible: false});
     }
   }
@@ -105,7 +105,9 @@ export default class DetailView extends Component {
     this.setState({messageVisible: true});
     this.toggleModalVisible();
     setTimeout(()=> {
-      if(this.state.modalVisible === true) this.toggleModalVisible();
+      if (this.state.modalVisible === true) {
+        this.toggleModalVisible();
+      }
     }, 3000);
   }
   renderFirstSlide() {
@@ -174,9 +176,9 @@ export default class DetailView extends Component {
           </View>
           : <View style = {{flex: 32}}/>
         }
-          <View style = {{ alignItems: 'center', flex: 296, justifyContent: 'center'}}>
+          <View style = {{alignItems: 'center', flex: 296, justifyContent: 'center'}}>
             <Text style = {styles.index}>
-              {index} of {total-1}
+              {index} of {total - 1}
             </Text>
           </View>
         {
@@ -199,11 +201,11 @@ export default class DetailView extends Component {
     );
   }
 
-  renderModal(){
+  renderModal() {
     return (
         <View style = {{flex: 1}}>
           <Modal
-            animationType={"fade"}
+            animationType={(this.state.messageVisible) ? 'slide' : 'fade'}
             transparent={true}
             visible={this.state.modalVisible}
             onRequestClose={() => {}}
@@ -220,11 +222,11 @@ export default class DetailView extends Component {
               <View style = {{flex: 114.1, backgroundColor: 'red'}}>
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity onPress = {() => {
-                      this.toggleModalVisible();
-                      this.setState({currentReport: 'location'})
-                      Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage });
-                    }}>
-                    <Text> Report an Issue</Text>
+                    this.toggleModalVisible();
+                    this.setState({currentReport: 'location'});
+                    Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage });
+                  }}>
+                  <Text> Report an Issue</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -245,12 +247,9 @@ export default class DetailView extends Component {
               <TouchableOpacity style = {{flex: 45}}
                                 onPress = {() => this.toggleModalVisible()}/>
             }
-
-
-
           </Modal>
         </View>
-    )
+    );
   }
 
   renderDate(date) {
@@ -312,9 +311,9 @@ export default class DetailView extends Component {
                         </View>
                         <View style = {styles.btn_flag}>
                           <TouchableOpacity onPress = {()=>{
-                              this.setState({currentReport: 'photo'})
-                              Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage})
-                            }}>
+                            this.setState({currentReport: 'photo'});
+                            Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage});
+                          }}>
                             <Image source = {IMG_BUTTON_FLAG}
                                    style = {{height: 24, width: 24}}/>
                           </TouchableOpacity>

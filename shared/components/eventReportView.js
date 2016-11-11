@@ -5,7 +5,7 @@ import SmallHeader from '../components/smallHeader';
 import ImgBtnCheck from '../resources/btn_check/drawable-xxxhdpi/check.png';
 
 const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexual content',
-                           'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
+  'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
 const locationReportOption = ['Permanently closed', 'Does\'nt exist anymall', 'Spam', 'Private', 'Moved elsewhere', 'Duplicate of another place'];
 const styles = {
   textStyle: {
@@ -45,7 +45,7 @@ export default class EventReportView extends Component {
           <View style = {{flex: 304}}>
             <TouchableOpacity onPress = {()=>{
               (this.state.currentIndex === i) ? this.setState({currentIndex: -1}) :
-              this.setState({currentIndex: i})
+              this.setState({currentIndex: i});
             }}
             style = {{flex: 1}}>
               <View style = {{flex: 6}}/>
@@ -69,7 +69,7 @@ export default class EventReportView extends Component {
 
   render() {
     return (
-      <View style = {{flex:1}}>
+      <View style = {{flex: 1}}>
         <SmallHeader
           handleBtnLeft={()=>{
             Actions.pop();
@@ -89,7 +89,7 @@ export default class EventReportView extends Component {
             <View style = {{flex: 32}}/>
             <View style = {{flex: 16}}>
               {
-                (this.props.aboutPhoto)? <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> What's wrong this photo? </Text> :
+                (this.props.aboutPhoto) ? <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> What's wrong this photo? </Text> :
                 <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> What's wrong this location? </Text>
               }
             </View>
