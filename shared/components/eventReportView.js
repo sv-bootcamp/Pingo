@@ -4,11 +4,12 @@ import {Actions} from 'react-native-router-flux';
 import SmallHeader from '../components/smallHeader';
 import ImgBtnCheck from '../resources/btn_check/drawable-xxxhdpi/check.png';
 
-const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexsual content',
+const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexual content',
                            'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
 const locationReportOption = ['Permanently closed', 'Does\'nt exist anymall', 'Spam', 'Private', 'Moved elsewhere', 'Duplicate of another place'];
 const styles = {
   textStyle: {
+    flex: 1,
     fontSize: 14,
     ...Platform.select({
       android: {
@@ -31,8 +32,7 @@ export default class EventReportView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      optionClicked: [false, false, false, false, false, false],
-      numOfCheck: 0
+      currentIndex: -1
     };
     this.renderOption = this.renderOption.bind(this);
   }
@@ -40,22 +40,24 @@ export default class EventReportView extends Component {
   renderOption(title, i) {
     return (
       <View style = {{flex: 46}}>
-        <View style = {{flex: 32}}/>
-        <View style = {{flex: 14, flexDirection: 'row'}}>
+        <View style = {{flex: 20}}/>
+        <View style = {{flex: 26, flexDirection: 'row'}}>
           <View style = {{flex: 304}}>
             <TouchableOpacity onPress = {()=>{
-              (this.state.optionClicked[i]) ? this.setState({numOfCheck: this.state.numOfCheck - 1}) :
-              this.setState({numOfCheck: this.state.numOfCheck + 1})
-              let newState = [...this.state.optionClicked];
-              newState[i] = !this.state.optionClicked[i];
-              this.setState({optionClicked: newState});
-            }}>
-              <Text style = {[styles.textStyle, {color: '#2b2b2b'}]}>{title}</Text>
+              (this.state.currentIndex === i) ? this.setState({currentIndex: -1}) :
+              this.setState({currentIndex: i})
+            }}
+            style = {{flex: 1}}>
+              <View style = {{flex: 6}}/>
+              <View style = {{flex: 14, justifyContent: 'center'}}>
+                <Text style = {[styles.textStyle, {color: '#2b2b2b'}]}>{title}</Text>
+              </View>
+              <View style = {{flex: 6}}/>
             </TouchableOpacity>
           </View>
-          <View style = {{flex: 16}}>
+          <View style = {{flex: 16, justifyContent: 'center'}}>
             {
-              (this.state.optionClicked[i]) ?
+              (this.state.currentIndex === i) ?
               <Image source = {ImgBtnCheck}
                      style = {{height: 16, width: 16}}/> : null
             }
@@ -77,7 +79,7 @@ export default class EventReportView extends Component {
             Actions.pop();
           }}
           btnRight={
-            <Text style={[styles.textDone, {color: (this.state.numOfCheck !== 0) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
+            <Text style={[styles.textDone, {color: (this.state.currentIndex !== -1) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
           }
           headerText={'Report an Issue'}
         />

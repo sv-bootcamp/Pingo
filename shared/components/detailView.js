@@ -104,6 +104,9 @@ export default class DetailView extends Component {
     this.handleReport(value);
     this.setState({messageVisible: true});
     this.toggleModalVisible();
+    setTimeout(()=> {
+      if(this.state.modalVisible === true) this.toggleModalVisible();
+    }, 3000);
   }
   renderFirstSlide() {
     return (
