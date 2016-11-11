@@ -88,6 +88,10 @@ export default class Map extends Component {
       };
       this.prevZoom = null;
       this.props.setLocation(newLocation);
+    },
+    (error) => {
+      // todo: handle this error when gps is off
+      console.log(error);
     });
   }
 
