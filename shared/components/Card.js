@@ -101,7 +101,8 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-        Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene, date: this.state.date});
+        Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene,
+                             date: this.state.date, address: this.props.dataSource.address});
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>

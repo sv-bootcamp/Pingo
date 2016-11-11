@@ -52,7 +52,6 @@ export default class DetailHeader extends Component {
       isSaved: false
     };
   }
-
   render() {
     return (
       <View style = {styles.wrapper}>
@@ -78,7 +77,10 @@ export default class DetailHeader extends Component {
           </View>
           <View style = {{flex: 19.2}}/>
           <View style = {styles.btn_more}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress = {() => {
+                  this.props.messageUnvisible();
+                  this.props.setModalVisible();
+                }}>
                 <Image source = {IMG_BUTTON_MORE}
                        style = {{height: 24, width: 24}}/>
               </TouchableOpacity>
@@ -93,5 +95,7 @@ DetailHeader.propTypes = {
   title: PropTypes.string,
   date: PropTypes.string,
   setCurrentScene: PropTypes.function,
-  lastScene: PropTypes.string
+  lastScene: PropTypes.string,
+  messageUnvisible: PropTypes.function,
+  setModalVisible: PropTypes.function
 };

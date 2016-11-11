@@ -9,8 +9,8 @@ import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import SettingLayout from './settingLayout';
+import EventReportView from '../components/eventReportView'
 import InitialSceneLayout from './InitialSceneLayout';
-
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
     <Scene key="initialScene" hideNavBar={true} component={
@@ -36,6 +36,9 @@ const scenes = Actions.create(
     }/>
     <Scene key="setting" hideNavBar={true} component={
       SettingLayout
+    }/>
+    <Scene key="eventReportView" hideNavBar={true} component={
+      EventReportView
     }/>
   </Scene>
 );
