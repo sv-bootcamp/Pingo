@@ -8,6 +8,7 @@ import {
   Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import LoginFacebookLayout from '../containers/loginFacebookLayout';
 
 const styles = {
   settingListBox: {
@@ -46,6 +47,10 @@ const styles = {
         fontFamily: 'Roboto-Medium'
       }
     })
+  },
+  myPageTextLogInFacebook: {
+    color: '#2c8cff',
+    marginLeft: 16
   }
 };
 
@@ -53,8 +58,9 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.renderSettingList = this.renderSettingList.bind(this);
+    this.renderSignOut = this.renderSignOut.bind(this);
+    this.renderGuestView = this.renderGuestView.bind(this);
   }
-
   handleButtonPrev() {
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
@@ -87,6 +93,27 @@ class Setting extends Component {
     );
   }
 
+  renderSignOut() {
+    return (
+      <LoginFacebookLayout
+        buttonView={this.renderSignOutText()}
+      />
+    );
+  }
+
+  renderSignOutText() {
+    return (
+      <View>
+        <View style={[styles.settingGreyBox, {height: 24}]}/>
+        <View style={[styles.settingListBox, {backgroundColor: 'white'}]}>
+          <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
+            Sign Out
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   handleSettingRecent() {
     // todo
   }
@@ -99,22 +126,29 @@ class Setting extends Component {
     // todo
   }
 
+  renderGuestView() {
+    // todo
+  }
+
   renderSettingList() {
     return (
-      <ScrollView style={{backgroundColor: 'white', flex: 1}}>
+      <ScrollView style={{backgroundColor: '#e7e7e7', flex: 1}}>
         {this.renderSettingGreyBox('Map', 42)}
         {this.renderSettingListBox('Viewing Preference', 'Recent', this.handleSettingRecent.bind(this))}
         {this.renderSettingListBox('AUTO Refresh Using WIFI Only', 'Off', this.handleSettingOff.bind(this))}
         {this.renderSettingListBox('City', 'San Francisco', this.handleSettingCityName.bind(this))}
-        {this.renderSettingGreyBox('Account', 42)}
-        {this.renderSettingListBox('Change Name', '', ()=>{})}
-        {this.renderSettingListBox('Linked Account', '', ()=>{})}
+        {(this.props.token !== '') ?
+          <View>
+            {this.renderSettingGreyBox('Account', 42)}
+            {this.renderSettingListBox('Change Name', '', ()=>{})}
+            {this.renderSettingListBox('Linked Account', '', ()=>{})}
+          </View>
+          : null}
         <View style={[styles.settingGreyBox, {height: 24}]}/>
         {this.renderSettingListBox('Privacy & Terms', '', ()=>{})}
         {this.renderSettingListBox('Help', '', ()=>{})}
         {this.renderSettingListBox('Send Feedback', '', ()=>{})}
-        <View style={[styles.settingGreyBox, {height: 24}]}/>
-        {this.renderSettingListBox('Sign Out', '', ()=>{})}
+        {(this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
         <View style={[styles.settingGreyBox, {height: 42}]}>
           <Text style={{marginLeft: 16}}>Version 1.0.0</Text>
         </View>
@@ -137,7 +171,8 @@ class Setting extends Component {
 }
 
 Setting.propTypes = {
-  setCurrentScene: PropTypes.func
+  setCurrentScene: PropTypes.func,
+  token: PropTypes.string
 };
 
 export default Setting;

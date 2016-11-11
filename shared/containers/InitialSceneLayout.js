@@ -1,10 +1,10 @@
+import InitialScene from '../components/initialScene';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
-import Setting from '../components/Setting';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   return {
-    token: state.auth.token
+    // TBD
   };
 };
 
@@ -16,9 +16,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const SettingLayout = connect(
+const InitialSceneLayout = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Setting);
+)(InitialScene);
 
-export default SettingLayout;
+export default InitialSceneLayout;

@@ -341,7 +341,7 @@ export default class DetailView extends Component {
                 );
               })}
           </Swiper>
-        </View> t
+        </View>
       </View>
     );
   }

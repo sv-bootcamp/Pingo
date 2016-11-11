@@ -1,7 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image, Platform} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image, Platform, Animated, Easing} from 'react-native';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
+
+import IMG_BUTTON_MYPAGE from '../resources/header/btn_mypage.png';
+import IMG_BUTTON_REFRESH from '../resources/header/btn_refresh.png';
+import IMG_BUTTON_SWITCH_MAP from '../resources/header/btn_switch_map.png';
+import IMG_BUTTON_SWITCH_LIST from '../resources/header/btn_switch_list.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -60,6 +65,24 @@ export default class MainHeader extends Component {
     super(props);
     this.handleSwitchButton = this.handleSwitchButton.bind(this);
     this.renderHeaderTabBar = this.renderHeaderTabBar.bind(this);
+    this.spin = this.spin.bind(this);
+    this.state = {
+      spinValue: new Animated.Value(0)
+    };
+  }
+  spin() {
+    this.state.spinValue.setValue(0);
+    Animated.timing(
+      this.state.spinValue,
+      {
+        toValue: 1,
+        duration: 1000,
+        easing: Easing.linear
+      }
+    ).start();
+  }
+  componentDidMount() {
+    this.spin();
   }
   renderHeaderTabBar(props) {
     return (<TabBarTop
@@ -86,15 +109,20 @@ export default class MainHeader extends Component {
   }
   handleRefreshButton() {
     // todo: implement refresh button handling function here
+    this.spin();
   }
   handleButtonMyPage() {
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
   render() {
+    const spin = this.state.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    });
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
-        <View style= {{ flexDirection: 'column', backgroundColor: 'white' }}>
+        <View style= {{ flexDirection: 'column', backgroundColor: 'white', elevation: 3 }}>
           <View style= {{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={styles.buttonMyPage}
@@ -102,16 +130,16 @@ export default class MainHeader extends Component {
             >
               <Image
                 style={styles.image}
-                source={require('../resources/header/btn_mypage.png')}
+                source={IMG_BUTTON_MYPAGE}
               />
             </TouchableOpacity>
             <Text style={styles.text}>San Francisco</Text>
             <TouchableOpacity
                 style={styles.buttonRefresh}
-                onPress={this.handleRefreshButton}>
-              <Image
-                style={styles.image}
-                source={require('../resources/header/btn_refresh.png')}
+                onPress={this.handleRefreshButton.bind(this)}>
+              <Animated.Image
+                style={[styles.image, {transform: [{rotate: spin}]}]}
+                source={IMG_BUTTON_REFRESH}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -119,7 +147,7 @@ export default class MainHeader extends Component {
               onPress={this.handleSwitchButton.bind(this)}>
               <Image
                 style={styles.image}
-                source={require('../resources/header/btn_list.png')}
+                source={(this.props.currentScene === 'map') ? IMG_BUTTON_SWITCH_MAP : IMG_BUTTON_SWITCH_LIST}
               />
             </TouchableOpacity>
           </View>
