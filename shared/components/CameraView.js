@@ -111,8 +111,11 @@ class CameraView extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // todo: determine what to do here
-        console.log(position);
+        const userLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+        this.props.setUserLocation(userLocation);
       },
       (error) => {
         // todo: implement what to do when GPS is off
@@ -288,6 +291,7 @@ class CameraView extends Component {
 CameraView.propTypes = {
   setCurrentPic: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setUserLocation: PropTypes.func,
   pic: PropTypes.string,
   lastScene: PropTypes.string
 };

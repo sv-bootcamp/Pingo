@@ -1,7 +1,7 @@
 import Map from '../components/map';
 import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard, getZoomLevel } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
-import { setCurrentCity } from '../actions/mapActions';
+import { setCurrentCity, setUserLocation } from '../actions/mapActions';
 import { connect } from 'react-redux';
 
 const getCategorizedItems = (items, categoryFilter) => {
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
     items: getCategorizedItems(state.map.items, state.map.categoryFilter),
     selectedItem: state.map.selectedItem,
     currentLocation: state.map.currentLocation,
-    setCurrentScene: state.flux.setCurrentScene,
+    userLocation: state.map.userLocation,
     zoomLevel: state.map.zoomLevel
   };
 };
@@ -54,6 +54,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentCity: (city) => {
       return dispatch(setCurrentCity(city));
+    },
+    setUserLocation: (userLocation) => {
+      return dispatch(setUserLocation(userLocation));
     }
   };
 };

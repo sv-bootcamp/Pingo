@@ -15,3 +15,4 @@ export const getDetailImage = 'GET_DETAIL_IMAGE';
 export const setMyPageTabViewIndex = 'SET_MY_PAGE_TAB_VIEW_INDEX';
 export const setToken = 'SET_TOKEN';
 export const setCurrentCity = 'SET_CURRENT_CITY';
+export const setUserLocation = 'SET_USER_LOCATION';

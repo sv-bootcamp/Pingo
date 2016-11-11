@@ -50,8 +50,10 @@ export default class Map extends Component {
     this.prevLng = null;
     this.prevZoom = null;
     this.state = {
-      markerSelect: ''
+      markerSelect: '',
+      userLocationEnabled: false
     };
+    this.watchID = null;
   }
 
   componentWillMount() {
@@ -60,6 +62,20 @@ export default class Map extends Component {
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
+  }
+
+  componentDidMount() {
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      const userLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+      this.props.setUserLocation(userLocation);
+    });
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
   }
 
   // todo: this is duplicate from Create.js. refactoring required
@@ -89,10 +105,17 @@ export default class Map extends Component {
       };
       this.prevZoom = null;
       this.props.setLocation(newLocation);
+      const userLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+      this.props.setUserLocation(userLocation);
+      this.setState({userLocationEnabled: true});
     },
     (error) => {
       // todo: handle this error when gps is off
       console.log(error);
+      this.setState({userLocationEnabled: false});
     });
   }
 
@@ -195,11 +218,13 @@ export default class Map extends Component {
               }}
             />
           ))}
-          <MapView.Marker
-            coordinate={{latitude: this.props.currentLocation.latitude, longitude: this.props.currentLocation.longitude}}
-            image={userPng}
-            anchor={{x: 0.5, y: 0.5}}
-          />
+          {(this.state.userLocationEnabled === true) ?
+            <MapView.Marker
+              coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
+              image={userPng}
+              anchor={{x: 0.5, y: 0.5}}
+            />
+          : null}
         </MapView>
         <View style={styles.buttonSection}>
           <MapButton
@@ -220,10 +245,12 @@ export default class Map extends Component {
 
 Map.propTypes = {
   currentLocation: PropTypes.object,
+  userLocation: PropTypes.object,
   selectedItem: PropTypes.any,
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
+  setUserLocation: PropTypes.func,
   setCurrentCity: PropTypes.func,
   onMarkerClick: PropTypes.func,
   hideMapCard: PropTypes.func,
