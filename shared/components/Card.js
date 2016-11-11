@@ -1,6 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import {Actions} from 'react-native-router-flux';
+
+import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
+import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
 
 const FLEX_MARGIN_ROW = 16;
 const FLEX_MARGIN_TEXT_ROW = 8;
@@ -58,7 +61,8 @@ class Card extends Component {
     super(props);
     this.state = {
       date: '',
-      numOfImage: 0
+      numOfImage: 0,
+      starClicked: false
     };
     this.renderImg = this.renderImg.bind(this);
   }
@@ -105,19 +109,41 @@ class Card extends Component {
       </TouchableOpacity>
     );
   }
+  handlePressStar() {
+    if (this.state.starClicked === true) {
+      this.setState({starClicked: false});
+    } else {
+      this.setState({starClicked: true});
+    }
+    // todo: implement save favourite event here
+  }
 
   renderCardText() {
     return (
       <View style={{
         flex: (this.props.dataSource.category === 'facility') ? FLEX_TEXT_WRAPPER : FLEX_TEXT_WRAPPER + FLEX_MARGIN_ROW,
-        backgroundColor: 'white',
         flexDirection: 'column'
       }}>
-        <View style={{flex: FLEX_TEXT_TITLE + FLEX_MARGIN_TEXT_ROW, justifyContent: 'flex-start'}}>
-          <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
+        <View style={{flex: FLEX_TEXT_TITLE + FLEX_MARGIN_TEXT_ROW, flexDirection: 'row'}}>
+          <View style={{flex: 4, justifyContent: 'flex-start'}}>
+            <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
+          </View>
+          <View style={{flex: 1, position: 'absolute', right: Dimensions.get('window').width * 16 / 360}}>
+            <TouchableOpacity
+              onPress={this.handlePressStar.bind(this)}>
+              <Image
+                style={{
+                  height: Dimensions.get('window').height * 24 / 640,
+                  width: Dimensions.get('window').height * 24 / 640
+                }}
+                source={(this.state.starClicked === true) ? IMG_BUTTON_YELLOW_STAR : IMG_BUTTON_STAR}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={{
-          flex: FLEX_TEXT_ADDRESS + FLEX_MARGIN_TEXT_ROW, justifyContent: (this.props.dataSource.category === 'facility') ? 'flex-start' : 'center'}}>
+          flex: FLEX_TEXT_ADDRESS + FLEX_MARGIN_TEXT_ROW,
+          justifyContent: (this.props.dataSource.category === 'facility') ? 'flex-start' : 'center'}}>
           <Text style={styles.address}>{this.props.dataSource.address}</Text>
         </View>
         { (this.props.dataSource.category === 'facility') ? null :
