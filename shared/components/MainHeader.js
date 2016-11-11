@@ -133,7 +133,7 @@ export default class MainHeader extends Component {
                 source={IMG_BUTTON_MYPAGE}
               />
             </TouchableOpacity>
-            <Text style={styles.text}>San Francisco</Text>
+            <Text style={styles.text}>{this.props.currentCity}</Text>
             <TouchableOpacity
                 style={styles.buttonRefresh}
                 onPress={this.handleRefreshButton.bind(this)}>
@@ -197,5 +197,6 @@ MainHeader.propTypes = {
   setCurrentScene: PropTypes.func,
   tabviewIndex: PropTypes.any,
   tabviewRoutes: PropTypes.any,
-  currentScene: PropTypes.string
+  currentScene: PropTypes.string,
+  currentCity: PropTypes.string
 };
