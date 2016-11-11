@@ -10,6 +10,7 @@ import warningPng from '../resources/marker/warning_small.png';
 import eventClickPng from '../resources/marker/event_big.png';
 import facilityClickPng from '../resources/marker/facility_big.png';
 import warningClickPng from '../resources/marker/warning_big.png';
+import userPng from '../resources/marker/user.png';
 import {API_GEODATA, API_KEY} from '../utils';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
@@ -249,7 +250,7 @@ export default class Map extends Component {
       <View style ={styles.container}>
         <MapView
           style ={styles.map}
-          onRegionChangeComplete={this.onLocationChange}
+          onRegionChange={this.onLocationChange}
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
@@ -290,6 +291,11 @@ export default class Map extends Component {
               </Image>
             </MapView.Marker>
           ))}
+          <MapView.Marker
+            coordinate={{latitude: this.props.currentLocation.latitude, longitude: this.props.currentLocation.longitude}}
+            image={userPng}
+            anchor={{x: 0.5, y: 0.5}}
+          />
         </MapView>
         {(this.checkMarkerClicked()) ?
           <View style={styles.buttonSection}>
