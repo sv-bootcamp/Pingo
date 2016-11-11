@@ -49,7 +49,7 @@ export default class EventReportView extends Component {
             }}
             style = {{flex: 1}}>
               <View style = {{flex: 6}}/>
-              <View style = {{flex: 14, justifyContent: 'center'}}>
+              <View style = {{flex: 20, justifyContent: 'center'}}>
                 <Text style = {[styles.textStyle, {color: '#2b2b2b'}]}>{title}</Text>
               </View>
               <View style = {{flex: 6}}/>
@@ -89,8 +89,8 @@ export default class EventReportView extends Component {
             <View style = {{flex: 32}}/>
             <View style = {{flex: 16}}>
               {
-                (this.props.aboutPhoto) ? <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> What's wrong this photo? </Text> :
-                <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> What's wrong this location? </Text>
+                <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> {(this.props.aboutPhoto) ?
+                    'What\'s wrong this photo?' : 'What\'s wrong this location?' } </Text>
               }
             </View>
             {
