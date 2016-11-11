@@ -97,7 +97,7 @@ export default class Map extends Component {
 
   handleCameraButton() {
     this.props.setCurrentScene('cameraView');
-    Actions.cameraView();
+    Actions.cameraView({lastScene: 'map'});
   }
 
   updatePrevValues() {
