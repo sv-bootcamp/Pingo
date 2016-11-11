@@ -132,7 +132,7 @@ class CameraView extends Component {
   }
 
   handleClose() {
-    this.props.setCurrentScene('map');
+    this.props.setCurrentScene(this.props.lastScene);
     Actions.pop();
   }
 
@@ -164,11 +164,11 @@ class CameraView extends Component {
         style={styles.btn_close}
         onPress={this.handleClose.bind(this)}>
         <Image
-          style={{height:24, width: 24}}
+          style={{height: 24, width: 24}}
           source={ImgBtnClose}
         />
       </TouchableOpacity>
-    )
+    );
   }
 
   renderBtnUse() {
@@ -180,7 +180,7 @@ class CameraView extends Component {
           <Text style={styles.text_use}> Use </Text>
         </TouchableOpacity>
       : null
-    )
+    );
   }
 
   renderCameraOrAfter() {
@@ -200,7 +200,7 @@ class CameraView extends Component {
           orientation={this.state.camera.orientation}
           captureAudio={this.state.camera.captureAudio}
         />
-    )
+    );
   }
 
   renderBottom() {
@@ -235,7 +235,7 @@ class CameraView extends Component {
           />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   renderBottomAfter() {
@@ -250,7 +250,7 @@ class CameraView extends Component {
           />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   render() {
@@ -274,7 +274,8 @@ class CameraView extends Component {
 CameraView.propTypes = {
   setCurrentPic: PropTypes.func,
   setCurrentScene: PropTypes.func,
-  pic: PropTypes.string
+  pic: PropTypes.string,
+  lastScene: PropTypes.string
 };
 
 export default CameraView;

@@ -1,6 +1,7 @@
 import EventList from '../components/EventList';
 import { getAllItems } from '../actions/listActions';
 import { connect } from 'react-redux';
+import { setCurrentScene } from '../actions/fluxActions';
 
 const getCategorizedItems = (items, categoryFilter) => {
   switch (categoryFilter) {
@@ -29,6 +30,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getAllItems: (zoomLevel, lat, long) => {
       return dispatch(getAllItems(zoomLevel, lat, long));
+    },
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
     }
   };
 };

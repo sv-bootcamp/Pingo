@@ -10,6 +10,7 @@ import warningPng from '../resources/marker/warning_small.png';
 import eventClickPng from '../resources/marker/event_big.png';
 import facilityClickPng from '../resources/marker/facility_big.png';
 import warningClickPng from '../resources/marker/warning_big.png';
+import {API_GEODATA, API_KEY} from '../utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +44,7 @@ export default class Map extends Component {
     this.setCurrentPosition = this.setCurrentPosition.bind(this);
     this.setMarkerClickTime = this.setMarkerClickTime.bind(this);
     this.onMapClick = this.onMapClick.bind(this);
+    this.getAddressData = this.getAddressData.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -57,6 +59,23 @@ export default class Map extends Component {
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
+  }
+
+  // todo: this is duplicate from Create.js. refactoring required
+  getAddressData() {
+    const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
+    fetch(uri)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson !== undefined) {
+        this.props.setCurrentCity(
+          JSON.stringify(responseJson.results[0].address_components[3].long_name)
+          .replace('"', '')
+          .replace('"', '')
+          .substring(0, 30)
+        );
+      }
+    });
   }
 
   setCurrentPosition() {
@@ -74,7 +93,7 @@ export default class Map extends Component {
 
   handleCameraButton() {
     this.props.setCurrentScene('cameraView');
-    Actions.cameraView();
+    Actions.cameraView({lastScene: 'map'});
   }
 
   updatePrevValues() {
@@ -84,6 +103,7 @@ export default class Map extends Component {
   }
 
   onLocationChange(region) {
+    this.getAddressData();
     const needToFetch = () => {
       if (!this.prevZoom || this.prevZoom !== Math.round(this.props.zoomLevel * 100) / 100) {
         return true;
@@ -194,6 +214,7 @@ Map.propTypes = {
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
+  setCurrentCity: PropTypes.func,
   onMarkerClick: PropTypes.func,
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,

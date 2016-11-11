@@ -67,6 +67,13 @@ export const setTabViewIndex = (index) => {
   };
 };
 
+export const setCurrentCity = (city) => {
+  return {
+    type: types.setCurrentCity,
+    city
+  };
+};
+
 export const getZoomLevel = (latitudeDelta) => {
   let zoomLevel = Math.log2(750 / latitudeDelta);
   if (latitudeDelta > 50) {
