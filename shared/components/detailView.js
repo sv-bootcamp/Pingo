@@ -51,7 +51,7 @@ const styles = {
       }
     }),
     color: '#ffffff',
-    fontSize: 17
+    fontSize: 14
   }
 };
 
@@ -219,7 +219,7 @@ export default class DetailView extends Component {
                 (this.state.messageVisible) ?
                 <TouchableOpacity style = {{flex: 114.1}}
                                   onPress = {() => this.toggleModalVisible()}/> :
-              <View style = {{flex: 114.1, backgroundColor: 'red'}}>
+              <View style = {{flex: 114.1, backgroundColor: '#fafafa', elevation: 4}}>
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity onPress = {() => {
                     this.toggleModalVisible();
@@ -241,8 +241,11 @@ export default class DetailView extends Component {
                               onPress = {() => this.toggleModalVisible()}/>
             {
               (this.state.messageVisible) ?
-              <View style = {{flex: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1e1e1e'}}>
-                <Text style = {styles.thanksMessage}> Thank you for reporting an issue with this {this.state.currentReport}. </Text>
+              <View style = {{flex: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1e1e1e', flexDirection: 'row'}}>
+                <View style = {{flex: 22.1}}/>
+                <View style = {{flex: 337.9}}>
+                  <Text style = {styles.thanksMessage}> Thank you for reporting an issue with this {this.state.currentReport}. </Text>
+                </View>
               </View> :
               <TouchableOpacity style = {{flex: 45}}
                                 onPress = {() => this.toggleModalVisible()}/>
