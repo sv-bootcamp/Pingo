@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Platform, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
 import {
+  requestRefreshTokenFacebook,
+  getAccessToken,
+  getRefreshToken,
   removeUserToken,
   grantFacebookUser,
   getLoginType,
@@ -65,9 +68,21 @@ class LoginFacebook extends Component {
     if (this.props.currentScene === 'initialScene') {
       getLoginType().then((data) => {
         if (data === 'facebook') {
-          this.props.setToken(data);
-          this.props.setCurrentScene('map');
-          Actions.map({type: 'replace'});
+          getRefreshToken().then((refreshToken) => {
+            if (refreshToken === null) {
+              return;
+            }
+            requestRefreshTokenFacebook(refreshToken);
+          });
+          getAccessToken().then((accessToken) => {
+            if (accessToken !== null) {
+              this.props.setToken(accessToken);
+              this.props.setCurrentScene('map');
+              Actions.map({type: 'replace'});
+            } else {
+              removeLoginType();
+            }
+          });
         }
       });
     }

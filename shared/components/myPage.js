@@ -54,10 +54,8 @@ class MyPage extends Component {
   componentDidMount() {
     getLoginType().then((data) => {
       if (data === null) {
-        console.log(data);
         this.props.setToken('');
       } else {
-        console.log(data);
         this.props.setToken(data);
       }
     });

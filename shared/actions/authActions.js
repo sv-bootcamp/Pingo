@@ -22,7 +22,8 @@ const signupFacebookUser = (FacebookToken) => {
   })
   .then((response) => response.json())
   .then((rjson) => {
-    setUserToken(rjson, 'facebook');
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
     })
   .catch((error) => {
     console.log(error);
@@ -45,7 +46,9 @@ export const signupGuestUser = () => {
     .then((response) => response.json())
     .then((rjson) => {
       console.log(rjson);
-      setUserToken(rjson, 'anonymous');
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+      setSecretToken(rjson.secret);
     })
     .catch((error) => {
       console.log(error);
@@ -78,7 +81,8 @@ export const grantAnonymousUser = (secret) => {
   })
   .then((rjson) => {
     console.log(rjson);
-    setUserToken(rjson, 'anonymous');
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
     console.log(error);
@@ -111,12 +115,21 @@ export const grantFacebookUser = (facebookToken) => {
   })
   .then((rjson) => {
     console.log(rjson);
-    setUserToken(rjson, 'facebook');
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
     console.log(error);
     signupFacebookUser(facebookToken);
   });
+};
+
+const setAccessToken = async (accessToken) => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY_accessToken, accessToken);
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 const setRefreshToken = async (refreshToken) => {
@@ -127,21 +140,68 @@ const setRefreshToken = async (refreshToken) => {
   }
 };
 
-// todo: use this later if getting error after requesting user profile
-const requestRefreshToken = async (refreshToken) => {
+const setSecretToken = async (secret) => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY_secret, secret);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const requestRefreshTokenFacebook = async (refreshToken) => {
   const address = 'https://goober.herokuapp.com/api/auth/refresh';
   fetch(address, {
     method: 'POST',
     headers: {
       'refreshToken': refreshToken
     }
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        throw new Error(response.status);
+      }
+    })
     .then((rjson) => {
       console.log(rjson);
+      setAccessToken(rjson.accessToken);
       setRefreshToken(rjson.refreshToken);
     })
     .catch((error) => {
       console.log(error);
+      removeUserToken();
+    })
+  })
+};
+
+export const requestRefreshTokenGuest = async (refreshToken) => {
+  const address = 'https://goober.herokuapp.com/api/auth/refresh';
+  fetch(address, {
+    method: 'POST',
+    headers: {
+      'refreshToken': refreshToken
+    }
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        throw new Error(response.status);
+      }
+    })
+    .then((rjson) => {
+      console.log(rjson);
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+    })
+    .catch((error) => {
+      console.log(error);
+      getSecretToken().then((secret) => {
+        if (secret !== null) {
+          grantAnonymousUser(secret);
+        } else {
+          signupGuestUser();
+        }
+      });
     })
   })
 };
@@ -153,7 +213,7 @@ export const setToken = (token) => {
   }
 };
 
-export const getUserToken = async () => {
+export const getAccessToken = async () => {
   try {
     return await AsyncStorage.getItem(STORAGE_KEY_accessToken);
   } catch (error) {
@@ -172,18 +232,6 @@ export const getSecretToken = async () => {
 export const getRefreshToken = async () => {
   try {
     return await AsyncStorage.getItem(STORAGE_KEY_refreshToken);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-export const setUserToken = async (response, userType) => {
-  try {
-    await AsyncStorage.setItem(STORAGE_KEY_accessToken, response.accessToken);
-    await AsyncStorage.setItem(STORAGE_KEY_refreshToken, response.refreshToken);
-    if (userType === 'anonymous') {
-      await AsyncStorage.setItem(STORAGE_KEY_secret, response.secret);
-    }
   } catch (error) {
     console.log(error.message);
   }
