@@ -78,9 +78,9 @@ export default class DetailHeader extends Component {
           <View style = {{flex: 19.2}}/>
           <View style = {styles.btn_more}>
               <TouchableOpacity onPress = {() => {
-                  this.props.messageUnvisible();
-                  this.props.setModalVisible();
-                }}>
+                this.props.messageUnvisible();
+                this.props.setModalVisible();
+              }}>
                 <Image source = {IMG_BUTTON_MORE}
                        style = {{height: 24, width: 24}}/>
               </TouchableOpacity>
