@@ -10,7 +10,7 @@ import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import LogInFacebook from '../components/LogInFacebook';
 import SettingLayout from './settingLayout';
-
+import EventReportView from '../components/eventReportView'
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
     <Scene key="map" hideNavBar={true} component={
@@ -36,6 +36,9 @@ const scenes = Actions.create(
     }/>
     <Scene key="setting" hideNavBar={true} component={
       SettingLayout
+    }/>
+    <Scene key="eventReportView" hideNavBar={true} component={
+      EventReportView
     }/>
   </Scene>
 );
