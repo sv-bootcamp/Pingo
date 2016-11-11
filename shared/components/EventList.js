@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView } from 'react-native';
+import { ListView, View, Dimensions } from 'react-native';
 import CardLayout from '../containers/cardLayout';
+import MapButton from './MapButton';
+import { Actions } from 'react-native-router-flux';
 
 class EventList extends Component {
   constructor(props) {
@@ -18,14 +20,29 @@ class EventList extends Component {
     this.props.currentLocation.longitude);
   }
 
+  handleCameraButton() {
+    this.props.setCurrentScene('camera');
+    Actions.cameraView({lastScene: 'list'});
+  }
+
   render() {
     return (
-    <ListView
-      dataSource={new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2
-      }).cloneWithRows(this.props.dataSource)}
-      renderRow={this.renderRowTxt.bind(this)}
-      enableEmptySections={true} />
+      <View style={{flex: 1}}>
+        <ListView
+          dataSource={new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+          }).cloneWithRows(this.props.dataSource)}
+          renderRow={this.renderRowTxt.bind(this)}
+          enableEmptySections={true} />
+        <MapButton
+          handleOnPress={this.handleCameraButton.bind(this)}
+          imageSource={'camera'}
+          style={{position: 'absolute', zIndex: 10, elevation: 4,
+            bottom: Dimensions.get('window').width * 16 / 360,
+            right: Dimensions.get('window').width * 16 / 360
+          }}
+        />
+      </View>
     );
   }
 }
@@ -36,7 +53,8 @@ EventList.propTypes = {
   actions: PropTypes.any,
   getItems: PropTypes.any,
   currentLocation: PropTypes.object,
-  zoomLevel: PropTypes.any
+  zoomLevel: PropTypes.any,
+  setCurrentScene: PropTypes.func
 };
 
 export default EventList;

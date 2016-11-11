@@ -33,7 +33,7 @@ export default class MapButton extends Component {
     return (
     <View>
       <TouchableHighlight
-        style={(this.props.imageSource === 'position') ? styles.position : styles.camera}
+        style={[(this.props.imageSource === 'position') ? styles.position : styles.camera, this.props.style]}
         onPress={this.props.handleOnPress}>
         <View>
           <Image
@@ -48,5 +48,6 @@ export default class MapButton extends Component {
 
 MapButton.propTypes = {
   handleOnPress: PropTypes.func,
-  imageSource: PropTypes.string
+  imageSource: PropTypes.string,
+  style: PropTypes.any
 };
