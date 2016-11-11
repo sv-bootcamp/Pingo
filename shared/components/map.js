@@ -179,7 +179,7 @@ export default class Map extends Component {
       <View style ={styles.container}>
         <MapView
           style ={styles.map}
-          onRegionChange={this.onLocationChange}
+          onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
