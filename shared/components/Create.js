@@ -18,6 +18,7 @@ import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} 
 import SmallHeader from '../components/smallHeader';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
+import ImgLocation from '../resources/create/btn_location.png';
 
 const styles = StyleSheet.create({
   preview: {
@@ -177,25 +178,13 @@ class Create extends Component {
       onFocusLocation: false,
       onFocusTitle: false,
       onFocusDateStart: false,
-      onFocusDateEnd: false
+      onFocusDateEnd: false,
+      busyPosting: false
     };
 
     this.getAddressData();
     this.encodePictureBase64();
   }
-
-  // todo: implement function getting markers around the user's location
-  /*
-   async getItemsAroundUser() {
-   navigator.geolocation.getCurrentPosition((position) => {
-   this.props.getAllItems(
-   this.props.zoomLevel,
-   position.coords.latitude,
-   position.coords.longitude);
-   }
-   );
-   }
-   */
 
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
@@ -218,7 +207,8 @@ class Create extends Component {
   handleDone() {
     if (this.state.addingNewLocation === true && this.state.Done === true) {
       this.setState({addingNewLocation: false});
-    } else if (this.state.addingNewLocation === false && this.state.Done === true) {
+    } else if (this.state.addingNewLocation === false && this.state.Done === true && this.state.busyPosting === false) {
+      this.setState({busyPosting: true});
       this.postNewItem();
     }
   }
@@ -665,6 +655,24 @@ class Create extends Component {
               <View>{this.renderCaption()}</View>
             }
           </ScrollView>
+        </View>
+        <View style={{
+          height: Dimensions.get('window').height * 24 / 640,
+          width: Dimensions.get('window').width * 24 / 360,
+          position: 'absolute',
+          top: Dimensions.get('window').height * 124 / 640 - Dimensions.get('window').height * 24 / 1280,
+          right: Dimensions.get('window').width * 27 / 360,
+          zIndex: 10
+        }}>
+          <TouchableOpacity onPress={this.getAddressData.bind(this)}>
+            <Image
+              style={{
+                height: Dimensions.get('window').height * 24 / 640,
+                width: Dimensions.get('window').width * 24 / 360
+              }}
+              source={ImgLocation}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
