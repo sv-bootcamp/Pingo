@@ -13,6 +13,7 @@ import {
 import ImgLogin1 from '../resources/initialScene/loginImage1.png';
 import ImgLogin2 from '../resources/initialScene/loginImage2.png';
 import ImgLogin3 from '../resources/initialScene/loginImage3.png';
+import ImgLogo from '../resources/logo/pingo.png';
 
 const WindowHeight = 477.8 + 162;
 const WindowWidth = 360;
@@ -24,6 +25,12 @@ const LoginImgWidth = 250;
 const styles = {
   wrapper: {
     flex: 1
+  },
+  slide0: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
   },
   slide1: {
     flex: 1,
@@ -116,6 +123,15 @@ class InitialScene extends Component {
       </View>
     );
   }
+  renderLogo() {
+    return (
+      <View style={styles.slide0}>
+        <Image
+          source={ImgLogo}
+        />
+      </View>
+    );
+  }
   renderSwiper() {
     const swiperHeight = Dimensions.get('window').height * SwiperHeight / (WindowHeight);
     return (
@@ -125,6 +141,7 @@ class InitialScene extends Component {
         activeDot={<View style={styles.activeDot}/>}
         height={swiperHeight}
       >
+        {this.renderLogo()}
         {this.renderSlide(styles.slide1, 'Explore real-time information', 'happening near you', ImgLogin1)}
         {this.renderSlide(styles.slide2, 'Find event details and see how others', 'enjoy through their photos', ImgLogin2)}
         {this.renderSlide(styles.slide3, 'Share your photos in an event', 'with other travellers', ImgLogin3)}
