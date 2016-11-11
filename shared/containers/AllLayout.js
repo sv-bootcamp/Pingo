@@ -9,7 +9,7 @@ import ListLayout from './listLayout';
 import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import SettingLayout from './settingLayout';
-import EventReportView from '../components/eventReportView'
+import EventReportView from '../components/eventReportView';
 import InitialSceneLayout from './InitialSceneLayout';
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
