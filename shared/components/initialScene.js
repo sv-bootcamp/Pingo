@@ -25,12 +25,6 @@ const styles = {
   wrapper: {
     flex: 1
   },
-  slide0: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white'
-  },
   slide1: {
     flex: 1,
     justifyContent: 'center',
