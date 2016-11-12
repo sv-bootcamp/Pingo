@@ -75,7 +75,7 @@ export default class EventReportView extends Component {
             Actions.pop();
           }}
           handleBtnRight={()=>{
-            (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location')
+            (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
             Actions.pop();
           }}
           btnRight={
