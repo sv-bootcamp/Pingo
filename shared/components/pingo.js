@@ -1,13 +1,24 @@
 import React, {PropTypes, Component} from 'react';
-import {Image, View} from 'react-native';
+import {Image, View, Dimensions, Animated, Easing} from 'react-native';
 import ImgPingo from '../resources/logo/pingo.png';
 import { Actions } from 'react-native-router-flux';
 import { getLoginType } from '../actions/authActions';
-import TimerMixin from 'react-timer-mixin';
+
+const styles = {
+  fadeOut: {
+    position: 'absolute',
+    zIndex: 1,
+    backgroundColor: 'white'
+  }
+};
 
 export default class Pingo extends Component {
   constructor(props) {
     super(props);
+    this.animationFadeOut = this.animationFadeOut.bind(this);
+    this.state = {
+      opacity: new Animated.Value(0)
+    };
   }
   componentDidMount() {
     getLoginType().then((data) => {
@@ -16,17 +27,36 @@ export default class Pingo extends Component {
         this.props.setCurrentScene('map');
         Actions.map({type: 'replace'});
       } else {
-        TimerMixin.setTimeout(()=> {
-          this.props.setCurrentScene('initialScene');
-          Actions.initialScene({type: 'replace'});
-        }, 1000);
+        this.animationFadeOut();
+        this.props.setCurrentScene('initialScene');
       }
     });
   }
+  animationFadeOut() {
+    this.state.opacity.setValue(0);
+    Animated.timing(
+      this.state.opacity,
+      {
+        toValue: 1,
+        duration: 1500,
+        easing: Easing.quad
+      }
+    ).start(()=>Actions.initialScene({type: 'replace'}));
+  }
   render() {
+    const opacity = this.state.opacity.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1]
+    });
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Image source={ImgPingo} />
+      <View style={{flex: 1}}>
+        <Animated.View style={[styles.fadeOut, {
+          height: Dimensions.get('window').height,
+          width: Dimensions.get('window').width,
+          opacity: opacity}]}/>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Image source={ImgPingo} />
+        </View>
       </View>
     );
   }
