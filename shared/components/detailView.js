@@ -69,7 +69,6 @@ export default class DetailView extends Component {
     this.renderDate = this.renderDate.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
-    this.renderFirstSlide = this.renderFirstSlide.bind(this);
     this.toggleModalVisible = this.toggleModalVisible.bind(this);
     this.renderModal = this.renderModal.bind(this);
     this.handleReport = this.handleReport.bind(this);
@@ -109,45 +108,6 @@ export default class DetailView extends Component {
         this.toggleModalVisible();
       }
     }, 3000);
-  }
-  renderFirstSlide() {
-    return (
-      <View style = {{flexDirection: 'row', flex: 1}}>
-        <View style = {{flex: 16}}/>
-        <View style = {{flex: 328}}>
-          <View style = {{flex: 64}}/>
-          <View style = {{flex: 80}}>
-            <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.title } </Text>
-          </View>
-          <View style = {{flex: 24}}/>
-          <View style = {{flex: 100, backgroundColor: 'green'}}/>
-          <View style = {{flex: 26}}/>
-          <View style = {{flex: 17}}>
-            <Text style = {{fontSize: 17}}> {this.props.address} </Text>
-          </View>
-          <View style = {{flex: 9}}/>
-          <View style = {{flex: 26}}>
-            <Text style = {{fontSize: 17}}> {this.props.date} </Text>
-          </View>
-          <View style = {{flex: 94}}/>
-          <View style = {{flex: 32, flexDirection: 'row'}}>
-            <View style = {{flex: 32, backgroundColor: 'blue'}}/>
-            <View style = {{flex: 312}}>
-              <View style = {{flex: 14}}>
-                <Text style = {styles.name}> Name </Text>
-              </View>
-              <View style = {{flex: 4}}/>
-              <View style = {{flex: 14}}>
-                <Text style = {styles.name}> {(this.props.detailSource.length !== 0) ?
-                this.renderDate(this.props.detailSource[0].createdDate) : null } </Text>
-              </View>
-            </View>
-          </View>
-          <View style = {{flex: 110}}/>
-        </View>
-        <View style = {{flex: 16}}/>
-      </View>
-    );
   }
 
   renderPagination(index, total) {
@@ -269,7 +229,12 @@ export default class DetailView extends Component {
       <Text> {createdTime} </Text>
     );
   }
+
   render() {
+    let data = this.props.detailSource;
+    if (data.length !== 0) {
+      data.unshift(data[0]);
+    }
     return (
       <View style = {{ flex: 1, backgroundColor: 'black'}}>
       {
@@ -282,8 +247,6 @@ export default class DetailView extends Component {
                                 messageUnvisible = {this.messageUnvisible}/>
           </View>
       }
-
-
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
           {this.renderModal()}
           <Swiper ref={(swiper) => {
@@ -293,7 +256,46 @@ export default class DetailView extends Component {
             renderPagination={this.renderPagination}
             height= {549}
             loop = {false}>
-              {this.props.detailSource.map((value)=>{
+              {data.map((value, i)=>{
+                if (i === 0) {
+                  return (
+                    <View style = {{flexDirection: 'row', flex: 1}}>
+                      <View style = {{flex: 16}}/>
+                      <View style = {{flex: 328}}>
+                        <View style = {{flex: 64}}/>
+                        <View style = {{flex: 80}}>
+                          <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.title } </Text>
+                        </View>
+                        <View style = {{flex: 24}}/>
+                        <View style = {{flex: 100, backgroundColor: 'green'}}/>
+                        <View style = {{flex: 26}}/>
+                        <View style = {{flex: 17}}>
+                          <Text style = {{fontSize: 17}}> {this.props.address} </Text>
+                        </View>
+                        <View style = {{flex: 9}}/>
+                        <View style = {{flex: 26}}>
+                          <Text style = {{fontSize: 17}}> {this.props.date} </Text>
+                        </View>
+                        <View style = {{flex: 94}}/>
+                        <View style = {{flex: 32, flexDirection: 'row'}}>
+                          <View style = {{flex: 32, backgroundColor: 'blue'}}/>
+                          <View style = {{flex: 312}}>
+                            <View style = {{flex: 14}}>
+                              <Text style = {styles.name}> Name </Text>
+                            </View>
+                            <View style = {{flex: 4}}/>
+                            <View style = {{flex: 14}}>
+                              <Text style = {styles.name}> {(value.length !== 0) ?
+                              this.renderDate(value.createdDate) : null } </Text>
+                            </View>
+                          </View>
+                        </View>
+                        <View style = {{flex: 110}}/>
+                      </View>
+                      <View style = {{flex: 16}}/>
+                    </View>
+                  );
+                }
                 return (
                   <View style = {{flex: 1}}>
                     {
@@ -304,7 +306,7 @@ export default class DetailView extends Component {
                         <View style = {{flex: 274}}>
                           <View style = {{flex: 16}}/>
                           <View style = {{flex: 14}}>
-                            <Text style = {styles.name}> Name </Text>
+                            <Text style = {styles.name}> Name1 </Text>
                           </View>
                           <View style = {{flex: 4}}/>
                           <View style = {{flex: 14}}>
