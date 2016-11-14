@@ -192,6 +192,7 @@ export default class Map extends Component {
         >
           {this.props.items.map(item => (
             <MapView.Marker
+              style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
               coordinate={{latitude: item.lat, longitude: item.lng}}
               anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.7} : null}
               onPress={()=>{
