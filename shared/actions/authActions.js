@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 const STORAGE_KEY_accessToken = '@PingoStorage:accessToken';
 const STORAGE_KEY_refreshToken = '@PingoStorage:refreshToken';
+const STORAGE_KEY_userId = '@PingoStorage:userId';
 const STORAGE_KEY_secret = '@PingoStorage:secret';
 const STORAGE_KEY_loginType = '@PingoStorage:loginType';
 
@@ -48,6 +49,7 @@ export const signupGuestUser = () => {
       console.log(rjson);
       setAccessToken(rjson.accessToken);
       setRefreshToken(rjson.refreshToken);
+      setUserId(rjson.userId);
       setSecretToken(rjson.secret);
     })
     .catch((error) => {
@@ -56,12 +58,12 @@ export const signupGuestUser = () => {
 };
 
 // todo: refactor the below two functions
-export const grantAnonymousUser = (secret) => {
-  console.log(secret);
+export const grantAnonymousUser = (secret, userId) => {
   const address = 'https://goober.herokuapp.com/api/auth/grant';
   const bodyGrant = JSON.stringify({
     'grantType': 'anonymous',
-    'secret': secret
+    'secret': secret,
+    'userId': userId
   });
   fetch(address, {
     method: 'POST',
@@ -72,7 +74,6 @@ export const grantAnonymousUser = (secret) => {
     body: bodyGrant
   })
   .then((response) => {
-    console.log(response);
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 400) {
@@ -80,7 +81,6 @@ export const grantAnonymousUser = (secret) => {
     }
   })
   .then((rjson) => {
-    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
   })
@@ -135,6 +135,14 @@ const setAccessToken = async (accessToken) => {
 const setRefreshToken = async (refreshToken) => {
   try {
     await AsyncStorage.setItem(STORAGE_KEY_refreshToken, refreshToken);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const setUserId = async (userId) => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY_userId, userId);
   } catch (error) {
     console.log(error.message);
   }
@@ -197,7 +205,11 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
       console.log(error);
       getSecretToken().then((secret) => {
         if (secret !== null) {
-          grantAnonymousUser(secret);
+          getUserId().then((userId) => {
+            if (userId !== null) {
+              grantAnonymousUser(secret, userId);
+            }
+          });
         } else {
           signupGuestUser();
         }
@@ -232,6 +244,14 @@ export const getSecretToken = async () => {
 export const getRefreshToken = async () => {
   try {
     return await AsyncStorage.getItem(STORAGE_KEY_refreshToken);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getUserId = async () => {
+  try {
+    return await AsyncStorage.getItem(STORAGE_KEY_userId);
   } catch (error) {
     console.log(error.message);
   }
