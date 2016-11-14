@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {StyleSheet, View, Text, Image, Dimensions} from 'react-native';
+import {StyleSheet, View, Text, Image, Dimensions, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -34,6 +34,13 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginRight: 16,
     marginBottom: 16
+  },
+  fontRobotoMedium: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
   }
 });
 
@@ -195,25 +202,24 @@ export default class Map extends Component {
             >
               <Image
                 style={{
-                  height: (this.state.markerSelect === item.key) ? Dimensions.get('window').height * 63 / 640
-                    : Dimensions.get('window').width * 19 / 360,
-                  width: (this.state.markerSelect === item.key) ? Dimensions.get('window').width * 52.1 / 360
-                    : Dimensions.get('window').width * 19 / 360
+                  height: (this.state.markerSelect === item.key) ? Dimensions.get('window').height * 103 / 640
+                    : Dimensions.get('window').width * 28 / 360,
+                  width: (this.state.markerSelect === item.key) ? Dimensions.get('window').width * 88.6 / 360
+                    : Dimensions.get('window').width * 28 / 360
                 }}
                 source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
-              />
-              {this.state.markerSelect === item.key ?
-                <View style={{
-                  height: 100,
-                  width: 200,
-                  backgroundColor: 'black',
-                  opacity: 0.9,
-                  position: 'absolute',
-                  zIndex: 10
-                }}>
-                  <Text style={{color: 'white', fontSize: 20}}>helllllllllllo</Text>
-                </View>
-                : null}
+              >
+                {(this.state.markerSelect === item.key) ?
+                  <Text style={[{
+                    alignSelf: 'center',
+                    top: Dimensions.get('window').height * 23 / 640,
+                    fontSize: 14,
+                    color: '#ffffff'
+                  }, styles.fontRobotoMedium]}>
+                    {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+                  </Text>
+                  : null}
+              </Image>
             </MapView.Marker>
           ))}
         </MapView>
@@ -250,5 +256,6 @@ Map.propTypes = {
     description: PropTypes.string
   })),
   category: PropTypes.arrayOf(PropTypes.string),
-  zoomLevel: PropTypes.any
+  zoomLevel: PropTypes.any,
+  detailSource: PropTypes.array
 };
