@@ -38,15 +38,15 @@ export default class Pingo extends Component {
       this.state.opacity,
       {
         toValue: 1,
-        duration: 1500,
+        duration: 2300,
         easing: Easing.quad
       }
     ).start(()=>Actions.initialScene({type: 'replace'}));
   }
   render() {
     const opacity = this.state.opacity.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1]
+      inputRange: [0, 0.5, 0.7, 1],
+      outputRange: [0, 0, 0, 1]
     });
     return (
       <View style={{flex: 1}}>
