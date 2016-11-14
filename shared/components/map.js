@@ -173,6 +173,7 @@ export default class Map extends Component {
     return null;
   }
 
+  // todo: use centerOffset for IOS
   render() {
     return (
       <View style ={styles.container}>
@@ -185,6 +186,7 @@ export default class Map extends Component {
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
+              anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.7} : null}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
