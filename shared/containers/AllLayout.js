@@ -11,13 +11,17 @@ import MyPageLayout from './myPageLayout';
 import SettingLayout from './settingLayout';
 import EventReportView from '../components/eventReportView';
 import InitialSceneLayout from './InitialSceneLayout';
+import PingoLayout from './PingoLayout';
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
-    <Scene key="initialScene" hideNavBar={true} component={
-      InitialSceneLayout
+    <Scene key="pingo" hideNavBar={true} component={
+      PingoLayout
     }/>
     <Scene key="map" hideNavBar={true} component={
       MapLayout
+    }/>
+    <Scene key="initialScene" hideNavBar={true} component={
+      InitialSceneLayout
     }/>
     <Scene key="list" hideNavBar={true} component={
       ListLayout
