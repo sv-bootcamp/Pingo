@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text, Image, Dimensions} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -185,14 +185,34 @@ export default class Map extends Component {
           {this.props.items.map(item => (
             <MapView.Marker
               coordinate={{latitude: item.lat, longitude: item.lng}}
-              title={item.title}
-              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
                 this.setState({markerSelect: item.key});
               }}
-            />
+            >
+              <Image
+                style={{
+                  height: (this.state.markerSelect === item.key) ? Dimensions.get('window').height * 63 / 640
+                    : Dimensions.get('window').width * 19 / 360,
+                  width: (this.state.markerSelect === item.key) ? Dimensions.get('window').width * 52.1 / 360
+                    : Dimensions.get('window').width * 19 / 360
+                }}
+                source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
+              />
+              {this.state.markerSelect === item.key ?
+                <View style={{
+                  height: 100,
+                  width: 200,
+                  backgroundColor: 'black',
+                  opacity: 0.9,
+                  position: 'absolute',
+                  zIndex: 10
+                }}>
+                  <Text style={{color: 'white', fontSize: 20}}>helllllllllllo</Text>
+                </View>
+                : null}
+            </MapView.Marker>
           ))}
         </MapView>
         <View style={styles.buttonSection}>
