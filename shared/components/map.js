@@ -194,7 +194,7 @@ export default class Map extends Component {
             <MapView.Marker
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
               coordinate={{latitude: item.lat, longitude: item.lng}}
-              anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.7} : null}
+              anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
