@@ -656,24 +656,26 @@ class Create extends Component {
             }
           </ScrollView>
         </View>
-        <View style={{
-          height: Dimensions.get('window').height * 24 / 640,
-          width: Dimensions.get('window').width * 24 / 360,
-          position: 'absolute',
-          top: Dimensions.get('window').height * 124 / 640 - Dimensions.get('window').height * 24 / 1280,
-          right: Dimensions.get('window').width * 27 / 360,
-          zIndex: 10
-        }}>
-          <TouchableOpacity onPress={this.getAddressData.bind(this)}>
+        {(this.state.addingNewLocation === true) ?
+          <View style={{
+            height: Dimensions.get('window').height * 24 / 640,
+            width: Dimensions.get('window').width * 24 / 360,
+            position: 'absolute',
+            top: Dimensions.get('window').height * 124 / 640,
+            right: Dimensions.get('window').width * 27 / 360,
+            zIndex: 10
+          }}>
+            <TouchableOpacity onPress={this.getAddressData.bind(this)}>
             <Image
-              style={{
-                height: Dimensions.get('window').height * 24 / 640,
-                width: Dimensions.get('window').width * 24 / 360
-              }}
-              source={ImgLocation}
+            style={{
+              height: Dimensions.get('window').height * 24 / 640,
+              width: Dimensions.get('window').width * 24 / 360
+            }}
+            source={ImgLocation}
             />
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+          : null}
       </View>
     );
   }

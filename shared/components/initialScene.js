@@ -18,7 +18,7 @@ const WindowHeight = 477.8 + 162;
 const WindowWidth = 360;
 const BottomBoxHeight = 162;
 const SwiperHeight = WindowHeight - BottomBoxHeight;
-const LoginImgHeight = 550;
+const LoginImgHeight = 512;
 const LoginImgWidth = 250;
 
 const styles = {
@@ -107,7 +107,7 @@ class InitialScene extends Component {
           style={[{
             position: 'absolute',
             top: swiperHeight * 124 / (WindowHeight),
-            height: Dimensions.get('window').height * LoginImgHeight / (WindowHeight),
+            height: (Dimensions.get('window').width * LoginImgWidth / (WindowWidth)) * 512 / 250,
             width: Dimensions.get('window').width * LoginImgWidth / (WindowWidth),
             left: Dimensions.get('window').width * 55 / WindowWidth
           }]}
