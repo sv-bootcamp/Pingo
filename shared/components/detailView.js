@@ -64,7 +64,8 @@ export default class DetailView extends Component {
       photoRepored: false,
       locationReported: false,
       messageVisible: false,
-      currentReport: ''
+      currentReport: '',
+      data: []
     };
     this.renderDate = this.renderDate.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -93,6 +94,15 @@ export default class DetailView extends Component {
 
   componentDidMount() {
     this._swiper.scrollBy(this.props.rowID * 1);
+  }
+
+  componentWillReceiveProps(nextProps){
+    let data = nextProps.detailSource;
+    if (data.length !== 0) {
+      data.unshift(data[0]);
+    }
+    console.log(JSON.stringify(nextProps));
+    this.setState({data: data});
   }
 
   handleClick() {
@@ -231,10 +241,6 @@ export default class DetailView extends Component {
   }
 
   render() {
-    let data = this.props.detailSource;
-    if (data.length !== 0) {
-      data.unshift(data[0]);
-    }
     return (
       <View style = {{ flex: 1, backgroundColor: 'black'}}>
       {
@@ -256,7 +262,7 @@ export default class DetailView extends Component {
             renderPagination={this.renderPagination}
             height= {549}
             loop = {false}>
-              {data.map((value, i)=>{
+              {this.state.data.map((value, i)=>{
                 if (i === 0) {
                   return (
                     <View style = {{flexDirection: 'row', flex: 1}}>
