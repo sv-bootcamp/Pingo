@@ -107,7 +107,7 @@ class InitialScene extends Component {
           style={[{
             position: 'absolute',
             top: swiperHeight * 124 / (WindowHeight),
-            height: (Dimensions.get('window').width * LoginImgWidth / (WindowWidth)) * 512 / 250,
+            height: (Dimensions.get('window').width * LoginImgWidth / (WindowWidth)) * LoginImgHeight / LoginImgWidth,
             width: Dimensions.get('window').width * LoginImgWidth / (WindowWidth),
             left: Dimensions.get('window').width * 55 / WindowWidth
           }]}
