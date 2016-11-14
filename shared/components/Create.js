@@ -540,29 +540,51 @@ class Create extends Component {
 
   renderAddNewLocation() {
     return (
-      <View>
+      <View style={{backgroundColor: 'white'}}>
         <Text style={styles.textCaption}> Location </Text>
-        <TextInput
-          style={[styles.inputLocation, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
-          onChangeText={(text) => {
-            this.setState({inputTextLocation: text});
-            if (this.state.onFocusLocation === false) {
+        <View style={{backgroundColor: 'white'}}>
+          {this.state.addingNewLocation === true ?
+            <View style={{
+              height: 24,
+              width: 24,
+              position: 'absolute',
+              zIndex: 10,
+              top: 11,
+              right: 27
+            }}>
+              <TouchableOpacity onPress={this.getAddressData.bind(this)}>
+                <Image
+                  style={{
+                    height: 24,
+                    width: 24
+                  }}
+                  source={ImgLocation}
+                />
+              </TouchableOpacity>
+            </View>
+            : null}
+          <TextInput
+            style={[styles.inputLocation, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
+            onChangeText={(text) => {
+              this.setState({inputTextLocation: text});
+              if (this.state.onFocusLocation === false) {
+                this.setState({onFocusLocation: true});
+              }
+            }}
+            value={`${this.state.streetNumber} ${this.state.streetName}`}
+            multiline={false}
+            underlineColorAndroid="rgba(0,0,0,0)"
+            onFocus={() => {
               this.setState({onFocusLocation: true});
-            }
-          }}
-          value={`${this.state.streetNumber} ${this.state.streetName}`}
-          multiline={false}
-          underlineColorAndroid="rgba(0,0,0,0)"
-          onFocus={() => {
-            this.setState({onFocusLocation: true});
-          }}
-          onEndEditing={() => {
-            this.setState({onFocusLocation: false});
-          }}
-          onSubmitEditing={() => {
-            this.setState({onFocusLocation: false});
-          }}
-        />
+            }}
+            onEndEditing={() => {
+              this.setState({onFocusLocation: false});
+            }}
+            onSubmitEditing={() => {
+              this.setState({onFocusLocation: false});
+            }}
+          />
+        </View>
         <Text style={styles.textLocation}> Title </Text>
         <TextInput
           style={[styles.inputLocation, {borderColor: (this.state.onFocusTitle === true) ? '#2c8cff' : '#dcdcdc'}]}
@@ -656,26 +678,6 @@ class Create extends Component {
             }
           </ScrollView>
         </View>
-        {(this.state.addingNewLocation === true) ?
-          <View style={{
-            height: Dimensions.get('window').height * 24 / 640,
-            width: Dimensions.get('window').width * 24 / 360,
-            position: 'absolute',
-            top: Dimensions.get('window').height * 124 / 640,
-            right: Dimensions.get('window').width * 27 / 360,
-            zIndex: 10
-          }}>
-            <TouchableOpacity onPress={this.getAddressData.bind(this)}>
-            <Image
-            style={{
-              height: Dimensions.get('window').height * 24 / 640,
-              width: Dimensions.get('window').width * 24 / 360
-            }}
-            source={ImgLocation}
-            />
-            </TouchableOpacity>
-          </View>
-          : null}
       </View>
     );
   }
