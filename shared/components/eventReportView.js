@@ -6,7 +6,7 @@ import ImgBtnCheck from '../resources/btn_check/drawable-xxxhdpi/check.png';
 
 const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexual content',
   'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
-const locationReportOption = ['Permanently closed', 'Does\'nt exist anymall', 'Spam', 'Private', 'Moved elsewhere', 'Duplicate of another place'];
+const locationReportOption = ['Permanently closed', 'Doesn\'t exist anymall', 'Spam', 'Private', 'Moved elsewhere', 'Duplicate of another place'];
 const styles = {
   textStyle: {
     flex: 1,
@@ -48,11 +48,11 @@ export default class EventReportView extends Component {
               this.setState({currentIndex: i});
             }}
             style = {{flex: 1}}>
-              <View style = {{flex: 6}}/>
-              <View style = {{flex: 20, justifyContent: 'center'}}>
+              <View style = {{flex: 5}}/>
+              <View style = {{flex: 22, justifyContent: 'center'}}>
                 <Text style = {[styles.textStyle, {color: '#2b2b2b'}]}>{title}</Text>
               </View>
-              <View style = {{flex: 6}}/>
+              <View style = {{flex: 5}}/>
             </TouchableOpacity>
           </View>
           <View style = {{flex: 16, justifyContent: 'center'}}>
