@@ -88,7 +88,7 @@ class SmallHeader extends Component {
         <View style={{flex: 1}}>
           {this.renderBtnLeft()}
         </View>
-        <View style={{flex: 1, alignItems: 'center'}}>
+        <View style={{flex: 3, alignItems: 'center'}}>
           {this.renderHeaderTitle()}
         </View>
         <View style={{flex: 1}}>

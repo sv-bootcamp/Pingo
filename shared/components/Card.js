@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     borderBottomWidth: 1,
-    borderBottomColor: '#e7e7e7'
+    borderBottomColor: '#e7e7e7',
+    elevation: 5
   },
   TextTitle: {
     fontSize: 19,

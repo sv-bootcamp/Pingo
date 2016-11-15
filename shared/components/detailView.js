@@ -7,6 +7,7 @@ import IMG_BUTTON_LEFT from '../resources/arrow_left/drawable-xxxhdpi/arrow.png'
 import IMG_BUTTON_RIGHT from '../resources/arrow_right/drawable-xxxhdpi/arrow.png';
 import IMG_BUTTON_FLAG from '../resources/btn_flag/drawable-xxxhdpi/btn_flag.png';
 import {Actions} from 'react-native-router-flux';
+import TimerMixin from 'react-timer-mixin';
 
 const styles = {
   wrapper: {
@@ -126,7 +127,7 @@ export default class DetailView extends Component {
     this.handleReport(value);
     this.setState({messageVisible: true});
     this.toggleModalVisible();
-    setTimeout(()=> {
+    TimerMixin.setTimeout(()=> {
       if (this.state.modalVisible === true) {
         this.toggleModalVisible();
       }

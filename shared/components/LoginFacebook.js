@@ -61,6 +61,7 @@ class LoginFacebook extends Component {
   constructor(props) {
     super(props);
   }
+  // todo: since pingo scene does the below work, this may not be necessary
   componentDidMount() {
     if (this.props.currentScene === 'initialScene') {
       getLoginType().then((data) => {
