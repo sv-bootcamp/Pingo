@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import Swiper from 'react-native-swiper';
 import DetailHeaderLayout from '../containers/detailHeaderLayout';
+import DetailLitemap from './detailLitemap';
 import { View, Image, Text, Modal, TouchableOpacity, Platform, TouchableHighlight } from 'react-native';
 import IMG_BUTTON_LEFT from '../resources/arrow_left/drawable-xxxhdpi/arrow.png';
 import IMG_BUTTON_RIGHT from '../resources/arrow_right/drawable-xxxhdpi/arrow.png';
@@ -52,6 +53,15 @@ const styles = {
     }),
     color: '#ffffff',
     fontSize: 14
+  },
+  date: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    }),
+    fontSize: 14,
+    fontWeight: 'normal'
   }
 };
 
@@ -75,6 +85,7 @@ export default class DetailView extends Component {
     this.handleReport = this.handleReport.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
     this.messageUnvisible = this.messageUnvisible.bind(this);
+    this.firstTry = true;
   }
 
   toggleModalVisible() {
@@ -92,8 +103,11 @@ export default class DetailView extends Component {
     : this.setState({locationReported: true});
   }
 
-  componentDidMount() {
-    this._swiper.scrollBy(this.props.rowID * 1);
+  componentDidUpdate(prevProps){
+    if (this.firstTry) {
+      this._swiper.scrollBy(prevProps.rowID * 1 + 1);
+      this.firstTry = false;
+    }
   }
 
   componentWillReceiveProps(nextProps){
@@ -101,7 +115,6 @@ export default class DetailView extends Component {
     if (data.length !== 0) {
       data.unshift(data[0]);
     }
-    console.log(JSON.stringify(nextProps));
     this.setState({data: data});
   }
 
@@ -236,11 +249,18 @@ export default class DetailView extends Component {
     (gap / minute >= 1) ? createdTime += Math.ceil(gap / minute) + ' minutes ago' :
     createdTime += 'right now';
     return (
-      <Text> {createdTime} </Text>
+      <Text style = {styles.date}>{createdTime}</Text>
     );
   }
 
   render() {
+    console.log(JSON.stringify(this.props));
+    let currentLocation = {
+      latitude: this.props.lat,
+      longitude: this.props.lng,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421
+    }
     return (
       <View style = {{ flex: 1, backgroundColor: 'black'}}>
       {
@@ -273,7 +293,10 @@ export default class DetailView extends Component {
                           <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.title } </Text>
                         </View>
                         <View style = {{flex: 24}}/>
-                        <View style = {{flex: 100, backgroundColor: 'green'}}/>
+                        <View style = {{flex: 100, backgroundColor: 'green'}}>
+                          <DetailLitemap currentLocation = {currentLocation}
+                                         category = {this.props.category}/>
+                        </View>
                         <View style = {{flex: 26}}/>
                         <View style = {{flex: 17}}>
                           <Text style = {{fontSize: 17}}> {this.props.address} </Text>
@@ -283,16 +306,16 @@ export default class DetailView extends Component {
                           <Text style = {{fontSize: 17}}> {this.props.date} </Text>
                         </View>
                         <View style = {{flex: 94}}/>
-                        <View style = {{flex: 32, flexDirection: 'row'}}>
+                        <View style = {{flex: 40, flexDirection: 'row'}}>
                           <View style = {{flex: 32, backgroundColor: 'blue'}}/>
-                          <View style = {{flex: 312}}>
+                          <View style = {{flex: 7}}/>
+                          <View style = {{flex: 305, justifyContent: 'center'}}>
                             <View style = {{flex: 14}}>
-                              <Text style = {styles.name}> Name </Text>
+                              <Text style = {styles.name}>Name</Text>
                             </View>
                             <View style = {{flex: 4}}/>
                             <View style = {{flex: 14}}>
-                              <Text style = {styles.name}> {(value.length !== 0) ?
-                              this.renderDate(value.createdDate) : null } </Text>
+                              {(value.length !== 0) ? this.renderDate(value.createdDate) : null }
                             </View>
                           </View>
                         </View>
@@ -367,5 +390,8 @@ DetailView.propTypes = {
   title: PropTypes.any,
   date: PropTypes.string,
   lastScene: PropTypes.string,
-  address: PropTypes.string
+  address: PropTypes.string,
+  lat: PropTypes.any,
+  lng: PropTypes.any,
+  category: PropTypes.string
 };
