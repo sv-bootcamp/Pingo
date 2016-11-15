@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     borderBottomWidth: 1,
-    borderBottomColor: '#e7e7e7'
+    borderBottomColor: '#e7e7e7',
+    elevation: 5
   },
   TextTitle: {
     fontSize: 19,
@@ -102,7 +103,8 @@ class Card extends Component {
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene,
-                             date: this.state.date, address: this.props.dataSource.address});
+                             date: this.state.date, address: this.props.dataSource.address, category: this.props.dataSource.category,
+                             lat: this.props.dataSource.lat, lng: this.props.dataSource.lng});
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>

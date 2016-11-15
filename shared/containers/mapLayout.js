@@ -24,6 +24,7 @@ const mapStateToProps = (state) => {
     items: getCategorizedItems(state.map.items, state.map.categoryFilter),
     selectedItem: state.map.selectedItem,
     currentLocation: state.map.currentLocation,
+    detailSource: state.map.detailSource,
     setCurrentScene: state.flux.setCurrentScene,
     zoomLevel: state.map.zoomLevel
   };

@@ -36,6 +36,8 @@ class DetailLitemap extends Component {
           style ={{height: 100, width: 333}}
           region={this.props.currentLocation}
           litemode={true}
+          scrollEnabled = {false}
+          zoomEnabled = {false}
         />
         <Image source={this.renderImgMarker()} style={styles.marker}/>
       </View>
