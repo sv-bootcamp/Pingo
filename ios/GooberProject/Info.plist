@@ -4,6 +4,26 @@
 <dict>
 	<key></key>
 	<dict/>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>fb536789819839446</string>
+      </array>
+    </dict>
+  </array>
+  <key>FacebookAppID</key>
+  <string>536789819839446</string>
+  <key>FacebookDisplayName</key>
+  <string>PINGO</string>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>fbapi</string>
+    <string>fb-messenger-api</string>
+    <string>fbauth2</string>
+    <string>fbshareextension</string>
+  </array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>access photo library</string>
 	<key>NSMicrophoneUsageDescription</key>
