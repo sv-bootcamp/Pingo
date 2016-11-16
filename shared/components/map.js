@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text, Image, Dimensions, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -11,6 +11,7 @@ import eventClickPng from '../resources/marker/event_big.png';
 import facilityClickPng from '../resources/marker/facility_big.png';
 import warningClickPng from '../resources/marker/warning_big.png';
 import {API_GEODATA, API_KEY} from '../utils';
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,6 +35,13 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginRight: 16,
     marginBottom: 16
+  },
+  fontRobotoMedium: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
   }
 });
 
@@ -54,11 +62,24 @@ export default class Map extends Component {
   }
 
   componentWillMount() {
-    this.setCurrentPosition();
-    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-    this.props.getMapItems(this.props.zoomLevel,
-      this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
+    LocationServicesDialogBox.checkLocationServicesIsEnabled({
+      message: "<h2>Use Location ?</h2>" +
+      "This app wants to change your device settings:<br/><br/>" +
+      "Use GPS, Wi-Fi, and cell network for location<br/><br/>",
+      ok: 'YES',
+      cancel: 'NO'
+    })
+    .then((success) => {
+      console.log(success);
+      this.setCurrentPosition();
+      this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+      this.props.getMapItems(this.props.zoomLevel,
+        this.props.currentLocation.latitude,
+        this.props.currentLocation.longitude);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
   }
 
   // todo: this is duplicate from Create.js. refactoring required
@@ -173,6 +194,7 @@ export default class Map extends Component {
     return null;
   }
 
+  // todo: use centerOffset for IOS
   render() {
     return (
       <View style ={styles.container}>
@@ -184,15 +206,37 @@ export default class Map extends Component {
         >
           {this.props.items.map(item => (
             <MapView.Marker
+              key={item.key}
+              style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
               coordinate={{latitude: item.lat, longitude: item.lng}}
-              title={item.title}
-              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
+              anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
                 this.setState({markerSelect: item.key});
               }}
-            />
+            >
+              <Image
+                style={{
+                  height: (this.state.markerSelect === item.key) ? Dimensions.get('window').height * 103 / 640
+                    : Dimensions.get('window').width * 28 / 360,
+                  width: (this.state.markerSelect === item.key) ? Dimensions.get('window').width * 88.6 / 360
+                    : Dimensions.get('window').width * 28 / 360
+                }}
+                source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
+              >
+                {(this.state.markerSelect === item.key) ?
+                  <Text style={[{
+                    alignSelf: 'center',
+                    top: Dimensions.get('window').height * 23 / 640,
+                    fontSize: 14,
+                    color: '#ffffff'
+                  }, styles.fontRobotoMedium]}>
+                    {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+                  </Text>
+                  : null}
+              </Image>
+            </MapView.Marker>
           ))}
         </MapView>
         <View style={styles.buttonSection}>
@@ -225,8 +269,10 @@ Map.propTypes = {
   getZoomLevel: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
-    description: PropTypes.string
+    description: PropTypes.string,
+    key: PropTypes.string
   })),
   category: PropTypes.arrayOf(PropTypes.string),
-  zoomLevel: PropTypes.any
+  zoomLevel: PropTypes.any,
+  detailSource: PropTypes.array
 };
