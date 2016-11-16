@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-android-location-services-dialog-box')
     compile project(':react-native-facebook-login')
     compile project(':react-native-image-to-base64')
     compile project(':react-native-camera')
