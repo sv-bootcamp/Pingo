@@ -157,6 +157,7 @@ class Create extends Component {
 
     this.state = {
       addingNewLocation: false,
+      addingExistingLocation: false,
       category: {
         colorEvent: 'white',
         colorFacility: 'white',
@@ -179,7 +180,9 @@ class Create extends Component {
       onFocusTitle: false,
       onFocusDateStart: false,
       onFocusDateEnd: false,
-      busyPosting: false
+      busyPosting: false,
+      selectItemKey: '',
+      selectUserKey: ''
     };
 
     this.getAddressData();
@@ -268,7 +271,9 @@ class Create extends Component {
 
   handleAddNewLocation() {
     this.setState({
-      addingNewLocation: true
+      addingNewLocation: true,
+      addingExistingLocation: false,
+      selectItemKey: ''
     });
   }
 
@@ -476,19 +481,22 @@ class Create extends Component {
         </View>
         <Text style={styles.textCaption}> Location </Text>
         <TouchableOpacity
-          style={[styles.btnLocation, {borderColor: (this.state.Done === true) ? '#8e8e8e' : '#e7e7e7'}]}
+          style={[styles.btnLocation, {
+            borderColor: (this.state.Done === true && !this.state.addingExistingLocation) ? '#8e8e8e' : '#e7e7e7'}]}
           onPress={this.handleAddNewLocation.bind(this)}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={[styles.textItemAddress, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
+              <Text style={[styles.textItemAddress, {
+                color: (this.state.Done === true && !this.state.addingExistingLocation) ? '#2b2b2b' : '#8e8e8e'}]}>
                 {this.state.streetNumber} {this.state.streetName}
               </Text>
-              <Text style={[styles.textItemTitle, {color: (this.state.Done === true) ? '#2b2b2b' : '#8e8e8e'}]}>
-                {(this.state.Done === true) ? this.state.inputTextTitle : 'Add New Location'}
+              <Text style={[styles.textItemTitle, {
+                color: (this.state.Done === true && !this.state.addingExistingLocation) ? '#2b2b2b' : '#8e8e8e'}]}>
+                {(this.state.Done === true && !this.state.addingExistingLocation) ? this.state.inputTextTitle : 'Add New Location'}
               </Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
-              {(this.state.Done === true) ?
+              {(this.state.Done === true && !this.state.addingExistingLocation) ?
                 <Image source={ImgBtnCheck} style={styles.btnCheck}/> :
                 <Text style={styles.textItemUnit}>0 km</Text>
               }
@@ -513,24 +521,41 @@ class Create extends Component {
     return (R * c).toFixed(2);
   }
 
+  handleDoneOnAddingExistingLocation() {
+    this.handleAddExistingLocation(this.state.key, this.state.userKey, this.state.inputTextCaption, this.state.img);
+  }
+
   // todo: should limit item.title length if it is too long
   renderAroundLocations() {
     return (
       this.props.dataSource.map(item => (
         <TouchableOpacity
-          style={[styles.btnLocation, {borderColor: '#e7e7e7'}]}
+          style={[styles.btnLocation, {borderColor: (this.state.selectItemKey === item.key) ? '#8e8e8e' : '#e7e7e7'}]}
           onPress={() => {
-            this.handleAddExistingLocation(item.key, item.userKey, this.state.inputTextCaption, this.state.img);
+            this.setState({
+              Done: true,
+              addingExistingLocation: true,
+              selectItemKey: item.key,
+              selectUserKey: item.userKey
+            });
           }}>
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={styles.textItemAddress}>{item.address.substring(0, 18)}</Text>
-              <Text style={styles.textItemTitle}>{item.title}</Text>
+              <Text style={[styles.textItemAddress, {
+                color: (this.state.selectItemKey === item.key) ? '#2b2b2b' : '#8e8e8e'
+              }]}>{item.address.substring(0, 18)}</Text>
+              <Text style={[styles.textItemTitle, {
+                color: (this.state.selectItemKey === item.key) ? '#2b2b2b' : '#8e8e8e'
+              }]}>{item.title}</Text>
             </View>
             <View style={{flex: 1, justifyContent: 'center'}}>
-              <Text style={styles.textItemUnit}>
-                {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
-              </Text>
+              {this.state.selectItemKey === item.key ?
+                <Image source={ImgBtnCheck} style={styles.btnCheck}/>
+                :
+                <Text style={styles.textItemUnit}>
+                  {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
+                </Text>
+              }
             </View>
           </View>
         </TouchableOpacity>
@@ -540,29 +565,51 @@ class Create extends Component {
 
   renderAddNewLocation() {
     return (
-      <View>
+      <View style={{backgroundColor: 'white'}}>
         <Text style={styles.textCaption}> Location </Text>
-        <TextInput
-          style={[styles.inputLocation, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
-          onChangeText={(text) => {
-            this.setState({inputTextLocation: text});
-            if (this.state.onFocusLocation === false) {
+        <View style={{backgroundColor: 'white'}}>
+          {this.state.addingNewLocation === true ?
+            <View style={{
+              height: 24,
+              width: 24,
+              position: 'absolute',
+              zIndex: 10,
+              top: 11,
+              right: 27
+            }}>
+              <TouchableOpacity onPress={this.getAddressData.bind(this)}>
+                <Image
+                  style={{
+                    height: 24,
+                    width: 24
+                  }}
+                  source={ImgLocation}
+                />
+              </TouchableOpacity>
+            </View>
+            : null}
+          <TextInput
+            style={[styles.inputLocation, {borderColor: (this.state.onFocusLocation === true) ? '#2c8cff' : '#dcdcdc'}]}
+            onChangeText={(text) => {
+              this.setState({inputTextLocation: text});
+              if (this.state.onFocusLocation === false) {
+                this.setState({onFocusLocation: true});
+              }
+            }}
+            value={`${this.state.streetNumber} ${this.state.streetName}`}
+            multiline={false}
+            underlineColorAndroid="rgba(0,0,0,0)"
+            onFocus={() => {
               this.setState({onFocusLocation: true});
-            }
-          }}
-          value={`${this.state.streetNumber} ${this.state.streetName}`}
-          multiline={false}
-          underlineColorAndroid="rgba(0,0,0,0)"
-          onFocus={() => {
-            this.setState({onFocusLocation: true});
-          }}
-          onEndEditing={() => {
-            this.setState({onFocusLocation: false});
-          }}
-          onSubmitEditing={() => {
-            this.setState({onFocusLocation: false});
-          }}
-        />
+            }}
+            onEndEditing={() => {
+              this.setState({onFocusLocation: false});
+            }}
+            onSubmitEditing={() => {
+              this.setState({onFocusLocation: false});
+            }}
+          />
+        </View>
         <Text style={styles.textLocation}> Title </Text>
         <TextInput
           style={[styles.inputLocation, {borderColor: (this.state.onFocusTitle === true) ? '#2c8cff' : '#dcdcdc'}]}
@@ -639,7 +686,8 @@ class Create extends Component {
           addingNewLocation={this.state.addingNewLocation}
           Done={this.state.Done}
           handleBtnLeft={this.handleBefore.bind(this)}
-          handleBtnRight={this.handleDone.bind(this)}
+          handleBtnRight={(this.state.addingExistingLocation === true) ?
+            this.handleDoneOnAddingExistingLocation.bind(this) : this.handleDone.bind(this)}
           btnRight={
             <Text style={[styles.textDone, {color: (this.state.Done === true) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
           }
@@ -655,24 +703,6 @@ class Create extends Component {
               <View>{this.renderCaption()}</View>
             }
           </ScrollView>
-        </View>
-        <View style={{
-          height: Dimensions.get('window').height * 24 / 640,
-          width: Dimensions.get('window').width * 24 / 360,
-          position: 'absolute',
-          top: Dimensions.get('window').height * 124 / 640 - Dimensions.get('window').height * 24 / 1280,
-          right: Dimensions.get('window').width * 27 / 360,
-          zIndex: 10
-        }}>
-          <TouchableOpacity onPress={this.getAddressData.bind(this)}>
-            <Image
-              style={{
-                height: Dimensions.get('window').height * 24 / 640,
-                width: Dimensions.get('window').width * 24 / 360
-              }}
-              source={ImgLocation}
-            />
-          </TouchableOpacity>
         </View>
       </View>
     );
