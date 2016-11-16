@@ -11,6 +11,7 @@ import eventClickPng from '../resources/marker/event_big.png';
 import facilityClickPng from '../resources/marker/facility_big.png';
 import warningClickPng from '../resources/marker/warning_big.png';
 import {API_GEODATA, API_KEY} from '../utils';
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,11 +62,24 @@ export default class Map extends Component {
   }
 
   componentWillMount() {
-    this.setCurrentPosition();
-    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-    this.props.getMapItems(this.props.zoomLevel,
-      this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
+    LocationServicesDialogBox.checkLocationServicesIsEnabled({
+      message: "<h2>Use Location ?</h2>" +
+      "This app wants to change your device settings:<br/><br/>" +
+      "Use GPS, Wi-Fi, and cell network for location<br/><br/>",
+      ok: 'YES',
+      cancel: 'NO'
+    })
+    .then((success) => {
+      console.log(success);
+      this.setCurrentPosition();
+      this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+      this.props.getMapItems(this.props.zoomLevel,
+        this.props.currentLocation.latitude,
+        this.props.currentLocation.longitude);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
   }
 
   // todo: this is duplicate from Create.js. refactoring required
