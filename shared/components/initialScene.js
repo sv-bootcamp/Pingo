@@ -10,7 +10,7 @@ import {
   setLoginType,
   grantAnonymousUser,
   getSecretToken,
-  getUserId
+  getUserKey
 } from '../actions/authActions';
 
 import ImgLogin1 from '../resources/initialScene/loginImage1.png';
@@ -167,7 +167,7 @@ class InitialScene extends Component {
           if (secret === null) {
             signupGuestUser();
           } else {
-            getUserId().then((userId) => {
+            getUserKey().then((userId) => {
               if (userId === null) {
                 signupGuestUser();
               } else {

@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 const STORAGE_KEY_accessToken = '@PingoStorage:accessToken';
 const STORAGE_KEY_refreshToken = '@PingoStorage:refreshToken';
-const STORAGE_KEY_userId = '@PingoStorage:userId';
+const STORAGE_KEY_userKey = '@PingoStorage:userKey';
 const STORAGE_KEY_secret = '@PingoStorage:secret';
 const STORAGE_KEY_loginType = '@PingoStorage:loginType';
 
@@ -23,8 +23,10 @@ const signupFacebookUser = (FacebookToken) => {
   })
   .then((response) => response.json())
   .then((rjson) => {
+    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
+    setUserKey(rjson.userKey);
     })
   .catch((error) => {
     console.log(error);
@@ -49,7 +51,7 @@ export const signupGuestUser = () => {
       console.log(rjson);
       setAccessToken(rjson.accessToken);
       setRefreshToken(rjson.refreshToken);
-      setUserId(rjson.userId);
+      setUserKey(rjson.userId);
       setSecretToken(rjson.secret);
     })
     .catch((error) => {
@@ -58,12 +60,12 @@ export const signupGuestUser = () => {
 };
 
 // todo: refactor the below two functions
-export const grantAnonymousUser = (secret, userId) => {
+export const grantAnonymousUser = (secret, userKey) => {
   const address = 'https://goober.herokuapp.com/api/auth/grant';
   const bodyGrant = JSON.stringify({
     'grantType': 'anonymous',
     'secret': secret,
-    'userId': userId
+    'userKey': userKey
   });
   fetch(address, {
     method: 'POST',
@@ -81,6 +83,7 @@ export const grantAnonymousUser = (secret, userId) => {
     }
   })
   .then((rjson) => {
+    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
   })
@@ -90,7 +93,7 @@ export const grantAnonymousUser = (secret, userId) => {
   });
 };
 
-export const grantFacebookUser = (facebookToken) => {
+export const grantFacebookUser = (facebookToken, userKey) => {
   const address = 'https://goober.herokuapp.com/api/auth/grant';
   console.log(address);
   console.log('fbtoken ' + facebookToken);
@@ -140,9 +143,9 @@ const setRefreshToken = async (refreshToken) => {
   }
 };
 
-const setUserId = async (userId) => {
+const setUserKey = async (userId) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_userId, userId);
+    await AsyncStorage.setItem(STORAGE_KEY_userKey, userId);
   } catch (error) {
     console.log(error.message);
   }
@@ -155,7 +158,7 @@ const setSecretToken = async (secret) => {
     console.log(error.message);
   }
 };
-
+// todo : pass it to grantfbuser after receiving 400
 export const requestRefreshTokenFacebook = async (refreshToken) => {
   const address = 'https://goober.herokuapp.com/api/auth/refresh';
   fetch(address, {
@@ -205,7 +208,7 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
       console.log(error);
       getSecretToken().then((secret) => {
         if (secret !== null) {
-          getUserId().then((userId) => {
+          getUserKey().then((userId) => {
             if (userId !== null) {
               grantAnonymousUser(secret, userId);
             }
@@ -249,9 +252,9 @@ export const getRefreshToken = async () => {
   }
 };
 
-export const getUserId = async () => {
+export const getUserKey = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_userId);
+    return await AsyncStorage.getItem(STORAGE_KEY_userKey);
   } catch (error) {
     console.log(error.message);
   }
