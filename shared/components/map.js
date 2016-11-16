@@ -206,6 +206,7 @@ export default class Map extends Component {
         >
           {this.props.items.map(item => (
             <MapView.Marker
+              key={item.key}
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
               coordinate={{latitude: item.lat, longitude: item.lng}}
               anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
@@ -268,7 +269,8 @@ Map.propTypes = {
   getZoomLevel: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
-    description: PropTypes.string
+    description: PropTypes.string,
+    key: PropTypes.string
   })),
   category: PropTypes.arrayOf(PropTypes.string),
   zoomLevel: PropTypes.any,
