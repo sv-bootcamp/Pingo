@@ -16,7 +16,6 @@ import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
 import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} from '../utils';
 import SmallHeader from '../components/smallHeader';
-import imageMagick from 'imagemagick';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
@@ -193,18 +192,7 @@ class Create extends Component {
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
       .then((file) =>{
-        const buf = Buffer.from(file, 'base64');
-        imageMagick.resize({
-          srcData: buf,
-          height: 1080,
-          width: 1080
-        }, (err, resized) => {
-          if (err) {
-            // TODO : some error handle code
-            return;
-          }
-          this.setState({img: resized.toString('base64')});
-        });
+        this.setState({img: file});
       })
       .catch((err) => {
         console.log(err.message, err.code);
