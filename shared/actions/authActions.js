@@ -30,7 +30,7 @@ const signupFacebookUser = (FacebookToken) => {
     setUserKey(rjson.userKey);
     })
   .catch((error) => {
-    console.log(error);
+    console.log(error.message);
   });
 };
 
@@ -47,17 +47,17 @@ export const signupGuestUser = () => {
     },
     body: bodySignUp
   })
-    .then((response) => response.json())
-    .then((rjson) => {
-      console.log(rjson);
-      setAccessToken(rjson.accessToken);
-      setRefreshToken(rjson.refreshToken);
-      setUserKey(rjson.userKey);
-      setSecretToken(rjson.userSecret);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  .then((response) => response.json())
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+    setUserKey(rjson.userKey);
+    setSecretToken(rjson.userSecret);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
 };
 
 // todo: refactor the below two functions
@@ -80,7 +80,7 @@ export const grantAnonymousUser = (secret, userKey) => {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 400) {
-      throw new Error(response.status);
+      signupGuestUser();
     }
   })
   .then((rjson) => {
@@ -89,8 +89,7 @@ export const grantAnonymousUser = (secret, userKey) => {
     setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
-    console.log(error);
-    signupGuestUser();
+    console.log(error.message);
   });
 };
 
@@ -115,7 +114,7 @@ export const grantFacebookUser = (facebookToken, userKey) => {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 400) {
-      throw new Error(response.status);
+      signupFacebookUser(facebookToken);
     }
   })
   .then((rjson) => {
@@ -124,8 +123,7 @@ export const grantFacebookUser = (facebookToken, userKey) => {
     setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
-    console.log(error);
-    signupFacebookUser(facebookToken);
+    console.log(error.message);
   });
 };
 
@@ -168,54 +166,94 @@ const setSecretToken = async (secret) => {
     console.log(error.message);
   }
 };
+
+export const setLoginType = async (loginType) => {
+  try {
+    await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`, loginType);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const setToken = (token) => {
+  return {
+    type: types.setToken,
+    token
+  }
+};
+
+export const setUserName = (userName) => {
+  return {
+    type: types.setUserName,
+    userName
+  }
+};
+
+export const setUserEmail = (userEmail) => {
+  return {
+    type: types.setUserEmail,
+    userEmail
+  }
+};
+
+export const setProfileImgUrl = (profileImgUrl) => {
+  return {
+    type: types.setProfileImgUrl,
+    profileImgUrl
+  }
+};
 // todo : pass it to grantfbuser after receiving 400
 export const requestRefreshTokenFacebook = async (refreshToken) => {
   const address = 'https://goober.herokuapp.com/api/auth/refresh';
+  const bodyRequestRefreshToken = JSON.stringify({
+    'refreshToken': refreshToken
+  });
   fetch(address, {
     method: 'POST',
     headers: {
-      'refreshToken': refreshToken
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: {
+      'refreshToken': bodyRequestRefreshToken
     }
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else if (response.status === 400) {
-        throw new Error(response.status);
-      }
-    })
-    .then((rjson) => {
-      console.log(rjson);
-      setAccessToken(rjson.accessToken);
-      setRefreshToken(rjson.refreshToken);
-    })
-    .catch((error) => {
-      console.log(error);
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 400) {
       removeUserToken();
-    })
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+  })
+  .catch((error) => {
+    console.log(error.message);
   })
 };
 
 export const requestRefreshTokenGuest = async (refreshToken) => {
   const address = 'https://goober.herokuapp.com/api/auth/refresh';
+  const bodyRequestRefreshToken = JSON.stringify({
+    'refreshToken': refreshToken
+  });
   fetch(address, {
     method: 'POST',
     headers: {
-      'refreshToken': refreshToken
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: {
+      'refreshToken': bodyRequestRefreshToken
     }
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else if (response.status === 400) {
-        throw new Error(response.status);
-      }
-    })
-    .then((rjson) => {
-      console.log(rjson);
-      setAccessToken(rjson.accessToken);
-      setRefreshToken(rjson.refreshToken);
-    })
-    .catch((error) => {
-      console.log(error);
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 400) {
       getSecretToken().then((secret) => {
         if (secret !== null) {
           getUserKey().then((userId) => {
@@ -227,15 +265,45 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
           signupGuestUser();
         }
       });
-    })
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+  })
+  .catch((error) => {
+    console.log(error.message);
   })
 };
 
-export const setToken = (token) => {
-  return {
-    type: types.setToken,
-    token
-  }
+export const getUserInformation = async (userKey) => {
+  const address = `http://goober.herokuapp.com/api/users/${userKey}`;
+  const bodyGetUserInformation = JSON.stringify({
+    'id': userKey
+  });
+  fetch(address, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: bodyGetUserInformation
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 500) {
+      throw new Error(response.status);
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    return rjson;
+  })
+  .catch((error) => {
+    console.log(error.message);
+  })
 };
 
 export const getAccessToken = async () => {
@@ -246,34 +314,25 @@ export const getAccessToken = async () => {
   }
 };
 
-export const getSecretToken = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
 export const getRefreshToken = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
-  } catch (error) {
-    console.log(error.message);
-  }
+    try {
+        return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+    } catch (error) {
+        console.log(error.message);
+    }
 };
 
 export const getUserKey = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
-  } catch (error) {
-    console.log(error.message);
-  }
+    try {
+        return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
+    } catch (error) {
+        console.log(error.message);
+    }
 };
 
-export const removeUserToken = async () => {
+export const getSecretToken = async () => {
   try {
-    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
-    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -287,18 +346,19 @@ export const getLoginType = async () => {
   }
 };
 
-export const setLoginType = async (loginType) => {
-  try {
-    await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`, loginType);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
 export const removeLoginType = async () => {
   try {
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
     console.log(error.message);
   }
+};
+
+export const removeUserToken = async () => {
+    try {
+        await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+        await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+    } catch (error) {
+        console.log(error.message);
+    }
 };

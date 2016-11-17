@@ -12,7 +12,7 @@ import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
-import { getLoginType } from '../actions/authActions';
+import { getLoginType, getUserKey, getUserInformation } from '../actions/authActions';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -50,6 +50,18 @@ class MyPage extends Component {
     super(props);
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
+    getUserKey().then((userKey) => {
+      if (userKey !== null) {
+        getUserInformation(userKey).then((rjson) => {
+          console.log(rjson);
+          if (rjson) {
+            this.props.setUserName(rjson.name);
+            this.props.setUserEmail(rjson.email);
+            this.props.setProfileImgUrl(rjson.profileImgUrl);
+          }
+        });
+      }
+    });
   }
   componentDidMount() {
     getLoginType().then((data) => {
@@ -190,8 +202,13 @@ MyPage.propTypes = {
   setCurrentScene: PropTypes.func,
   setMyPageTabViewIndex: PropTypes.func,
   setToken: PropTypes.func,
+  setUserName: PropTypes.func,
+  setUserEmail: PropTypes.func,
+  setProfileImgUrl: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
   token: PropTypes.string,
+  userName: PropTypes.string,
+  profileImgUrl: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
   items: PropTypes.any
 };
