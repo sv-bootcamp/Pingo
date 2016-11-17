@@ -1,11 +1,12 @@
 import * as types from './actionTypes';
 import { AsyncStorage } from 'react-native';
 
-const STORAGE_KEY_accessToken = '@PingoStorage:accessToken';
-const STORAGE_KEY_refreshToken = '@PingoStorage:refreshToken';
-const STORAGE_KEY_userKey = '@PingoStorage:userKey';
-const STORAGE_KEY_secret = '@PingoStorage:secret';
-const STORAGE_KEY_loginType = '@PingoStorage:loginType';
+const STORAGE_NAME = '@PingoStorage:';
+const STORAGE_KEY_accessToken = 'accessToken';
+const STORAGE_KEY_refreshToken = 'refreshToken';
+const STORAGE_KEY_userKey = 'userKey';
+const STORAGE_KEY_secret = 'secret';
+const STORAGE_KEY_loginType = 'loginType';
 
 const signupFacebookUser = (FacebookToken) => {
   const address = 'https://goober.herokuapp.com/api/users/signup';
@@ -131,7 +132,7 @@ export const grantFacebookUser = (facebookToken, userKey) => {
 const setAccessToken = async (accessToken) => {
   try {
     if (accessToken !== null) {
-      await AsyncStorage.setItem(STORAGE_KEY_accessToken, accessToken);
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`, accessToken);
     }
   } catch (error) {
     console.log(error.message);
@@ -141,7 +142,7 @@ const setAccessToken = async (accessToken) => {
 const setRefreshToken = async (refreshToken) => {
   try {
     if (refreshToken !== null) {
-      await AsyncStorage.setItem(STORAGE_KEY_refreshToken, refreshToken);
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`, refreshToken);
     }
   } catch (error) {
     console.log(error.message);
@@ -151,7 +152,7 @@ const setRefreshToken = async (refreshToken) => {
 const setUserKey = async (userKey) => {
   try {
     if (userKey !== null) {
-      await AsyncStorage.setItem(STORAGE_KEY_userKey, userKey);
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`, userKey);
     }
   } catch (error) {
     console.log(error.message);
@@ -161,7 +162,7 @@ const setUserKey = async (userKey) => {
 const setSecretToken = async (secret) => {
   try {
     if (secret !== null) {
-      await AsyncStorage.setItem(STORAGE_KEY_secret, secret);
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`, secret);
     }
   } catch (error) {
     console.log(error.message);
@@ -239,7 +240,7 @@ export const setToken = (token) => {
 
 export const getAccessToken = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_accessToken);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -247,7 +248,7 @@ export const getAccessToken = async () => {
 
 export const getSecretToken = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_secret);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -255,7 +256,7 @@ export const getSecretToken = async () => {
 
 export const getRefreshToken = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_refreshToken);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -263,7 +264,7 @@ export const getRefreshToken = async () => {
 
 export const getUserKey = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_userKey);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -271,8 +272,8 @@ export const getUserKey = async () => {
 
 export const removeUserToken = async () => {
   try {
-    await AsyncStorage.removeItem(STORAGE_KEY_accessToken);
-    await AsyncStorage.removeItem(STORAGE_KEY_refreshToken);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -280,7 +281,7 @@ export const removeUserToken = async () => {
 
 export const getLoginType = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_loginType);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
     console.log(error.message);
   }
@@ -288,7 +289,7 @@ export const getLoginType = async () => {
 
 export const setLoginType = async (loginType) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_loginType, loginType);
+    await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`, loginType);
   } catch (error) {
     console.log(error.message);
   }
@@ -296,7 +297,7 @@ export const setLoginType = async (loginType) => {
 
 export const removeLoginType = async () => {
   try {
-    await AsyncStorage.removeItem(STORAGE_KEY_loginType);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
     console.log(error.message);
   }
