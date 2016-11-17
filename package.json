@@ -10,12 +10,14 @@
   },
   "jest": {
     "preset": "jest-react-native",
-    "setupFiles": ["./node_modules/react-native/jestSupport/env.js"]
+    "setupFiles": [
+      "./node_modules/react-native/jestSupport/env.js"
+    ]
   },
   "dependencies": {
     "buffer": "^5.0.0",
     "moment": "^2.15.2",
-    "react": "^15.3.2",
+    "react": "~15.3.2",
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-update": "^15.3.2",
     "react-native": "0.35.0",
@@ -37,6 +39,7 @@
   },
   "devDependencies": {
     "babel-jest": "^15.0.0",
+    "babel-plugin-module-resolver": "^2.3.0",
     "babel-preset-react-native": "^1.9.0",
     "eslint": "^3.6.1",
     "eslint-config-airbnb": "^12.0.0",
