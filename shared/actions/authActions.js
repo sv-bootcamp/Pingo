@@ -81,12 +81,15 @@ export const grantAnonymousUser = (secret, userKey) => {
       return response.json();
     } else if (response.status === 400) {
       signupGuestUser();
+      return null;
     }
   })
   .then((rjson) => {
     console.log(rjson);
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
+    if (rjson !== null) {
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+    }
   })
   .catch((error) => {
     console.log(error);
@@ -115,12 +118,15 @@ export const grantFacebookUser = (facebookToken, userKey) => {
       return response.json();
     } else if (response.status === 400) {
       signupFacebookUser(facebookToken);
+      return null;
     }
   })
   .then((rjson) => {
     console.log(rjson);
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
+    if (rjson !== null) {
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+    }
   })
   .catch((error) => {
     console.log(error);

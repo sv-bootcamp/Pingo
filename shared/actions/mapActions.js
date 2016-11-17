@@ -20,26 +20,30 @@ export const receiveItems = (json) => {
 export const getMapItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
     const queries = [];
-    queries.push(createQueryObject('isThumbnail', true));
-    queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', long));
-
+    queries.push(createQueryObject('zoom', zoomLevel));
+    queries.push(createQueryObject('isThumbnail', true));
     // todo: recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
-    const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
+    const address = `http://goober.herokuapp.com/api/items${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
+      const headers = JSON.stringify({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${accessToken}`
+      });
       return fetch(address, {
         method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'authorization': `bearer ${accessToken}`
-        }
+        headers: headers
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        return response.json();
+      })
       .then(json =>
         dispatch(receiveItems(json))
-      );
+      )
+      .catch((error) => console.log(error));
     });
   };
 };
