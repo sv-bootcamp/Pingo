@@ -17,6 +17,7 @@
   "dependencies": {
     "buffer": "^5.0.0",
     "moment": "^2.15.2",
+    "negotiator": "^0.6.1",
     "react": "~15.3.2",
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-update": "^15.3.2",
