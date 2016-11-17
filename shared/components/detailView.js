@@ -255,7 +255,6 @@ export default class DetailView extends Component {
   }
 
   render() {
-    console.log(JSON.stringify(this.props));
     let currentLocation = {
       latitude: this.props.lat,
       longitude: this.props.lng,
@@ -286,7 +285,8 @@ export default class DetailView extends Component {
               {this.state.data.map((value, i)=>{
                 if (i === 0) {
                   return (
-                    <View style = {{flexDirection: 'row', flex: 1}}>
+                    <View style = {{flexDirection: 'row', flex: 1}}
+                          key = {i.toString()}>
                       <View style = {{flex: 16}}/>
                       <View style = {{flex: 328}}>
                         <View style = {{flex: 64}}/>
@@ -327,7 +327,8 @@ export default class DetailView extends Component {
                   );
                 }
                 return (
-                  <View style = {{flex: 1}}>
+                  <View style = {{flex: 1}}
+                        key = {i.toString()}>
                     {
                       (this.state.isClicked) ? <View style = {{flex: 68, backgroundColor: 'black'}}/> :
                       <View style = {{flex: 68, flexDirection: 'row'}}>

@@ -94,8 +94,8 @@ export default class DetailHeader extends Component {
 DetailHeader.propTypes = {
   title: PropTypes.string,
   date: PropTypes.string,
-  setCurrentScene: PropTypes.function,
+  setCurrentScene: PropTypes.func,
   lastScene: PropTypes.string,
-  messageUnvisible: PropTypes.function,
-  setModalVisible: PropTypes.function
+  messageUnvisible: PropTypes.func,
+  setModalVisible: PropTypes.func
 };

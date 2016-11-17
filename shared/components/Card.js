@@ -200,11 +200,13 @@ Card.propTypes = {
     endTime: PropTypes.string,
     title: PropTypes.string,
     address: PropTypes.string,
-    imageUrls: PropTypes.array
+    imageUrls: PropTypes.array,
+    key: PropTypes.any
   })),
-  getDetailImage: PropTypes.function,
+  key: PropTypes.string,
+  getDetailImage: PropTypes.func,
   currentScene: PropTypes.string,
-  setCurrentScene: PropTypes.function
+  setCurrentScene: PropTypes.func
 };
 
 export default Card;
