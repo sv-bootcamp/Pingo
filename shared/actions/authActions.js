@@ -51,8 +51,8 @@ export const signupGuestUser = () => {
       console.log(rjson);
       setAccessToken(rjson.accessToken);
       setRefreshToken(rjson.refreshToken);
-      setUserKey(rjson.userId);
-      setSecretToken(rjson.secret);
+      setUserKey(rjson.userKey);
+      setSecretToken(rjson.userSecret);
     })
     .catch((error) => {
       console.log(error);
@@ -99,7 +99,8 @@ export const grantFacebookUser = (facebookToken, userKey) => {
   console.log('fbtoken ' + facebookToken);
   const bodyGrant = JSON.stringify({
     'grantType': 'facebook',
-    'facebookToken': facebookToken
+    'facebookToken': facebookToken,
+    'userKey': userKey
   });
   fetch(address, {
     method: 'POST',
@@ -129,7 +130,9 @@ export const grantFacebookUser = (facebookToken, userKey) => {
 
 const setAccessToken = async (accessToken) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_accessToken, accessToken);
+    if (accessToken !== null) {
+      await AsyncStorage.setItem(STORAGE_KEY_accessToken, accessToken);
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -137,15 +140,19 @@ const setAccessToken = async (accessToken) => {
 
 const setRefreshToken = async (refreshToken) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_refreshToken, refreshToken);
+    if (refreshToken !== null) {
+      await AsyncStorage.setItem(STORAGE_KEY_refreshToken, refreshToken);
+    }
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const setUserKey = async (userId) => {
+const setUserKey = async (userKey) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_userKey, userId);
+    if (userKey !== null) {
+      await AsyncStorage.setItem(STORAGE_KEY_userKey, userKey);
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -153,7 +160,9 @@ const setUserKey = async (userId) => {
 
 const setSecretToken = async (secret) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_secret, secret);
+    if (secret !== null) {
+      await AsyncStorage.setItem(STORAGE_KEY_secret, secret);
+    }
   } catch (error) {
     console.log(error.message);
   }

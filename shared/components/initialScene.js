@@ -167,11 +167,11 @@ class InitialScene extends Component {
           if (secret === null) {
             signupGuestUser();
           } else {
-            getUserKey().then((userId) => {
-              if (userId === null) {
+            getUserKey().then((userKey) => {
+              if (userKey === null) {
                 signupGuestUser();
               } else {
-                grantAnonymousUser(secret, userId);
+                grantAnonymousUser(secret, userKey);
               }
             });
           }
