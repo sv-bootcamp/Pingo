@@ -1,11 +1,8 @@
 engines:
   eslint:
     enabled: true
-  duplication:
-    enabled: true
-    # ... CONFIG CONTENT ...
-    exclude_fingerprints:
-    - e8316f2b631c53f04659321fb7f01e89
+    config:
+      config: .eslintrc
 ratings:
    paths:
    - "**.js"
