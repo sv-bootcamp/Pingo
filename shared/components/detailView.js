@@ -318,7 +318,6 @@ export default class DetailView extends Component {
         }
         <View style={styles.slide}>
           <TouchableHighlight style = {{flex: 1}}
-
                               onPress = {()=>this.handleClick(i)}>
             <Image source = {{uri: value.url}}
                    style = {{flex: 1}}/>
