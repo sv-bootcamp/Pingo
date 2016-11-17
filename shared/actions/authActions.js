@@ -283,18 +283,18 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
   })
 };
 
-export const getUserInformation = async (userKey) => {
+export const getUserInformation = async (userKey, accessToken) => {
+  console.log(userKey);
+  console.log(accessToken);
   const address = `http://goober.herokuapp.com/api/users/${userKey}`;
-  const bodyGetUserInformation = JSON.stringify({
-    'id': userKey
+  const headerGetUserInformation = JSON.stringify({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'authorization': `bearer ${accessToken}`
   });
   fetch(address, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyGetUserInformation
+    method: 'GET',
+    headers: headerGetUserInformation
   })
   .then((response) => {
     if (response.status === 200) {

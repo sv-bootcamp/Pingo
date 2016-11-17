@@ -12,7 +12,7 @@ import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
-import { getLoginType, getUserKey, getUserInformation } from '../actions/authActions';
+import { getLoginType, getUserKey, getUserInformation, getAccessToken } from '../actions/authActions';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 
@@ -52,12 +52,16 @@ class MyPage extends Component {
     this.renderTabView = this.renderTabView.bind(this);
     getUserKey().then((userKey) => {
       if (userKey !== null) {
-        getUserInformation(userKey).then((rjson) => {
-          console.log(rjson);
-          if (rjson) {
-            this.props.setUserName(rjson.name);
-            this.props.setUserEmail(rjson.email);
-            this.props.setProfileImgUrl(rjson.profileImgUrl);
+        getAccessToken().then((accessToken) => {
+          if (accessToken !== null) {
+            getUserInformation(userKey, accessToken).then((rjson) => {
+              console.log(rjson);
+              if (rjson) {
+                this.props.setUserName(rjson.name);
+                this.props.setUserEmail(rjson.email);
+                this.props.setProfileImgUrl(rjson.profileImgUrl);
+              }
+            });
           }
         });
       }
@@ -159,14 +163,20 @@ class MyPage extends Component {
   }
 
   renderTabViewContents() {
-    return (
-      <ListView
-        dataSource={new ListView.DataSource({
-          rowHasChanged: (r1, r2) => r1 !== r2
-        }).cloneWithRows(this.props.items)}
-        renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
-        enableEmptySections={true} />
-    );
+    if (this.props.items) {
+      return (
+        <ListView
+          dataSource={
+            new ListView.DataSource({
+              rowHasChanged: (r1, r2) => r1 !== r2
+            }).cloneWithRows(this.props.items)
+          }
+          renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+          enableEmptySections={true}
+        />
+      );
+    }
+    return null;
   }
 
   renderTabViewHeader(props) {
