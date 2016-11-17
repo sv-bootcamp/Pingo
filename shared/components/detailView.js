@@ -86,7 +86,10 @@ export default class DetailView extends Component {
     this.handleReport = this.handleReport.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
     this.messageUnvisible = this.messageUnvisible.bind(this);
+    this.renderSlide = this.renderSlide.bind(this);
+    this.renderInfoSlide = this.renderInfoSlide.bind(this);
     this.firstTry = true;
+    this.currentIndex = 0;
   }
 
   toggleModalVisible() {
@@ -104,23 +107,18 @@ export default class DetailView extends Component {
     : this.setState({locationReported: true});
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps, prevState){
     if (this.firstTry) {
-      this._swiper.scrollBy(prevProps.rowID * 1 + 1);
+      this._swiper.scrollBy(prevProps.rowID * 1 + 1, false);
+      this.currentIndex = this.props.rowID * 1 + 1;
       this.firstTry = false;
     }
+    (prevState.isClicked) ? this._swiper.scrollBy(this.currentIndex, false) : this._swiper.scrollBy(this.currentIndex - 1, false)
   }
 
-  componentWillReceiveProps(nextProps){
-    let data = nextProps.detailSource;
-    if (data.length !== 0) {
-      data.unshift(data[0]);
-    }
-    this.setState({data: data});
-  }
-
-  handleClick() {
+  handleClick(i) {
     this.setState({isClicked: !this.state.isClicked});
+    this.currentIndex = i + 1;
   }
 
   handleMessage(value) {
@@ -238,7 +236,109 @@ export default class DetailView extends Component {
         </View>
     );
   }
+  renderInfoSlide() {
+    let currentLocation = {
+      latitude: this.props.lat,
+      longitude: this.props.lng,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421
+    };
 
+    return (
+      <View style = {{flexDirection: 'row', flex: 1}}>
+        <View style = {{flex: 16}}/>
+        <View style = {{flex: 328}}>
+          <View style = {{flex: 64}}/>
+          <View style = {{flex: 80}}>
+            <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.title } </Text>
+          </View>
+          <View style = {{flex: 24}}/>
+          <View style = {{flex: 100, backgroundColor: 'green', borderRadius: 5}}>
+            <DetailLitemap currentLocation = {currentLocation}
+                           category = {this.props.category}/>
+          </View>
+          <View style = {{flex: 26}}/>
+          <View style = {{flex: 17}}>
+            <Text style = {{fontSize: 17}}> {this.props.address} </Text>
+          </View>
+          <View style = {{flex: 9}}/>
+          <View style = {{flex: 26}}>
+            <Text style = {{fontSize: 17}}> {this.props.date} </Text>
+          </View>
+          <View style = {{flex: 94}}/>
+          <View style = {{flex: 40, flexDirection: 'row'}}>
+            <View style = {{flex: 32, backgroundColor: 'blue', borderRadius: 3}}/>
+            <View style = {{flex: 7}}/>
+            <View style = {{flex: 305, justifyContent: 'center'}}>
+              <View style = {{flex: 14}}>
+                <Text style = {styles.name}>Name</Text>
+              </View>
+              <View style = {{flex: 4}}/>
+              <View style = {{flex: 14}}>
+                {(this.props.detailSource.length !== 0) ? this.renderDate(this.props.detailSource[0].createdDate) : null }
+              </View>
+            </View>
+          </View>
+          <View style = {{flex: 110}}/>
+        </View>
+        <View style = {{flex: 16}}/>
+      </View>
+    );
+  }
+
+  renderSlide(value, i) {
+    return (
+      <View style = {{flex: 1}}>
+        {
+          (this.state.isClicked) ? <View style = {{flex: 68, backgroundColor: 'black'}}/> :
+          <View style = {{flex: 68, flexDirection: 'row'}}>
+            <View style = {{flex: 16}}/>
+            <View style = {{flex: 32}}/>
+            <View style = {{flex: 274}}>
+              <View style = {{flex: 16}}/>
+              <View style = {{flex: 14}}>
+                <Text style = {styles.name}> Name </Text>
+              </View>
+              <View style = {{flex: 4}}/>
+              <View style = {{flex: 14}}>
+                {this.renderDate(value.createdDate)}
+              </View>
+              <View style = {{flex: 16}}/>
+            </View>
+            <View style = {styles.btn_flag}>
+              <TouchableOpacity onPress = {()=>{
+                this.setState({currentReport: 'photo'});
+                Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage});
+              }}>
+                <Image source = {IMG_BUTTON_FLAG}
+                       style = {{height: 24, width: 24}}/>
+              </TouchableOpacity>
+            </View>
+          </View>
+        }
+        <View style={styles.slide}>
+          <TouchableHighlight style = {{flex: 1}}
+
+                              onPress = {()=>this.handleClick(i)}>
+            <Image source = {{uri: value.url}}
+                   style = {{flex: 1}}/>
+          </TouchableHighlight>
+        </View>
+        {(this.state.isClicked) ? <View style = {{flex: 103, backgroundColor: 'black'}}/> :
+        <View style = {{flex: 103, flexDirection: 'row'}}>
+          <View style = {{flex: 16}}/>
+          <View style = {{flex: 328}}>
+            <View style = {{flex: 15}}/>
+            <View style = {{flex: 86}}>
+              <Text style = {styles.caption}> { value.caption } </Text>
+            </View>
+          </View>
+          <View style = {{flex: 16}}/>
+        </View>
+        }
+      </View>
+    );
+  }
   renderDate(date) {
     const day = 86400000;
     const hour = 3600000;
@@ -255,12 +355,14 @@ export default class DetailView extends Component {
   }
 
   render() {
-    let currentLocation = {
-      latitude: this.props.lat,
-      longitude: this.props.lng,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421
+    let pages = [];
+    if (!this.state.isClicked) {
+      pages.push(this.renderInfoSlide(this.props.detailSource[0]));
     }
+    for (let i = 0; i < this.props.detailSource.length; i = i + 1) {
+      pages.push(this.renderSlide(this.props.detailSource[i], i));
+    }
+
     return (
       <View style = {{ flex: 1, backgroundColor: 'black'}}>
       {
@@ -282,102 +384,7 @@ export default class DetailView extends Component {
             renderPagination={this.renderPagination}
             height= {549}
             loop = {false}>
-              {this.state.data.map((value, i)=>{
-                if (i === 0) {
-                  return (
-                    <View style = {{flexDirection: 'row', flex: 1}}
-                          key = {i.toString()}>
-                      <View style = {{flex: 16}}/>
-                      <View style = {{flex: 328}}>
-                        <View style = {{flex: 64}}/>
-                        <View style = {{flex: 80}}>
-                          <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.title } </Text>
-                        </View>
-                        <View style = {{flex: 24}}/>
-                        <View style = {{flex: 100, backgroundColor: 'green'}}>
-                          <DetailLitemap currentLocation = {currentLocation}
-                                         category = {this.props.category}/>
-                        </View>
-                        <View style = {{flex: 26}}/>
-                        <View style = {{flex: 17}}>
-                          <Text style = {{fontSize: 17}}> {this.props.address} </Text>
-                        </View>
-                        <View style = {{flex: 9}}/>
-                        <View style = {{flex: 26}}>
-                          <Text style = {{fontSize: 17}}> {this.props.date} </Text>
-                        </View>
-                        <View style = {{flex: 94}}/>
-                        <View style = {{flex: 40, flexDirection: 'row'}}>
-                          <View style = {{flex: 32, backgroundColor: 'blue'}}/>
-                          <View style = {{flex: 7}}/>
-                          <View style = {{flex: 305, justifyContent: 'center'}}>
-                            <View style = {{flex: 14}}>
-                              <Text style = {styles.name}>Name</Text>
-                            </View>
-                            <View style = {{flex: 4}}/>
-                            <View style = {{flex: 14}}>
-                              {(value.length !== 0) ? this.renderDate(value.createdDate) : null }
-                            </View>
-                          </View>
-                        </View>
-                        <View style = {{flex: 110}}/>
-                      </View>
-                      <View style = {{flex: 16}}/>
-                    </View>
-                  );
-                }
-                return (
-                  <View style = {{flex: 1}}
-                        key = {i.toString()}>
-                    {
-                      (this.state.isClicked) ? <View style = {{flex: 68, backgroundColor: 'black'}}/> :
-                      <View style = {{flex: 68, flexDirection: 'row'}}>
-                        <View style = {{flex: 16}}/>
-                        <View style = {{flex: 32}}/>
-                        <View style = {{flex: 274}}>
-                          <View style = {{flex: 16}}/>
-                          <View style = {{flex: 14}}>
-                            <Text style = {styles.name}> Name1 </Text>
-                          </View>
-                          <View style = {{flex: 4}}/>
-                          <View style = {{flex: 14}}>
-                            {this.renderDate(value.createdDate)}
-                          </View>
-                          <View style = {{flex: 16}}/>
-                        </View>
-                        <View style = {styles.btn_flag}>
-                          <TouchableOpacity onPress = {()=>{
-                            this.setState({currentReport: 'photo'});
-                            Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage});
-                          }}>
-                            <Image source = {IMG_BUTTON_FLAG}
-                                   style = {{height: 24, width: 24}}/>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    }
-                    <View style={styles.slide}>
-                      <TouchableHighlight style = {{flex: 1}}
-                                          onPress = {this.handleClick}>
-                        <Image source = {{uri: value.url}}
-                               style = {{flex: 1}}/>
-                      </TouchableHighlight>
-                    </View>
-                    {(this.state.isClicked) ? <View style = {{flex: 103, backgroundColor: 'black'}}/> :
-                    <View style = {{flex: 103, flexDirection: 'row'}}>
-                      <View style = {{flex: 16}}/>
-                      <View style = {{flex: 328}}>
-                        <View style = {{flex: 15}}/>
-                        <View style = {{flex: 86}}>
-                          <Text style = {styles.caption}> { value.caption } </Text>
-                        </View>
-                      </View>
-                      <View style = {{flex: 16}}/>
-                    </View>
-                    }
-                  </View>
-                );
-              })}
+              {pages}
           </Swiper>
         </View>
       </View>
