@@ -1,2 +1,2 @@
-# Pingo [![Build Status](https://travis-ci.org/sv-bootcamp/Pingo.svg?branch=master)](https://travis-ci.org/sv-bootcamp/Pingo) [![Code Climate](https://codeclimate.com/github/sv-bootcamp/goober-mobile/badges/gpa.svg)](https://codeclimate.com/github/sv-bootcamp/Pingo) [![Issue Count](https://codeclimate.com/github/sv-bootcamp/Pingo/badges/issue_count.svg)](https://codeclimate.com/github/sv-bootcamp/Pingo)
+# Pingo [![Build Status](https://travis-ci.org/sv-bootcamp/Pingo.svg?branch=master)](https://travis-ci.org/sv-bootcamp/Pingo) [![Code Climate](https://codeclimate.com/github/sv-bootcamp/goober-mobile/badges/gpa.svg)](https://codeclimate.com/github/sv-bootcamp/Pingo)
 Mobile application
