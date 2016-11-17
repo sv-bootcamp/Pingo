@@ -30,7 +30,7 @@ const signupFacebookUser = (FacebookToken) => {
     setUserKey(rjson.userKey);
     })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   });
 };
 
@@ -56,7 +56,7 @@ export const signupGuestUser = () => {
     setSecretToken(rjson.userSecret);
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   });
 };
 
@@ -89,7 +89,7 @@ export const grantAnonymousUser = (secret, userKey) => {
     setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   });
 };
 
@@ -123,7 +123,7 @@ export const grantFacebookUser = (facebookToken, userKey) => {
     setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   });
 };
 
@@ -133,7 +133,7 @@ const setAccessToken = async (accessToken) => {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`, accessToken);
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -143,7 +143,7 @@ const setRefreshToken = async (refreshToken) => {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`, refreshToken);
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -153,7 +153,7 @@ const setUserKey = async (userKey) => {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`, userKey);
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -163,7 +163,7 @@ const setSecretToken = async (secret) => {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`, secret);
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -171,7 +171,7 @@ export const setLoginType = async (loginType) => {
   try {
     await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`, loginType);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -231,7 +231,7 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
     setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   })
 };
 
@@ -273,7 +273,7 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
     setRefreshToken(rjson.refreshToken);
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   })
 };
 
@@ -302,7 +302,7 @@ export const getUserInformation = async (userKey) => {
     return rjson;
   })
   .catch((error) => {
-    console.log(error.message);
+    console.log(error);
   })
 };
 
@@ -310,7 +310,7 @@ export const getAccessToken = async () => {
   try {
     return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -318,7 +318,7 @@ export const getRefreshToken = async () => {
     try {
         return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 };
 
@@ -326,7 +326,7 @@ export const getUserKey = async () => {
     try {
         return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 };
 
@@ -334,7 +334,7 @@ export const getSecretToken = async () => {
   try {
     return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -342,7 +342,7 @@ export const getLoginType = async () => {
   try {
     return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -350,7 +350,7 @@ export const removeLoginType = async () => {
   try {
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -358,7 +358,8 @@ export const removeUserToken = async () => {
     try {
         await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
         await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+        await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 };

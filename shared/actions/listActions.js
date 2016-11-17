@@ -1,6 +1,7 @@
 import * as types from './actionTypes';
-import {SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, HTTP,
+import {SERVER_ADDR, ENDPOINT_IMAGE, HTTP,
   queryBuilder, createQueryObject} from '../utils';
+import { getAccessToken } from './authActions';
 
 export function TBD() {
   return {
@@ -15,6 +16,7 @@ export const receiveItems = (json) => {
   };
 };
 
+// todo: refactor getting item function in mapActions
 export const getAllItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
     const queries = [];
@@ -23,12 +25,22 @@ export const getAllItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', long));
 
-    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
-    return fetch(address)
+    // todo recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
+    const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
+    getAccessToken().then((accessToken) => {
+      return fetch(address, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'authorization': `bearer ${accessToken}`
+        }
+      })
       .then(response => response.json())
       .then(json =>
         dispatch(receiveItems(json))
-    );
+      );
+    });
   };
 };
 

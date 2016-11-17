@@ -116,6 +116,7 @@ class LoginFacebook extends Component {
           this.props.setToken('');
           removeUserToken();
           removeLoginType();
+          // todo : handle accessToken for getting items after logout
         }}
         onCancel={()=>{}}
         onPermissionsMissing={()=>{}}
