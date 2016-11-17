@@ -6,7 +6,7 @@
     "build": "(cd android/ && ./gradlew assembleDebug)",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/",
-    "test": "eslint shared/**/*.js && eslint __tests__/**/*.js && jest"
+    "test": "eslint shared/**/*.js && eslint __tests__/**/*.js && jest && ./node_modules/.bin/istanbul cover ./node_modules/tape/bin/tape ./test/*.js"
   },
   "jest": {
     "preset": "jest-react-native"
@@ -42,10 +42,12 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
+    "istanbul": "^0.4.5",
     "jest": "^15.1.1",
     "jest-cli": "^15.1.1",
     "jest-react-native": "^15.0.0",
     "react-native-swiper": "^1.5.2",
-    "react-test-renderer": "^15.3.2"
+    "react-test-renderer": "^15.3.2",
+    "tape": "^4.6.2"
   }
 }
