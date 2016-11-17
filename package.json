@@ -9,7 +9,8 @@
     "test": "eslint shared/**/*.js && eslint __tests__/**/*.js && jest"
   },
   "jest": {
-    "preset": "jest-react-native"
+    "preset": "jest-react-native",
+    "setupFiles": ["./node_modules/react-native/jestSupport/env.js"]
   },
   "dependencies": {
     "buffer": "^5.0.0",
