@@ -206,7 +206,7 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
-          {this.props.items.map(item => (
+          {(!this.props.items) ? null : this.props.items.map(item => (
             <MapView.Marker
               key={item.key}
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
