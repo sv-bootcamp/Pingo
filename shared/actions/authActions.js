@@ -65,7 +65,7 @@ export const grantAnonymousUser = (secret, userKey) => {
   const address = 'https://goober.herokuapp.com/api/auth/grant';
   const bodyGrant = JSON.stringify({
     'grantType': 'anonymous',
-    'secret': secret,
+    'userSecret': secret,
     'userKey': userKey
   });
   fetch(address, {
