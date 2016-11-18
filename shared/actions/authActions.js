@@ -8,7 +8,7 @@ const STORAGE_KEY_userKey = 'userKey';
 const STORAGE_KEY_secret = 'secret';
 const STORAGE_KEY_loginType = 'loginType';
 
-const signupFacebookUser = (FacebookToken) => {
+export const signupFacebookUser = (FacebookToken) => {
   const address = 'https://goober.herokuapp.com/api/users/signup';
   const bodySignUp = JSON.stringify({
     'userType': 'facebook',
@@ -96,41 +96,53 @@ export const grantAnonymousUser = (secret, userKey) => {
   });
 };
 
-export const grantFacebookUser = (facebookToken, userKey) => {
-  const address = 'https://goober.herokuapp.com/api/auth/grant';
-  console.log(address);
-  console.log('fbtoken ' + facebookToken);
-  const bodyGrant = JSON.stringify({
-    'grantType': 'facebook',
-    'facebookToken': facebookToken,
-    'userKey': userKey
-  });
-  fetch(address, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyGrant
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    } else if (response.status === 400) {
-      signupFacebookUser(facebookToken);
-      return null;
-    }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    if (rjson !== null) {
-      setAccessToken(rjson.accessToken);
-      setRefreshToken(rjson.refreshToken);
-    }
-  })
-  .catch((error) => {
+export const grantFacebookUser = async (facebookToken, userKey) => {
+  if (userKey === null) {
+    console.log('signinfaceobkbk');
+    return signupFacebookUser(facebookToken);
+  }
+  try {
+    const address = 'https://goober.herokuapp.com/api/auth/grant';
+    console.log(address);
+    console.log('fbtoken ' + facebookToken);
+    console.log(userKey);
+    const bodyGrant = JSON.stringify({
+      'grantType': 'facebook',
+      'facebookToken': facebookToken,
+      'userKey': userKey
+    });
+    await fetch(address, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: bodyGrant
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        signupFacebookUser(facebookToken);
+        return null;
+      }
+    })
+    .then((rjson) => {
+      console.log(rjson);
+      if (rjson !== null && rjson !== undefined) {
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+      } else {
+        signupFacebookUser(facebookToken);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } catch (error) {
     console.log(error);
-  });
+  }
 };
 
 const setAccessToken = async (accessToken) => {
