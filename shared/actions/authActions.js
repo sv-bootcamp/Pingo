@@ -252,9 +252,7 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: {
-      'refreshToken': bodyRequestRefreshToken
-    }
+    body: bodyRequestRefreshToken
   })
   .then((response) => {
     if (response.status === 200) {
