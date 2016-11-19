@@ -331,19 +331,19 @@ export const getAccessToken = async () => {
 };
 
 export const getRefreshToken = async () => {
-    try {
-        return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getUserKey = async () => {
-    try {
-        return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getSecretToken = async () => {
@@ -371,11 +371,11 @@ export const removeLoginType = async () => {
 };
 
 export const removeUserToken = async () => {
-    try {
-        await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
-        await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
-        await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
