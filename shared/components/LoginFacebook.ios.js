@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
     Text,
     View,
-    TouchableHighlight,
+    TouchableHighlight
 } from 'react-native';
 import {FBLoginManager} from 'react-native-facebook-login';
 
