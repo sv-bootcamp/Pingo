@@ -177,7 +177,7 @@ class InitialScene extends Component {
   render() {
     return (
       <View style={{flexDirection: 'column', flex: 1}}>
-        <View style={{flex: 1, backgroundColor: 'blue'}}>
+        <View style={{flex: 1, backgroundColor: '#f7f7f7'}}>
           {this.renderSwiper()}
         </View>
         <View style={[styles.bottomBox, {height: Dimensions.get('window').height * BottomBoxHeight / (SwiperHeight + BottomBoxHeight)}]}>
