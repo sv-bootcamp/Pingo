@@ -90,7 +90,7 @@ export default class Map extends Component {
     fetch(uri)
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson !== undefined) {
+      if (responseJson.results.length !== 0) {
         this.props.setCurrentCity(
           JSON.stringify(responseJson.results[0].address_components[3].long_name)
           .replace('"', '')
