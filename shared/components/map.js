@@ -91,12 +91,16 @@ export default class Map extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson !== undefined) {
-        this.props.setCurrentCity(
-          JSON.stringify(responseJson.results[0].address_components[3].long_name)
-          .replace('"', '')
-          .replace('"', '')
-          .substring(0, 30)
-        );
+        try {
+          this.props.setCurrentCity(
+            JSON.stringify(responseJson.results[0].address_components[3].long_name)
+            .replace('"', '')
+            .replace('"', '')
+            .substring(0, 30)
+          );
+        } catch(error) {
+          console.log(error);  
+        }
       }
     });
   }
