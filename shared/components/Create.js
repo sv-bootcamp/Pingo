@@ -14,8 +14,9 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
-import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} from '../utils';
+import {ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} from '../utils';
 import SmallHeader from '../components/smallHeader';
+import { getAccessToken } from '../actions/authActions';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
@@ -230,23 +231,27 @@ class Create extends Component {
       caption: this.state.inputTextCaption
     });
 
-    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
-    fetch(address, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: data
-    })
+    const address = `https://goober.herokuapp.com${ENDPOINT_ITEM}`;
+    getAccessToken().then((accessToken) => {
+      fetch(address, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          authorization: `bearer ${accessToken}`
+        },
+        body: data
+      })
       .then((response) => response.json())
-      .then(() => {
+      .then((rjson) => {
+        console.log(rjson);
         this.props.setCurrentScene('map');
         Actions.pop({popNum: 2});
       })
       .catch((error) => {
         console.warn(error);
       });
+    });
   }
 
   getAddressData() {
@@ -293,23 +298,27 @@ class Create extends Component {
       image: image
     });
 
-    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
-    fetch(address, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: data
-    })
+    const address = `https://goober.herokuapp.com${ENDPOINT_IMAGE}`;
+    getAccessToken().then((accessToken) => {
+      fetch(address, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          authorization: `bearer ${accessToken}`
+        },
+        body: data
+      })
       .then((response) => response.json())
-      .then(() => {
+      .then((rjson) => {
+        console.log(rjson);
         this.props.setCurrentScene('map');
         Actions.pop({popNum: 2});
       })
       .catch((error) => {
         console.warn(error);
       });
+    });
   }
 
   handleCategoryButton(select) {
@@ -564,7 +573,7 @@ class Create extends Component {
           </View>
         </TouchableOpacity>
       ))
-    )
+    );
   }
 
   renderAddNewLocation() {

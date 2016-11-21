@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     })
   }
