@@ -12,9 +12,10 @@ import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
-import { getLoginType, getUserKey, getUserInformation, getAccessToken } from '../actions/authActions';
+import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '../actions/authActions';
 
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
+import ImgGuest from '../resources/myPage/guest.png';
 
 const styles = StyleSheet.create({
   myPageTextUserName: {
@@ -50,22 +51,32 @@ class MyPage extends Component {
     super(props);
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
-    getUserKey().then((userKey) => {
-      if (userKey !== null) {
-        getAccessToken().then((accessToken) => {
-          if (accessToken !== null) {
+    getAccessToken().then((accessToken) => {
+      console.log(accessToken);
+      if (accessToken !== null) {
+        getUserKey().then((userKey) => {
+          console.log(userKey);
+          if (userKey !== null) {
+            console.log(userKey);
+            // TODO: now it gets user information every time. improve this
             getUserInformation(userKey, accessToken).then((rjson) => {
               console.log(rjson);
+              console.log('here');
               if (rjson) {
                 this.props.setUserName(rjson.name);
                 this.props.setUserEmail(rjson.email);
                 this.props.setProfileImgUrl(rjson.profileImgUrl);
+                console.log(this.props.userName);
+                console.log(this.props.profileImgUrl);
               }
             });
           }
         });
       }
     });
+    this.state = {
+      imageHeight: 0
+    };
   }
   componentDidMount() {
     getLoginType().then((data) => {
@@ -107,12 +118,25 @@ class MyPage extends Component {
       </View>
     );
   }
+
+  handleTextLayout(evt) {
+    console.log(evt.nativeEvent.layout);
+    this.setState({imageHeight: evt.nativeEvent.layout.height});
+  }
+
   renderUserPicture() {
     return (
       <View style={{flexDirection: 'row', flex: 24 + 72 + 16}}>
         <View style={{flex: 24}}/>
-        <View style={{flex: 88}}>
-          <Text>Picture</Text>
+        <View style={{flex: 88}} onLayout={this.handleTextLayout.bind(this)}>
+          <Image
+            style={{height: this.state.imageHeight, width: this.state.imageHeight}}
+            source={(
+                    this.props.profileImgUrl !== '' &&
+                    this.props.token !== '' &&
+                    this.props.token !== 'guest') ?
+            {uri: this.props.profileImgUrl} : ImgGuest}
+          />
         </View>
       </View>
     );
@@ -132,7 +156,15 @@ class MyPage extends Component {
     return (
       <View style={{flexDirection: 'column', flex: 225}}>
         <View style={{flex: 35}}>
-          <Text style={[styles.myPageTextUserName, styles.fontRobotoMedium]}>Guest</Text>
+          <Text style={[styles.myPageTextUserName, styles.fontRobotoMedium]}>
+            {(
+              this.props.userName !== '' &&
+              this.props.token !== '' &&
+              this.props.token !== 'guest') ?
+              this.props.userName :
+              'guest'
+            }
+          </Text>
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
