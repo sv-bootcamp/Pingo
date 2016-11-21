@@ -86,19 +86,24 @@ export default class Map extends Component {
 
   // todo: this is duplicate from Create.js. refactoring required
   getAddressData() {
+    const DEFAULT_CURRENT_CITY = 'PINGO';
     const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
     fetch(uri)
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.results.length !== 0) {
-        this.props.setCurrentCity(
-          JSON.stringify(responseJson.results[0].address_components[3].long_name)
-          .replace('"', '')
-          .replace('"', '')
-          .substring(0, 30)
-        );
-      }
+      return JSON.stringify(responseJson.results[0].address_components[3].long_name)
+              .replace('"', '')
+              .replace('"', '')
+              .substring(0, 30);
+    })
+    .catch(err => {
+      return DEFAULT_CURRENT_CITY;
+    })
+    .then(cityName => {
+      return this.props.setCurrentCity(cityName);
     });
+
+
   }
 
   setCurrentPosition() {
