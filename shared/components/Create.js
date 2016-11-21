@@ -251,13 +251,17 @@ class Create extends Component {
 
   getAddressData() {
     const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
-    fetch(uri)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
-        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
-        this.setState({streetName: streetName, streetNumber: streetNumber});
-      });
+    try {
+      fetch(uri)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
+          const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
+          this.setState({streetName: streetName, streetNumber: streetNumber});
+        })
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   checkDone() {
