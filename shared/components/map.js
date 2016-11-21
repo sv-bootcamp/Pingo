@@ -62,24 +62,26 @@ export default class Map extends Component {
   }
 
   componentWillMount() {
-    LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message: "<h2>Use Location ?</h2>" +
-      "This app wants to change your device settings:<br/><br/>" +
-      "Use GPS, Wi-Fi, and cell network for location<br/><br/>",
-      ok: 'YES',
-      cancel: 'NO'
-    })
-    .then((success) => {
-      console.log(success);
-      this.setCurrentPosition();
-      this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-      this.props.getMapItems(this.props.zoomLevel,
-        this.props.currentLocation.latitude,
-        this.props.currentLocation.longitude);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+    if (Platform.OS === 'android') {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message: "<h2>Use Location ?</h2>" +
+        "This app wants to change your device settings:<br/><br/>" +
+        "Use GPS, Wi-Fi, and cell network for location<br/><br/>",
+        ok: 'YES',
+        cancel: 'NO'
+      })
+      .then((success) => {
+        console.log(success);
+        this.setCurrentPosition();
+        this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+        this.props.getMapItems(this.props.zoomLevel,
+          this.props.currentLocation.latitude,
+          this.props.currentLocation.longitude);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+    }
   }
 
   // todo: this is duplicate from Create.js. refactoring required
@@ -204,7 +206,7 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
-          {this.props.items.map(item => (
+          {(!this.props.items) ? null : this.props.items.map(item => (
             <MapView.Marker
               key={item.key}
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}

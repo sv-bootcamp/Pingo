@@ -1,12 +1,14 @@
 import * as types from './actionTypes';
 import { AsyncStorage } from 'react-native';
 
-const STORAGE_KEY_accessToken = '@PingoStorage:accessToken';
-const STORAGE_KEY_refreshToken = '@PingoStorage:refreshToken';
-const STORAGE_KEY_secret = '@PingoStorage:secret';
-const STORAGE_KEY_loginType = '@PingoStorage:loginType';
+const STORAGE_NAME = '@PingoStorage:';
+const STORAGE_KEY_accessToken = 'accessToken';
+const STORAGE_KEY_refreshToken = 'refreshToken';
+const STORAGE_KEY_userKey = 'userKey';
+const STORAGE_KEY_secret = 'secret';
+const STORAGE_KEY_loginType = 'loginType';
 
-const signupFacebookUser = (FacebookToken) => {
+export const signupFacebookUser = (FacebookToken) => {
   const address = 'https://goober.herokuapp.com/api/users/signup';
   const bodySignUp = JSON.stringify({
     'userType': 'facebook',
@@ -22,7 +24,10 @@ const signupFacebookUser = (FacebookToken) => {
   })
   .then((response) => response.json())
   .then((rjson) => {
-    setUserToken(rjson, 'facebook');
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+    setUserKey(rjson.userKey);
     })
   .catch((error) => {
     console.log(error);
@@ -42,108 +47,150 @@ export const signupGuestUser = () => {
     },
     body: bodySignUp
   })
-    .then((response) => response.json())
+  .then((response) => response.json())
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+    setUserKey(rjson.userKey);
+    setSecretToken(rjson.userSecret);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+// todo: refactor the below two functions
+export const grantAnonymousUser = (secret, userKey) => {
+  const address = 'https://goober.herokuapp.com/api/auth/grant';
+  const bodyGrant = JSON.stringify({
+    'grantType': 'anonymous',
+    'userSecret': secret,
+    'userKey': userKey
+  });
+  fetch(address, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: bodyGrant
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 400) {
+      signupGuestUser();
+      return null;
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    if (rjson !== null) {
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+export const grantFacebookUser = async (facebookToken, userKey) => {
+  if (userKey === null) {
+    console.log('signinfaceobkbk');
+    return signupFacebookUser(facebookToken);
+  }
+  try {
+    const address = 'https://goober.herokuapp.com/api/auth/grant';
+    console.log(address);
+    console.log('fbtoken ' + facebookToken);
+    console.log(userKey);
+    const bodyGrant = JSON.stringify({
+      'grantType': 'facebook',
+      'facebookToken': facebookToken,
+      'userKey': userKey
+    });
+    await fetch(address, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: bodyGrant
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        signupFacebookUser(facebookToken);
+        return null;
+      }
+    })
     .then((rjson) => {
       console.log(rjson);
-      setUserToken(rjson, 'anonymous');
+      if (rjson !== null && rjson !== undefined) {
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+      } else {
+        signupFacebookUser(facebookToken);
+      }
     })
     .catch((error) => {
       console.log(error);
     });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-// todo: refactor the below two functions
-export const grantAnonymousUser = (secret) => {
-  console.log(secret);
-  const address = 'https://goober.herokuapp.com/api/auth/grant';
-  const bodyGrant = JSON.stringify({
-    'grantType': 'anonymous',
-    'secret': secret
-  });
-  fetch(address, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyGrant
-  })
-  .then((response) => {
-    console.log(response);
-    if (response.status === 200) {
-      return response.json();
-    } else if (response.status === 400) {
-      throw new Error(response.status);
+const setAccessToken = async (accessToken) => {
+  try {
+    if (accessToken !== null) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`, accessToken);
     }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    setUserToken(rjson, 'anonymous');
-  })
-  .catch((error) => {
+  } catch (error) {
     console.log(error);
-    signupGuestUser();
-  });
-};
-
-export const grantFacebookUser = (facebookToken) => {
-  const address = 'https://goober.herokuapp.com/api/auth/grant';
-  console.log(address);
-  console.log('fbtoken ' + facebookToken);
-  const bodyGrant = JSON.stringify({
-    'grantType': 'facebook',
-    'facebookToken': facebookToken
-  });
-  fetch(address, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyGrant
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    } else if (response.status === 400) {
-      throw new Error(response.status);
-    }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    setUserToken(rjson, 'facebook');
-  })
-  .catch((error) => {
-    console.log(error);
-    signupFacebookUser(facebookToken);
-  });
+  }
 };
 
 const setRefreshToken = async (refreshToken) => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_refreshToken, refreshToken);
+    if (refreshToken !== null) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`, refreshToken);
+    }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
-// todo: use this later if getting error after requesting user profile
-const requestRefreshToken = async (refreshToken) => {
-  const address = 'https://goober.herokuapp.com/api/auth/refresh';
-  fetch(address, {
-    method: 'POST',
-    headers: {
-      'refreshToken': refreshToken
+const setUserKey = async (userKey) => {
+  try {
+    if (userKey !== null) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`, userKey);
     }
-    .then((response) => response.json())
-    .then((rjson) => {
-      console.log(rjson);
-      setRefreshToken(rjson.refreshToken);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  })
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const setSecretToken = async (secret) => {
+  try {
+    if (secret !== null) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`, secret);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const setLoginType = async (loginType) => {
+  try {
+    await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`, loginType);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const setToken = (token) => {
@@ -153,71 +200,182 @@ export const setToken = (token) => {
   }
 };
 
-export const getUserToken = async () => {
-  try {
-    return await AsyncStorage.getItem(STORAGE_KEY_accessToken);
-  } catch (error) {
-    console.log(error.message);
+export const setUserName = (userName) => {
+  return {
+    type: types.setUserName,
+    userName
   }
 };
 
-export const getSecretToken = async () => {
+export const setUserEmail = (userEmail) => {
+  return {
+    type: types.setUserEmail,
+    userEmail
+  }
+};
+
+export const setProfileImgUrl = (profileImgUrl) => {
+  return {
+    type: types.setProfileImgUrl,
+    profileImgUrl
+  }
+};
+// todo : pass it to grantfbuser after receiving 400
+export const requestRefreshTokenFacebook = async (refreshToken) => {
+  const address = 'https://goober.herokuapp.com/api/auth/refresh';
+  const bodyRequestRefreshToken = JSON.stringify({
+    'refreshToken': refreshToken
+  });
+  fetch(address, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: {
+      'refreshToken': bodyRequestRefreshToken
+    }
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 400) {
+      removeUserToken();
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+};
+
+export const requestRefreshTokenGuest = async (refreshToken) => {
+  const address = 'https://goober.herokuapp.com/api/auth/refresh';
+  const bodyRequestRefreshToken = JSON.stringify({
+    'refreshToken': refreshToken
+  });
+  fetch(address, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: bodyRequestRefreshToken
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 400) {
+      getSecretToken().then((secret) => {
+        if (secret !== null) {
+          getUserKey().then((userId) => {
+            if (userId !== null) {
+              grantAnonymousUser(secret, userId);
+            }
+          });
+        } else {
+          signupGuestUser();
+        }
+      });
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+};
+
+export const getUserInformation = async (userKey, accessToken) => {
+  console.log(userKey);
+  console.log(accessToken);
+  const address = `http://goober.herokuapp.com/api/users/${userKey}`;
+  const headerGetUserInformation = JSON.stringify({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'authorization': `bearer ${accessToken}`
+  });
+  fetch(address, {
+    method: 'GET',
+    headers: headerGetUserInformation
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else if (response.status === 500) {
+      throw new Error(response.status);
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    return rjson;
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+};
+
+export const getAccessToken = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_secret);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
 export const getRefreshToken = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_refreshToken);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
-export const setUserToken = async (response, userType) => {
+export const getUserKey = async () => {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY_accessToken, response.accessToken);
-    await AsyncStorage.setItem(STORAGE_KEY_refreshToken, response.refreshToken);
-    if (userType === 'anonymous') {
-      await AsyncStorage.setItem(STORAGE_KEY_secret, response.secret);
-    }
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
-export const removeUserToken = async () => {
+export const getSecretToken = async () => {
   try {
-    await AsyncStorage.removeItem(STORAGE_KEY_accessToken);
-    await AsyncStorage.removeItem(STORAGE_KEY_refreshToken);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
 export const getLoginType = async () => {
   try {
-    return await AsyncStorage.getItem(STORAGE_KEY_loginType);
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
-    console.log(error.message);
-  }
-};
-
-export const setLoginType = async (loginType) => {
-  try {
-    await AsyncStorage.setItem(STORAGE_KEY_loginType, loginType);
-  } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
 export const removeLoginType = async () => {
   try {
-    await AsyncStorage.removeItem(STORAGE_KEY_loginType);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+  }
+};
+
+export const removeUserToken = async () => {
+  try {
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
+  } catch (error) {
+    console.log(error);
   }
 };
