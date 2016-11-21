@@ -8,6 +8,7 @@ import {
   setUserEmail,
   setProfileImgUrl
 } from '../actions/authActions';
+import { setCreatedPosts } from '../actions/userActions';
 
 // todo: change items later
 const mapStateToProps = (state) => {
@@ -17,7 +18,8 @@ const mapStateToProps = (state) => {
     items: state.map.items,
     token: state.auth.token,
     userName: state.auth.userName,
-    profileImgUrl: state.auth.profileImgUrl
+    profileImgUrl: state.auth.profileImgUrl,
+    createdPosts: state.user.createdPosts
   };
 };
 
@@ -40,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setProfileImgUrl: (profileImgUrl) => {
       return dispatch(setProfileImgUrl(profileImgUrl));
+    },
+    setCreatedPosts: (createdPosts) => {
+      return dispatch(setCreatedPosts(createdPosts));
     }
   };
 };

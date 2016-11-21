@@ -52,22 +52,15 @@ class MyPage extends Component {
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
     getAccessToken().then((accessToken) => {
-      console.log(accessToken);
       if (accessToken !== null) {
         getUserKey().then((userKey) => {
-          console.log(userKey);
           if (userKey !== null) {
-            console.log(userKey);
             // TODO: now it gets user information every time. improve this
             getUserInformation(userKey, accessToken).then((rjson) => {
-              console.log(rjson);
-              console.log('here');
               if (rjson) {
                 this.props.setUserName(rjson.name);
                 this.props.setUserEmail(rjson.email);
                 this.props.setProfileImgUrl(rjson.profileImgUrl);
-                console.log(this.props.userName);
-                console.log(this.props.profileImgUrl);
               }
             });
           }
@@ -85,6 +78,29 @@ class MyPage extends Component {
       } else {
         this.props.setToken(data);
       }
+    });
+    const address = 'http://goober.herokuapp.com/api/users/createdposts';
+    getAccessToken().then((accessToken) => {
+      console.log(address);
+      console.log(accessToken);
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `bearer ${accessToken}`
+      };
+      fetch(address, {
+        method: 'GET',
+        headers: headers
+      })
+        .then(response => {
+          console.log(response);
+          return response.json();
+        })
+        .then(json => {
+          console.log(json);
+          this.props.setCreatedPosts(json);
+        })
+        .catch((error) => console.log(error));
     });
   }
   renderImageButtonSetting() {
@@ -195,14 +211,15 @@ class MyPage extends Component {
   }
 
   renderTabViewContents() {
-    if (this.props.items) {
+    console.log(this.props.createdPosts);
+    if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
       return (
         <ListView
           dataSource={
-            new ListView.DataSource({
-              rowHasChanged: (r1, r2) => r1 !== r2
-            }).cloneWithRows(this.props.items)
-          }
+          new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+          }).cloneWithRows(this.props.createdPosts)
+        }
           renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
           enableEmptySections={true}
         />
@@ -247,12 +264,14 @@ MyPage.propTypes = {
   setUserName: PropTypes.func,
   setUserEmail: PropTypes.func,
   setProfileImgUrl: PropTypes.func,
+  setCreatedPosts: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
   token: PropTypes.string,
   userName: PropTypes.string,
   profileImgUrl: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
-  items: PropTypes.any
+  items: PropTypes.any,
+  createdPosts: PropTypes.array
 };
 
 export default MyPage;
