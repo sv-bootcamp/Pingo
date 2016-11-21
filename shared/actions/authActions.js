@@ -8,13 +8,13 @@ const STORAGE_KEY_userKey = 'userKey';
 const STORAGE_KEY_secret = 'secret';
 const STORAGE_KEY_loginType = 'loginType';
 
-export const signupFacebookUser = (FacebookToken) => {
+export const signupFacebookUser = async (FacebookToken) => {
   const address = 'https://goober.herokuapp.com/api/users/signup';
   const bodySignUp = JSON.stringify({
     'userType': 'facebook',
     'facebookToken': FacebookToken
   });
-  fetch(address, {
+  await fetch(address, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -34,12 +34,12 @@ export const signupFacebookUser = (FacebookToken) => {
   });
 };
 
-export const signupGuestUser = () => {
+export const signupGuestUser = async () => {
   const address = 'https://goober.herokuapp.com/api/users/signup';
   const bodySignUp = JSON.stringify({
     'userType': 'anonymous'
   });
-  fetch(address, {
+  await fetch(address, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -96,20 +96,14 @@ export const grantAnonymousUser = (secret, userKey) => {
   });
 };
 
-export const grantFacebookUser = async (facebookToken, userKey) => {
-  if (userKey === null) {
-    console.log('signinfaceobkbk');
-    return signupFacebookUser(facebookToken);
-  }
+export const grantFacebookUser = async (facebookToken) => {
   try {
     const address = 'https://goober.herokuapp.com/api/auth/grant';
     console.log(address);
     console.log('fbtoken ' + facebookToken);
-    console.log(userKey);
     const bodyGrant = JSON.stringify({
       'grantType': 'facebook',
-      'facebookToken': facebookToken,
-      'userKey': userKey
+      'facebookToken': facebookToken
     });
     await fetch(address, {
       method: 'POST',
@@ -131,8 +125,16 @@ export const grantFacebookUser = async (facebookToken, userKey) => {
     .then((rjson) => {
       console.log(rjson);
       if (rjson !== null && rjson !== undefined) {
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
+        console.log('setting tokens after facebook grant');
+        getUserKey().then((userKey) => {
+          if (userKey === null) {
+            console.log('userkey not found. signing up again');
+            signupFacebookUser(facebookToken);
+          } else {
+            setAccessToken(rjson.accessToken);
+            setRefreshToken(rjson.refreshToken);
+          }
+        });
       } else {
         signupFacebookUser(facebookToken);
       }
@@ -226,15 +228,13 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
   const bodyRequestRefreshToken = JSON.stringify({
     'refreshToken': refreshToken
   });
-  fetch(address, {
+  return fetch(address, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: {
-      'refreshToken': bodyRequestRefreshToken
-    }
+    body: bodyRequestRefreshToken
   })
   .then((response) => {
     if (response.status === 200) {
@@ -294,32 +294,36 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
 };
 
 export const getUserInformation = async (userKey, accessToken) => {
-  console.log(userKey);
-  console.log(accessToken);
-  const address = `http://goober.herokuapp.com/api/users/${userKey}`;
-  const headerGetUserInformation = JSON.stringify({
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'authorization': `bearer ${accessToken}`
-  });
-  fetch(address, {
-    method: 'GET',
-    headers: headerGetUserInformation
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    } else if (response.status === 500) {
-      throw new Error(response.status);
-    }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    return rjson;
-  })
-  .catch((error) => {
+  try {
+    console.log(accessToken);
+    console.log(userKey);
+    const address = `http://goober.herokuapp.com/api/users/${userKey}`;
+    const headerGetUserInformation = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `bearer ${accessToken}`
+    };
+    return await fetch(address, {
+      method: 'GET',
+      headers: headerGetUserInformation
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 500) {
+          throw new Error(response.status);
+        }
+      })
+      .then((rjson) => {
+        console.log(rjson);
+        return rjson;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  } catch (error) {
     console.log(error);
-  })
+  }
 };
 
 export const getAccessToken = async () => {
@@ -374,7 +378,6 @@ export const removeUserToken = async () => {
   try {
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
-    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
   } catch (error) {
     console.log(error);
   }
