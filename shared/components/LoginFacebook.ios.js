@@ -1,59 +1,64 @@
 import React, { Component, PropTypes } from 'react';
 import {
-    Text,
-    View,
-    TouchableHighlight
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  Platform
 } from 'react-native';
 import {FBLoginManager} from 'react-native-facebook-login';
+import { Actions } from 'react-native-router-flux';
+import {
+  setLoginType,
+  grantFacebookUser,
+  removeUserToken,
+  removeLoginType
+} from '../actions/authActions';
+
+const WindowHeight = 477.8 + 162;
+const WindowWidth = 360;
 
 const styles = {
-  container: {
-    flex: 1,
+  settingListBox: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderColor: '#e7e7e7',
+    height: 56,
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center'
   },
-  FBLoginButton: {
-    flex: 1,
+  settingGreyBox: {
+    backgroundColor: '#e7e7e7',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    height: 30,
-    width: 175,
-    paddingLeft: 2,
-
-    backgroundColor: 'rgb(66,93,174)',
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: 'rgb(66,93,174)',
-
-    shadowColor: "#000000",
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    shadowOffset: {
-      height: 1,
-      width: 0
-    }
+    alignItems: 'center'
   },
-  FBLoginButtonText: {
-    color: 'white',
-    fontWeight: '600',
-    fontFamily: 'Helvetica neue',
-    fontSize: 14.2
+  settingTextList: {
+    color: '#2b2b2b',
+    marginLeft: 16
   },
-  FBLoginButtonTextLoggedIn: {
-    marginLeft: 5
+  settingTextRightButton: {
+    fontSize: 16,
+    color: '#2c8cff',
+    alignSelf: 'flex-end',
+    marginRight: 16
   },
-  FBLoginButtonTextLoggedOut: {
-    marginLeft: 18
+  fontRobotoRegular: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
   },
-  FBLogo: {
-    position: 'absolute',
-    height: 14,
-    width: 14,
-    left: 7,
-    top: 7
+  fontRobotoMedium: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      }
+    })
+  },
+  myPageTextLogInFacebook: {
+    color: '#2c8cff',
+    marginLeft: 16
   }
 };
 
@@ -68,8 +73,16 @@ class LoginFacebook extends Component {
   handleLogin() {
     FBLoginManager.login((error, data) => {
       if (!error) {
-        this.setState({ user: data });
-        this.props.onLogin && this.props.onLogin();
+        console.log(data);
+        setLoginType('facebook');
+        grantFacebookUser(data.credentials.token).then(() => {
+          this.props.setToken('facebook');
+          console.log(this.props.currentScene);
+          if (this.props.currentScene === 'initialScene') {
+            this.props.setCurrentScene('map');
+            Actions.map({type: 'replace'});
+          }
+        });
       } else {
         console.log(error, data);
       }
@@ -79,8 +92,9 @@ class LoginFacebook extends Component {
   handleLogout() {
     FBLoginManager.logout((error, data) => {
       if (!error) {
-        this.setState({ user : null});
-        this.props.onLogout && this.props.onLogout();
+        this.props.setToken('');
+        removeUserToken();
+        removeLoginType();
       } else {
         console.log(error, data);
       }
@@ -89,7 +103,6 @@ class LoginFacebook extends Component {
 
   onPress() {
     this.state.user ? this.handleLogout() : this.handleLogin();
-    this.props.onPress && this.props.onPress();
   }
 
   componentWillMount() {
@@ -100,29 +113,64 @@ class LoginFacebook extends Component {
     });
   }
 
-  render() {
-    const text = this.state.user ? 'Log out' : 'Log in with Facebook';
-    return (
-      <View style={this.props.style}>
-        <TouchableHighlight
-          style={styles.container}
-          onPress={this.onPress.bind(this)}
+  renderButton() {
+    if (this.props.currentScene === 'setting') {
+      return (
+        <View>
+          <View style={[styles.settingGreyBox, {height: 24}]}/>
+          <TouchableOpacity
+            style={[styles.settingListBox, {backgroundColor: 'white'}]}
+            onPress={this.handleLogout.bind(this)}
+          >
+            <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
+              Sign Out
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (this.props.currentScene === 'myPage') {
+      return (
+        <TouchableOpacity onPress={this.handleLogin.bind(this)}>
+          <Text style={[{color: '#2c8cff'}, styles.fontRobotoRegular]}>
+            Log in with Facebook
+          </Text>
+        </TouchableOpacity>
+      );
+    } else if (this.props.currentScene === 'initialScene') {
+      return (
+        <TouchableOpacity
+          style={{
+            width: Dimensions.get('window').width * 280 / WindowWidth,
+            height: Dimensions.get('window').height * 48 / WindowHeight,
+            justifyContent: 'center',
+            borderRadius: 10,
+            elevation: 1,
+            backgroundColor: '#4267b2'
+          }}
+          onPress={this.handleLogin.bind(this)}
         >
-          <View style={styles.FBLoginButton}>
-            <Text style={[styles.FBLoginButtonText, this.state.user ? styles.FBLoginButtonTextLoggedIn : styles.FBLoginButtonTextLoggedOut]}
-              numberOfLines={1}>{text}</Text>
-          </View>
-        </TouchableHighlight>
-      </View>
+          <Text style={[{alignSelf: 'center', fontSize: 14, color: 'white'}, styles.fontRobotoMedium]}>
+            Login with Facebook
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      this.renderButton()
     );
   }
 }
 
 LoginFacebook.propTypes = {
   style: PropTypes.any,
-  onPress: PropTypes.func,
-  onLogin: PropTypes.func,
-  onLogout: PropTypes.func
+  setToken: PropTypes.func,
+  setCurrentScene: PropTypes.func,
+  token: PropTypes.string,
+  currentScene: PropTypes.string
 };
 
-export default LoginFacebook
+export default LoginFacebook;
