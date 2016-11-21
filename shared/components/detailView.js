@@ -107,13 +107,13 @@ export default class DetailView extends Component {
     : this.setState({locationReported: true});
   }
 
-  componentDidUpdate(prevProps, prevState){
+  componentDidUpdate(prevProps, prevState) {
     if (this.firstTry) {
       this._swiper.scrollBy(prevProps.rowID * 1 + 1, false);
       this.currentIndex = this.props.rowID * 1 + 1;
       this.firstTry = false;
     }
-    (prevState.isClicked) ? this._swiper.scrollBy(this.currentIndex, false) : this._swiper.scrollBy(this.currentIndex - 1, false)
+    (prevState.isClicked) ? this._swiper.scrollBy(this.currentIndex, false) : this._swiper.scrollBy(this.currentIndex - 1, false);
   }
 
   handleClick(i) {
@@ -133,6 +133,9 @@ export default class DetailView extends Component {
   }
 
   renderPagination(index, total) {
+    if (this.currentIndex !== index) {
+      this.currentIndex = index;
+    }
     if (this.state.isClicked) {
       return (<View style ={{flex: 0.3, backgroundColor: 'black'}}/>);
     }
@@ -206,7 +209,8 @@ export default class DetailView extends Component {
                   <TouchableOpacity onPress = {() => {
                     this.toggleModalVisible();
                     this.setState({currentReport: 'location'});
-                    Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage });
+                    Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage,
+                      key: this.props.detailSource[this.currentIndex].key});
                   }}>
                   <Text> Report an Issue</Text>
                   </TouchableOpacity>
