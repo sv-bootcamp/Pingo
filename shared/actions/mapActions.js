@@ -25,15 +25,13 @@ export const getMapItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', true));
     // todo: recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
-    const address = `http://goober.herokuapp.com/api/items${queryBuilder(queries)}`;
+    const address = `https://goober.herokuapp.com/api/items${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
       console.log(address);
       console.log(accessToken);
-      const headers = JSON.stringify({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${accessToken}`
-      });
+      const headers = {
+        authorization: `bearer ${accessToken}`
+      };
       return fetch(address, {
         method: 'GET',
         headers: headers

@@ -96,20 +96,14 @@ export const grantAnonymousUser = (secret, userKey) => {
   });
 };
 
-export const grantFacebookUser = async (facebookToken, userKey) => {
-  if (userKey === null) {
-    console.log('signinfaceobkbk');
-    return signupFacebookUser(facebookToken);
-  }
+export const grantFacebookUser = async (facebookToken) => {
   try {
     const address = 'https://goober.herokuapp.com/api/auth/grant';
     console.log(address);
     console.log('fbtoken ' + facebookToken);
-    console.log(userKey);
     const bodyGrant = JSON.stringify({
       'grantType': 'facebook',
-      'facebookToken': facebookToken,
-      'userKey': userKey
+      'facebookToken': facebookToken
     });
     await fetch(address, {
       method: 'POST',
@@ -131,6 +125,7 @@ export const grantFacebookUser = async (facebookToken, userKey) => {
     .then((rjson) => {
       console.log(rjson);
       if (rjson !== null && rjson !== undefined) {
+        console.log('setting tokens after facebook grant');
         setAccessToken(rjson.accessToken);
         setRefreshToken(rjson.refreshToken);
       } else {
@@ -226,15 +221,13 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
   const bodyRequestRefreshToken = JSON.stringify({
     'refreshToken': refreshToken
   });
-  fetch(address, {
+  return fetch(address, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: {
-      'refreshToken': bodyRequestRefreshToken
-    }
+    body: bodyRequestRefreshToken
   })
   .then((response) => {
     if (response.status === 200) {

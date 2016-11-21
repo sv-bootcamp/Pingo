@@ -5,7 +5,6 @@ import {
   requestRefreshTokenFacebook,
   getAccessToken,
   getRefreshToken,
-  getUserKey,
   removeUserToken,
   grantFacebookUser,
   getLoginType,
@@ -74,9 +73,11 @@ class LoginFacebook extends Component {
             if (refreshToken === null) {
               return;
             }
+            console.log(refreshToken);
             requestRefreshTokenFacebook(refreshToken);
           });
           getAccessToken().then((accessToken) => {
+            console.log(accessToken);
             if (accessToken !== null) {
               this.props.setToken(accessToken);
               this.props.setCurrentScene('map');
@@ -105,15 +106,13 @@ class LoginFacebook extends Component {
         onLogin={(data) => {
           setLoginType('facebook');
           console.log(data);
-          getUserKey().then((userKey) => {
-            grantFacebookUser(data.credentials.token, userKey).then(() => {
-              this.props.setToken('facebook');
-              console.log(this.props.currentScene);
-              if (this.props.currentScene === 'initialScene') {
-                this.props.setCurrentScene('map');
-                Actions.map({type: 'replace'});
-              }
-            });
+          grantFacebookUser(data.credentials.token).then(() => {
+            this.props.setToken('facebook');
+            console.log(this.props.currentScene);
+            if (this.props.currentScene === 'initialScene') {
+              this.props.setCurrentScene('map');
+              Actions.map({type: 'replace'});
+            }
           });
         }}
         onLoginFound={()=>{}}

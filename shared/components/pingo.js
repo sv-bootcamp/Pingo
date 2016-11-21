@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {Image, View, Dimensions, Animated, Easing} from 'react-native';
 import ImgPingo from '../resources/logo/pingo.png';
 import { Actions } from 'react-native-router-flux';
-import { getLoginType } from '../actions/authActions';
+import { getLoginType, getRefreshToken, requestRefreshTokenFacebook, getAccessToken, removeLoginType } from '../actions/authActions';
 
 const styles = {
   fadeOut: {
@@ -23,9 +23,25 @@ export default class Pingo extends Component {
   componentDidMount() {
     getLoginType().then((data) => {
       if (data === 'facebook') {
-        this.props.setToken(data);
-        this.props.setCurrentScene('map');
-        Actions.map({type: 'replace'});
+        getRefreshToken().then((refreshToken) => {
+          if (refreshToken === null) {
+            return null;
+          }
+          console.log(refreshToken);
+          return requestRefreshTokenFacebook(refreshToken);
+        })
+        .then(() => {
+          getAccessToken().then((accessToken) => {
+            console.log(accessToken);
+            if (accessToken !== null) {
+              this.props.setToken(accessToken);
+              this.props.setCurrentScene('map');
+              Actions.map({type: 'replace'});
+            } else {
+              removeLoginType();
+            }
+          });
+        });
       } else {
         this.animationFadeOut();
         this.props.setCurrentScene('initialScene');
