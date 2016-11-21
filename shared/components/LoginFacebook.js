@@ -2,6 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Platform, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
 import {
+  requestRefreshTokenFacebook,
+  getAccessToken,
+  getRefreshToken,
+  getUserKey,
   removeUserToken,
   grantFacebookUser,
   getLoginType,
@@ -66,9 +70,21 @@ class LoginFacebook extends Component {
     if (this.props.currentScene === 'initialScene') {
       getLoginType().then((data) => {
         if (data === 'facebook') {
-          this.props.setToken(data);
-          this.props.setCurrentScene('map');
-          Actions.map({type: 'replace'});
+          getRefreshToken().then((refreshToken) => {
+            if (refreshToken === null) {
+              return;
+            }
+            requestRefreshTokenFacebook(refreshToken);
+          });
+          getAccessToken().then((accessToken) => {
+            if (accessToken !== null) {
+              this.props.setToken(accessToken);
+              this.props.setCurrentScene('map');
+              Actions.map({type: 'replace'});
+            } else {
+              removeLoginType();
+            }
+          });
         }
       });
     }
@@ -88,12 +104,17 @@ class LoginFacebook extends Component {
         permissions={['email', 'user_about_me']}
         onLogin={(data) => {
           setLoginType('facebook');
-          grantFacebookUser(data.credentials.token);
-          this.props.setToken('facebook');
-          if (this.props.currentScene === 'initialScene') {
-            this.props.setCurrentScene('map');
-            Actions.map({type: 'replace'});
-          }
+          console.log(data);
+          getUserKey().then((userKey) => {
+            grantFacebookUser(data.credentials.token, userKey).then(() => {
+              this.props.setToken('facebook');
+              console.log(this.props.currentScene);
+              if (this.props.currentScene === 'initialScene') {
+                this.props.setCurrentScene('map');
+                Actions.map({type: 'replace'});
+              }
+            });
+          });
         }}
         onLoginFound={()=>{}}
         onLoginNotFound={()=>{}}
@@ -101,6 +122,7 @@ class LoginFacebook extends Component {
           this.props.setToken('');
           removeUserToken();
           removeLoginType();
+          // todo : handle accessToken for getting items after logout
         }}
         onCancel={()=>{}}
         onPermissionsMissing={()=>{}}

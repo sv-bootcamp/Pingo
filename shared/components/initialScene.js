@@ -4,10 +4,13 @@ import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import {
-  getSecretToken,
-  grantAnonymousUser,
+  getRefreshToken,
+  requestRefreshTokenGuest,
   signupGuestUser,
-  setLoginType
+  setLoginType,
+  grantAnonymousUser,
+  getSecretToken,
+  getUserKey
 } from '../actions/authActions';
 
 import ImgLogin1 from '../resources/initialScene/loginImage1.png';
@@ -162,11 +165,23 @@ class InitialScene extends Component {
     );
   }
   handleGuestButton() {
-    getSecretToken().then((data) => {
-      if (data === null) {
-        signupGuestUser();
+    getRefreshToken().then((refreshToken) => {
+      if (refreshToken === null) {
+        getSecretToken().then((secret) => {
+          if (secret === null) {
+            signupGuestUser();
+          } else {
+            getUserKey().then((userKey) => {
+              if (userKey === null) {
+                signupGuestUser();
+              } else {
+                grantAnonymousUser(secret, userKey);
+              }
+            });
+          }
+        });
       } else {
-        grantAnonymousUser(data);
+        requestRefreshTokenGuest(refreshToken);
       }
     });
     setLoginType('guest');

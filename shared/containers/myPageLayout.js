@@ -2,7 +2,12 @@ import MyPage from '../components/myPage';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setMyPageTabViewIndex } from '../actions/myPageActions';
-import { setToken } from '../actions/authActions';
+import {
+  setToken,
+  setUserName,
+  setUserEmail,
+  setProfileImgUrl
+} from '../actions/authActions';
 
 // todo: change items later
 const mapStateToProps = (state) => {
@@ -10,7 +15,9 @@ const mapStateToProps = (state) => {
     myPageTabViewIndex: state.myPage.myPageTabViewIndex,
     myPageTabViewRoutes: state.myPage.myPageTabViewRoutes,
     items: state.map.items,
-    token: state.auth.token
+    token: state.auth.token,
+    userName: state.auth.userName,
+    profileImgUrl: state.auth.profileImgUrl
   };
 };
 
@@ -24,6 +31,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     setToken: (token) => {
       return dispatch(setToken(token));
+    },
+    setUserName: (userName) => {
+      return dispatch(setUserName(userName));
+    },
+    setUserEmail: (userEmail) => {
+      return dispatch(setUserEmail(userEmail));
+    },
+    setProfileImgUrl: (profileImgUrl) => {
+      return dispatch(setProfileImgUrl(profileImgUrl));
     }
   };
 };
