@@ -3,6 +3,7 @@ import { Image, Text, TouchableOpacity, View, Platform } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import SmallHeader from '../components/smallHeader';
 import ImgBtnCheck from '../resources/btn_check/drawable-xxxhdpi/check.png';
+import { getAccessToken } from '../actions/authActions';
 
 const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexual content',
   'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
@@ -38,8 +39,35 @@ export default class EventReportView extends Component {
       currentIndex: -1
     };
     this.renderOption = this.renderOption.bind(this);
+    this.reportEvent = this.reportEvent.bind(this);
   }
-
+  reportEvent(){
+    const address = 'https://goober.herokuapp.com/api/reports';
+    getAccessToken().then((accessToken) => {
+      return fetch(address, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'authorization': `bearer ${accessToken}`,
+          'aboutPhoto': `${this.props.aboutPhoto}`,
+          'key': `${this.props.key}`,
+          'reportIndex': `${this.state.currentIndex}`
+        }
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((rjson)=>{
+        console.log(rjson);
+        (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
+        Actions.pop();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    });
+  }
   renderOption(title, i) {
     return (
       <View style = {{flex: 46}}>
@@ -78,8 +106,7 @@ export default class EventReportView extends Component {
             Actions.pop();
           }}
           handleBtnRight={()=>{
-            (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
-            Actions.pop();
+            this.reportEvent();
           }}
           btnRight={
             <Text style={[styles.textDone, {color: (this.state.currentIndex !== -1) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
@@ -120,5 +147,6 @@ export default class EventReportView extends Component {
 
 EventReportView.propTypes = {
   aboutPhoto: PropTypes.boolean,
-  handleReport: PropTypes.fucntion
+  handleReport: PropTypes.fucntion,
+  key: PropTypes.string
 };
