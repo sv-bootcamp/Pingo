@@ -26,7 +26,11 @@ const LoginImgWidth = 250;
 
 const styles = {
   wrapper: {
-    flex: 1
+    ...Platform.select({
+      android: {
+        flex: 1
+      }
+    })
   },
   slide1: {
     flex: 1,
@@ -188,7 +192,7 @@ class InitialScene extends Component {
   render() {
     return (
       <View style={{flexDirection: 'column', flex: 1}}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, backgroundColor: '#f7f7f7'}}>
           {this.renderSwiper()}
         </View>
         <View style={[styles.bottomBox, {height: Dimensions.get('window').height * BottomBoxHeight / (SwiperHeight + BottomBoxHeight)}]}>
