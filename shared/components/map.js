@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     })
   }
@@ -99,7 +102,7 @@ export default class Map extends Component {
             .substring(0, 30)
           );
         } catch(error) {
-          console.log(error);  
+          console.log(error);
         }
       }
     });
