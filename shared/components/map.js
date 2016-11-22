@@ -102,8 +102,6 @@ export default class Map extends Component {
     .then(cityName => {
       return this.props.setCurrentCity(cityName);
     });
-
-
   }
 
   setCurrentPosition() {
