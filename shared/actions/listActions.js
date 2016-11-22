@@ -1,8 +1,7 @@
 import * as types from './actionTypes';
-import {ENDPOINT_IMAGE, HTTP,
-  queryBuilder, createQueryObject} from '../utils'; // Now, we use temporary query, so We don't need SERVER_ADDR
 // import {SERVER_ADDR, ENDPOINT_IMAGE, HTTP,
-//   queryBuilder, createQueryObject} from '../utils';
+//   queryBuilder, createQueryObject} from '../utils'; We will use later
+import {queryBuilder, createQueryObject} from '../utils';
 import { getAccessToken } from './authActions';
 
 export function TBD() {
@@ -57,8 +56,8 @@ export const getDetailImage = (key) => {
   return (dispatch) => {
     const queries = [];
     queries.push(createQueryObject('item', key));
-    //const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
-    const address = `${HTTP}${"goober.herokuapp.com"}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
+    // const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
+    const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
       return fetch(address, {
         method: 'GET',
