@@ -96,7 +96,7 @@ export default class Map extends Component {
               .replace('"', '')
               .substring(0, 30);
     })
-    .catch(err => {
+    .catch(() => {
       return DEFAULT_CURRENT_CITY;
     })
     .then(cityName => {
