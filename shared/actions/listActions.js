@@ -55,11 +55,23 @@ export const getDetailImage = (key) => {
   return (dispatch) => {
     const queries = [];
     queries.push(createQueryObject('item', key));
-    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
-    return fetch(address)
+    //const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
+    const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
+    console.log(address);
+    getAccessToken().then((accessToken) => {
+      console.log(accessToken);
+      return fetch(address, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'authorization': `bearer ${accessToken}`
+        }
+      })
       .then(response => response.json())
       .then(json =>
-        dispatch(receiveImages(json))
-    );
+          dispatch(receiveImages(json))
+      );
+    });
   };
 };
