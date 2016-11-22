@@ -19,7 +19,15 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     backgroundColor: '#f8f8f8',
     flexDirection: 'row',
-    marginBottom: 0
+    marginBottom: 0,
+    ...Platform.select({
+      android: {
+        elevation: 3
+      },
+      ios: {
+        shadowOpacity: 1
+      }
+    })
   },
   text_header: {
     fontSize: 17,
@@ -87,7 +95,7 @@ class SmallHeader extends Component {
 
   render() {
     return (
-      <View style={[styles.header, {elevation: 3}]}>
+      <View style={styles.header}>
         <View style={{flex: 1}}>
           {this.renderBtnLeft()}
         </View>
