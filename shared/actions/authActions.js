@@ -37,7 +37,8 @@ export const signupFacebookUser = async (FacebookToken) => {
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
     setUserKey(rjson.userKey);
-    })
+    return null;
+  })
   .catch((error) => {
     console.log(error);
   });
@@ -138,11 +139,9 @@ export const grantFacebookUser = async (facebookToken) => {
       if (response.status === 200) {
         return response.json();
       } else if (response.status === 400) {
-        signupFacebookUser(facebookToken);
-        return null;
+        return signupFacebookUser(facebookToken);
       } else if (response.status === 500) {
-        signupFacebookUser(facebookToken);
-        return null;
+        return signupFacebookUser(facebookToken);
       }
     })
     .then((rjson) => {
@@ -152,16 +151,17 @@ export const grantFacebookUser = async (facebookToken) => {
         getUserKey().then((userKey) => {
           if (userKey === null) {
             console.log('userkey not found. signing up again');
-            signupFacebookUser(facebookToken);
+            return signupFacebookUser(facebookToken);
           } else {
             setAccessToken(rjson.accessToken);
             setRefreshToken(rjson.refreshToken);
           }
         });
       } else {
-        signupFacebookUser(facebookToken);
+        return signupFacebookUser(facebookToken);
       }
     })
+    .then()
     .catch((error) => {
       console.log(error);
     });
