@@ -3,6 +3,7 @@ import * as types from './actionTypes';
 //   queryBuilder, createQueryObject} from '../utils'; We will use later
 import {queryBuilder, createQueryObject} from '../utils';
 import { getAccessToken } from './authActions';
+import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE} from '../utils';
 
 export function TBD() {
   return {
@@ -27,14 +28,15 @@ export const getAllItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('lng', long));
 
     // todo recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
-    const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
+    // const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
       return fetch(address, {
         method: 'GET',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
-          'authorization': `bearer ${accessToken}`
+          authorization: `bearer ${accessToken}`
         }
       })
       .then(response => response.json())
@@ -57,14 +59,15 @@ export const getDetailImage = (key) => {
     const queries = [];
     queries.push(createQueryObject('item', key));
     // const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
-    const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
+    // const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}/${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
       return fetch(address, {
         method: 'GET',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
-          'authorization': `bearer ${accessToken}`
+          authorization: `bearer ${accessToken}`
         }
       })
       .then(response => response.json())

@@ -11,7 +11,7 @@ const styles = {
     backgroundColor: 'white'
   }
 };
-import { removeAllDev } from '../actions/authActions';
+
 export default class Pingo extends Component {
   constructor(props) {
     super(props);
@@ -20,8 +20,8 @@ export default class Pingo extends Component {
       opacity: new Animated.Value(0)
     };
   }
+
   componentDidMount() {
-    removeAllDev().done();
     getLoginType().then((data) => {
       if (data === 'facebook') {
         getRefreshToken().then((refreshToken) => {
@@ -51,6 +51,7 @@ export default class Pingo extends Component {
       }
     });
   }
+
   animationFadeOut() {
     this.state.opacity.setValue(0);
     Animated.timing(
@@ -62,6 +63,7 @@ export default class Pingo extends Component {
       }
     ).start(()=>Actions.initialScene({type: 'replace'}));
   }
+
   render() {
     const opacity = this.state.opacity.interpolate({
       inputRange: [0, 0.5, 0.7, 1],
