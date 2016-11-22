@@ -11,7 +11,7 @@ const styles = {
     backgroundColor: 'white'
   }
 };
-
+import { removeAllDev } from '../actions/authActions';
 export default class Pingo extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +21,7 @@ export default class Pingo extends Component {
     };
   }
   componentDidMount() {
+    removeAllDev().done();
     getLoginType().then((data) => {
       if (data === 'facebook') {
         getRefreshToken().then((refreshToken) => {

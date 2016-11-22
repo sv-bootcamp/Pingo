@@ -54,6 +54,7 @@ export const signupGuestUser = async () => {
     setRefreshToken(rjson.refreshToken);
     setUserKey(rjson.userKey);
     setSecretToken(rjson.userSecret);
+    return null;
   })
   .catch((error) => {
     console.log(error);
@@ -61,39 +62,46 @@ export const signupGuestUser = async () => {
 };
 
 // todo: refactor the below two functions
-export const grantAnonymousUser = (secret, userKey) => {
-  const address = 'https://goober.herokuapp.com/api/auth/grant';
-  const bodyGrant = JSON.stringify({
-    'grantType': 'anonymous',
-    'userSecret': secret,
-    'userKey': userKey
-  });
-  fetch(address, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyGrant
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    } else if (response.status === 400) {
-      signupGuestUser();
-      return null;
-    }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    if (rjson !== null) {
-      setAccessToken(rjson.accessToken);
-      setRefreshToken(rjson.refreshToken);
-    }
-  })
-  .catch((error) => {
+export const grantAnonymousUser = async (secret, userKey) => {
+  try {
+    const address = 'https://goober.herokuapp.com/api/auth/grant';
+    const bodyGrant = JSON.stringify({
+      'grantType': 'anonymous',
+      'userSecret': secret,
+      'userKey': userKey
+    });
+    await fetch(address, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: bodyGrant
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        return signupGuestUser();
+      } else if (response.status === 500) {
+        return signupGuestUser();
+      }
+    })
+    .then((rjson) => {
+      console.log(rjson);
+      if (!rjson) {
+        console.log(rjson + 'adsfasfd');
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  } catch (error) {
     console.log(error);
-  });
+  }
 };
 
 export const grantFacebookUser = async (facebookToken) => {
@@ -118,6 +126,9 @@ export const grantFacebookUser = async (facebookToken) => {
       if (response.status === 200) {
         return response.json();
       } else if (response.status === 400) {
+        signupFacebookUser(facebookToken);
+        return null;
+      } else if (response.status === 500) {
         signupFacebookUser(facebookToken);
         return null;
       }
@@ -378,6 +389,18 @@ export const removeUserToken = async () => {
   try {
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+// todo: this is for developing. It should not be used in release. remove later if possible
+export const removeAllDev = async () => {
+  try {
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
   } catch (error) {
     console.log(error);
   }
