@@ -6,7 +6,6 @@ import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import {
   getRefreshToken,
   requestRefreshTokenGuest,
-  signupGuestUser,
   setLoginType,
   grantAnonymousUser,
   getSecretToken,
