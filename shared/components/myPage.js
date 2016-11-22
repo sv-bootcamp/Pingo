@@ -227,7 +227,7 @@ class MyPage extends Component {
 
   render() {
     return (
-      <View style={{flexDirection: 'column', flex: 1}}>
+      <View style={{flexDirection: 'column', flex: 1, overflow: 'hidden'}}>
         <SmallHeader
           btnRight={this.renderImageButtonSetting()}
           handleBtnLeft={this.handleButtonPrev.bind(this)}

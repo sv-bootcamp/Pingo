@@ -709,7 +709,7 @@ class Create extends Component {
   // todo: the View wrapping scrollView style.height must be changed
   render() {
     return (
-      <View style={{flexDirection: 'column'}}>
+      <View style={{flexDirection: 'column', overflow: 'hidden'}}>
         <SmallHeader
           addingNewLocation={this.state.addingNewLocation}
           Done={this.state.Done}

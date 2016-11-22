@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
         elevation: 3
       },
       ios: {
-        shadowOpacity: 1
+        shadowOpacity: 1,
+        shadowRadius: 4,
+        zIndex: 5
       }
     })
   },
