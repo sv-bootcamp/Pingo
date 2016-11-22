@@ -57,9 +57,7 @@ export const getDetailImage = (key) => {
     queries.push(createQueryObject('item', key));
     //const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
     const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
-    console.log(address);
     getAccessToken().then((accessToken) => {
-      console.log(accessToken);
       return fetch(address, {
         method: 'GET',
         headers: {
