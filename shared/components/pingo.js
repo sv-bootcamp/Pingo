@@ -40,6 +40,8 @@ export default class Pingo extends Component {
               Actions.map({type: 'replace'});
             } else {
               removeLoginType();
+              this.animationFadeOut();
+              this.props.setCurrentScene('initialScene');
             }
           });
         });
