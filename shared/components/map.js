@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {StyleSheet, View, Text, Image, Dimensions, Platform} from 'react-native';
+import {Animated, Easing, StyleSheet, View, Text, Image, Dimensions, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -56,11 +56,13 @@ export default class Map extends Component {
     this.setMarkerClickTime = this.setMarkerClickTime.bind(this);
     this.onMapClick = this.onMapClick.bind(this);
     this.getAddressData = this.getAddressData.bind(this);
+    this.cardAnimationSlideUp = this.cardAnimationSlideUp.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
     this.state = {
-      markerSelect: ''
+      markerSelect: '',
+      cardTranslateY: new Animated.Value(0)
     };
   }
 
@@ -85,6 +87,18 @@ export default class Map extends Component {
         console.log(error.message);
       });
     }
+  }
+
+  cardAnimationSlideUp() {
+    this.state.cardTranslateY.setValue(0);
+    Animated.timing(
+      this.state.cardTranslateY,
+      {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.quad
+      }
+    ).start();
   }
 
   // todo: this is duplicate from Create.js. refactoring required
@@ -204,6 +218,10 @@ export default class Map extends Component {
 
   // todo: use centerOffset for IOS
   render() {
+    const translateY = this.state.cardTranslateY.interpolate({
+      inputRange: [0, 1],
+      outputRange: [199, 0]
+    });
     return (
       <View style ={styles.container}>
         <MapView
@@ -222,6 +240,7 @@ export default class Map extends Component {
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
+                this.cardAnimationSlideUp();
                 this.setState({markerSelect: item.key});
               }}
             >
@@ -258,7 +277,9 @@ export default class Map extends Component {
         </View>
         {
           (this.props.selectedItem.title === undefined) ? null :
-            <CardLayout dataSource = {this.props.selectedItem} />
+            <Animated.View style={{transform: [{translateY: translateY}]}}>
+              <CardLayout dataSource = {this.props.selectedItem} />
+            </Animated.View>
         }
       </View>
     );
