@@ -20,6 +20,7 @@ export default class Pingo extends Component {
       opacity: new Animated.Value(0)
     };
   }
+
   componentDidMount() {
     getLoginType().then((data) => {
       if (data === 'facebook') {
@@ -39,6 +40,8 @@ export default class Pingo extends Component {
               Actions.map({type: 'replace'});
             } else {
               removeLoginType();
+              this.animationFadeOut();
+              this.props.setCurrentScene('initialScene');
             }
           });
         });
@@ -48,6 +51,7 @@ export default class Pingo extends Component {
       }
     });
   }
+
   animationFadeOut() {
     this.state.opacity.setValue(0);
     Animated.timing(
@@ -59,6 +63,7 @@ export default class Pingo extends Component {
       }
     ).start(()=>Actions.initialScene({type: 'replace'}));
   }
+
   render() {
     const opacity = this.state.opacity.interpolate({
       inputRange: [0, 0.5, 0.7, 1],

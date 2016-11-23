@@ -59,6 +59,9 @@ const styles = {
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Regular'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     }),
     fontSize: 14,
