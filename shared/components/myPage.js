@@ -89,6 +89,7 @@ class MyPage extends Component {
         this.props.setToken(data);
       }
     });
+    this.props.getSavedPosts();
   }
   renderImageButtonSetting() {
     return (
@@ -255,7 +256,8 @@ MyPage.propTypes = {
   userName: PropTypes.string,
   profileImgUrl: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
-  items: PropTypes.any
+  items: PropTypes.any,
+  getSavedPosts: PropTypes.func
 };
 
 export default MyPage;

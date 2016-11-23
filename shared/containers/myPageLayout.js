@@ -1,7 +1,7 @@
 import MyPage from '../components/myPage';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
-import { setMyPageTabViewIndex } from '../actions/myPageActions';
+import { setMyPageTabViewIndex, getSavedPosts } from '../actions/myPageActions';
 import {
   setToken,
   setUserName,
@@ -17,7 +17,8 @@ const mapStateToProps = (state) => {
     items: state.map.items,
     token: state.auth.token,
     userName: state.auth.userName,
-    profileImgUrl: state.auth.profileImgUrl
+    profileImgUrl: state.auth.profileImgUrl,
+    savedPosts: state.myPage.savedPosts
   };
 };
 
@@ -40,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setProfileImgUrl: (profileImgUrl) => {
       return dispatch(setProfileImgUrl(profileImgUrl));
+    },
+    getSavedPosts: () => {
+      return dispatch(getSavedPosts());
     }
   };
 };
