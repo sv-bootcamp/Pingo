@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, View, Dimensions } from 'react-native';
+import { ListView, View, Dimensions, Platform } from 'react-native';
 import CardLayout from '../containers/cardLayout';
 import MapButton from './MapButton';
 import { Actions } from 'react-native-router-flux';
@@ -37,7 +37,12 @@ class EventList extends Component {
         <MapButton
           handleOnPress={this.handleCameraButton.bind(this)}
           imageSource={'camera'}
-          style={{position: 'absolute', zIndex: 10, elevation: 4,
+          style={Platform.OS === 'android' ? {
+            position: 'absolute', zIndex: 10, elevation: 4,
+            bottom: Dimensions.get('window').width * 16 / 360,
+            right: Dimensions.get('window').width * 16 / 360
+          } : {
+            position: 'absolute', zIndex: 10,
             bottom: Dimensions.get('window').width * 16 / 360,
             right: Dimensions.get('window').width * 16 / 360
           }}

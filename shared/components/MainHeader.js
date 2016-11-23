@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     })
   },
@@ -57,6 +60,20 @@ const styles = StyleSheet.create({
   image: {
     height: 24,
     width: 24
+  },
+  wrapper: {
+    flexDirection: 'column',
+    backgroundColor: 'white',
+    ...Platform.select({
+      android: {
+        elevation: 3
+      },
+      ios: {
+        shadowOpacity: 1,
+        shadowRadius: 4,
+        zIndex: 5
+      }
+    })
   }
 });
 
@@ -122,7 +139,7 @@ export default class MainHeader extends Component {
     });
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
-        <View style= {{ flexDirection: 'column', backgroundColor: 'white', elevation: 3 }}>
+        <View style= {styles.wrapper}>
           <View style= {{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={styles.buttonMyPage}

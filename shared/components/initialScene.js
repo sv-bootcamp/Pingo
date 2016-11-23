@@ -6,7 +6,6 @@ import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import {
   getRefreshToken,
   requestRefreshTokenGuest,
-  signupGuestUser,
   setLoginType,
   grantAnonymousUser,
   getSecretToken,
@@ -94,6 +93,9 @@ const styles = {
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     })
   }
@@ -165,29 +167,28 @@ class InitialScene extends Component {
     );
   }
   handleGuestButton() {
+    let tmpRefreshToken;
+    let tmpSecret;
     getRefreshToken().then((refreshToken) => {
+      tmpRefreshToken = refreshToken;
       if (refreshToken === null) {
-        getSecretToken().then((secret) => {
-          if (secret === null) {
-            signupGuestUser();
-          } else {
-            getUserKey().then((userKey) => {
-              if (userKey === null) {
-                signupGuestUser();
-              } else {
-                grantAnonymousUser(secret, userKey);
-              }
-            });
-          }
-        });
-      } else {
-        requestRefreshTokenGuest(refreshToken);
+        return getSecretToken();
       }
+      return requestRefreshTokenGuest(refreshToken);
+    }).then((secret) => {
+      tmpSecret = secret;
+      if (!tmpRefreshToken) {
+        return null;
+      }
+      return getUserKey();
+    }).then((userKey) => {
+      return grantAnonymousUser(tmpSecret, userKey);
+    }).then(() => {
+      setLoginType('guest');
+      this.props.setToken('guest');
+      this.props.setCurrentScene('map');
+      Actions.map({type: 'replace'});
     });
-    setLoginType('guest');
-    this.props.setToken('guest');
-    this.props.setCurrentScene('map');
-    Actions.map({type: 'replace'});
   }
   render() {
     return (

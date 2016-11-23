@@ -14,8 +14,16 @@ import DatePicker from 'react-native-datepicker';
 import Date from 'moment';
 import { Actions } from 'react-native-router-flux';
 import RNFS from 'react-native-fs';
-import {HTTP, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, API_GEODATA, API_KEY} from '../utils';
+import {
+  HTTPS,
+  SERVER_ADDR,
+  ENDPOINT_ITEM,
+  ENDPOINT_IMAGE,
+  API_GEODATA,
+  API_KEY
+} from '../utils';
 import SmallHeader from '../components/smallHeader';
+import { getAccessToken, getUserKey } from '../actions/authActions';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
@@ -217,49 +225,60 @@ class Create extends Component {
   }
 
   postNewItem() {
-    const data = JSON.stringify({
-      title: this.state.inputTextTitle,
-      lat: this.props.currentLocation.latitude,
-      lng: this.props.currentLocation.longitude,
-      address: `${this.state.streetNumber} ${this.state.streetName}`,
-      category: this.state.category.select,
-      image: String(this.state.img),
-      userKey: 'user-8523574664000-b82e-473b-1234-ead0f54gvr00',
-      startTime: this.state.dateStart,
-      endTime: this.state.dateEnd,
-      caption: this.state.inputTextCaption
-    });
-
-    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}`;
-    fetch(address, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: data
-    })
-      .then((response) => response.json())
-      .then(() => {
-        this.props.setCurrentScene('map');
-        Actions.pop({popNum: 2});
-      })
-      .catch((error) => {
-        console.warn(error);
+    let dataFlag;
+    getUserKey().then((userKey) => {
+      return JSON.stringify({
+        title: this.state.inputTextTitle,
+        lat: this.props.currentLocation.latitude,
+        lng: this.props.currentLocation.longitude,
+        address: `${this.state.streetNumber} ${this.state.streetName}`,
+        category: this.state.category.select,
+        image: String(this.state.img),
+        userKey: userKey,
+        startTime: this.state.dateStart,
+        endTime: this.state.dateEnd,
+        caption: this.state.inputTextCaption
       });
+    })
+    .then((data) => {
+      dataFlag = data;
+      return getAccessToken();
+    })
+    .then((accessToken) => {
+      // const address = `https://goober.herokuapp.com${ENDPOINT_ITEM}`;
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}`;
+      return fetch(address, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authorization: `bearer ${accessToken}`
+        },
+        body: dataFlag
+      });
+    })
+    .then((response) => response.json())
+    .then((rjson) => {
+      console.log(rjson);
+      this.props.setCurrentScene('map');
+      Actions.pop({popNum: 2});
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
   }
 
   getAddressData() {
     const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
     try {
       fetch(uri)
-        .then((response) => response.json())
-        .then((responseJson) => {
-          const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
-          const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
-          this.setState({streetName: streetName, streetNumber: streetNumber});
-        })
-    } catch(error) {
+      .then((response) => response.json())
+      .then((responseJson) => {
+        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
+        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
+        this.setState({streetName: streetName, streetNumber: streetNumber});
+      });
+    } catch (error) {
       console.log(error);
     }
   }
@@ -293,15 +312,18 @@ class Create extends Component {
       image: image
     });
 
-    const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
-    fetch(address, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: data
-    })
+    // const address = `https://goober.herokuapp.com${ENDPOINT_IMAGE}`;
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
+    getAccessToken().then((accessToken) => {
+      fetch(address, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authorization: `bearer ${accessToken}`
+        },
+        body: data
+      })
       .then((response) => response.json())
       .then(() => {
         this.props.setCurrentScene('map');
@@ -310,6 +332,7 @@ class Create extends Component {
       .catch((error) => {
         console.warn(error);
       });
+    });
   }
 
   handleCategoryButton(select) {
@@ -564,7 +587,7 @@ class Create extends Component {
           </View>
         </TouchableOpacity>
       ))
-    )
+    );
   }
 
   renderAddNewLocation() {
@@ -685,7 +708,7 @@ class Create extends Component {
   // todo: the View wrapping scrollView style.height must be changed
   render() {
     return (
-      <View style={{flexDirection: 'column'}}>
+      <View style={{flexDirection: 'column', overflow: 'hidden'}}>
         <SmallHeader
           addingNewLocation={this.state.addingNewLocation}
           Done={this.state.Done}

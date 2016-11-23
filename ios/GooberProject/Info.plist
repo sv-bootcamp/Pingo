@@ -23,31 +23,33 @@
 	<string>1</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to scan barcodes</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Used microphone</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used microphone</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
 	<key>FacebookAppID</key>
 	<string>536789819839446</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-      <key>http://goober.herokuapp.com</key>
-      <dict>
-        <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-        <true/>
-        <key>NSIncludesSubdomains</key>
-        <true/>
-      </dict>
 			<key>ec2-52-78-96-168.ap-northeast-2.compute.amazonaws.com</key>
 			<dict>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 				<key>NSTemporaryExceptionMinimumTLSVersion</key>
 				<string>TLSv1.1</string>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>http://goober.herokuapp.com</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
 				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
@@ -69,12 +71,12 @@
 	</dict>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>FacebookDisplayName</key>
 	<string>PINGO</string>
 	<key>CFBundleURLTypes</key>

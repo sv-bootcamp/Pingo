@@ -1,9 +1,20 @@
 import React, {PropTypes, Component} from 'react';
-import {TouchableHighlight, Image, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, Image, View, Platform} from 'react-native';
 import ImgBtnLocation from '../resources/btn_location/btn_location.png';
 import ImgBtnCamera from '../resources/btn_camera/btn_camera.png';
 
-const styles = StyleSheet.create({
+const styles = {
+  container: {
+    height: 48,
+    width: 48,
+    borderRadius: 8,
+    ...Platform.select({
+      ios: {
+        shadowOpacity: 0.5,
+        shadowRadius: 2
+      }
+    })
+  },
   position: {
     backgroundColor: '#f7f7f9',
     height: 48,
@@ -24,23 +35,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }
-});
+};
 
 export default class MapButton extends Component {
   render() {
     const imageSource = (this.props.imageSource === 'position') ? ImgBtnLocation : ImgBtnCamera;
 
     return (
-    <View>
-      <TouchableHighlight
-        style={[(this.props.imageSource === 'position') ? styles.position : styles.camera, this.props.style]}
+    <View style={[styles.container, this.props.style]}>
+      <TouchableOpacity
+        style={[(this.props.imageSource === 'position') ? styles.position : styles.camera]}
         onPress={this.props.handleOnPress}>
         <View>
           <Image
             style={{height: 24, width: 24}}
             source={imageSource} />
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     </View>
     );
   }

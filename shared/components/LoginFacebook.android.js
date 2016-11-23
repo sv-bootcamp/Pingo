@@ -51,6 +51,9 @@ const styles = {
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     })
   },
@@ -90,6 +93,7 @@ class LoginFacebook extends Component {
       });
     }
   }
+
   render() {
     return (
       <FBLogin
@@ -136,6 +140,7 @@ class FBLoginView extends Component {
     this.renderButton.bind(this);
     this.handleOnPress.bind(this);
   }
+
   handleOnPress() {
     if (!this.context.isLoggedIn) {
       this.context.login();
@@ -143,6 +148,7 @@ class FBLoginView extends Component {
       this.context.logout();
     }
   }
+
   renderButton() {
     if (this.props.currentScene === 'setting') {
       return (
@@ -195,6 +201,7 @@ class FBLoginView extends Component {
     }
     return null;
   }
+
   render() {
     return (
       this.renderButton()
