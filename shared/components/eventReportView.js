@@ -147,6 +147,6 @@ export default class EventReportView extends Component {
 
 EventReportView.propTypes = {
   aboutPhoto: PropTypes.boolean,
-  handleReport: PropTypes.fucntion,
+  handleReport: PropTypes.fucn,
   key: PropTypes.string
 };
