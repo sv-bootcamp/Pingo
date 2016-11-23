@@ -7,7 +7,8 @@ const mapStateToProps = (state) => {
     pic: state.form.pic,
     zoomLevel: state.map.zoomLevel,
     dataSource: state.list.dataSource,
-    currentLocation: state.map.currentLocation
+    currentLocation: state.map.currentLocation,
+    userLocation: state.map.userLocation
   };
 };
 
