@@ -76,6 +76,13 @@ export const setLocation = (location) => {
   };
 };
 
+export const setUserLocation = (userLocation) => {
+  return {
+    type: types.setUserLocation,
+    userLocation
+  };
+};
+
 export const setTabViewIndex = (index) => {
   return {
     type: types.setTabViewIndex,
