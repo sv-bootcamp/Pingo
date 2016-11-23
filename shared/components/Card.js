@@ -153,7 +153,7 @@ class Card extends Component {
         <View style={{
           flex: FLEX_TEXT_ADDRESS + FLEX_MARGIN_TEXT_ROW,
           justifyContent: (this.props.dataSource.category === 'facility') ? 'flex-start' : 'center'}}>
-          <Text style={styles.address}>{this.props.dataSource.address}</Text>
+          <Text style={styles.address} numberOfLines={1}>{this.props.dataSource.address}</Text>
         </View>
         { (this.props.dataSource.category === 'facility') ? null :
           <View style={{flex: FLEX_TEXT_DATE + FLEX_MARGIN_TEXT_ROW * 2}}>
