@@ -22,7 +22,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderBottomWidth: 1,
     borderBottomColor: '#e7e7e7',
-    elevation: 5
+    ...Platform.select({
+      android: {
+        elevation: 5
+      }
+    })
   },
   TextTitle: {
     fontSize: 19,
@@ -183,7 +187,14 @@ class Card extends Component {
 
   render() {
     return (
-      <View style={[styles.cardWrapper, {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD}]}>
+      <View style={[
+        styles.cardWrapper,
+        {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD},
+        (this.props.currentScene === 'map') ? {
+          shadowOpacity: 0.15,
+          shadowRadius: 2
+        } : null
+        ]}>
         <View style={{flex: FLEX_MARGIN_ROW, backgroundColor: 'white'}}/>
         <View style={{flex: HEIGHT_CARD - FLEX_MARGIN_ROW * 2, backgroundColor: 'white', flexDirection: 'row'}}>
           <View style={{flex: FLEX_MARGIN_ROW}}/>
