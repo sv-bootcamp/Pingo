@@ -76,7 +76,6 @@ class LoginFacebook extends Component {
   handleLogin() {
     FBLoginManager.login((error, data) => {
       if (!error) {
-        console.log(data);
         setLoginType('facebook');
         grantFacebookUser(data.credentials.token).then(() => {
           this.props.setToken('facebook');
