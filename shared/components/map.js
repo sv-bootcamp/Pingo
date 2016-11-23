@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
       }
     })
   }
@@ -209,6 +212,7 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
+          {console.log(this.props.items)}
           {(!this.props.items) ? null : this.props.items.map(item => (
             <MapView.Marker
               key={item.key}

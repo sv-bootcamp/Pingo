@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     flex: 1,
     ...Platform.select({
       ios: {
-        marginTop: 19
+        marginTop: 19,
+        overflow: 'hidden'
       }
     })
   }
