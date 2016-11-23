@@ -105,6 +105,7 @@ class InitialScene extends Component {
   constructor(props) {
     super(props);
   }
+
   renderSlide(style, upperText, belowText, image) {
     const swiperHeight = Dimensions.get('window').height * SwiperHeight / (WindowHeight);
     return (
@@ -125,6 +126,7 @@ class InitialScene extends Component {
       </View>
     );
   }
+
   renderSwiper() {
     const swiperHeight = Dimensions.get('window').height * SwiperHeight / (WindowHeight);
     return (
@@ -159,6 +161,7 @@ class InitialScene extends Component {
       </View>
     );
   }
+
   renderBottomLoginButton() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end', bottom: 10}}>
@@ -166,6 +169,7 @@ class InitialScene extends Component {
       </View>
     );
   }
+
   handleGuestButton() {
     let tmpRefreshToken;
     let tmpSecret;
@@ -190,6 +194,7 @@ class InitialScene extends Component {
       Actions.map({type: 'replace'});
     });
   }
+
   render() {
     return (
       <View style={{flexDirection: 'column', flex: 1}}>

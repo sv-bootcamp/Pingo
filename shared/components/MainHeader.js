@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image, Platform, Animated, Easing} from 'react-native';
+import {Text, View, TouchableOpacity, Image, Platform, Animated, Easing} from 'react-native';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
@@ -8,7 +8,7 @@ import IMG_BUTTON_REFRESH from '../resources/header/btn_refresh.png';
 import IMG_BUTTON_SWITCH_MAP from '../resources/header/btn_switch_map.png';
 import IMG_BUTTON_SWITCH_LIST from '../resources/header/btn_switch_list.png';
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     marginTop: 0
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
       }
     })
   }
-});
+};
 
 export default class MainHeader extends Component {
   constructor(props) {
@@ -87,6 +87,7 @@ export default class MainHeader extends Component {
       spinValue: new Animated.Value(0)
     };
   }
+
   spin() {
     this.state.spinValue.setValue(0);
     Animated.timing(
@@ -98,9 +99,11 @@ export default class MainHeader extends Component {
       }
     ).start();
   }
+
   componentDidMount() {
     this.spin();
   }
+
   renderHeaderTabBar(props) {
     return (<TabBarTop
       {...props}
@@ -111,6 +114,7 @@ export default class MainHeader extends Component {
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
+
   handleSwitchButton() {
     if (this.props.currentScene === 'map') {
       this.props.showListCard();
@@ -124,14 +128,17 @@ export default class MainHeader extends Component {
       Actions.pop();
     }
   }
+
   handleRefreshButton() {
     // todo: implement refresh button handling function here
     this.spin();
   }
+
   handleButtonMyPage() {
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
+
   render() {
     const spin = this.state.spinValue.interpolate({
       inputRange: [0, 1],

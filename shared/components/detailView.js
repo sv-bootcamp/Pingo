@@ -36,7 +36,7 @@ const styles = {
     fontSize: 14,
     fontWeight: 'bold'
   },
-  btn_flag: {
+  btnFlag: {
     flex: 38,
     justifyContent: 'center'
   },
@@ -112,11 +112,11 @@ export default class DetailView extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.firstTry) {
-      this._swiper.scrollBy(prevProps.rowID * 1 + 1, false);
+      this.swiper.scrollBy(prevProps.rowID * 1 + 1, false);
       this.currentIndex = this.props.rowID * 1 + 1;
       this.firstTry = false;
     }
-    (prevState.isClicked) ? this._swiper.scrollBy(this.currentIndex, false) : this._swiper.scrollBy(this.currentIndex - 1, false);
+    (prevState.isClicked) ? this.swiper.scrollBy(this.currentIndex, false) : this.swiper.scrollBy(this.currentIndex - 1, false);
   }
 
   handleClick(i) {
@@ -155,7 +155,7 @@ export default class DetailView extends Component {
           <View style = {{flex: 16, justifyContent: 'center', alignItems: 'center'}}>
             <TouchableOpacity onPress={() => {
               if (index > 0) {
-                this._swiper.scrollBy(-1);
+                this.swiper.scrollBy(-1);
               }
             }}>
               <Image source = {IMG_BUTTON_LEFT}
@@ -174,7 +174,7 @@ export default class DetailView extends Component {
           <View style = {{flex: 16, justifyContent: 'center', alignItems: 'center'}}>
             <TouchableOpacity onPress={() => {
               if (index + 1 < total) {
-                this._swiper.scrollBy(1);
+                this.swiper.scrollBy(1);
               }
             }}>
               <Image source = {IMG_BUTTON_RIGHT}
@@ -312,7 +312,7 @@ export default class DetailView extends Component {
               </View>
               <View style = {{flex: 16}}/>
             </View>
-            <View style = {styles.btn_flag}>
+            <View style = {styles.btnFlag}>
               <TouchableOpacity onPress = {()=>{
                 this.setState({currentReport: 'photo'});
                 Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage});
@@ -345,6 +345,7 @@ export default class DetailView extends Component {
       </View>
     );
   }
+
   renderDate(date) {
     const day = 86400000;
     const hour = 3600000;
@@ -384,7 +385,7 @@ export default class DetailView extends Component {
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
           {this.renderModal()}
           <Swiper ref={(swiper) => {
-            this._swiper = swiper;
+            this.swiper = swiper;
           }}
             showsButtons = {false}
             renderPagination={this.renderPagination}

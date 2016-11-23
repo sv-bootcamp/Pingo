@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Dimensions,
-  StyleSheet,
   Image,
   View,
   Text,
@@ -28,7 +27,7 @@ import { getAccessToken, getUserKey } from '../actions/authActions';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
 
-const styles = StyleSheet.create({
+const styles = {
   preview: {
     height: 104,
     width: 104
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
       }
     })
   }
-});
+};
 
 class Create extends Component {
   constructor(props) {

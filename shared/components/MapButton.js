@@ -42,17 +42,17 @@ export default class MapButton extends Component {
     const imageSource = (this.props.imageSource === 'position') ? ImgBtnLocation : ImgBtnCamera;
 
     return (
-    <View style={[styles.container, this.props.style]}>
-      <TouchableOpacity
-        style={[(this.props.imageSource === 'position') ? styles.position : styles.camera]}
-        onPress={this.props.handleOnPress}>
-        <View>
-          <Image
-            style={{height: 24, width: 24}}
-            source={imageSource} />
-        </View>
-      </TouchableOpacity>
-    </View>
+      <View style={[styles.container, this.props.style]}>
+        <TouchableOpacity
+          style={[(this.props.imageSource === 'position') ? styles.position : styles.camera]}
+          onPress={this.props.handleOnPress}>
+          <View>
+            <Image
+              style={{height: 24, width: 24}}
+              source={imageSource} />
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
