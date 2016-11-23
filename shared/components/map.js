@@ -212,13 +212,13 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
-          {console.log(this.props.items)}
           {(!this.props.items) ? null : this.props.items.map(item => (
             <MapView.Marker
               key={item.key}
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
               coordinate={{latitude: item.lat, longitude: item.lng}}
-              anchor={(this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
+              anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
+              centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);

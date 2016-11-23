@@ -13,7 +13,7 @@ import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '../actions/authActions';
-
+import { HTTPS, SERVER_ADDR, ENDPOINT_CREATEDPOST } from '../utils';
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 import ImgGuest from '../resources/myPage/guest.png';
 
@@ -74,6 +74,7 @@ class MyPage extends Component {
       imageHeight: 0
     };
   }
+
   componentDidMount() {
     getLoginType().then((data) => {
       if (data === null) {
@@ -82,7 +83,8 @@ class MyPage extends Component {
         this.props.setToken(data);
       }
     });
-    const address = 'http://goober.herokuapp.com/api/users/createdposts';
+    // const address = 'http://goober.herokuapp.com/api/users/createdposts';
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_CREATEDPOST}`;
     getAccessToken().then((accessToken) => {
       console.log(address);
       console.log(accessToken);
@@ -95,17 +97,18 @@ class MyPage extends Component {
         method: 'GET',
         headers: headers
       })
-        .then(response => {
-          console.log(response);
-          return response.json();
-        })
-        .then(json => {
-          console.log(json);
-          this.props.setCreatedPosts(json);
-        })
-        .catch((error) => console.log(error));
+      .then(response => {
+        console.log(response);
+        return response.json();
+      })
+      .then(json => {
+        console.log(json);
+        this.props.setCreatedPosts(json);
+      })
+      .catch((error) => console.log(error));
     });
   }
+
   renderImageButtonSetting() {
     return (
       <Image
@@ -114,6 +117,7 @@ class MyPage extends Component {
       />
     );
   }
+
   handleButtonPrev() {
     this.props.setCurrentScene('map');
     Actions.map({type: 'replace'});

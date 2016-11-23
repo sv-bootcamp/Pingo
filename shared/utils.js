@@ -5,6 +5,7 @@ export const ENDPOINT_ITEM = '/api/items';
 export const ENDPOINT_IMAGE = '/api/images';
 export const ENDPOINT_USER = '/api/users';
 export const ENDPOINT_SIGNUP = '/api/users/signup';
+export const ENDPOINT_CREATEDPOST = '/api/users/createdposts';
 export const ENDPOINT_GRANT = '/api/auth/grant';
 export const ENDPOINT_REFRESH = '/api/auth/refresh';
 export const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';

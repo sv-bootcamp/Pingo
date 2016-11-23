@@ -163,19 +163,22 @@ class Card extends Component {
   }
 
   renderListView() {
-    return (
-      <View style={{flex: FLEX_LIST_WRAPPER}}>
-        <ListView
-          dataSource={new ListView.DataSource({
+    if (this.props.dataSource && this.props.dataSource.imageUrls) {
+      return (
+        <View style={{flex: FLEX_LIST_WRAPPER}}>
+          <ListView
+            dataSource={new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
           }).cloneWithRows(this.props.dataSource.imageUrls)}
-          renderRow={this.renderImg.bind(this)}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          horizontal={true}
-        />
-      </View>
-    );
+            renderRow={this.renderImg.bind(this)}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            horizontal={true}
+          />
+        </View>
+      );
+    }
+    return null;
   }
 
   render() {
