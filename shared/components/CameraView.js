@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
   },
   btn_close: {
     left: 15,
-    top: 24
+    top: 24,
+    width: 24
   },
   btn_use: {
     left: Dimensions.get('window').width - 50,
