@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Dimensions,
-  StyleSheet,
   Image,
   View,
   Text,
@@ -28,7 +27,7 @@ import { getAccessToken, getUserKey } from '../actions/authActions';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
 
-const styles = StyleSheet.create({
+const styles = {
   preview: {
     height: 104,
     width: 104
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
       }
     })
   }
-});
+};
 
 class Create extends Component {
   constructor(props) {
@@ -190,7 +189,8 @@ class Create extends Component {
       onFocusDateEnd: false,
       busyPosting: false,
       selectItemKey: '',
-      selectUserKey: ''
+      selectUserKey: '',
+      picClicked: false
     };
 
     this.getAddressData();
@@ -504,7 +504,15 @@ class Create extends Component {
             }}
             autoFocus={true}
           />
-          <Image source={{uri: this.props.pic}} style={[styles.preview, {marginRight: 16}]}/>
+          <TouchableOpacity
+            onPress={()=>{
+              this.setState({picClicked: true});
+          }}>
+            <Image
+              source={{uri: this.props.pic}}
+              style={[styles.preview, {marginRight: 16}]}
+            />
+          </TouchableOpacity>
         </View>
         <Text style={styles.textCaption}> Location </Text>
         <TouchableOpacity
@@ -708,6 +716,23 @@ class Create extends Component {
   // todo: the View wrapping scrollView style.height must be changed
   render() {
     return (
+      this.state.picClicked === true ?
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: '#1e1e1e'}}>
+        <View style={{flex: 132, backgroundColor: '#1e1e1e'}}/>
+        <TouchableOpacity
+          style={{flex: 360}}
+          onPress={() => {
+            this.setState({picClicked: false});
+          }}
+        >
+          <Image
+            style={{width: Dimensions.get('window').width, flex: 1}}
+            source={{uri: this.props.pic}}
+          />
+        </TouchableOpacity>
+        <View style={{flex: 148, backgroundColor: '#1e1e1e'}}/>
+      </View>
+        :
       <View style={{flexDirection: 'column', overflow: 'hidden'}}>
         <SmallHeader
           addingNewLocation={this.state.addingNewLocation}

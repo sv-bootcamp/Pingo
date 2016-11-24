@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import {
-  StyleSheet,
   Dimensions,
   View,
   Text,
@@ -17,7 +16,7 @@ import ImgBtnTakingPhoto from '../resources/camera/btn_taking_photo.png';
 import ImgFlash from '../resources/camera/icon_flash.png';
 import ImgCameraAgain from '../resources/camera/icon_camera_again.png';
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1
   },
@@ -42,32 +41,32 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0
   },
-  btn_taking_photo: {
+  btnTakingPhoto: {
     alignSelf: 'center',
     flex: 1
   },
-  btn_camera_switch: {
+  btnCameraSwitch: {
     alignSelf: 'center',
     flex: 1
   },
-  btn_flash: {
+  btnFlash: {
     alignSelf: 'center',
     flex: 1
   },
-  btn_again: {
+  btnAgain: {
     alignSelf: 'center',
     left: Dimensions.get('window').width / 2 - 25
   },
-  btn_close: {
+  btnClose: {
     left: 15,
     top: 24,
     width: 24
   },
-  btn_use: {
+  btnUse: {
     left: Dimensions.get('window').width - 50,
     top: -22
   },
-  text_top: {
+  textTop: {
     alignSelf: 'center',
     flex: 1,
     color: 'white',
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  text_use: {
+  textUse: {
     color: '#2c8cff',
     fontSize: 17,
     ...Platform.select({
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
       }
     })
   }
-});
+};
 
 class CameraView extends Component {
   constructor(props) {
@@ -146,7 +145,7 @@ class CameraView extends Component {
   }
 
   handleFlash() {
-    //todo: handle camera flash here
+    // todo: handle camera flash here
   }
 
   handleClose() {
@@ -179,7 +178,7 @@ class CameraView extends Component {
   renderBtnClose() {
     return (
       <TouchableOpacity
-        style={styles.btn_close}
+        style={styles.btnClose}
         onPress={this.handleClose.bind(this)}>
         <Image
           style={{height: 24, width: 24}}
@@ -193,9 +192,9 @@ class CameraView extends Component {
     return (
       (this.state.Done === true) ?
         <TouchableOpacity
-          style={styles.btn_use}
+          style={styles.btnUse}
           onPress={this.handleUse.bind(this)}>
-          <Text style={styles.text_use}> Use </Text>
+          <Text style={styles.textUse}> Use </Text>
         </TouchableOpacity>
       : null
     );
@@ -225,7 +224,7 @@ class CameraView extends Component {
     return (
       <View style={styles.bottom}>
         <TouchableOpacity
-          style={styles.btn_camera_switch}
+          style={styles.btnCameraSwitch}
           onPress={this.switchType.bind(this)}>
           <Image
             style={{height: 48, width: 48, left: 32}}
@@ -233,7 +232,7 @@ class CameraView extends Component {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.btn_taking_photo}
+          style={styles.btnTakingPhoto}
           onPress={this.takePicture.bind(this)}>
           <Image
             style={{
@@ -243,7 +242,7 @@ class CameraView extends Component {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.btn_flash}
+          style={styles.btnFlash}
           onPress={this.handleFlash.bind(this)}>
           <Image
             style={{
@@ -260,7 +259,7 @@ class CameraView extends Component {
     return (
       <View style={styles.bottom}>
         <TouchableOpacity
-          style={styles.btn_again}
+          style={styles.btnAgain}
           onPress={this.takeAgain.bind(this)}>
           <Image
             style={{height: 48, width: 48}}
@@ -276,7 +275,7 @@ class CameraView extends Component {
       <View style={styles.container}>
         <View style={styles.top}>
           {this.renderBtnClose()}
-          <Text style={styles.text_top}> Photo </Text>
+          <Text style={styles.textTop}> Photo </Text>
           {this.renderBtnUse()}
         </View>
         {this.renderCameraOrAfter()}

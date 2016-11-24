@@ -67,9 +67,9 @@ export default class Map extends Component {
   componentWillMount() {
     if (Platform.OS === 'android') {
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
-        message: "<h2>Use Location ?</h2>" +
-        "This app wants to change your device settings:<br/><br/>" +
-        "Use GPS, Wi-Fi, and cell network for location<br/><br/>",
+        message: '<h2>Use Location ?</h2>' +
+        'This app wants to change your device settings:<br/><br/>' +
+        'Use GPS, Wi-Fi, and cell network for location<br/><br/>',
         ok: 'YES',
         cancel: 'NO'
       })
@@ -86,7 +86,6 @@ export default class Map extends Component {
       });
     }
   }
-
   // todo: this is duplicate from Create.js. refactoring required
   getAddressData() {
     const DEFAULT_CURRENT_CITY = 'PINGO';

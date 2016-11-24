@@ -21,6 +21,7 @@ class DetailLitemap extends Component {
     super(props);
     this.renderImgMarker = this.renderImgMarker.bind(this);
   }
+
   renderImgMarker() {
     if (this.props.category === 'event') {
       return ImgMarkerEvent;
@@ -29,6 +30,7 @@ class DetailLitemap extends Component {
     }
     return ImgMarkerWarning;
   }
+
   render() {
     return (
       <View style={{alignItems: 'center'}}>

@@ -32,7 +32,6 @@ const styles = {
 };
 
 export default class EventReportView extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +40,8 @@ export default class EventReportView extends Component {
     this.renderOption = this.renderOption.bind(this);
     this.reportEvent = this.reportEvent.bind(this);
   }
-  reportEvent(){
+
+  reportEvent() {
     const address = 'https://goober.herokuapp.com/api/reports';
     getAccessToken().then((accessToken) => {
       return fetch(address, {
@@ -68,6 +68,7 @@ export default class EventReportView extends Component {
       });
     });
   }
+
   renderOption(title, i) {
     return (
       <View style = {{flex: 46}}>

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Dimensions,
-  StyleSheet,
   Image,
   View,
   Text,
@@ -13,7 +12,7 @@ import ImgBtnBefore from '../resources/camera/btn_before.png';
 
 const DEFAULT_ACTIVE_OPACITY = 0.2;
 
-const styles = StyleSheet.create({
+const styles = {
   header: {
     height: 64,
     width: Dimensions.get('window').width,
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
       }
     })
   },
-  text_header: {
+  textHeader: {
     fontSize: 17,
     top: 24,
     color: '#2b2b2b',
@@ -44,16 +43,16 @@ const styles = StyleSheet.create({
       }
     })
   },
-  btn_left: {
+  btnLeft: {
     left: 15,
     top: 24
   },
-  btn_right: {
+  btnRight: {
     position: 'absolute',
     right: 15,
     top: 24
   }
-});
+};
 
 class SmallHeader extends Component {
   constructor(props) {
@@ -63,7 +62,7 @@ class SmallHeader extends Component {
   renderBtnLeft() {
     return (
       <TouchableOpacity
-        style={styles.btn_left}
+        style={styles.btnLeft}
         onPress={()=>{
           this.props.handleBtnLeft();
         }}>
@@ -77,14 +76,14 @@ class SmallHeader extends Component {
 
   renderHeaderTitle() {
     return (
-      <Text style={styles.text_header}>{this.props.headerText}</Text>
+      <Text style={styles.textHeader}>{this.props.headerText}</Text>
     );
   }
 
   renderBtnRight() {
     return (
       <TouchableOpacity
-        style={styles.btn_right}
+        style={styles.btnRight}
         onPress={()=>{
           this.props.handleBtnRight();
         }}
