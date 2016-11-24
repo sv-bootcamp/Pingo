@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-
+import { getAccessToken } from '../actions/authActions';
+import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST } from '../utils';
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
 
@@ -66,7 +67,7 @@ class Card extends Component {
     this.state = {
       date: '',
       numOfImage: 0,
-      starClicked: false
+      isSaved: false
     };
     this.renderImg = this.renderImg.bind(this);
   }
@@ -115,10 +116,50 @@ class Card extends Component {
     );
   }
   handlePressStar() {
-    if (this.state.starClicked === true) {
-      this.setState({starClicked: false});
+    if (this.state.isSaved === true) {
+      this.setState({isSaved: false});
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const bodySave = JSON.stringify({
+        'itemKey': `${this.props.dataSource.key}`
+      });
+      console.log("yaya" + address);
+      getAccessToken().then((accessToken) => {
+        return fetch(address, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'authorization': `bearer ${accessToken}`
+          },
+          body: bodySave
+        })
+        .then(response => response.json())
+        .then(json =>
+          console.log(json)
+        );
+      });
     } else {
-      this.setState({starClicked: true});
+      this.setState({isSaved: true});
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const bodySave = JSON.stringify({
+        'entity': 'item',
+        'itemKey': `${this.props.dataSource.key}`
+      });
+      getAccessToken().then((accessToken) => {
+        return fetch(address, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'authorization': `bearer ${accessToken}`
+          },
+          body: bodySave
+        })
+        .then(response => response.json())
+        .then(json =>
+          console.log(json)
+        );
+      });
     }
     // todo: implement save favourite event here
   }
@@ -141,7 +182,7 @@ class Card extends Component {
                   height: Dimensions.get('window').height * 24 / 640,
                   width: Dimensions.get('window').height * 24 / 640
                 }}
-                source={(this.state.starClicked === true) ? IMG_BUTTON_YELLOW_STAR : IMG_BUTTON_STAR}
+                source={(this.state.isSaved === true) ? IMG_BUTTON_YELLOW_STAR : IMG_BUTTON_STAR}
               />
             </TouchableOpacity>
           </View>

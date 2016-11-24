@@ -4,6 +4,7 @@ import {Actions} from 'react-native-router-flux';
 import SmallHeader from '../components/smallHeader';
 import ImgBtnCheck from '../resources/btn_check/drawable-xxxhdpi/check.png';
 import { getAccessToken } from '../actions/authActions';
+import { HTTPS, SERVER_ADDR, ENDPOINT_REPORT } from '../utils';
 
 const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexual content',
   'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
@@ -42,7 +43,7 @@ export default class EventReportView extends Component {
     this.reportEvent = this.reportEvent.bind(this);
   }
   reportEvent(){
-    const address = 'https://goober.herokuapp.com/api/reports';
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REPORT}`
     getAccessToken().then((accessToken) => {
       return fetch(address, {
         method: 'POST',
@@ -59,9 +60,10 @@ export default class EventReportView extends Component {
         return response.json();
       })
       .then((rjson)=>{
-        console.log(rjson);
-        (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
-        Actions.pop();
+        if (rjson.message === 'success') {
+          (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
+          Actions.pop();
+        }
       })
       .catch((error) => {
         console.log(error);
