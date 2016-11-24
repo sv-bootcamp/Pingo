@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
@@ -16,7 +16,7 @@ const HEIGHT_CARD = 199;
 const HEIGHT_CARD_FACILITY = 175;
 const WIDTH_CARD = 360;
 
-const styles = StyleSheet.create({
+const styles = {
   cardWrapper: {
     backgroundColor: 'white',
     flexDirection: 'column',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     height: 88,
     marginRight: 8
   }
-});
+};
 
 class Card extends Component {
 
@@ -106,8 +106,8 @@ class Card extends Component {
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene,
-                             date: this.state.date, address: this.props.dataSource.address, category: this.props.dataSource.category,
-                             lat: this.props.dataSource.lat, lng: this.props.dataSource.lng});
+          date: this.state.date, address: this.props.dataSource.address, category: this.props.dataSource.category,
+          lat: this.props.dataSource.lat, lng: this.props.dataSource.lng});
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>

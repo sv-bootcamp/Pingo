@@ -14,7 +14,7 @@ const styles = {
     borderBottomWidth: 1,
     borderBottomColor: '#e7e7e7'
   },
-  btn_close: {
+  btnClose: {
     flex: 55,
     justifyContent: 'center',
     alignItems: 'center'
@@ -58,7 +58,7 @@ export default class DetailHeader extends Component {
   render() {
     return (
       <View style = {styles.wrapper}>
-        <View style = {styles.btn_close}>
+        <View style = {styles.btnClose}>
           <TouchableOpacity
             onPress = {()=>{
               this.props.setCurrentScene(this.props.lastScene);

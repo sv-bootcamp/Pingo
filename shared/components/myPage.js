@@ -4,7 +4,6 @@ import {
   View,
   Image,
   Text,
-  StyleSheet,
   Platform,
   ListView
 } from 'react-native';
@@ -17,7 +16,7 @@ import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '..
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 import ImgGuest from '../resources/myPage/guest.png';
 
-const styles = StyleSheet.create({
+const styles = {
   myPageTextUserName: {
     position: 'absolute',
     bottom: 0,
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
       }
     })
   }
-});
+};
 
 class MyPage extends Component {
   constructor(props) {
@@ -81,6 +80,7 @@ class MyPage extends Component {
       imageHeight: 0
     };
   }
+
   componentDidMount() {
     getLoginType().then((data) => {
       if (data === null) {
@@ -90,6 +90,7 @@ class MyPage extends Component {
       }
     });
   }
+
   renderImageButtonSetting() {
     return (
       <Image
@@ -98,6 +99,7 @@ class MyPage extends Component {
       />
     );
   }
+
   handleButtonPrev() {
     this.props.setCurrentScene('map');
     Actions.map({type: 'replace'});

@@ -64,6 +64,7 @@ class Setting extends Component {
     this.renderSignOut = this.renderSignOut.bind(this);
     this.renderGuestView = this.renderGuestView.bind(this);
   }
+
   handleButtonPrev() {
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
