@@ -59,7 +59,8 @@ const styles = {
   },
   btnClose: {
     left: 15,
-    top: 24
+    top: 24,
+    width: 24
   },
   btnUse: {
     left: Dimensions.get('window').width - 50,
