@@ -15,6 +15,10 @@ const initialState = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   },
+  userLocation: {
+    latitude: 37.78825,
+    longitude: -122.4324
+  },
   zoomLevel: 14,
   items: [],
   selectedItem: {},
@@ -39,6 +43,10 @@ const map = (state = initialState, action = {}) => {
   case types.setLocation:
     return update(state, {
       currentLocation: { $set: action.location }
+    });
+  case types.setUserLocation:
+    return update(state, {
+      userLocation: {$set: action.userLocation }
     });
   case types.setTabViewIndex:
     return update(state, {
