@@ -1,5 +1,6 @@
 import * as types from './actionTypes';
 import { getAccessToken } from './authActions';
+import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST } from '../utils';
 
 export const setMyPageTabViewIndex = (myPageTabViewIndex) => {
   return {
@@ -17,9 +18,8 @@ export const receiveSavedPosts = (json) => {
 
 export const getSavedPosts = () => {
   return (dispatch) => {
-    const address = 'https://goober.herokuapp.com/api/users/savedposts';
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
     getAccessToken().then((accessToken) => {
-      console.log(accessToken);
       return fetch(address, {
         method: 'GET',
         headers: {
@@ -33,5 +33,5 @@ export const getSavedPosts = () => {
         dispatch(receiveSavedPosts(json))
       );
     });
-  }
+  };
 };

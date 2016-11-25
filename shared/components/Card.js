@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import { getAccessToken } from '../actions/authActions';
-
+import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST } from '../utils';
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
 
@@ -114,16 +114,17 @@ class Card extends Component {
       </TouchableOpacity>
     );
   }
-  handlePressStar() { // todo: I will apply this function to redux soon!
+  handlePressStar() {
     if (this.state.isSaved === true) {
       this.setState({isSaved: false});
-      const address = 'https://goober.herokuapp.com/api/users/savedposts';
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
       const bodySave = JSON.stringify({
         'itemKey': `${this.props.dataSource.key}`
       });
+      console.log("yaya" + address);
       getAccessToken().then((accessToken) => {
         return fetch(address, {
-          method: 'DELETE',
+          method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -138,7 +139,7 @@ class Card extends Component {
       });
     } else {
       this.setState({isSaved: true});
-      const address = 'https://goober.herokuapp.com/api/users/savedposts';
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
       const bodySave = JSON.stringify({
         'entity': 'item',
         'itemKey': `${this.props.dataSource.key}`
