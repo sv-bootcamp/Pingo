@@ -58,6 +58,7 @@ export default class Map extends Component {
     this.getAddressData = this.getAddressData.bind(this);
     this.cardAnimationSlideUp = this.cardAnimationSlideUp.bind(this);
     this.buttonAnimationSlideUp = this.buttonAnimationSlideUp.bind(this);
+    this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -230,6 +231,10 @@ export default class Map extends Component {
     return null;
   }
 
+  checkMarkerClicked() {
+    return (this.props.selectedItem && this.props.selectedItem.title === undefined);
+  }
+
   // todo: use centerOffset for IOS
   render() {
     const cardTranslateY = this.state.cardTranslateY.interpolate({
@@ -248,7 +253,6 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
-          {console.log(this.props.items)}
           {(!this.props.items) ? null : this.props.items.map(item => (
             <MapView.Marker
               key={item.key}
@@ -286,7 +290,7 @@ export default class Map extends Component {
             </MapView.Marker>
           ))}
         </MapView>
-        {(this.props.selectedItem.title === undefined) ?
+        {(this.checkMarkerClicked()) ?
           <View style={styles.buttonSection}>
             <MapButton
               imageSource={'position'}
@@ -310,7 +314,7 @@ export default class Map extends Component {
           </View>
         }
         {
-          (this.props.selectedItem.title === undefined) ? null :
+          (this.checkMarkerClicked()) ? null :
             <Animated.View style={{transform: [{translateY: cardTranslateY}]}}>
               <CardLayout dataSource = {this.props.selectedItem} />
             </Animated.View>
