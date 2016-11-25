@@ -5,6 +5,8 @@ import IMG_BUTTON_CLOSE from '../resources/btn_close/drawable-xxxhdpi/btn_close.
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_MORE from '../resources/btn_more/drawable-xxxhdpi/btn_more.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
+import { getAccessToken } from '../actions/authActions';
+import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST } from '../utils';
 
 const styles = {
   wrapper: {
@@ -52,9 +54,59 @@ export default class DetailHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSaved: false
+      isSaved: this.props.isSaved
     };
+    this.handlePressStar = this.handlePressStar.bind(this);
   }
+
+  handlePressStar() { // todo: I will apply this function to redux soon! 
+    if (this.state.isSaved === true) {
+      this.setState({isSaved: false});
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const bodySave = JSON.stringify({
+        'itemKey': `${this.props.itemKey}`
+      });
+      getAccessToken().then((accessToken) => {
+        return fetch(address, {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'authorization': `bearer ${accessToken}`
+          },
+          body: bodySave
+        })
+        .then(response => response.json())
+        .then(json =>
+          console.log(json)
+        );
+      });
+    } else {
+      this.setState({isSaved: true});
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const bodySave = JSON.stringify({
+        'entity': 'item',
+        'itemKey': `${this.props.itemKey}`
+      });
+      getAccessToken().then((accessToken) => {
+        return fetch(address, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'authorization': `bearer ${accessToken}`
+          },
+          body: bodySave
+        })
+        .then(response => response.json())
+        .then(json =>
+          console.log(json)
+        );
+      });
+    }
+  }
+
+
   render() {
     return (
       <View style = {styles.wrapper}>
@@ -73,7 +125,10 @@ export default class DetailHeader extends Component {
           {(this.props.date) ? <Text> {this.props.date} </Text> : null}
         </View>
           <View style = {styles.btn_star}>
-              <TouchableOpacity onPress = {() => this.setState({isSaved: !this.state.isSaved})}>
+              <TouchableOpacity onPress = {() => {
+                this.handlePressStar();
+                this.setState({isSaved: !this.state.isSaved});
+              }}>
                 <Image source = {(this.state.isSaved) ? IMG_BUTTON_YELLOW_STAR : IMG_BUTTON_STAR}
                        style = {{height: 24, width: 24}}/>
               </TouchableOpacity>
@@ -100,5 +155,7 @@ DetailHeader.propTypes = {
   setCurrentScene: PropTypes.func,
   lastScene: PropTypes.string,
   messageUnvisible: PropTypes.func,
-  setModalVisible: PropTypes.func
+  setModalVisible: PropTypes.func,
+  isSaved: PropTypes.bool,
+  itemKey: PropTypes.string
 };
