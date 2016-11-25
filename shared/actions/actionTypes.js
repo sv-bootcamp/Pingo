@@ -19,3 +19,5 @@ export const setUserName = 'SET_USER_NAME';
 export const setUserEmail = 'SET_USER_EMAIL';
 export const setProfileImgUrl = 'SET_PROFILE_IMG_URL';
 export const getSavedPosts = 'SET_SAVED_POSTS';
+export const saveEvent = 'SAVE_ENENT';
+export const deleteEvent = 'DELETE_EVENT';
