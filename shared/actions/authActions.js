@@ -157,8 +157,6 @@ export const grantFacebookUser = async (facebookToken) => {
             setRefreshToken(rjson.refreshToken);
           }
         });
-      } else {
-        return signupFacebookUser(facebookToken);
       }
     })
     .then()

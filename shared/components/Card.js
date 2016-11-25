@@ -23,7 +23,11 @@ const styles = {
     flexDirection: 'column',
     borderBottomWidth: 1,
     borderBottomColor: '#e7e7e7',
-    elevation: 5
+    ...Platform.select({
+      android: {
+        elevation: 5
+      }
+    })
   },
   TextTitle: {
     fontSize: 19,
@@ -188,7 +192,7 @@ class Card extends Component {
         <View style={{
           flex: FLEX_TEXT_ADDRESS + FLEX_MARGIN_TEXT_ROW,
           justifyContent: (this.props.dataSource.category === 'facility') ? 'flex-start' : 'center'}}>
-          <Text style={styles.address}>{this.props.dataSource.address}</Text>
+          <Text style={styles.address} numberOfLines={1}>{this.props.dataSource.address}</Text>
         </View>
         { (this.props.dataSource.category === 'facility') ? null :
           <View style={{flex: FLEX_TEXT_DATE + FLEX_MARGIN_TEXT_ROW * 2}}>
@@ -202,24 +206,34 @@ class Card extends Component {
   }
 
   renderListView() {
-    return (
-      <View style={{flex: FLEX_LIST_WRAPPER}}>
-        <ListView
-          dataSource={new ListView.DataSource({
+    if (this.props.dataSource && this.props.dataSource.imageUrls) {
+      return (
+        <View style={{flex: FLEX_LIST_WRAPPER}}>
+          <ListView
+            dataSource={new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
           }).cloneWithRows(this.props.dataSource.imageUrls)}
-          renderRow={this.renderImg.bind(this)}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          horizontal={true}
-        />
-      </View>
-    );
+            renderRow={this.renderImg.bind(this)}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            horizontal={true}
+          />
+        </View>
+      );
+    }
+    return null;
   }
 
   render() {
     return (
-      <View style={[styles.cardWrapper, {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD}]}>
+      <View style={[
+        styles.cardWrapper,
+        {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD},
+        (this.props.currentScene === 'map') ? {
+          shadowOpacity: 0.15,
+          shadowRadius: 2
+        } : null
+        ]}>
         <View style={{flex: FLEX_MARGIN_ROW, backgroundColor: 'white'}}/>
         <View style={{flex: HEIGHT_CARD - FLEX_MARGIN_ROW * 2, backgroundColor: 'white', flexDirection: 'row'}}>
           <View style={{flex: FLEX_MARGIN_ROW}}/>
