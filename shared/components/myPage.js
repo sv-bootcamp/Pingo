@@ -264,7 +264,8 @@ MyPage.propTypes = {
   profileImgUrl: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
   items: PropTypes.any,
-  getSavedPosts: PropTypes.func
+  getSavedPosts: PropTypes.func,
+  savedPosts: PropTypes.any
 };
 
 export default MyPage;
