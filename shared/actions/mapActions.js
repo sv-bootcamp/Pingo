@@ -29,8 +29,6 @@ export const getMapItems = (zoomLevel, lat, long) => {
     // const address = `https://goober.herokuapp.com/api/items${queryBuilder(queries)}`;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
-      console.log(address);
-      console.log(accessToken);
       const headers = {
         authorization: `bearer ${accessToken}`
       };

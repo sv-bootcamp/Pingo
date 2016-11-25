@@ -89,6 +89,7 @@ class MyPage extends Component {
         this.props.setToken(data);
       }
     });
+    this.props.getSavedPosts();
   }
 
   renderImageButtonSetting() {
@@ -200,13 +201,18 @@ class MyPage extends Component {
   }
 
   renderTabViewContents() {
-    if (this.props.items) {
+    if (this.props.myPageTabViewIndex === 1 && this.props.savedPosts.length !== 0) {
+      let dataSource = this.props.savedPosts.map((post) => {
+        return (
+          Object.assign(post, {isSaved: true})
+        );
+      });
       return (
         <ListView
           dataSource={
             new ListView.DataSource({
               rowHasChanged: (r1, r2) => r1 !== r2
-            }).cloneWithRows(this.props.items)
+            }).cloneWithRows(dataSource)
           }
           renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
           enableEmptySections={true}
@@ -257,7 +263,9 @@ MyPage.propTypes = {
   userName: PropTypes.string,
   profileImgUrl: PropTypes.string,
   myPageTabViewRoutes: PropTypes.any,
-  items: PropTypes.any
+  items: PropTypes.any,
+  getSavedPosts: PropTypes.func,
+  savedPosts: PropTypes.any
 };
 
 export default MyPage;

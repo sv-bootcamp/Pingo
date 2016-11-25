@@ -18,3 +18,4 @@ export const setCurrentCity = 'SET_CURRENT_CITY';
 export const setUserName = 'SET_USER_NAME';
 export const setUserEmail = 'SET_USER_EMAIL';
 export const setProfileImgUrl = 'SET_PROFILE_IMG_URL';
+export const getSavedPosts = 'SET_SAVED_POSTS';

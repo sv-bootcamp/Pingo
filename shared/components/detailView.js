@@ -245,8 +245,8 @@ export default class DetailView extends Component {
   }
   renderInfoSlide() {
     let currentLocation = {
-      latitude: this.props.lat,
-      longitude: this.props.lng,
+      latitude: this.props.dataSource.lat,
+      longitude: this.props.dataSource.lng,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421
     };
@@ -257,16 +257,16 @@ export default class DetailView extends Component {
         <View style = {{flex: 328}}>
           <View style = {{flex: 64}}/>
           <View style = {{flex: 80}}>
-            <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.title } </Text>
+            <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.dataSource.title } </Text>
           </View>
           <View style = {{flex: 24}}/>
           <View style = {{flex: 100, backgroundColor: 'green', borderRadius: 5}}>
             <DetailLitemap currentLocation = {currentLocation}
-                           category = {this.props.category}/>
+                           category = {this.props.dataSource.category}/>
           </View>
           <View style = {{flex: 26}}/>
           <View style = {{flex: 17}}>
-            <Text style = {{fontSize: 17}}> {this.props.address} </Text>
+            <Text style = {{fontSize: 17}}> {this.props.dataSource.address} </Text>
           </View>
           <View style = {{flex: 9}}/>
           <View style = {{flex: 26}}>
@@ -369,17 +369,18 @@ export default class DetailView extends Component {
     for (let i = 0; i < this.props.detailSource.length; i = i + 1) {
       pages.push(this.renderSlide(this.props.detailSource[i], i));
     }
-
     return (
       <View style = {{ flex: 1, backgroundColor: 'black'}}>
       {
         (this.state.isClicked) ? <View style = {{height: 67, backgroundColor: 'black'}}/> :
           <View style = {{height: 67}}>
-            <DetailHeaderLayout title = {this.props.title}
+            <DetailHeaderLayout title = {this.props.dataSource.title}
+                                itemKey = {this.props.dataSource.key}
                                 date = {this.props.date}
                                 lastScene = {this.props.lastScene}
                                 setModalVisible = {this.toggleModalVisible}
-                                messageUnvisible = {this.messageUnvisible}/>
+                                messageUnvisible = {this.messageUnvisible}
+                                isSaved = {this.props.isSaved}/>
           </View>
       }
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
@@ -401,13 +402,16 @@ export default class DetailView extends Component {
 
 DetailView.propTypes = {
   detailSource: PropTypes.any,
-  detailIndex: PropTypes.any,
   rowID: PropTypes.any,
-  title: PropTypes.any,
   date: PropTypes.string,
   lastScene: PropTypes.string,
-  address: PropTypes.string,
-  lat: PropTypes.any,
-  lng: PropTypes.any,
-  category: PropTypes.string
+  dataSource: PropTypes.objectOf(PropTypes.shape({
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
+    title: PropTypes.string,
+    address: PropTypes.string,
+    imageUrls: PropTypes.array,
+    key: PropTypes.any
+  })),
+  isSaved: PropTypes.bool
 };
