@@ -59,9 +59,10 @@ export default class EventReportView extends Component {
         return response.json();
       })
       .then((rjson)=>{
-        console.log(rjson);
-        (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
-        Actions.pop();
+        if (rjson && rjson.message === 'success') {
+          (this.props.aboutPhoto) ? this.props.handleReport('photo') : this.props.handleReport('location');
+          Actions.pop();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -147,7 +148,7 @@ export default class EventReportView extends Component {
 }
 
 EventReportView.propTypes = {
-  aboutPhoto: PropTypes.boolean,
+  aboutPhoto: PropTypes.bool,
   handleReport: PropTypes.func,
   key: PropTypes.string
 };

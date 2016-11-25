@@ -67,7 +67,7 @@ class Card extends Component {
     this.state = {
       date: '',
       numOfImage: 0,
-      isSaved: false
+      isSaved: this.props.dataSource.isSaved
     };
     this.renderImg = this.renderImg.bind(this);
   }
@@ -106,16 +106,15 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-        Actions.detailView({ rowID: rowID, title: this.props.dataSource.title, lastScene: this.props.currentScene,
-          date: this.state.date, address: this.props.dataSource.address, category: this.props.dataSource.category,
-          lat: this.props.dataSource.lat, lng: this.props.dataSource.lng});
+        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene,
+        date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>
       </TouchableOpacity>
     );
   }
-  handlePressStar() {
+  handlePressStar() { // todo: I will apply this function to redux soon!
     if (this.state.isSaved === true) {
       this.setState({isSaved: false});
       const address = 'https://goober.herokuapp.com/api/users/savedposts';
@@ -124,7 +123,7 @@ class Card extends Component {
       });
       getAccessToken().then((accessToken) => {
         return fetch(address, {
-          method: 'POST',
+          method: 'DELETE',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -160,7 +159,6 @@ class Card extends Component {
         );
       });
     }
-    // todo: implement save favourite event here
   }
 
   renderCardText() {
@@ -236,17 +234,15 @@ class Card extends Component {
 }
 
 Card.propTypes = {
-  address: PropTypes.string,
-  title: PropTypes.string,
   dataSource: PropTypes.objectOf(PropTypes.shape({
     startTime: PropTypes.string,
     endTime: PropTypes.string,
     title: PropTypes.string,
     address: PropTypes.string,
     imageUrls: PropTypes.array,
-    key: PropTypes.any
+    key: PropTypes.any,
+    isSaved: PropTypes.bool
   })),
-  key: PropTypes.string,
   getDetailImage: PropTypes.func,
   currentScene: PropTypes.string,
   setCurrentScene: PropTypes.func

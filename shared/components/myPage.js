@@ -201,13 +201,26 @@ class MyPage extends Component {
   }
 
   renderTabViewContents() {
+<<<<<<< HEAD
     if (this.props.items) {
+=======
+    if (this.props.myPageTabViewIndex === 1 && this.props.savedPosts.length !== 0) {
+      let dataSource = this.props.savedPosts.map((post) => {
+        return (
+          Object.assign(post, {isSaved: true})
+        );
+      });
+>>>>>>> complete save function
       return (
         <ListView
           dataSource={
             new ListView.DataSource({
               rowHasChanged: (r1, r2) => r1 !== r2
+<<<<<<< HEAD
             }).cloneWithRows(this.props.items)
+=======
+            }).cloneWithRows(dataSource)
+>>>>>>> complete save function
           }
           renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
           enableEmptySections={true}

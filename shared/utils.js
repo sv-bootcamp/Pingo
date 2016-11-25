@@ -1,6 +1,7 @@
 export const HTTP = 'http://';
 export const HTTPS = 'https://';
 export const SERVER_ADDR = 'pn-go.com';
+//export const SERVER_ADDR = 'goober.herokuapp.com';
 export const ENDPOINT_ITEM = '/api/items';
 export const ENDPOINT_IMAGE = '/api/images';
 export const ENDPOINT_USER = '/api/users';
