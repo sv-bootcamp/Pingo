@@ -86,8 +86,6 @@ class MyPage extends Component {
     // const address = 'http://goober.herokuapp.com/api/users/createdposts';
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_CREATEDPOST}`;
     getAccessToken().then((accessToken) => {
-      console.log(address);
-      console.log(accessToken);
       const headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
