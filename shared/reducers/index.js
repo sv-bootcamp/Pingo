@@ -5,6 +5,7 @@ import fluxReducer from './flux';
 import formReducer from './form';
 import myPageReducer from './myPage';
 import authReducer from './auth';
+import userReducer from './user';
 
 export default combineReducers({
   map: mapReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   flux: fluxReducer,
   form: formReducer,
   myPage: myPageReducer,
-  auth: authReducer
+  auth: authReducer,
+  user: userReducer
 });

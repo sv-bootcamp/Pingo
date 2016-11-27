@@ -12,7 +12,7 @@ import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '../actions/authActions';
-
+import { HTTPS, SERVER_ADDR, ENDPOINT_CREATEDPOST } from '../utils';
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 import ImgGuest from '../resources/myPage/guest.png';
 
@@ -54,22 +54,15 @@ class MyPage extends Component {
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
     getAccessToken().then((accessToken) => {
-      console.log(accessToken);
       if (accessToken !== null) {
         getUserKey().then((userKey) => {
-          console.log(userKey);
           if (userKey !== null) {
-            console.log(userKey);
             // TODO: now it gets user information every time. improve this
             getUserInformation(userKey, accessToken).then((rjson) => {
-              console.log(rjson);
-              console.log('here');
               if (rjson) {
                 this.props.setUserName(rjson.name);
                 this.props.setUserEmail(rjson.email);
                 this.props.setProfileImgUrl(rjson.profileImgUrl);
-                console.log(this.props.userName);
-                console.log(this.props.profileImgUrl);
               }
             });
           }
@@ -90,6 +83,28 @@ class MyPage extends Component {
       }
     });
     this.props.getSavedPosts();
+    // const address = 'http://goober.herokuapp.com/api/users/createdposts';
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_CREATEDPOST}`;
+    getAccessToken().then((accessToken) => {
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `bearer ${accessToken}`
+      };
+      fetch(address, {
+        method: 'GET',
+        headers: headers
+      })
+      .then(response => {
+        console.log(response);
+        return response.json();
+      })
+      .then(json => {
+        console.log(json);
+        this.props.setCreatedPosts(json);
+      })
+      .catch((error) => console.log(error));
+    });
   }
 
   renderImageButtonSetting() {
@@ -218,10 +233,21 @@ class MyPage extends Component {
           enableEmptySections={true}
         />
       );
+    } else if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
+      return (
+        <ListView
+          dataSource={
+          new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+          }).cloneWithRows(this.props.createdPosts)
+        }
+          renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+          enableEmptySections={true}
+        />
+      );
     }
     return null;
   }
-
   renderTabViewHeader(props) {
     return (<TabBarTop
       {...props}
@@ -258,6 +284,7 @@ MyPage.propTypes = {
   setUserName: PropTypes.func,
   setUserEmail: PropTypes.func,
   setProfileImgUrl: PropTypes.func,
+  setCreatedPosts: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
   token: PropTypes.string,
   userName: PropTypes.string,
@@ -265,7 +292,8 @@ MyPage.propTypes = {
   myPageTabViewRoutes: PropTypes.any,
   items: PropTypes.any,
   getSavedPosts: PropTypes.func,
-  savedPosts: PropTypes.any
+  savedPosts: PropTypes.any,
+  createdPosts: PropTypes.array
 };
 
 export default MyPage;
