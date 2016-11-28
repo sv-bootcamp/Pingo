@@ -188,12 +188,9 @@ class Card extends Component {
     return (
       <View style={[
         styles.cardWrapper,
-        {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD},
-        (this.props.currentScene === 'map') ? {
-          shadowOpacity: 0.15,
-          shadowRadius: 2
-        } : null
-        ]}>
+        this.props.style,
+        {height: (this.props.dataSource.category === 'facility') ? HEIGHT_CARD_FACILITY : HEIGHT_CARD}
+      ]}>
         <View style={{flex: FLEX_MARGIN_ROW, backgroundColor: 'white'}}/>
         <View style={{flex: HEIGHT_CARD - FLEX_MARGIN_ROW * 2, backgroundColor: 'white', flexDirection: 'row'}}>
           <View style={{flex: FLEX_MARGIN_ROW}}/>
@@ -222,7 +219,8 @@ Card.propTypes = {
   currentScene: PropTypes.string,
   setCurrentScene: PropTypes.func,
   saveEvent: PropTypes.func,
-  deleteEvent: PropTypes.func
+  deleteEvent: PropTypes.func,
+  style: PropTypes.object
 };
 
 export default Card;

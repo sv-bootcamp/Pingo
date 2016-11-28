@@ -317,7 +317,17 @@ export default class Map extends Component {
         {
           (this.checkMarkerClicked()) ? null :
             <Animated.View style={{transform: [{translateY: cardTranslateY}]}}>
-              <CardLayout dataSource = {this.props.selectedItem} />
+              <CardLayout
+                dataSource = {this.props.selectedItem}
+                style={{
+                  ...Platform.select({
+                    ios: {
+                      shadowOpacity: 0.15,
+                      shadowRadius: 2
+                    }
+                  })
+                }}
+              />
             </Animated.View>
         }
       </View>
