@@ -190,6 +190,11 @@ export default class DetailView extends Component {
   }
 
   renderModal() {
+    if (this.state.isClicked) {
+      return (
+        <View style = {{flex: 1, backgroundColor: 'black'}}/>
+      )
+    }
     return (
         <View style = {{flex: 1}}>
           <Modal
