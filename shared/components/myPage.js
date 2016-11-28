@@ -83,7 +83,6 @@ class MyPage extends Component {
       }
     });
     this.props.getSavedPosts();
-    // const address = 'http://goober.herokuapp.com/api/users/createdposts';
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_CREATEDPOST}`;
     getAccessToken().then((accessToken) => {
       const headers = {
@@ -231,6 +230,7 @@ class MyPage extends Component {
           }
           renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
           enableEmptySections={true}
+          removeClippedSubviews={false}
         />
       );
     } else if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
@@ -243,6 +243,7 @@ class MyPage extends Component {
         }
           renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
           enableEmptySections={true}
+          removeClippedSubviews={false}
         />
       );
     }
