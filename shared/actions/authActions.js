@@ -6,7 +6,9 @@ import {
   ENDPOINT_USER,
   ENDPOINT_SIGNUP,
   ENDPOINT_GRANT,
-  ENDPOINT_REFRESH
+  ENDPOINT_REFRESH,
+  DEFAULT_HEADERS,
+  getAuthHeaders
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
@@ -18,17 +20,15 @@ const STORAGE_KEY_loginType = 'loginType';
 
 export const signupFacebookUser = async (FacebookToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
-  const bodySignUp = JSON.stringify({
+  const headers = DEFAULT_HEADERS;
+  const body = JSON.stringify({
     'userType': 'facebook',
     'facebookToken': FacebookToken
   });
   await fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodySignUp
+    headers,
+    body
   })
   .then((response) => response.json())
   .then((rjson) => {
@@ -45,16 +45,14 @@ export const signupFacebookUser = async (FacebookToken) => {
 
 export const signupGuestUser = async () => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
-  const bodySignUp = JSON.stringify({
+  const headers = DEFAULT_HEADERS;
+  const body = JSON.stringify({
     'userType': 'anonymous'
   });
   await fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodySignUp
+    headers,
+    body
   })
   .then((response) => response.json())
   .then((rjson) => {
@@ -74,18 +72,16 @@ export const signupGuestUser = async () => {
 export const grantAnonymousUser = async (secret, userKey) => {
   try {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
-    const bodyGrant = JSON.stringify({
+    const headers = DEFAULT_HEADERS;
+    const body = JSON.stringify({
       'grantType': 'anonymous',
       'userSecret': secret,
       'userKey': userKey
     });
     await fetch(address, {
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: bodyGrant
+      headers,
+      body
     })
     .then((response) => {
       console.log(response);
@@ -114,19 +110,17 @@ export const grantAnonymousUser = async (secret, userKey) => {
 export const grantFacebookUser = async (facebookToken) => {
   try {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
+    const headers = DEFAULT_HEADERS;
     console.log(address);
     console.log('fbtoken ' + facebookToken);
-    const bodyGrant = JSON.stringify({
+    const body = JSON.stringify({
       'grantType': 'facebook',
       'facebookToken': facebookToken
     });
     await fetch(address, {
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: bodyGrant
+      headers,
+      body
     })
     .then((response) => {
       console.log(response);
@@ -239,16 +233,14 @@ export const setProfileImgUrl = (profileImgUrl) => {
 // todo : pass it to grantfbuser after receiving 400
 export const requestRefreshTokenFacebook = async (refreshToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
-  const bodyRequestRefreshToken = JSON.stringify({
+  const headers = DEFAULT_HEADERS;
+  const body = JSON.stringify({
     'refreshToken': refreshToken
   });
   return fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyRequestRefreshToken
+    headers,
+    body
   })
   .then((response) => {
     if (response.status === 200) {
@@ -269,16 +261,14 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
 
 export const requestRefreshTokenGuest = async (refreshToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
-  const bodyRequestRefreshToken = JSON.stringify({
+  const headers = DEFAULT_HEADERS;
+  const body = JSON.stringify({
     'refreshToken': refreshToken
   });
   fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: bodyRequestRefreshToken
+    headers,
+    body
   })
   .then((response) => {
     if (response.status === 200) {
@@ -310,14 +300,10 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
 export const getUserInformation = async (userKey, accessToken) => {
   try {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_USER}/${userKey}`;
-    const headerGetUserInformation = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `bearer ${accessToken}`
-    };
+    const headers = getAuthHeaders(accessToken);
     return await fetch(address, {
       method: 'GET',
-      headers: headerGetUserInformation
+      headers
     })
     .then((response) => {
       if (response.status === 200) {
