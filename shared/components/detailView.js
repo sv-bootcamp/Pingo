@@ -216,7 +216,7 @@ export default class DetailView extends Component {
                     this.toggleModalVisible();
                     this.setState({currentReport: 'location'});
                     Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage,
-                      key: this.props.detailSource[this.currentIndex].key});
+                      eventKey: this.props.detailSource[this.state.currentIndex].key});
                   }}>
                   <Text> Report an Issue</Text>
                   </TouchableOpacity>
