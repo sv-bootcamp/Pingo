@@ -181,6 +181,7 @@ export default class Map extends Component {
 
   handleLocationButton() {
     this.setCurrentPosition();
+    // todo: change to appropriate zoom level when it is clicked
   }
 
   handleCameraButton() {
