@@ -79,7 +79,8 @@ export default class DetailView extends Component {
       locationReported: false,
       messageVisible: false,
       currentReport: '',
-      data: []
+      data: [],
+      currentIndex: 0
     };
     this.renderDate = this.renderDate.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -92,7 +93,6 @@ export default class DetailView extends Component {
     this.renderSlide = this.renderSlide.bind(this);
     this.renderInfoSlide = this.renderInfoSlide.bind(this);
     this.firstTry = true;
-    this.currentIndex = 0;
   }
 
   toggleModalVisible() {
@@ -113,15 +113,16 @@ export default class DetailView extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.firstTry) {
       this.swiper.scrollBy(prevProps.rowID * 1 + 1, false);
-      this.currentIndex = this.props.rowID * 1 + 1;
       this.firstTry = false;
     }
-    (prevState.isClicked) ? this.swiper.scrollBy(this.currentIndex, false) : this.swiper.scrollBy(this.currentIndex - 1, false);
+    if (this.state.isClicked !== prevState.isClicked) {
+      (prevState.isClicked) ? this.swiper.scrollBy(this.state.currentIndex + 1, false) : this.swiper.scrollBy(this.state.currentIndex, false);
+    }
   }
 
   handleClick(i) {
     this.setState({isClicked: !this.state.isClicked});
-    this.currentIndex = i + 1;
+    this.setState({currentIndex: i});
   }
 
   handleMessage(value) {
@@ -136,9 +137,6 @@ export default class DetailView extends Component {
   }
 
   renderPagination(index, total) {
-    if (this.currentIndex !== index) {
-      this.currentIndex = index;
-    }
     if (this.state.isClicked) {
       return (<View style ={{flex: 0.3, backgroundColor: 'black'}}/>);
     }
@@ -193,7 +191,7 @@ export default class DetailView extends Component {
     if (this.state.isClicked) {
       return (
         <View style = {{flex: 1, backgroundColor: 'black'}}/>
-      )
+      );
     }
     return (
         <View style = {{flex: 1}}>
@@ -248,6 +246,7 @@ export default class DetailView extends Component {
         </View>
     );
   }
+
   renderInfoSlide() {
     let currentLocation = {
       latitude: this.props.dataSource.lat,
@@ -320,7 +319,7 @@ export default class DetailView extends Component {
             <View style = {styles.btnFlag}>
               <TouchableOpacity onPress = {()=>{
                 this.setState({currentReport: 'photo'});
-                Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage});
+                Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage, eventKey: this.props.dataSource.key});
               }}>
                 <Image source = {IMG_BUTTON_FLAG}
                        style = {{height: 24, width: 24}}/>
@@ -389,7 +388,6 @@ export default class DetailView extends Component {
           </View>
       }
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
-          {this.renderModal()}
           <Swiper ref={(swiper) => {
             this.swiper = swiper;
           }}
@@ -399,6 +397,7 @@ export default class DetailView extends Component {
             loop = {false}>
               {pages}
           </Swiper>
+          {this.renderModal()}
         </View>
       </View>
     );
