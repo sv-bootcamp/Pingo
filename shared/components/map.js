@@ -10,6 +10,8 @@ import warningPng from '../resources/marker/warning_small.png';
 import eventClickPng from '../resources/marker/event_big.png';
 import facilityClickPng from '../resources/marker/facility_big.png';
 import warningClickPng from '../resources/marker/warning_big.png';
+import userPng from '../resources/marker/user.png';
+import userSmallPng from '../resources/marker/user_small.png';
 import {API_GEODATA, API_KEY} from '../utils';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
@@ -59,14 +61,17 @@ export default class Map extends Component {
     this.cardAnimationSlideUp = this.cardAnimationSlideUp.bind(this);
     this.buttonAnimationSlideUp = this.buttonAnimationSlideUp.bind(this);
     this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
+    this.renderUserIndicatorMarker = this.renderUserIndicatorMarker.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
     this.state = {
       markerSelect: '',
       cardTranslateY: new Animated.Value(0),
-      buttonTranslateY: new Animated.Value(0)
+      buttonTranslateY: new Animated.Value(0),
+      userLocationEnabled: false
     };
+    this.watchID = null;
   }
 
   componentWillMount() {
@@ -116,6 +121,20 @@ export default class Map extends Component {
     ).start();
   }
 
+  componentDidMount() {
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      const userLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+      this.props.setUserLocation(userLocation);
+    });
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
+  }
+
   // todo: this is duplicate from Create.js. refactoring required
   getAddressData() {
     const DEFAULT_CURRENT_CITY = 'PINGO';
@@ -141,16 +160,28 @@ export default class Map extends Component {
       const newLocation = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 0.004724,
+        longitudeDelta: 0.004023
       };
       this.prevZoom = null;
       this.props.setLocation(newLocation);
+      const userLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+      this.props.setUserLocation(userLocation);
+      this.setState({userLocationEnabled: true});
     },
     (error) => {
       // todo: handle this error when gps is off
       console.log(error);
+      this.setState({userLocationEnabled: false});
     });
+  }
+
+  handleLocationButton() {
+    this.setCurrentPosition();
+    // todo: change to appropriate zoom level when it is clicked
   }
 
   handleCameraButton() {
@@ -231,6 +262,13 @@ export default class Map extends Component {
     return null;
   }
 
+  renderUserIndicatorMarker() {
+    if (this.props.zoomLevel <= 18 && this.props.zoomLevel > 17) {
+      return userPng;
+    }
+    return userSmallPng;
+  }
+
   checkMarkerClicked() {
     return (this.props.selectedItem && this.props.selectedItem.title === undefined);
   }
@@ -248,6 +286,9 @@ export default class Map extends Component {
     return (
       <View style ={styles.container}>
         <MapView
+          ref={ref => {
+            this.map = ref;
+          }}
           style ={styles.map}
           onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
@@ -290,12 +331,19 @@ export default class Map extends Component {
               </Image>
             </MapView.Marker>
           ))}
+          {(this.state.userLocationEnabled === true) ?
+            <MapView.Marker
+              coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
+              image={this.renderUserIndicatorMarker()}
+              anchor={{x: 0.5, y: 0.5}}
+            />
+          : null}
         </MapView>
         {(this.checkMarkerClicked()) ?
           <View style={styles.buttonSection}>
             <MapButton
               imageSource={'position'}
-              handleOnPress={this.setCurrentPosition.bind(this)}/>
+              handleOnPress={this.handleLocationButton.bind(this)}/>
             <MapButton
               imageSource={'camera'}
               handleOnPress={this.handleCameraButton.bind(this)}/>
@@ -305,7 +353,7 @@ export default class Map extends Component {
             <Animated.View style={{transform: [{translateY: buttonTranslateY}]}}>
               <MapButton
                 imageSource={'position'}
-                handleOnPress={this.setCurrentPosition.bind(this)}/>
+                handleOnPress={this.handleLocationButton.bind(this)}/>
             </Animated.View>
             <Animated.View style={{transform: [{translateY: buttonTranslateY}]}}>
               <MapButton
@@ -327,10 +375,12 @@ export default class Map extends Component {
 
 Map.propTypes = {
   currentLocation: PropTypes.object,
+  userLocation: PropTypes.object,
   selectedItem: PropTypes.any,
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
+  setUserLocation: PropTypes.func,
   setCurrentCity: PropTypes.func,
   onMarkerClick: PropTypes.func,
   hideMapCard: PropTypes.func,
