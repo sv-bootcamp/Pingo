@@ -11,6 +11,7 @@ import eventClickPng from '../resources/marker/event_big.png';
 import facilityClickPng from '../resources/marker/facility_big.png';
 import warningClickPng from '../resources/marker/warning_big.png';
 import userPng from '../resources/marker/user.png';
+import userSmallPng from '../resources/marker/user_small.png';
 import {API_GEODATA, API_KEY} from '../utils';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
@@ -60,6 +61,7 @@ export default class Map extends Component {
     this.cardAnimationSlideUp = this.cardAnimationSlideUp.bind(this);
     this.buttonAnimationSlideUp = this.buttonAnimationSlideUp.bind(this);
     this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
+    this.renderUserIndicatorMarker = this.renderUserIndicatorMarker.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -158,8 +160,8 @@ export default class Map extends Component {
       const newLocation = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 0.004724,
+        longitudeDelta: 0.004023
       };
       this.prevZoom = null;
       this.props.setLocation(newLocation);
@@ -175,6 +177,10 @@ export default class Map extends Component {
       console.log(error);
       this.setState({userLocationEnabled: false});
     });
+  }
+
+  handleLocationButton() {
+    this.setCurrentPosition();
   }
 
   handleCameraButton() {
@@ -255,6 +261,13 @@ export default class Map extends Component {
     return null;
   }
 
+  renderUserIndicatorMarker() {
+    if (this.props.zoomLevel <= 18 && this.props.zoomLevel > 17) {
+      return userPng;
+    }
+    return userSmallPng;
+  }
+
   checkMarkerClicked() {
     return (this.props.selectedItem && this.props.selectedItem.title === undefined);
   }
@@ -272,6 +285,9 @@ export default class Map extends Component {
     return (
       <View style ={styles.container}>
         <MapView
+          ref={ref => {
+            this.map = ref;
+          }}
           style ={styles.map}
           onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
@@ -317,7 +333,7 @@ export default class Map extends Component {
           {(this.state.userLocationEnabled === true) ?
             <MapView.Marker
               coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
-              image={userPng}
+              image={this.renderUserIndicatorMarker()}
               anchor={{x: 0.5, y: 0.5}}
             />
           : null}
@@ -326,7 +342,7 @@ export default class Map extends Component {
           <View style={styles.buttonSection}>
             <MapButton
               imageSource={'position'}
-              handleOnPress={this.setCurrentPosition.bind(this)}/>
+              handleOnPress={this.handleLocationButton.bind(this)}/>
             <MapButton
               imageSource={'camera'}
               handleOnPress={this.handleCameraButton.bind(this)}/>
@@ -336,7 +352,7 @@ export default class Map extends Component {
             <Animated.View style={{transform: [{translateY: buttonTranslateY}]}}>
               <MapButton
                 imageSource={'position'}
-                handleOnPress={this.setCurrentPosition.bind(this)}/>
+                handleOnPress={this.handleLocationButton.bind(this)}/>
             </Animated.View>
             <Animated.View style={{transform: [{translateY: buttonTranslateY}]}}>
               <MapButton
