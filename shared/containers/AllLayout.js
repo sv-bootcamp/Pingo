@@ -1,5 +1,5 @@
-import {View, StyleSheet, Platform} from 'react-native';
-import React, {Component} from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
+import React, { Component } from 'react';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
 import FormLayout from './formLayout';
