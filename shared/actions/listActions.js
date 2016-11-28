@@ -29,15 +29,12 @@ export const getAllItems = (zoomLevel, lat, long) => {
 
     // todo recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
     // const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
+      const headers = getAuthHeaders(accessToken);
       return fetch(address, {
         method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authorization: `bearer ${accessToken}`
-        }
+        headers
       })
       .then(response => response.json())
       .then(json =>
@@ -60,11 +57,12 @@ export const getDetailImage = (key) => {
     queries.push(createQueryObject('item', key));
     // const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
     // const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}/${queryBuilder(queries)}`;
     getAccessToken().then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}/${queryBuilder(queries)}`;
+      const headers = getAuthHeaders(accessToken);
       return fetch(address, {
         method: 'GET',
-        headers: getAuthHeaders(accessToken)
+        headers
       })
       .then(response => response.json())
       .then(json =>

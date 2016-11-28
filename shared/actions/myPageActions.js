@@ -18,11 +18,12 @@ export const receiveSavedPosts = (json) => {
 
 export const getSavedPosts = () => {
   return (dispatch) => {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
     getAccessToken().then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const headers = getAuthHeaders(accessToken);
       return fetch(address, {
         method: 'GET',
-        headers: getAuthHeaders(accessToken)
+        headers
       })
       .then(response => response.json())
       .then(json =>
@@ -37,20 +38,17 @@ export const getSavedPosts = () => {
 
 export const saveEvent = (eventKey) => {
   return (dispatch) => {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-    const bodySave = JSON.stringify({
-      'entity': 'item',
-      'itemKey': `${eventKey}`
-    });
     getAccessToken().then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const body = JSON.stringify({
+        'entity': 'item',
+        'itemKey': `${eventKey}`
+      });
+      const headers = getAuthHeaders(accessToken);
       return fetch(address, {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'authorization': `bearer ${accessToken}`
-        },
-        body: bodySave
+        headers,
+        body
       })
       .then(response => response.json())
       .then(json => {
@@ -67,19 +65,16 @@ export const saveEvent = (eventKey) => {
 
 export const deleteEvent = (eventKey) => {
   return (dispatch) => {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-    const bodySave = JSON.stringify({
-      'itemKey': `${eventKey}`
-    });
     getAccessToken(dispatch).then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
+      const headers = getAuthHeaders(accessToken);
+      const body = JSON.stringify({
+        'itemKey': `${eventKey}`
+      });
       return fetch(address, {
         method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'authorization': `bearer ${accessToken}`
-        },
-        body: bodySave
+        headers,
+        body
       })
       .then(response => response.json())
       .then(json => {
