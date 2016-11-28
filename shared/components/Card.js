@@ -177,6 +177,7 @@ class Card extends Component {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             horizontal={true}
+            removeClippedSubviews={false}
           />
         </View>
       );
