@@ -59,7 +59,7 @@ export const saveEvent = (eventKey) => {
       })
       .then(response => response.json())
       .then(json => {
-        if(json.message !== undefined){
+        if(json.message){
           dispatch(getSavedPosts());
         }
       })
@@ -88,7 +88,7 @@ export const deleteEvent = (eventKey) => {
       })
       .then(response => response.json())
       .then(json => {
-        if(json.message !== undefined){
+        if(json.message){
           dispatch(getSavedPosts());
         }
       })
