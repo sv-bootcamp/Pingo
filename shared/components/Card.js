@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import { getAccessToken } from '../actions/authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST } from '../utils';
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
 
@@ -121,48 +119,10 @@ class Card extends Component {
   handlePressStar() {
     if (this.state.isSaved === true) {
       this.setState({isSaved: false});
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const bodySave = JSON.stringify({
-        'itemKey': `${this.props.dataSource.key}`
-      });
-      console.log("yaya" + address);
-      getAccessToken().then((accessToken) => {
-        return fetch(address, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'authorization': `bearer ${accessToken}`
-          },
-          body: bodySave
-        })
-        .then(response => response.json())
-        .then(json =>
-          console.log(json)
-        );
-      });
+      this.props.deleteEvent(this.props.dataSource.key);
     } else {
       this.setState({isSaved: true});
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const bodySave = JSON.stringify({
-        'entity': 'item',
-        'itemKey': `${this.props.dataSource.key}`
-      });
-      getAccessToken().then((accessToken) => {
-        return fetch(address, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'authorization': `bearer ${accessToken}`
-          },
-          body: bodySave
-        })
-        .then(response => response.json())
-        .then(json =>
-          console.log(json)
-        );
-      });
+      this.props.saveEvent(this.props.dataSource.key);
     }
   }
 
@@ -260,7 +220,9 @@ Card.propTypes = {
   })),
   getDetailImage: PropTypes.func,
   currentScene: PropTypes.string,
-  setCurrentScene: PropTypes.func
+  setCurrentScene: PropTypes.func,
+  saveEvent: PropTypes.func,
+  deleteEvent: PropTypes.func
 };
 
 export default Card;

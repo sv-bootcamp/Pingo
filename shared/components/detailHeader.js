@@ -5,8 +5,6 @@ import IMG_BUTTON_CLOSE from '../resources/btn_close/drawable-xxxhdpi/btn_close.
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_MORE from '../resources/btn_more/drawable-xxxhdpi/btn_more.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
-import { getAccessToken } from '../actions/authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST } from '../utils';
 
 const styles = {
   wrapper: {
@@ -59,50 +57,13 @@ export default class DetailHeader extends Component {
     this.handlePressStar = this.handlePressStar.bind(this);
   }
 
-  handlePressStar() { // todo: I will apply this function to redux soon! 
+  handlePressStar() { // todo: I will apply this function to redux soon!
     if (this.state.isSaved === true) {
       this.setState({isSaved: false});
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const bodySave = JSON.stringify({
-        'itemKey': `${this.props.itemKey}`
-      });
-      getAccessToken().then((accessToken) => {
-        return fetch(address, {
-          method: 'DELETE',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'authorization': `bearer ${accessToken}`
-          },
-          body: bodySave
-        })
-        .then(response => response.json())
-        .then(json =>
-          console.log(json)
-        );
-      });
+      this.props.deleteEvent(this.props.itemKey);
     } else {
       this.setState({isSaved: true});
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const bodySave = JSON.stringify({
-        'entity': 'item',
-        'itemKey': `${this.props.itemKey}`
-      });
-      getAccessToken().then((accessToken) => {
-        return fetch(address, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'authorization': `bearer ${accessToken}`
-          },
-          body: bodySave
-        })
-        .then(response => response.json())
-        .then(json =>
-          console.log(json)
-        );
-      });
+      this.props.saveEvent(this.props.itemKey);
     }
   }
 
@@ -157,5 +118,7 @@ DetailHeader.propTypes = {
   messageUnvisible: PropTypes.func,
   setModalVisible: PropTypes.func,
   isSaved: PropTypes.bool,
-  itemKey: PropTypes.string
+  itemKey: PropTypes.string,
+  saveEvent: PropTypes.func,
+  deleteEvent: PropTypes.func
 };
