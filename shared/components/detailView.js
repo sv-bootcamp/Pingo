@@ -113,11 +113,10 @@ export default class DetailView extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.firstTry) {
       this.swiper.scrollBy(prevProps.rowID * 1 + 1, false);
-      this.setState({currentIndex: this.props.rowID * 1 + 1});
       this.firstTry = false;
     }
-    if(this.state.isClicked !== prevState.isClicked){
-      (prevState.isClicked) ? this.swiper.scrollBy(this.state.currentIndex+1, false) : this.swiper.scrollBy(this.state.currentIndex, false);
+    if (this.state.isClicked !== prevState.isClicked) {
+      (prevState.isClicked) ? this.swiper.scrollBy(this.state.currentIndex + 1, false) : this.swiper.scrollBy(this.state.currentIndex, false);
     }
   }
 
@@ -189,8 +188,10 @@ export default class DetailView extends Component {
   }
 
   renderModal() {
-    if (!this.state.modalVisible) {
-      return ;
+    if (this.state.isClicked) {
+      return (
+        <View style = {{flex: 1, backgroundColor: 'black'}}/>
+      );
     }
     return (
         <View style = {{flex: 1}}>
@@ -214,7 +215,8 @@ export default class DetailView extends Component {
                   <TouchableOpacity onPress = {() => {
                     this.toggleModalVisible();
                     this.setState({currentReport: 'location'});
-                    Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage, eventKey: this.props.dataSource.key});
+                    Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage,
+                      key: this.props.detailSource[this.currentIndex].key});
                   }}>
                   <Text> Report an Issue</Text>
                   </TouchableOpacity>
@@ -244,6 +246,7 @@ export default class DetailView extends Component {
         </View>
     );
   }
+
   renderInfoSlide() {
     let currentLocation = {
       latitude: this.props.dataSource.lat,

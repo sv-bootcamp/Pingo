@@ -42,7 +42,7 @@ export default class EventReportView extends Component {
     this.reportEvent = this.reportEvent.bind(this);
   }
   reportEvent(){
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REPORT}`
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REPORT}`;
     getAccessToken().then((accessToken) => {
       return fetch(address, {
         method: 'POST',
@@ -150,5 +150,5 @@ export default class EventReportView extends Component {
 EventReportView.propTypes = {
   aboutPhoto: PropTypes.bool,
   handleReport: PropTypes.func,
-  key: PropTypes.string
+  eventKey: PropTypes.string
 };
