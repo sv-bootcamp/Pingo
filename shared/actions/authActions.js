@@ -6,7 +6,9 @@ import {
   ENDPOINT_USER,
   ENDPOINT_SIGNUP,
   ENDPOINT_GRANT,
-  ENDPOINT_REFRESH
+  ENDPOINT_REFRESH,
+  DEFAULT_HEADERS,
+  getAuthHeaders
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
@@ -24,10 +26,7 @@ export const signupFacebookUser = async (FacebookToken) => {
   });
   await fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers: DEFAULT_HEADERS,
     body: bodySignUp
   })
   .then((response) => response.json())
@@ -50,10 +49,7 @@ export const signupGuestUser = async () => {
   });
   await fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers: DEFAULT_HEADERS,
     body: bodySignUp
   })
   .then((response) => response.json())
@@ -81,10 +77,7 @@ export const grantAnonymousUser = async (secret, userKey) => {
     });
     await fetch(address, {
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: DEFAULT_HEADERS,
       body: bodyGrant
     })
     .then((response) => {
@@ -122,10 +115,7 @@ export const grantFacebookUser = async (facebookToken) => {
     });
     await fetch(address, {
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+      headers: DEFAULT_HEADERS,
       body: bodyGrant
     })
     .then((response) => {
@@ -244,10 +234,7 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
   });
   return fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers: DEFAULT_HEADERS,
     body: bodyRequestRefreshToken
   })
   .then((response) => {
@@ -274,10 +261,7 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
   });
   fetch(address, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers: DEFAULT_HEADERS,
     body: bodyRequestRefreshToken
   })
   .then((response) => {
@@ -310,14 +294,10 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
 export const getUserInformation = async (userKey, accessToken) => {
   try {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_USER}/${userKey}`;
-    const headerGetUserInformation = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `bearer ${accessToken}`
-    };
+    const headers = getAuthHeaders(accessToken);
     return await fetch(address, {
       method: 'GET',
-      headers: headerGetUserInformation
+      headers
     })
     .then((response) => {
       if (response.status === 200) {

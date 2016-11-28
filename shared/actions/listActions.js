@@ -3,7 +3,7 @@ import * as types from './actionTypes';
 //   queryBuilder, createQueryObject} from '../utils'; We will use later
 import {queryBuilder, createQueryObject} from '../utils';
 import { getAccessToken } from './authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE} from '../utils';
+import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, getAuthHeaders} from '../utils';
 
 export function TBD() {
   return {
@@ -64,11 +64,7 @@ export const getDetailImage = (key) => {
     getAccessToken().then((accessToken) => {
       return fetch(address, {
         method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authorization: `bearer ${accessToken}`
-        }
+        headers: getAuthHeaders(accessToken)
       })
       .then(response => response.json())
       .then(json =>

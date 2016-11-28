@@ -14,6 +14,16 @@ export const ENDPOINT_REPORT = '/api/reports';
 export const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
 export const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
+export const DEFAULT_HEADERS = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};
+
+export const getAuthHeaders = (accessToken) => {
+  DEFAULT_HEADERS.Authorization = `bearer ${accessToken}`;
+  return DEFAULT_HEADERS;
+};
+
 export const createQueryObject = (key, value) => {
   return {key, value};
 };
