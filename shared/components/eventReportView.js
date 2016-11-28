@@ -51,7 +51,7 @@ export default class EventReportView extends Component {
           'Content-Type': 'application/json',
           'authorization': `bearer ${accessToken}`,
           'aboutPhoto': `${this.props.aboutPhoto}`,
-          'key': `${this.props.key}`,
+          'key': `${this.props.eventKey}`,
           'reportIndex': `${this.state.currentIndex}`
         }
       })
