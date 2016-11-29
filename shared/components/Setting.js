@@ -139,7 +139,7 @@ class Setting extends Component {
         {this.renderSettingListBox('Send Feedback', '', ()=>{})}
         {(this.props.token !== 'guest' && this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
         <View style={[styles.settingGreyBox, {height: 42}]}>
-          <Text style={{marginLeft: 16}}>Version 1.0.0</Text>
+          <Text style={{marginLeft: 16, color: '#8e8e8e'}}>Version 1.0.0</Text>
         </View>
       </ScrollView>
     );

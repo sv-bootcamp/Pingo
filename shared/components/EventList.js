@@ -11,7 +11,7 @@ class EventList extends Component {
 
   renderRowTxt(rowData) {
     return (
-      <CardLayout dataSource = {rowData}/>
+      <CardLayout dataSource = {rowData} style={{}}/>
     );
   }
 

@@ -81,7 +81,15 @@ const styles = {
   bottomBox: {
     backgroundColor: '#f7f7f7',
     flexDirection: 'column',
-    elevation: 10
+    ...Platform.select({
+      android: {
+        elevation: 10
+      },
+      ios: {
+        shadowOpacity: 0.2,
+        shadowRadius: 1
+      }
+    })
   },
   fontRobotoRegular: {
     ...Platform.select({
@@ -153,7 +161,19 @@ class InitialScene extends Component {
             height: Dimensions.get('window').height * 48 / WindowHeight,
             justifyContent: 'center',
             borderRadius: 10,
-            elevation: 1
+            ...Platform.select({
+              android: {
+                elevation: 1
+              },
+              ios: {
+                shadowOpacity: 0.2,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 0,
+                  height: 3
+                }
+              }
+            })
           }, btnStyle]}
           onPress={handleButtonPress}
         >
