@@ -20,7 +20,8 @@ const mapStateToProps = (state) => {
     userName: state.auth.userName,
     profileImgUrl: state.auth.profileImgUrl,
     savedPosts: state.myPage.savedPosts,
-    createdPosts: state.user.createdPosts
+    createdPosts: state.user.createdPosts,
+    loadingLoginAnimating: state.user.loadingLoginAnimating
   };
 };
 

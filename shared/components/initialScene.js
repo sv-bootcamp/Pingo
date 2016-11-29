@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import {Image, Platform, View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import { Image, Platform, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
+import LoadingLayout from '../containers/loadingLayout';
 import {
   getRefreshToken,
   requestRefreshTokenGuest,
@@ -191,6 +192,7 @@ class InitialScene extends Component {
   }
 
   handleGuestButton() {
+    this.props.setLoadingLoginAnimating(true);
     let tmpRefreshToken;
     let tmpSecret;
     getRefreshToken().then((refreshToken) => {
@@ -211,6 +213,7 @@ class InitialScene extends Component {
       setLoginType('guest');
       this.props.setToken('guest');
       this.props.setCurrentScene('map');
+      this.props.setLoadingLoginAnimating(false);
       Actions.map({type: 'replace'});
     });
   }
@@ -231,6 +234,7 @@ class InitialScene extends Component {
             this.handleGuestButton.bind(this)
           )}
         </View>
+        <LoadingLayout/>
       </View>
     );
   }
@@ -238,7 +242,8 @@ class InitialScene extends Component {
 
 InitialScene.propTypes = {
   setCurrentScene: PropTypes.func,
-  setToken: PropTypes.func
+  setToken: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func
 };
 
 export default InitialScene;
