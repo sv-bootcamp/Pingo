@@ -72,7 +72,7 @@ export default class EventReportView extends Component {
 
   renderOption(title, i) {
     return (
-      <View style = {{flex: 46}}>
+      <View style = {{flex: 46}} key = {i}>
         <View style = {{flex: 20}}/>
         <View style = {{flex: 26, flexDirection: 'row'}}>
           <View style = {{flex: 304}}>
