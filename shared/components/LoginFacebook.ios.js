@@ -146,8 +146,13 @@ class LoginFacebook extends Component {
             height: Dimensions.get('window').height * 48 / WindowHeight,
             justifyContent: 'center',
             borderRadius: 10,
-            elevation: 1,
-            backgroundColor: '#4267b2'
+            backgroundColor: '#4267b2',
+            shadowOpacity: 0.2,
+            shadowRadius: 1,
+            shadowOffset: {
+              width: 0,
+              height: 3
+            }
           }}
           onPress={this.handleLogin.bind(this)}
         >
