@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Image, Platform, View, Text, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { Image, Platform, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
