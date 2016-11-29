@@ -557,7 +557,7 @@ class Create extends Component {
   }
 
   handleDoneOnAddingExistingLocation() {
-    this.handleAddExistingLocation(this.state.key, this.state.userKey, this.state.inputTextCaption, this.state.img);
+    this.handleAddExistingLocation(this.state.selectItemKey, this.state.selectUserKey, this.state.inputTextCaption, this.state.img);
   }
 
   // todo: should limit item.title length if it is too long
