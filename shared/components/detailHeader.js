@@ -65,6 +65,7 @@ export default class DetailHeader extends Component {
       this.setState({isSaved: true});
       this.props.saveEvent(this.props.itemKey);
     }
+    this.props.toggleStar();
   }
 
 
@@ -120,5 +121,6 @@ DetailHeader.propTypes = {
   isSaved: PropTypes.bool,
   itemKey: PropTypes.string,
   saveEvent: PropTypes.func,
-  deleteEvent: PropTypes.func
+  deleteEvent: PropTypes.func,
+  toggleStar: PropTypes.func
 };
