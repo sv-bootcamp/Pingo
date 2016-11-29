@@ -83,7 +83,10 @@ class Card extends Component {
 
   transformTodate() {
     let startTime = new Date(this.props.dataSource.startTime);
-    let endTime = new Date(this.props.dataSource.endTime);
+    let endTime = '';
+    if (this.props.dataSource.endTime) {
+      endTime = new Date(this.props.dataSource.endTime);
+    }
     let date = '';
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
       'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
