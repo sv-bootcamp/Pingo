@@ -21,3 +21,4 @@ export const setProfileImgUrl = 'SET_PROFILE_IMG_URL';
 export const getSavedPosts = 'SET_SAVED_POSTS';
 export const setCreatedPosts = 'SET_CREATED_POSTS';
 export const setUserLocation = 'SET_USER_LOCATION';
+export const setLoadingLoginAnimating = 'SET_LOADING_LOGIN_ANIMATING';

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Image, Platform, View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import {Image, Platform, View, Text, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
@@ -171,6 +171,7 @@ class InitialScene extends Component {
   }
 
   handleGuestButton() {
+    this.props.setLoadingLoginAnimating(true);
     let tmpRefreshToken;
     let tmpSecret;
     getRefreshToken().then((refreshToken) => {
@@ -211,6 +212,33 @@ class InitialScene extends Component {
             this.handleGuestButton.bind(this)
           )}
         </View>
+        {this.props.loadingLoginAnimating ?
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              height: Dimensions.get('window').height,
+              width: Dimensions.get('window').width,
+              zIndex: 40,
+              backgroundColor: 'white',
+              opacity: 0.5
+            }}
+          />
+          : null}
+        <ActivityIndicator
+          animating={this.props.loadingLoginAnimating}
+          style={{
+            position: 'absolute',
+            top: Dimensions.get('window').height / 2 - 40,
+            left: Dimensions.get('window').width / 2 - 40 + 3,
+            height: 80,
+            width: 80,
+            zIndex: 50
+          }}
+          size="large"
+          color="black"
+        />
       </View>
     );
   }
@@ -218,7 +246,9 @@ class InitialScene extends Component {
 
 InitialScene.propTypes = {
   setCurrentScene: PropTypes.func,
-  setToken: PropTypes.func
+  setToken: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
+  loadingLoginAnimating: PropTypes.bool
 };
 
 export default InitialScene;

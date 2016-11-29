@@ -3,7 +3,8 @@ import update from 'react-addons-update';
 
 const initialState = {
   createdPosts: [],
-  savedPosts: []
+  savedPosts: [],
+  loadingLoginAnimating: false
 };
 
 const user = (state = initialState, action = {}) => {
@@ -11,6 +12,10 @@ const user = (state = initialState, action = {}) => {
   case types.setCreatedPosts:
     return update(state, {
       createdPosts: { $set: action.createdPosts }
+    });
+  case types.setLoadingLoginAnimating:
+    return update(state, {
+      loadingLoginAnimating: { $set: action.loadingLoginAnimating }
     });
   default:
     return state;

@@ -149,7 +149,7 @@ class Setting extends Component {
     return (
       <View style={{flexDirection: 'column', flex: 1, overflow: 'hidden'}}>
         <SmallHeader
-          btnRight={null}
+          btnRight={<View/>}
           handleBtnLeft={this.handleButtonPrev.bind(this)}
           handleBtnRight={()=>{}}
           headerText='Settings'/>
