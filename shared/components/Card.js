@@ -91,6 +91,7 @@ class Card extends Component {
     };
     this.renderImg = this.renderImg.bind(this);
     this.toggleStar = this.toggleStar.bind(this);
+<<<<<<< HEAD
     this.renderOwnership = this.renderOwnership.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
     this.renderModal = this.renderModal.bind(this);
@@ -118,6 +119,8 @@ class Card extends Component {
       this.fromActivity = false;
       this.aboutItem = false;
     }
+=======
+>>>>>>> date bug fix
   }
 
   componentDidMount() {
@@ -157,8 +160,13 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
+<<<<<<< HEAD
         Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
           date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
+=======
+        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
+        date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
+>>>>>>> date bug fix
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>
@@ -180,6 +188,7 @@ class Card extends Component {
     this.setState({isSaved: !this.state.isSaved});
   }
 
+<<<<<<< HEAD
   renderMenu() {
     return (
           <View
@@ -233,6 +242,8 @@ class Card extends Component {
       </TouchableOpacity>
     );
   }
+=======
+>>>>>>> date bug fix
   renderCardText() {
     let wrapperFlex = (this.props.dataSource.category === 'facility') ? FLEX_TEXT_WRAPPER : FLEX_TEXT_WRAPPER + FLEX_MARGIN_ROW;
     if (this.fromActivity && this.aboutItem) {
