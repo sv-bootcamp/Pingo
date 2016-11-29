@@ -384,7 +384,8 @@ export default class DetailView extends Component {
                                 lastScene = {this.props.lastScene}
                                 setModalVisible = {this.toggleModalVisible}
                                 messageUnvisible = {this.messageUnvisible}
-                                isSaved = {this.props.isSaved}/>
+                                isSaved = {this.props.isSaved}
+                                toggleStar = {this.props.toggleStar}/>
           </View>
       }
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
@@ -417,5 +418,6 @@ DetailView.propTypes = {
     imageUrls: PropTypes.array,
     key: PropTypes.any
   })),
-  isSaved: PropTypes.bool
+  isSaved: PropTypes.bool,
+  toggleStar: PropTypes.func
 };
