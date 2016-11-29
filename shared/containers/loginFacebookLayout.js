@@ -2,6 +2,7 @@ import LoginFacebook from '../components/LoginFacebook';
 import { connect } from 'react-redux';
 import { setToken } from '../actions/authActions';
 import { setCurrentScene } from '../actions/fluxActions';
+import { setLoadingLoginAnimating } from '../actions/userActions';
 
 const mapStateToProps = (state) => {
   return {
@@ -17,6 +18,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    setLoadingLoginAnimating: (loadingLoginAnimating) => {
+      return dispatch(setLoadingLoginAnimating(loadingLoginAnimating));
     }
   };
 };

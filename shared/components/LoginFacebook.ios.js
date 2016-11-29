@@ -76,16 +76,19 @@ class LoginFacebook extends Component {
   handleLogin() {
     FBLoginManager.login((error, data) => {
       if (!error) {
+        this.props.setLoadingLoginAnimating(true);
         setLoginType('facebook');
         grantFacebookUser(data.credentials.token).then(() => {
           this.props.setToken('facebook');
           console.log(this.props.currentScene);
+          this.props.setLoadingLoginAnimating(false);
           if (this.props.currentScene === 'initialScene') {
             this.props.setCurrentScene('map');
             Actions.map({type: 'replace'});
           }
         });
       } else {
+        this.props.setLoadingLoginAnimating(false);
         console.log(error, data);
       }
     });
@@ -176,6 +179,7 @@ LoginFacebook.propTypes = {
   style: PropTypes.any,
   setToken: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   token: PropTypes.string,
   currentScene: PropTypes.string
 };

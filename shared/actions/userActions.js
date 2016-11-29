@@ -6,3 +6,10 @@ export const setCreatedPosts = (createdPosts) => {
     createdPosts: createdPosts
   };
 };
+
+export const setLoadingLoginAnimating = (loadingLoginAnimating) => {
+  return {
+    type: types.setLoadingLoginAnimating,
+    loadingLoginAnimating: loadingLoginAnimating
+  };
+};

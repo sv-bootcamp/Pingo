@@ -108,6 +108,7 @@ class LoginFacebook extends Component {
         loginBehavior={FBLoginManager.LoginBehaviors.Web}
         permissions={['email', 'user_about_me']}
         onLogin={(data) => {
+          this.props.setLoadingLoginAnimating(true);
           setLoginType('facebook');
           console.log(data);
           grantFacebookUser(data.credentials.token).then(() => {
@@ -115,6 +116,7 @@ class LoginFacebook extends Component {
             console.log(this.props.currentScene);
             if (this.props.currentScene === 'initialScene') {
               this.props.setCurrentScene('map');
+              this.props.setLoadingLoginAnimating(false);
               Actions.map({type: 'replace'});
             }
           });
@@ -225,6 +227,7 @@ LoginFacebook.propTypes = {
   style: PropTypes.any,
   setToken: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   token: PropTypes.string,
   currentScene: PropTypes.string
 };
