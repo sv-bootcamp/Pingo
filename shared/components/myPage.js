@@ -46,6 +46,12 @@ const styles = {
         fontWeight: 'bold'
       }
     })
+  },
+  textNothingFound: {
+    alignSelf: 'center',
+    fontSize: 19,
+    color: '#8e8e8e',
+    top: 100
   }
 };
 
@@ -54,6 +60,7 @@ class MyPage extends Component {
     super(props);
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
+    this.renderTextNothingFound = this.renderTextNothingFound.bind(this);
     getAccessToken().then((accessToken) => {
       if (accessToken !== null) {
         getUserKey().then((userKey) => {
@@ -96,11 +103,9 @@ class MyPage extends Component {
         headers: headers
       })
       .then(response => {
-        console.log(response);
         return response.json();
       })
       .then(json => {
-        console.log(json);
         this.props.setCreatedPosts(json);
       })
       .catch((error) => console.log(error));
@@ -215,37 +220,58 @@ class MyPage extends Component {
     );
   }
 
-  renderTabViewContents() {
-    if (this.props.myPageTabViewIndex === 1 && this.props.savedPosts.length !== 0) {
-      let dataSource = this.props.savedPosts.map((post) => {
+  renderTextNothingFound(text) {
+    return (
+      <Text style={styles.textNothingFound}>{text}</Text>
+    );
+  }
+
+  renderTabViewContents({ route }) {
+    if (route.key === '2') {
+      if (this.props.token !== '' && this.props.token !== 'guest' && this.props.savedPosts.length !== 0) {
+        let dataSource = this.props.savedPosts.map((post) => {
+          return (
+            Object.assign(post, {isSaved: true})
+          );
+        });
         return (
-          Object.assign(post, {isSaved: true})
-        );
-      });
-      return (
-        <ListView
-          dataSource={
+          <ListView
+            dataSource={
             new ListView.DataSource({
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(dataSource)
           }
-          renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
-          enableEmptySections={true}
-          removeClippedSubviews={false}
-        />
-      );
-    } else if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
+            enableEmptySections={true}
+            removeClippedSubviews={false}
+          />
+        );
+      }
       return (
-        <ListView
-          dataSource={
-          new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
-          }).cloneWithRows(this.props.createdPosts)
-        }
-          renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
-          enableEmptySections={true}
-          removeClippedSubviews={false}
-        />
+        this.renderTextNothingFound('Nothing Found')
+      );
+    }
+    if (route.key === '1') {
+      if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
+        return (
+          <ListView
+            dataSource={
+            new ListView.DataSource({
+              rowHasChanged: (r1, r2) => r1 !== r2
+            }).cloneWithRows(this.props.createdPosts)
+          }
+            renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+            enableEmptySections={true}
+            removeClippedSubviews={false}
+          />
+        );
+      } else if (this.props.token === '' || this.props.token === 'guest') {
+        return (
+          this.renderTextNothingFound('Please Login to add items here')
+        );
+      }
+      return (
+        this.renderTextNothingFound('Nothing Found')
       );
     }
     return null;

@@ -313,7 +313,6 @@ export const getUserInformation = async (userKey, accessToken) => {
       }
     })
     .then((rjson) => {
-      console.log(rjson);
       return rjson;
     })
     .catch((error) => {
