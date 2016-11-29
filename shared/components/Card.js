@@ -72,6 +72,7 @@ class Card extends Component {
       isSaved: this.props.dataSource.isSaved
     };
     this.renderImg = this.renderImg.bind(this);
+    this.toggleStar = this.toggleStar.bind(this);
   }
 
   componentDidMount() {
@@ -82,7 +83,10 @@ class Card extends Component {
 
   transformTodate() {
     let startTime = new Date(this.props.dataSource.startTime);
-    let endTime = new Date(this.props.dataSource.endTime);
+    let endTime = '';
+    if (this.props.dataSource.endTime) {
+      endTime = new Date(this.props.dataSource.endTime);
+    }
     let date = '';
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
       'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -108,7 +112,7 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene,
+        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
         date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
       }}>
         <Image style={styles.CardImage}
@@ -124,6 +128,10 @@ class Card extends Component {
       this.setState({isSaved: true});
       this.props.saveEvent(this.props.dataSource.key);
     }
+  }
+
+  toggleStar() {
+    this.setState({isSaved: !this.state.isSaved});
   }
 
   renderCardText() {
