@@ -116,6 +116,7 @@ class LoginFacebook extends Component {
             console.log(this.props.currentScene);
             if (this.props.currentScene === 'initialScene') {
               this.props.setCurrentScene('map');
+              this.props.setLoadingLoginAnimating(false);
               Actions.map({type: 'replace'});
             }
           });

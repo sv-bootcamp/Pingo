@@ -4,9 +4,9 @@ import { setCurrentScene } from '../actions/fluxActions';
 import { setToken } from '../actions/authActions';
 import { setLoadingLoginAnimating } from '../actions/userActions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   return {
-    loadingLoginAnimating: state.user.loadingLoginAnimating
+    // TBD
   };
 };
 

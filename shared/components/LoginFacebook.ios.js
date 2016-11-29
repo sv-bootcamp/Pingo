@@ -81,6 +81,7 @@ class LoginFacebook extends Component {
         grantFacebookUser(data.credentials.token).then(() => {
           this.props.setToken('facebook');
           console.log(this.props.currentScene);
+          this.props.setLoadingLoginAnimating(false);
           if (this.props.currentScene === 'initialScene') {
             this.props.setCurrentScene('map');
             Actions.map({type: 'replace'});

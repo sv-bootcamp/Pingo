@@ -11,6 +11,7 @@ import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
+import LoadingLayout from '../containers/loadingLayout';
 import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '../actions/authActions';
 import { HTTPS, SERVER_ADDR, ENDPOINT_CREATEDPOST } from '../utils';
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
@@ -273,6 +274,7 @@ class MyPage extends Component {
         <View style={{backgroundColor: 'white', flex: 440}}>
           {this.renderTabView()}
         </View>
+        <LoadingLayout/>
       </View>
     );
   }
