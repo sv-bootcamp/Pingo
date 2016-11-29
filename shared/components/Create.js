@@ -325,7 +325,8 @@ class Create extends Component {
         body: data
       })
       .then((response) => response.json())
-      .then(() => {
+      .then((json) => {
+        console.log(json);
         this.props.setCurrentScene('map');
         Actions.pop({popNum: 2});
       })
@@ -557,7 +558,7 @@ class Create extends Component {
   }
 
   handleDoneOnAddingExistingLocation() {
-    this.handleAddExistingLocation(this.state.key, this.state.userKey, this.state.inputTextCaption, this.state.img);
+    this.handleAddExistingLocation(this.state.selectItemKey, this.state.selectUserKey, this.state.inputTextCaption, this.state.img);
   }
 
   // todo: should limit item.title length if it is too long
