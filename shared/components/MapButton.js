@@ -11,7 +11,11 @@ const styles = {
     ...Platform.select({
       ios: {
         shadowOpacity: 0.5,
-        shadowRadius: 2
+        shadowRadius: 2,
+        shadowOffset: {
+          width: 0,
+          height: 5
+        }
       }
     })
   },

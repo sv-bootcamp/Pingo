@@ -240,7 +240,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(dataSource)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
@@ -296,7 +296,7 @@ class MyPage extends Component {
           headerText={'My Page'}
         />
         {this.renderUserBox()}
-        <View style={{backgroundColor: 'white', flex: 440}}>
+        <View style={{backgroundColor: 'white', flex: 440, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}>
           {this.renderTabView()}
         </View>
       </View>
