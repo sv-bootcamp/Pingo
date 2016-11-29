@@ -72,6 +72,7 @@ class Card extends Component {
       isSaved: this.props.dataSource.isSaved
     };
     this.renderImg = this.renderImg.bind(this);
+    this.toggleStar = this.toggleStar.bind(this);
   }
 
   componentDidMount() {
@@ -108,7 +109,7 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene,
+        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
         date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
       }}>
         <Image style={styles.CardImage}
@@ -124,6 +125,10 @@ class Card extends Component {
       this.setState({isSaved: true});
       this.props.saveEvent(this.props.dataSource.key);
     }
+  }
+
+  toggleStar() {
+    this.setState({isSaved: !this.state.isSaved});
   }
 
   renderCardText() {
