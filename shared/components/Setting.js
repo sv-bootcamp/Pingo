@@ -92,7 +92,11 @@ class Setting extends Component {
   renderSettingGreyBox(text, height) {
     return (
       <View style={[styles.settingGreyBox, {height: height}]}>
-        <Text style={{marginLeft: 16, position: 'absolute', bottom: 8}}>{text}</Text>
+        <Text style={[
+          {marginLeft: 16, position: 'absolute', bottom: 8, fontSize: 16},
+          styles.fontRobotoRegular]}>
+          {text}
+        </Text>
       </View>
     );
   }

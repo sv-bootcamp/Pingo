@@ -146,7 +146,6 @@ class MyPage extends Component {
   }
 
   handleTextLayout(evt) {
-    console.log(evt.nativeEvent.layout);
     this.setState({imageHeight: evt.nativeEvent.layout.height});
   }
 
