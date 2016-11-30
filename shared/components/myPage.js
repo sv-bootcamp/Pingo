@@ -287,13 +287,22 @@ class MyPage extends Component {
     }
     return null;
   }
+
   renderTabViewHeader(props) {
     return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
         <Text style={[styles.fontRobotoMedium, { fontSize: 14, color: '#2b2b2b' }]}>{routes.route.title}</Text>
       }
-      style={{backgroundColor: 'white', flex: 0.1}}
+      style={{
+        backgroundColor: 'white',
+        flex: 0.1,
+        ...Platform.select({
+          android: {
+            elevation: 1
+          }
+        })
+      }}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
