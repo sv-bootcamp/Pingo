@@ -3,8 +3,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Dimensions,
-  Platform
+  Dimensions
 } from 'react-native';
 import {FBLoginManager} from 'react-native-facebook-login';
 import { Actions } from 'react-native-router-flux';
@@ -31,13 +30,6 @@ const styles = {
     backgroundColor: '#e7e7e7',
     flexDirection: 'row',
     alignItems: 'center'
-  },
-  fontRobotoRegular: {
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Regular'
-      }
-    })
   },
   fontRobotoMedium: {
     fontWeight: 'bold'
@@ -111,7 +103,7 @@ class LoginFacebook extends Component {
             style={[styles.settingListBox, {backgroundColor: 'white'}]}
             onPress={this.handleLogout.bind(this)}
           >
-            <Text style={[styles.myPageTextLogInFacebook, styles.fontRobotoRegular]}>
+            <Text style={styles.myPageTextLogInFacebook}>
               Sign Out
             </Text>
           </TouchableOpacity>

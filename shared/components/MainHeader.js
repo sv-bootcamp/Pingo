@@ -74,6 +74,16 @@ const styles = {
         zIndex: 5
       }
     })
+  },
+  fontRobotoMedium: {
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
+      }
+    })
   }
 };
 
@@ -108,7 +118,7 @@ export default class MainHeader extends Component {
     return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
-        <Text style={{ margin: 0, color: '#8e8e8e' }}>{routes.route.title}</Text>
+        <Text style={[{ margin: 0, color: '#2b2b2b' }, styles.fontRobotoMedium]}>{routes.route.title}</Text>
       }
       style={{backgroundColor: 'white'}}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Platform, View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
 import {
   requestRefreshTokenFacebook,
