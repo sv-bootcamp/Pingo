@@ -49,9 +49,8 @@ const styles = {
   },
   textNothingFound: {
     alignSelf: 'center',
-    fontSize: 19,
-    color: '#8e8e8e',
-    top: 100
+    fontSize: 14,
+    color: '#8e8e8e'
   }
 };
 
@@ -78,7 +77,8 @@ class MyPage extends Component {
       }
     });
     this.state = {
-      imageHeight: 0
+      imageHeight: 0,
+      tabViewWrapperHeight: 0
     };
   }
 
@@ -147,6 +147,10 @@ class MyPage extends Component {
 
   handleTextLayout(evt) {
     this.setState({imageHeight: evt.nativeEvent.layout.height});
+  }
+
+  handleTabViewWrapperLayout(evt) {
+    this.setState({tabViewWrapperHeight: evt.nativeEvent.layout.height});
   }
 
   renderUserPicture() {
@@ -220,8 +224,16 @@ class MyPage extends Component {
   }
 
   renderTextNothingFound(text) {
+    const textHeight = 17;
+    const tabViewWrapperHeightRatio = 446.5;
+    const tabViewContentsHeightRatio = 405;
     return (
-      <Text style={styles.textNothingFound}>{text}</Text>
+      <Text style={[
+        styles.textNothingFound,
+        {top: this.state.tabViewWrapperHeight *
+        (tabViewContentsHeightRatio / 2) / tabViewWrapperHeightRatio - textHeight / 2}]}>
+        {text}
+      </Text>
     );
   }
 
@@ -296,7 +308,10 @@ class MyPage extends Component {
           headerText={'My Page'}
         />
         {this.renderUserBox()}
-        <View style={{backgroundColor: 'white', flex: 440, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}>
+        <View
+          style={{backgroundColor: 'white', flex: 440, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}
+          onLayout={this.handleTabViewWrapperLayout.bind(this)}
+        >
           {this.renderTabView()}
         </View>
         <LoadingLayout/>
