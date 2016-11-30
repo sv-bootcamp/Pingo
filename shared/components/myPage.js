@@ -159,7 +159,7 @@ class MyPage extends Component {
         <View style={{flex: 24}}/>
         <View style={{flex: 88}} onLayout={this.handleTextLayout.bind(this)}>
           <Image
-            style={{height: this.state.imageHeight, width: this.state.imageHeight}}
+            style={{height: this.state.imageHeight, width: this.state.imageHeight, borderRadius: 5}}
             source={(
                     this.props.profileImgUrl !== '' &&
                     this.props.token !== '' &&
