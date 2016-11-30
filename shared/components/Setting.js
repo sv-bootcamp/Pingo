@@ -26,7 +26,8 @@ const styles = {
   },
   settingTextList: {
     color: '#2b2b2b',
-    marginLeft: 16
+    marginLeft: 16,
+    fontSize: 16
   },
   settingTextRightButton: {
     fontSize: 16,
@@ -93,7 +94,7 @@ class Setting extends Component {
     return (
       <View style={[styles.settingGreyBox, {height: height}]}>
         <Text style={[
-          {marginLeft: 16, position: 'absolute', bottom: 8, fontSize: 16},
+          {marginLeft: 16, position: 'absolute', bottom: 8, fontSize: 14, color: '#8e8e8e'},
           styles.fontRobotoRegular]}>
           {text}
         </Text>
@@ -126,18 +127,18 @@ class Setting extends Component {
   renderSettingList() {
     return (
       <ScrollView style={{backgroundColor: '#e7e7e7', flex: 1}}>
-        {this.renderSettingGreyBox('Map', 42)}
+        {this.renderSettingGreyBox('Map', 35)}
         {this.renderSettingListBox('Viewing Preference', 'Recent', this.handleSettingRecent.bind(this))}
         {this.renderSettingListBox('AUTO Refresh Using WIFI Only', 'Off', this.handleSettingOff.bind(this))}
         {this.renderSettingListBox('City', 'San Francisco', this.handleSettingCityName.bind(this))}
         {(this.props.token !== 'guest' && this.props.token !== '') ?
           <View>
-            {this.renderSettingGreyBox('Account', 42)}
+            {this.renderSettingGreyBox('Account', 35)}
             {this.renderSettingListBox('Change Name', '', ()=>{})}
             {this.renderSettingListBox('Linked Account', '', ()=>{})}
           </View>
           : null}
-        <View style={[styles.settingGreyBox, {height: 24}]}/>
+        <View style={[styles.settingGreyBox, {height: 16}]}/>
         {this.renderSettingListBox('Privacy & Terms', '', ()=>{})}
         {this.renderSettingListBox('Help', '', ()=>{})}
         {this.renderSettingListBox('Send Feedback', '', ()=>{})}

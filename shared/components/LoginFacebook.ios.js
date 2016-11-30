@@ -32,16 +32,6 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center'
   },
-  settingTextList: {
-    color: '#2b2b2b',
-    marginLeft: 16
-  },
-  settingTextRightButton: {
-    fontSize: 16,
-    color: '#2c8cff',
-    alignSelf: 'flex-end',
-    marginRight: 16
-  },
   fontRobotoRegular: {
     ...Platform.select({
       android: {
@@ -50,18 +40,12 @@ const styles = {
     })
   },
   fontRobotoMedium: {
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Medium'
-      },
-      ios: {
-        fontWeight: 'bold'
-      }
-    })
+    fontWeight: 'bold'
   },
   myPageTextLogInFacebook: {
     color: '#2c8cff',
-    marginLeft: 16
+    marginLeft: 16,
+    fontSize: 16
   }
 };
 
@@ -122,7 +106,7 @@ class LoginFacebook extends Component {
     if (this.props.currentScene === 'setting') {
       return (
         <View>
-          <View style={[styles.settingGreyBox, {height: 24}]}/>
+          <View style={[styles.settingGreyBox, {height: 16}]}/>
           <TouchableOpacity
             style={[styles.settingListBox, {backgroundColor: 'white'}]}
             onPress={this.handleLogout.bind(this)}
