@@ -28,12 +28,10 @@ export default class Pingo extends Component {
           if (refreshToken === null) {
             return null;
           }
-          console.log(refreshToken);
           return requestRefreshTokenFacebook(refreshToken);
         })
         .then(() => {
           getAccessToken().then((accessToken) => {
-            console.log(accessToken);
             if (accessToken !== null) {
               this.props.setToken(accessToken);
               this.props.setCurrentScene('map');

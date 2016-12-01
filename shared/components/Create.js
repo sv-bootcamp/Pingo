@@ -22,6 +22,7 @@ import {
   API_KEY
 } from '../utils';
 import SmallHeader from '../components/smallHeader';
+import LoadingLayout from '../containers/loadingLayout';
 import { getAccessToken, getUserKey } from '../actions/authActions';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
@@ -227,6 +228,7 @@ class Create extends Component {
   postNewItem() {
     let dataFlag;
     getUserKey().then((userKey) => {
+      this.props.setLoadingLoginAnimating(true);
       return JSON.stringify({
         title: this.state.inputTextTitle,
         lat: this.props.currentLocation.latitude,
@@ -259,10 +261,12 @@ class Create extends Component {
     .then((response) => response.json())
     .then((rjson) => {
       console.log(rjson);
+      this.props.setLoadingLoginAnimating(false);
       this.props.setCurrentScene('map');
       Actions.pop({popNum: 2});
     })
     .catch((error) => {
+      this.props.setLoadingLoginAnimating(false);
       console.warn(error);
     });
   }
@@ -312,6 +316,7 @@ class Create extends Component {
     });
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
     getAccessToken().then((accessToken) => {
+      this.props.setLoadingLoginAnimating(true);
       fetch(address, {
         method: 'POST',
         headers: {
@@ -323,10 +328,12 @@ class Create extends Component {
       })
       .then((response) => response.json())
       .then(() => {
+        this.props.setLoadingLoginAnimating(false);
         this.props.setCurrentScene('map');
         Actions.pop({popNum: 2});
       })
       .catch((error) => {
+        this.props.setLoadingLoginAnimating(false);
         console.warn(error);
       });
     });
@@ -756,6 +763,7 @@ class Create extends Component {
             }
           </ScrollView>
         </View>
+        <LoadingLayout/>
       </View>
     );
   }
@@ -765,6 +773,7 @@ Create.propTypes = {
   pic: PropTypes.string,
   getAllItems: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
   currentLocation: PropTypes.any
