@@ -3,7 +3,7 @@ import {
   queryBuilder, createQueryObject} from '../utils';
 import { getAccessToken } from './authActions';
 import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, getAuthHeaders } from '../utils';
-import { turnOffLoadingAnimation } from '../components/map';
+import { setLoadingLoginAnimating } from './userActions';
 
 export const onLocationChange = (region) => {
   return {
@@ -37,7 +37,8 @@ export const getMapItems = (zoomLevel, lat, long) => {
         return response.json();
       })
       .then(json => {
-        turnOffLoadingAnimation();
+        console.log(json);
+        dispatch(setLoadingLoginAnimating(false));
         return dispatch(receiveItems(json));
       })
       .catch((error) => console.log(error));

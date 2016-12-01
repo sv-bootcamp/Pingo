@@ -58,11 +58,6 @@ const styles = StyleSheet.create({
   }
 });
 
-// todo: change this later. inappropriate way to do it.
-export const turnOffLoadingAnimation = () => {
-  this.props.setLoadingLoginAnimating(false);
-};
-
 export default class Map extends Component {
   constructor(props) {
     super(props);
@@ -115,8 +110,8 @@ export default class Map extends Component {
 
   componentWillReceiveProps(props) {
     if (props.items.length !== this.state.itemLength) {
+      console.log("adsfasdfdsfsfdreceivingprops");
       this.setState({items: props.items});
-      this.props.setLoadingLoginAnimating(true);
     }
   }
 
@@ -179,6 +174,7 @@ export default class Map extends Component {
   }
 
   setCurrentPosition() {
+    console.log('setting cur pos');
     navigator.geolocation.getCurrentPosition((position) => {
       const newLocation = {
         latitude: position.coords.latitude,
@@ -219,6 +215,7 @@ export default class Map extends Component {
   }
 
   onLocationChange(region) {
+    console.log('location change');
     this.getAddressData();
     const needToFetch = () => {
       if (!this.prevZoom || this.prevZoom !== Math.round(this.props.zoomLevel * 100) / 100) {
@@ -239,19 +236,23 @@ export default class Map extends Component {
     if (!needToFetch()) {
       return;
     }
+    console.log("wtf");
     this.props.setLoadingLoginAnimating(true);
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
       this.props.currentLocation.longitude)
     .then(() => {
+      console.log("adsf");
       this.updatePrevValues();
       this.props.onLocationChange(region);
       this.setState({itemLength: this.props.items.length});
       this.props.setLoadingLoginAnimating(false);
     });
+    console.log("asdfsdfsfsfd");
   }
 
   onMapClick() {
+    console.log('map click');
     const curTime = new Date();
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
       this.props.hideMapCard();
