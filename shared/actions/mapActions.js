@@ -26,7 +26,6 @@ export const getMapItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('lng', long));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', true));
-    console.log("Adf");
     return await getAccessToken().then(async (accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
@@ -35,7 +34,6 @@ export const getMapItems = (zoomLevel, lat, long) => {
         headers
       })
       .then(response => {
-        console.log(response);
         return response.json();
       })
       .then(json => {
