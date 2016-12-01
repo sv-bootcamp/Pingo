@@ -49,9 +49,8 @@ const styles = {
   },
   textNothingFound: {
     alignSelf: 'center',
-    fontSize: 19,
-    color: '#8e8e8e',
-    top: 100
+    fontSize: 14,
+    color: '#8e8e8e'
   }
 };
 
@@ -78,7 +77,8 @@ class MyPage extends Component {
       }
     });
     this.state = {
-      imageHeight: 0
+      imageHeight: 0,
+      tabViewWrapperHeight: 0
     };
   }
 
@@ -146,8 +146,11 @@ class MyPage extends Component {
   }
 
   handleTextLayout(evt) {
-    console.log(evt.nativeEvent.layout);
     this.setState({imageHeight: evt.nativeEvent.layout.height});
+  }
+
+  handleTabViewWrapperLayout(evt) {
+    this.setState({tabViewWrapperHeight: evt.nativeEvent.layout.height});
   }
 
   renderUserPicture() {
@@ -156,7 +159,7 @@ class MyPage extends Component {
         <View style={{flex: 24}}/>
         <View style={{flex: 88}} onLayout={this.handleTextLayout.bind(this)}>
           <Image
-            style={{height: this.state.imageHeight, width: this.state.imageHeight}}
+            style={{height: this.state.imageHeight, width: this.state.imageHeight, borderRadius: 5}}
             source={(
                     this.props.profileImgUrl !== '' &&
                     this.props.token !== '' &&
@@ -221,8 +224,16 @@ class MyPage extends Component {
   }
 
   renderTextNothingFound(text) {
+    const textHeight = 17;
+    const tabViewWrapperHeightRatio = 446.5;
+    const tabViewContentsHeightRatio = 405;
     return (
-      <Text style={styles.textNothingFound}>{text}</Text>
+      <Text style={[
+        styles.textNothingFound,
+        {top: this.state.tabViewWrapperHeight *
+        (tabViewContentsHeightRatio / 2) / tabViewWrapperHeightRatio - textHeight / 2}]}>
+        {text}
+      </Text>
     );
   }
 
@@ -276,13 +287,22 @@ class MyPage extends Component {
     }
     return null;
   }
+
   renderTabViewHeader(props) {
     return (<TabBarTop
       {...props}
       renderLabel={(routes) =>
         <Text style={[styles.fontRobotoMedium, { fontSize: 14, color: '#2b2b2b' }]}>{routes.route.title}</Text>
       }
-      style={{backgroundColor: 'white', flex: 0.1}}
+      style={{
+        backgroundColor: 'white',
+        flex: 0.1,
+        ...Platform.select({
+          android: {
+            elevation: 1
+          }
+        })
+      }}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
@@ -297,7 +317,10 @@ class MyPage extends Component {
           headerText={'My Page'}
         />
         {this.renderUserBox()}
-        <View style={{backgroundColor: 'white', flex: 440, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}>
+        <View
+          style={{backgroundColor: 'white', flex: 440, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}
+          onLayout={this.handleTabViewWrapperLayout.bind(this)}
+        >
           {this.renderTabView()}
         </View>
         <LoadingLayout/>

@@ -11,7 +11,7 @@ export const ENDPOINT_GRANT = '/api/auth/grant';
 export const ENDPOINT_REFRESH = '/api/auth/refresh';
 export const ENDPOINT_SAVEDPOST = '/api/users/savedposts';
 export const ENDPOINT_REPORT = '/api/reports';
-export const API_KEY = 'AIzaSyBQj4eFHtV1G9mTKUzAggz384jo4h7oFhg';
+export const API_KEY = 'AIzaSyAyPPoj64FoqPCqFTDQBkR9aNM493v_xH4';
 export const API_GEODATA = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 export const DEFAULT_HEADERS = {
