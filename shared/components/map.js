@@ -84,7 +84,6 @@ export default class Map extends Component {
   }
 
   componentWillMount() {
-    console.log('componentWillMount');
     if (Platform.OS === 'android') {
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
         message: '<h2>Use Location ?</h2>' +
