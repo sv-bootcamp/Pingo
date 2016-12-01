@@ -113,7 +113,7 @@ class Card extends Component {
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
-        date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
+          date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>

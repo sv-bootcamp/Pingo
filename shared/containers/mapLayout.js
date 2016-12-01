@@ -2,6 +2,7 @@ import Map from '../components/map';
 import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard, getZoomLevel } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setCurrentCity, setUserLocation } from '../actions/mapActions';
+import { setLoadingLoginAnimating } from '../actions/userActions';
 import { connect } from 'react-redux';
 
 const getCategorizedItems = (items, categoryFilter) => {
@@ -59,6 +60,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setUserLocation: (userLocation) => {
       return dispatch(setUserLocation(userLocation));
+    },
+    setLoadingLoginAnimating: (loadingLoginAnimating) => {
+      return dispatch(setLoadingLoginAnimating(loadingLoginAnimating));
     }
   };
 };

@@ -3,6 +3,7 @@ import {Animated, Easing, StyleSheet, View, Text, Image, Dimensions, Platform} f
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
+import LoadingLayout from '../containers/loadingLayout';
 import MapButton from './MapButton';
 import eventPng from '../resources/marker/event_small.png';
 import facilityPng from '../resources/marker/facility_small.png';
@@ -78,7 +79,8 @@ export default class Map extends Component {
       buttonTranslateY: new Animated.Value(0),
       userLocationEnabled: false,
       itemLength: 0,
-      items: []
+      items: [],
+      mapViewHeight: 0
     };
     this.watchID = null;
   }
@@ -109,6 +111,7 @@ export default class Map extends Component {
   componentWillReceiveProps(props) {
     if (props.items.length !== this.state.itemLength) {
       this.setState({items: props.items});
+      this.props.setLoadingLoginAnimating(true);
     }
   }
 
@@ -231,12 +234,16 @@ export default class Map extends Component {
     if (!needToFetch()) {
       return;
     }
+    this.props.setLoadingLoginAnimating(true);
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
-    this.updatePrevValues();
-    this.props.onLocationChange(region);
-    this.setState({itemLength: this.props.items.length});
+      this.props.currentLocation.longitude)
+    .then(() => {
+      this.updatePrevValues();
+      this.props.onLocationChange(region);
+      this.setState({itemLength: this.props.items.length});
+      this.props.setLoadingLoginAnimating(false);
+    });
   }
 
   onMapClick() {
@@ -289,6 +296,10 @@ export default class Map extends Component {
     return (this.props.selectedItem && this.props.selectedItem.title === undefined);
   }
 
+  handleViewLayout(evt) {
+    this.setState({mapViewHeight: evt.nativeEvent.layout.height});
+  }
+
   // todo: use centerOffset for IOS
   render() {
     const cardTranslateY = this.state.cardTranslateY.interpolate({
@@ -300,7 +311,7 @@ export default class Map extends Component {
       outputRange: [0, 199 + 16]
     });
     return (
-      <View style ={styles.container}>
+      <View style ={styles.container} onLayout={this.handleViewLayout.bind(this)}>
         <MapView
           ref={ref => {
             this.map = ref;
@@ -399,6 +410,9 @@ export default class Map extends Component {
               />
             </Animated.View>
         }
+        <LoadingLayout
+          customWrapperHeight={this.state.mapViewHeight}
+        />
       </View>
     );
   }
@@ -417,6 +431,7 @@ Map.propTypes = {
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
   getZoomLevel: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string,

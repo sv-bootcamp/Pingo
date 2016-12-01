@@ -32,7 +32,6 @@ export const signupFacebookUser = async (FacebookToken) => {
   })
   .then((response) => response.json())
   .then((rjson) => {
-    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
     setUserKey(rjson.userKey);
@@ -56,7 +55,6 @@ export const signupGuestUser = async () => {
   })
   .then((response) => response.json())
   .then((rjson) => {
-    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
     setUserKey(rjson.userKey);
@@ -84,7 +82,6 @@ export const grantAnonymousUser = async (secret, userKey) => {
       body
     })
     .then((response) => {
-      console.log(response);
       if (response.status === 200) {
         return response.json();
       } else {
@@ -92,7 +89,6 @@ export const grantAnonymousUser = async (secret, userKey) => {
       }
     })
     .then((rjson) => {
-      console.log(rjson);
       if (rjson) {
         setAccessToken(rjson.accessToken);
         setRefreshToken(rjson.refreshToken);
@@ -123,7 +119,6 @@ export const grantFacebookUser = async (facebookToken) => {
       body
     })
     .then((response) => {
-      console.log(response);
       if (response.status === 200) {
         return response.json();
       } else {
@@ -131,12 +126,9 @@ export const grantFacebookUser = async (facebookToken) => {
       }
     })
     .then((rjson) => {
-      console.log(rjson);
       if (rjson) {
-        console.log('setting tokens after facebook grant');
         getUserKey().then((userKey) => {
           if (userKey === null) {
-            console.log('userkey not found. signing up again');
             return signupFacebookUser(facebookToken);
           } else {
             setAccessToken(rjson.accessToken);
@@ -250,7 +242,6 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
     }
   })
   .then((rjson) => {
-    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
   })
@@ -288,7 +279,6 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
     }
   })
   .then((rjson) => {
-    console.log(rjson);
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
   })

@@ -19,16 +19,16 @@ export const receiveItems = (json) => {
 };
 
 export const getMapItems = (zoomLevel, lat, long) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     const queries = [];
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', long));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', true));
-    getAccessToken().then((accessToken) => {
+    return await getAccessToken().then(async (accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
+      return await fetch(address, {
         method: 'GET',
         headers
       })
