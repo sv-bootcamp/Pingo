@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import SmallHeader from './smallHeader';
 import {
+  Alert,
   View,
   Text,
   ScrollView,
@@ -8,7 +9,8 @@ import {
   Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import LoginFacebookLayout from '../containers/loginFacebookLayout';
+import { removeUserToken, removeLoginType } from '../actions/authActions';
+import {FBLoginManager} from 'react-native-facebook-login';
 
 const styles = {
   settingListBox: {
@@ -64,6 +66,7 @@ class Setting extends Component {
     this.renderSettingList = this.renderSettingList.bind(this);
     this.renderSignOut = this.renderSignOut.bind(this);
     this.renderGuestView = this.renderGuestView.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleButtonPrev() {
@@ -102,9 +105,43 @@ class Setting extends Component {
     );
   }
 
+  handleLogout() {
+    FBLoginManager.logout((error, data) => {
+      if (!error) {
+        this.props.setToken('');
+        removeUserToken();
+        removeLoginType();
+      } else {
+        console.log(error, data);
+      }
+    });
+  }
+
   renderSignOut() {
     return (
-      <LoginFacebookLayout/>
+      <View>
+        <View style={[styles.settingGreyBox, {height: 16}]}/>
+        <TouchableOpacity
+          style={[styles.settingListBox, {backgroundColor: 'white'}]}
+          onPress={this.handleAlertSignOut.bind(this)}
+        >
+          <Text style={styles.myPageTextLogInFacebook}>
+            Sign Out
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  handleAlertSignOut() {
+    const msg = 'Are you sure you want to sign out?';
+    Alert.alert(
+      'Sign out of Pingo?',
+      msg,
+      [
+        {text: 'Cancel'},
+        {text: 'Sign out', onPress: () => this.handleLogout()}
+      ]
     );
   }
 
@@ -166,6 +203,7 @@ class Setting extends Component {
 
 Setting.propTypes = {
   setCurrentScene: PropTypes.func,
+  setToken: PropTypes.func,
   token: PropTypes.string
 };
 

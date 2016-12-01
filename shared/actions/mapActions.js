@@ -3,6 +3,7 @@ import {
   queryBuilder, createQueryObject} from '../utils';
 import { getAccessToken } from './authActions';
 import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, getAuthHeaders } from '../utils';
+import { turnOffLoadingAnimation } from '../components/map';
 
 export const onLocationChange = (region) => {
   return {
@@ -25,6 +26,7 @@ export const getMapItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('lng', long));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', true));
+    console.log("Adf");
     return await getAccessToken().then(async (accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
@@ -33,11 +35,13 @@ export const getMapItems = (zoomLevel, lat, long) => {
         headers
       })
       .then(response => {
+        console.log(response);
         return response.json();
       })
-      .then(json =>
-        dispatch(receiveItems(json))
-      )
+      .then(json => {
+        turnOffLoadingAnimation();
+        return dispatch(receiveItems(json));
+      })
       .catch((error) => console.log(error));
     });
   };

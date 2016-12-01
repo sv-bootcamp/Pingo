@@ -58,6 +58,11 @@ const styles = StyleSheet.create({
   }
 });
 
+// todo: change this later. inappropriate way to do it.
+export const turnOffLoadingAnimation = () => {
+  this.props.setLoadingLoginAnimating(false);
+};
+
 export default class Map extends Component {
   constructor(props) {
     super(props);

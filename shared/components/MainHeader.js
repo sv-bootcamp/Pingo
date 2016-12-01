@@ -126,6 +126,7 @@ export default class MainHeader extends Component {
   }
 
   handleSwitchButton() {
+    this.props.setLoadingLoginAnimating(false);
     if (this.props.currentScene === 'map') {
       this.props.showListCard();
       this.props.setCurrentScene('list');
@@ -145,6 +146,7 @@ export default class MainHeader extends Component {
   }
 
   handleButtonMyPage() {
+    this.props.setLoadingLoginAnimating(false);
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
@@ -229,6 +231,7 @@ MainHeader.propTypes = {
   categorizeItems: PropTypes.func,
   setTabViewIndex: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   tabviewIndex: PropTypes.any,
   tabviewRoutes: PropTypes.any,
   currentScene: PropTypes.string,

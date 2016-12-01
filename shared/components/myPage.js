@@ -191,7 +191,7 @@ class MyPage extends Component {
               this.props.token !== '' &&
               this.props.token !== 'guest') ?
               this.props.userName :
-              'guest'
+              'Guest'
             }
           </Text>
         </View>
