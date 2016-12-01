@@ -245,7 +245,6 @@ class Create extends Component {
       return getAccessToken();
     })
     .then((accessToken) => {
-      // const address = `https://goober.herokuapp.com${ENDPOINT_ITEM}`;
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}`;
       return fetch(address, {
         method: 'POST',
@@ -274,8 +273,8 @@ class Create extends Component {
       fetch(uri)
       .then((response) => response.json())
       .then((responseJson) => {
-        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"','');
-        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"','');
+        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"', '');
+        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"', '');
         this.setState({streetName: streetName, streetNumber: streetNumber});
       });
     } catch (error) {
@@ -311,8 +310,6 @@ class Create extends Component {
       caption: caption,
       image: image
     });
-
-    // const address = `https://goober.herokuapp.com${ENDPOINT_IMAGE}`;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
     getAccessToken().then((accessToken) => {
       fetch(address, {
@@ -561,40 +558,43 @@ class Create extends Component {
   }
 
   // todo: should limit item.title length if it is too long
+  // todo: current View height is not stable towards various devices.
   renderAroundLocations() {
     return (
-      this.props.dataSource.map(item => (
-        <TouchableOpacity
-          style={[styles.btnLocation, {borderColor: (this.state.selectItemKey === item.key) ? '#8e8e8e' : '#e7e7e7'}]}
-          onPress={() => {
-            this.setState({
-              Done: true,
-              addingExistingLocation: true,
-              selectItemKey: item.key,
-              selectUserKey: item.userKey
-            });
-          }}>
-          <View style={{flexDirection: 'row', flex: 1}}>
-            <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
-              <Text style={[styles.textItemAddress, {
-                color: (this.state.selectItemKey === item.key) ? '#2b2b2b' : '#8e8e8e'
-              }]}>{item.address.substring(0, 18)}</Text>
-              <Text style={[styles.textItemTitle, {
-                color: (this.state.selectItemKey === item.key) ? '#2b2b2b' : '#8e8e8e'
-              }]}>{item.title}</Text>
+      <View style={{flex: 1, height: this.props.dataSource.length * (75 + 8) + 30}}>
+        {this.props.dataSource.map(item => (
+          <TouchableOpacity
+            style={[styles.btnLocation, {borderColor: (this.state.selectItemKey === item.key) ? '#8e8e8e' : '#e7e7e7'}]}
+            onPress={() => {
+              this.setState({
+                Done: true,
+                addingExistingLocation: true,
+                selectItemKey: item.key,
+                selectUserKey: item.userKey
+              });
+            }}>
+            <View style={{flexDirection: 'row', flex: 1}}>
+              <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
+                <Text style={[styles.textItemAddress, {
+                  color: (this.state.selectItemKey === item.key) ? '#2b2b2b' : '#8e8e8e'
+                }]}>{item.address.substring(0, 18)}</Text>
+                <Text style={[styles.textItemTitle, {
+                  color: (this.state.selectItemKey === item.key) ? '#2b2b2b' : '#8e8e8e'
+                }]}>{item.title}</Text>
+              </View>
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                {this.state.selectItemKey === item.key ?
+                  <Image source={ImgBtnCheck} style={styles.btnCheck}/>
+                  :
+                  <Text style={styles.textItemUnit}>
+                    {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
+                  </Text>
+                }
+              </View>
             </View>
-            <View style={{flex: 1, justifyContent: 'center'}}>
-              {this.state.selectItemKey === item.key ?
-                <Image source={ImgBtnCheck} style={styles.btnCheck}/>
-                :
-                <Text style={styles.textItemUnit}>
-                  {this.getDistanceFromLatLonInKm(item.lat, item.lng)} km
-                </Text>
-              }
-            </View>
-          </View>
-        </TouchableOpacity>
-      ))
+          </TouchableOpacity>
+        ))}
+      </View>
     );
   }
 

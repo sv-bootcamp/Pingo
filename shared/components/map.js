@@ -31,12 +31,19 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  buttonSection: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginLeft: 16,
-    marginRight: 16,
-    marginBottom: 16
+  buttonLocationSection: {
+    position: 'absolute',
+    left: 16,
+    bottom: 16,
+    height: 48,
+    width: 48
+  },
+  buttonCameraSection: {
+    position: 'absolute',
+    right: 16,
+    bottom: 16,
+    height: 48,
+    width: 48
   },
   fontRobotoMedium: {
     ...Platform.select({
@@ -291,7 +298,7 @@ export default class Map extends Component {
     });
     const buttonTranslateY = this.state.buttonTranslateY.interpolate({
       inputRange: [0, 1],
-      outputRange: [199, 0]
+      outputRange: [0, 199 + 16]
     });
     return (
       <View style ={styles.container}>
@@ -349,28 +356,33 @@ export default class Map extends Component {
             />
           : null}
         </MapView>
-        {(this.checkMarkerClicked()) ?
-          <View style={styles.buttonSection}>
+        {
+          (this.checkMarkerClicked()) ?
+          <View style={styles.buttonLocationSection}>
             <MapButton
               imageSource={'position'}
               handleOnPress={this.handleLocationButton.bind(this)}/>
+          </View>
+          :
+          <Animated.View style={[styles.buttonLocationSection, {bottom: buttonTranslateY}]}>
+            <MapButton
+              imageSource={'position'}
+              handleOnPress={this.handleLocationButton.bind(this)}/>
+          </Animated.View>
+        }
+        {
+          (this.checkMarkerClicked()) ?
+          <View style={styles.buttonCameraSection}>
             <MapButton
               imageSource={'camera'}
               handleOnPress={this.handleCameraButton.bind(this)}/>
           </View>
           :
-          <View style={styles.buttonSection}>
-            <Animated.View style={{transform: [{translateY: buttonTranslateY}]}}>
-              <MapButton
-                imageSource={'position'}
-                handleOnPress={this.handleLocationButton.bind(this)}/>
-            </Animated.View>
-            <Animated.View style={{transform: [{translateY: buttonTranslateY}]}}>
-              <MapButton
-                imageSource={'camera'}
-                handleOnPress={this.handleCameraButton.bind(this)}/>
-            </Animated.View>
-          </View>
+          <Animated.View style={[styles.buttonCameraSection, {bottom: buttonTranslateY}]}>
+            <MapButton
+              imageSource={'camera'}
+              handleOnPress={this.handleCameraButton.bind(this)}/>
+          </Animated.View>
         }
         {
           (this.checkMarkerClicked()) ? null :
