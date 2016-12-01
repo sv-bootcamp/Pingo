@@ -69,12 +69,15 @@ export default class Map extends Component {
       markerSelect: '',
       cardTranslateY: new Animated.Value(0),
       buttonTranslateY: new Animated.Value(0),
-      userLocationEnabled: false
+      userLocationEnabled: false,
+      itemLength: 0,
+      items: []
     };
     this.watchID = null;
   }
 
   componentWillMount() {
+    console.log('componentWillMount');
     if (Platform.OS === 'android') {
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
         message: '<h2>Use Location ?</h2>' +
@@ -94,6 +97,12 @@ export default class Map extends Component {
       .catch((error) => {
         console.log(error.message);
       });
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.items.length !== this.state.itemLength) {
+      this.setState({items: props.items});
     }
   }
 
@@ -221,6 +230,7 @@ export default class Map extends Component {
       this.props.currentLocation.longitude);
     this.updatePrevValues();
     this.props.onLocationChange(region);
+    this.setState({itemLength: this.props.items.length});
   }
 
   onMapClick() {
@@ -294,7 +304,7 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
-          {(!this.props.items) ? null : this.props.items.map(item => (
+          {(!this.state.items) ? null : this.props.items.map(item => (
             <MapView.Marker
               key={item.key}
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
