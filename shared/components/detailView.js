@@ -8,6 +8,7 @@ import IMG_BUTTON_RIGHT from '../resources/arrow_right/drawable-xxxhdpi/arrow.pn
 import IMG_BUTTON_FLAG from '../resources/btn_flag/drawable-xxxhdpi/btn_flag.png';
 import {Actions} from 'react-native-router-flux';
 import TimerMixin from 'react-timer-mixin';
+import { getAccessToken, getUserInformation } from '../actions/authActions';
 
 const styles = {
   wrapper: {
@@ -59,13 +60,9 @@ const styles = {
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Regular'
-      },
-      ios: {
-        fontWeight: 'bold'
       }
     }),
-    fontSize: 14,
-    fontWeight: 'normal'
+    fontSize: 14
   }
 };
 
@@ -80,7 +77,11 @@ export default class DetailView extends Component {
       messageVisible: false,
       currentReport: '',
       data: [],
-      currentIndex: 0
+      currentIndex: 0,
+      name: 'name',
+      profileImgUrl: '',
+      profileImageHeight: 0,
+      profileImageWidth: 0
     };
     this.renderDate = this.renderDate.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -93,6 +94,18 @@ export default class DetailView extends Component {
     this.renderSlide = this.renderSlide.bind(this);
     this.renderInfoSlide = this.renderInfoSlide.bind(this);
     this.firstTry = true;
+  }
+
+  componentDidMount() {
+    getAccessToken().then((accessToken) => {
+      return getUserInformation(this.props.dataSource.userKey, accessToken);
+    })
+    .then((rjson) => {
+      this.setState({
+        name: rjson.name,
+        profileImgUrl: rjson.profileImgUrl
+      });
+    });
   }
 
   toggleModalVisible() {
@@ -278,11 +291,22 @@ export default class DetailView extends Component {
           </View>
           <View style = {{flex: 94}}/>
           <View style = {{flex: 40, flexDirection: 'row'}}>
-            <View style = {{flex: 32, backgroundColor: 'blue', borderRadius: 3}}/>
+            <View
+              style = {{flex: 32}}
+              onLayout={(evt) => this.setState({
+                profileImageHeight: evt.nativeEvent.layout.height,
+                profileImageWidth: evt.nativeEvent.layout.width
+              })}
+            >
+              <Image
+                style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3}}
+                source={{uri: this.state.profileImgUrl}}
+              />
+            </View>
             <View style = {{flex: 7}}/>
             <View style = {{flex: 305, justifyContent: 'center'}}>
               <View style = {{flex: 14}}>
-                <Text style = {styles.name}>Name</Text>
+                <Text style = {styles.name}>{this.state.name}</Text>
               </View>
               <View style = {{flex: 4}}/>
               <View style = {{flex: 14}}>
@@ -304,11 +328,21 @@ export default class DetailView extends Component {
           (this.state.isClicked) ? <View style = {{flex: 68, backgroundColor: 'black'}}/> :
           <View style = {{flex: 68, flexDirection: 'row'}}>
             <View style = {{flex: 16}}/>
-            <View style = {{flex: 32}}/>
+            <View
+              style = {{flex: 32, justifyContent: 'center'}}
+              onLayout={(evt) => this.setState({
+                profileImageWidth: evt.nativeEvent.layout.width
+              })}
+            >
+              <Image
+                style={{height: this.state.profileImageWidth, width: this.state.profileImageWidth, borderRadius: 3}}
+                source={{uri: this.state.profileImgUrl}}
+              />
+            </View>
             <View style = {{flex: 274}}>
               <View style = {{flex: 16}}/>
               <View style = {{flex: 14}}>
-                <Text style = {styles.name}> Name </Text>
+                <Text style = {styles.name}> {this.state.name} </Text>
               </View>
               <View style = {{flex: 4}}/>
               <View style = {{flex: 14}}>
