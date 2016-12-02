@@ -38,7 +38,7 @@ export const queryBuilder = (arr) => {
   return `?${queryString}`;
 };
 
-export const RESTUtil = {
+export const HTTPUtil = {
   get: (address, headers) => {
     return fetch(address, {
       method: 'GET',

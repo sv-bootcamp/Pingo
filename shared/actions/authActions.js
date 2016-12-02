@@ -9,7 +9,7 @@ import {
   ENDPOINT_REFRESH,
   DEFAULT_HEADERS,
   getAuthHeaders,
-  RESTUtil
+  HTTPUtil
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
@@ -25,7 +25,7 @@ const REFRESH_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
 const USER_INFO_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_USER}`;
 export const RESTManager = {
   signup: (body) => {
-    return RESTUtil.post(SIGNUP_ADDRESS, DEFAULT_HEADERS, body);
+    return HTTPUtil.post(SIGNUP_ADDRESS, DEFAULT_HEADERS, body);
   },
   signupFacebook: (facebookToken) => {
     return RESTManager.signup({
@@ -39,7 +39,7 @@ export const RESTManager = {
     });
   },
   grant: (body) => {
-    return RESTUtil.post(GRANT_ADDRESS, DEFAULT_HEADERS, body);
+    return HTTPUtil.post(GRANT_ADDRESS, DEFAULT_HEADERS, body);
   },
   grantFacebook: (facebookToken) => {
     return RESTManager.grant({
@@ -55,12 +55,12 @@ export const RESTManager = {
     });
   },
   refresh: (body) => {
-    return RESTUtil.post(REFRESH_ADDRESS, DEFAULT_HEADERS, body);
+    return HTTPUtil.post(REFRESH_ADDRESS, DEFAULT_HEADERS, body);
   },
   getUserInfo: (userKey, accessToken) => {
     const address = `${USER_INFO_ADDRESS}/${userKey}`;
     const header = getAuthHeaders(accessToken);
-    return RESTUtil.get(address, header);
+    return HTTPUtil.get(address, header);
   }
 };
 
