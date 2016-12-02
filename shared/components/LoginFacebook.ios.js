@@ -54,6 +54,7 @@ class LoginFacebook extends Component {
     FBLoginManager.login((error, data) => {
       if (!error) {
         this.props.setLoadingLoginAnimating(true);
+        setLoginType('facebook');
         grantFacebookUser(data.credentials.token).then(() => {
           this.props.setToken('facebook');
           this.props.setLoadingLoginAnimating(false);
