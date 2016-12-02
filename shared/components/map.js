@@ -94,8 +94,7 @@ export default class Map extends Component {
         ok: 'YES',
         cancel: 'NO'
       })
-      .then((success) => {
-        console.log(success);
+      .then(() => {
         this.setCurrentPosition();
         this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
         this.props.getMapItems(this.props.zoomLevel,
@@ -109,8 +108,10 @@ export default class Map extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.items.length !== this.state.itemLength) {
-      this.setState({items: props.items});
+    if (props.items) {
+      if (props.items.length !== this.state.itemLength) {
+        this.setState({items: props.items});
+      }
     }
   }
 
@@ -320,7 +321,7 @@ export default class Map extends Component {
           region={this.props.currentLocation}
           onPress={this.onMapClick}
         >
-          {(!this.state.items) ? null : this.props.items.map(item => (
+          {(!this.state.items) ? null : this.state.items.map(item => (
             <MapView.Marker
               key={item.key}
               style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}

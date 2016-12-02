@@ -30,7 +30,12 @@ export const signupFacebookUser = async (FacebookToken) => {
     headers,
     body
   })
-  .then((response) => response.json())
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    }
+    throw new Error(response.status);
+  })
   .then((rjson) => {
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
@@ -107,8 +112,6 @@ export const grantFacebookUser = async (facebookToken) => {
   try {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
     const headers = DEFAULT_HEADERS;
-    console.log(address);
-    console.log('fbtoken ' + facebookToken);
     const body = JSON.stringify({
       'grantType': 'facebook',
       'facebookToken': facebookToken
@@ -122,25 +125,22 @@ export const grantFacebookUser = async (facebookToken) => {
       if (response.status === 200) {
         return response.json();
       } else {
-        return signupFacebookUser(facebookToken);
+        return null;
       }
     })
     .then((rjson) => {
       if (rjson) {
-        getUserKey().then((userKey) => {
-          if (userKey === null) {
-            return signupFacebookUser(facebookToken);
-          } else {
-            setAccessToken(rjson.accessToken);
-            setRefreshToken(rjson.refreshToken);
-            setUserKey(rjson.userKey);
-          }
-        });
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+        setUserKey(rjson.userKey);
+      } else {
+        return signupFacebookUser(facebookToken);
       }
     })
     .then()
     .catch((error) => {
       console.log(error);
+      throw new Error();
     });
   } catch (error) {
     console.log(error);
@@ -149,7 +149,7 @@ export const grantFacebookUser = async (facebookToken) => {
 
 const setAccessToken = async (accessToken) => {
   try {
-    if (accessToken !== null) {
+    if (accessToken) {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`, accessToken);
     }
   } catch (error) {
@@ -159,7 +159,7 @@ const setAccessToken = async (accessToken) => {
 
 const setRefreshToken = async (refreshToken) => {
   try {
-    if (refreshToken !== null) {
+    if (refreshToken) {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`, refreshToken);
     }
   } catch (error) {
@@ -169,7 +169,7 @@ const setRefreshToken = async (refreshToken) => {
 
 const setUserKey = async (userKey) => {
   try {
-    if (userKey !== null) {
+    if (userKey) {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`, userKey);
     }
   } catch (error) {
@@ -179,7 +179,7 @@ const setUserKey = async (userKey) => {
 
 const setSecretToken = async (secret) => {
   try {
-    if (secret !== null) {
+    if (secret) {
       await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`, secret);
     }
   } catch (error) {

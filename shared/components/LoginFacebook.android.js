@@ -9,7 +9,8 @@ import {
   grantFacebookUser,
   getLoginType,
   setLoginType,
-  removeLoginType
+  removeLoginType,
+  signupGuestUser
 } from '../actions/authActions';
 import { Actions } from 'react-native-router-flux';
 
@@ -56,11 +57,9 @@ class LoginFacebook extends Component {
             if (refreshToken === null) {
               return;
             }
-            console.log(refreshToken);
             requestRefreshTokenFacebook(refreshToken);
           });
           getAccessToken().then((accessToken) => {
-            console.log(accessToken);
             if (accessToken !== null) {
               this.props.setToken(accessToken);
               this.props.setCurrentScene('map');
@@ -90,23 +89,22 @@ class LoginFacebook extends Component {
         onLogin={(data) => {
           this.props.setLoadingLoginAnimating(true);
           setLoginType('facebook');
-          console.log(data);
           grantFacebookUser(data.credentials.token).then(() => {
             this.props.setToken('facebook');
-            console.log(this.props.currentScene);
             if (this.props.currentScene === 'initialScene') {
               this.props.setCurrentScene('map');
               this.props.setLoadingLoginAnimating(false);
               Actions.map({type: 'replace'});
             }
-          });
+          }).catch(() => this.props.setLoadingLoginAnimating(false));
         }}
         onLoginFound={()=>{}}
         onLoginNotFound={()=>{}}
         onLogout={() => {
           this.props.setToken('');
-          removeUserToken();
-          removeLoginType();
+          removeUserToken()
+          .then(() => removeLoginType())
+          .then(() => signupGuestUser());
           // todo : handle accessToken for getting items after logout
         }}
         onCancel={()=>{}}

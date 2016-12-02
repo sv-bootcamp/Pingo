@@ -239,7 +239,10 @@ class MyPage extends Component {
 
   renderTabViewContents({ route }) {
     if (route.key === '2') {
-      if (this.props.token !== '' && this.props.token !== 'guest' && this.props.savedPosts.length !== 0) {
+      if (this.props.token !== '' &&
+        this.props.token !== 'guest' &&
+        this.props.savedPosts.length !== 0 &&
+        !this.props.savedPosts.error) {
         let dataSource = this.props.savedPosts.map((post) => {
           return (
             Object.assign(post, {isSaved: true})
@@ -263,7 +266,11 @@ class MyPage extends Component {
       );
     }
     if (route.key === '1') {
-      if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
+      if (this.props.token !== '' &&
+        this.props.token !== 'guest' &&
+        this.props.createdPosts &&
+        this.props.createdPosts.length !== 0
+        && !this.props.createdPosts.error) {
         return (
           <ListView
             dataSource={

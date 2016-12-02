@@ -37,7 +37,6 @@ export const getMapItems = (zoomLevel, lat, long) => {
         return response.json();
       })
       .then(json => {
-        console.log(json);
         dispatch(setLoadingLoginAnimating(false));
         return dispatch(receiveItems(json));
       })
