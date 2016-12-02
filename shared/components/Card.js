@@ -73,6 +73,7 @@ class Card extends Component {
     };
     this.renderImg = this.renderImg.bind(this);
     this.toggleStar = this.toggleStar.bind(this);
+    this.renderListView = this.renderListView.bind(this);
   }
 
   componentDidMount() {
@@ -174,21 +175,40 @@ class Card extends Component {
   }
 
   renderListView() {
-    if (this.props.dataSource && this.props.dataSource.imageUrls) {
-      return (
-        <View style={{flex: FLEX_LIST_WRAPPER}}>
-          <ListView
-            dataSource={new ListView.DataSource({
+    if (this.props.dataSource) {
+      if (this.props.dataSource.imageUrl) {
+        this.imageUrls = [];
+        this.imageUrls.push(this.props.dataSource.imageUrl);
+        return (
+          <View style={{flex: FLEX_LIST_WRAPPER}}>
+            <ListView
+              dataSource={new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+          }).cloneWithRows(this.imageUrls)}
+              renderRow={this.renderImg.bind(this)}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              horizontal={true}
+              removeClippedSubviews={false}
+            />
+          </View>
+        );
+      } else if (this.props.dataSource.imageUrls) {
+        return (
+          <View style={{flex: FLEX_LIST_WRAPPER}}>
+            <ListView
+              dataSource={new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
           }).cloneWithRows(this.props.dataSource.imageUrls)}
-            renderRow={this.renderImg.bind(this)}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            horizontal={true}
-            removeClippedSubviews={false}
-          />
-        </View>
-      );
+              renderRow={this.renderImg.bind(this)}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              horizontal={true}
+              removeClippedSubviews={false}
+            />
+          </View>
+        );
+      }
     }
     return null;
   }

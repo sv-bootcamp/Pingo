@@ -271,7 +271,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.createdPosts)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
