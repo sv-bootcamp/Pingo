@@ -1,15 +1,15 @@
 import * as types from './actionTypes';
 import { AsyncStorage } from 'react-native';
 import {
-    HTTPS,
-    SERVER_ADDR,
-    ENDPOINT_USER,
-    ENDPOINT_SIGNUP,
-    ENDPOINT_GRANT,
-    ENDPOINT_REFRESH,
-    DEFAULT_HEADERS,
-    getAuthHeaders,
-    RESTUtil
+  HTTPS,
+  SERVER_ADDR,
+  ENDPOINT_USER,
+  ENDPOINT_SIGNUP,
+  ENDPOINT_GRANT,
+  ENDPOINT_REFRESH,
+  DEFAULT_HEADERS,
+  getAuthHeaders,
+  RESTUtil
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
@@ -76,17 +76,17 @@ export const signupFacebookUser = async (FacebookToken) => {
     headers,
     body
   })
-      .then((response) => response.json())
-      .then((rjson) => {
-        console.log(rjson);
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
-        setUserKey(rjson.userKey);
-        return null;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  .then((response) => response.json())
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+    setUserKey(rjson.userKey);
+    return null;
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 };
 
 export const signupGuestUser = async () => {
@@ -100,18 +100,18 @@ export const signupGuestUser = async () => {
     headers,
     body
   })
-      .then((response) => response.json())
-      .then((rjson) => {
-        console.log(rjson);
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
-        setUserKey(rjson.userKey);
-        setSecretToken(rjson.userSecret);
-        return null;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  .then((response) => response.json())
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+    setUserKey(rjson.userKey);
+    setSecretToken(rjson.userSecret);
+    return null;
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 };
 
 // todo: refactor the below two functions
@@ -129,25 +129,25 @@ export const grantAnonymousUser = async (secret, userKey) => {
       headers,
       body
     })
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            return signupGuestUser();
-          }
-        })
-        .then((rjson) => {
-          console.log(rjson);
-          if (rjson) {
-            setAccessToken(rjson.accessToken);
-            setRefreshToken(rjson.refreshToken);
-            setUserKey(rjson.userKey);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return signupGuestUser();
+      }
+    })
+    .then((rjson) => {
+      console.log(rjson);
+      if (rjson) {
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+        setUserKey(rjson.userKey);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   } catch (error) {
     console.log(error);
   }
@@ -168,34 +168,34 @@ export const grantFacebookUser = async (facebookToken) => {
       headers,
       body
     })
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            return response.json();
-          } else {
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return signupFacebookUser(facebookToken);
+      }
+    })
+    .then((rjson) => {
+      console.log(rjson);
+      if (rjson) {
+        console.log('setting tokens after facebook grant');
+        getUserKey().then((userKey) => {
+          if (userKey === null) {
+            console.log('userkey not found. signing up again');
             return signupFacebookUser(facebookToken);
+          } else {
+            setAccessToken(rjson.accessToken);
+            setRefreshToken(rjson.refreshToken);
+            setUserKey(rjson.userKey);
           }
-        })
-        .then((rjson) => {
-          console.log(rjson);
-          if (rjson) {
-            console.log('setting tokens after facebook grant');
-            getUserKey().then((userKey) => {
-              if (userKey === null) {
-                console.log('userkey not found. signing up again');
-                return signupFacebookUser(facebookToken);
-              } else {
-                setAccessToken(rjson.accessToken);
-                setRefreshToken(rjson.refreshToken);
-                setUserKey(rjson.userKey);
-              }
-            });
-          }
-        })
-        .then()
-        .catch((error) => {
-          console.log(error);
         });
+      }
+    })
+    .then()
+    .catch((error) => {
+      console.log(error);
+    });
   } catch (error) {
     console.log(error);
   }
@@ -288,21 +288,21 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
     headers,
     body
   })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          removeUserToken();
-        }
-      })
-      .then((rjson) => {
-        console.log(rjson);
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      removeUserToken();
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
 };
 
 export const requestRefreshTokenGuest = async (refreshToken) => {
@@ -316,31 +316,31 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
     headers,
     body
   })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          getSecretToken().then((secret) => {
-            if (secret !== null) {
-              getUserKey().then((userId) => {
-                if (userId !== null) {
-                  grantAnonymousUser(secret, userId);
-                }
-              });
-            } else {
-              signupGuestUser();
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      getSecretToken().then((secret) => {
+        if (secret !== null) {
+          getUserKey().then((userId) => {
+            if (userId !== null) {
+              grantAnonymousUser(secret, userId);
             }
           });
+        } else {
+          signupGuestUser();
         }
-      })
-      .then((rjson) => {
-        console.log(rjson);
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+      });
+    }
+  })
+  .then((rjson) => {
+    console.log(rjson);
+    setAccessToken(rjson.accessToken);
+    setRefreshToken(rjson.refreshToken);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
 };
 
 export const getUserInformation = async (userKey, accessToken) => {
@@ -351,19 +351,19 @@ export const getUserInformation = async (userKey, accessToken) => {
       method: 'GET',
       headers
     })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            throw new Error(response.status);
-          }
-        })
-        .then((rjson) => {
-          return rjson;
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error(response.status);
+      }
+    })
+    .then((rjson) => {
+      return rjson;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   } catch (error) {
     console.log(error);
   }
