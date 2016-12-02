@@ -1,14 +1,15 @@
 import * as types from './actionTypes';
 import { AsyncStorage } from 'react-native';
 import {
-  HTTPS,
-  SERVER_ADDR,
-  ENDPOINT_USER,
-  ENDPOINT_SIGNUP,
-  ENDPOINT_GRANT,
-  ENDPOINT_REFRESH,
-  DEFAULT_HEADERS,
-  getAuthHeaders
+    HTTPS,
+    SERVER_ADDR,
+    ENDPOINT_USER,
+    ENDPOINT_SIGNUP,
+    ENDPOINT_GRANT,
+    ENDPOINT_REFRESH,
+    DEFAULT_HEADERS,
+    getAuthHeaders,
+    RESTUtil
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
@@ -17,6 +18,51 @@ const STORAGE_KEY_refreshToken = 'refreshToken';
 const STORAGE_KEY_userKey = 'userKey';
 const STORAGE_KEY_secret = 'secret';
 const STORAGE_KEY_loginType = 'loginType';
+
+const SIGNUP_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
+const GRANT_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
+const REFRESH_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
+const USER_INFO_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_USER}`;
+export const RESTManager = {
+  signup: (body) => {
+    return RESTUtil.post(SIGNUP_ADDRESS, DEFAULT_HEADERS, body);
+  },
+  signupFacebook: (facebookToken) => {
+    return RESTManager.signup({
+      userType: 'facebook',
+      facebookToken: facebookToken
+    });
+  },
+  signupGuest: () => {
+    return RESTManager.signup({
+      userType: 'anonymous'
+    });
+  },
+  grant: (body) => {
+    return RESTUtil.post(GRANT_ADDRESS, DEFAULT_HEADERS, body);
+  },
+  grantFacebook: (facebookToken) => {
+    return RESTManager.grant({
+      grantType: 'facebook',
+      facebookToken
+    });
+  },
+  grantGuest: (userKey, userSecret) => {
+    return RESTManager.grant({
+      grantType: 'anonymous',
+      userSecret,
+      userKey
+    });
+  },
+  refresh: (body) => {
+    return RESTUtil.post(REFRESH_ADDRESS, DEFAULT_HEADERS, body);
+  },
+  getUserInfo: (userKey, accessToken) => {
+    const address = `${USER_INFO_ADDRESS}/${userKey}`;
+    const header = getAuthHeaders(accessToken);
+    return RESTUtil.get(address, header);
+  }
+};
 
 export const signupFacebookUser = async (FacebookToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
@@ -30,17 +76,17 @@ export const signupFacebookUser = async (FacebookToken) => {
     headers,
     body
   })
-  .then((response) => response.json())
-  .then((rjson) => {
-    console.log(rjson);
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-    setUserKey(rjson.userKey);
-    return null;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+      .then((response) => response.json())
+      .then((rjson) => {
+        console.log(rjson);
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+        setUserKey(rjson.userKey);
+        return null;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 };
 
 export const signupGuestUser = async () => {
@@ -54,18 +100,18 @@ export const signupGuestUser = async () => {
     headers,
     body
   })
-  .then((response) => response.json())
-  .then((rjson) => {
-    console.log(rjson);
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-    setUserKey(rjson.userKey);
-    setSecretToken(rjson.userSecret);
-    return null;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+      .then((response) => response.json())
+      .then((rjson) => {
+        console.log(rjson);
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+        setUserKey(rjson.userKey);
+        setSecretToken(rjson.userSecret);
+        return null;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 };
 
 // todo: refactor the below two functions
@@ -83,25 +129,25 @@ export const grantAnonymousUser = async (secret, userKey) => {
       headers,
       body
     })
-    .then((response) => {
-      console.log(response);
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        return signupGuestUser();
-      }
-    })
-    .then((rjson) => {
-      console.log(rjson);
-      if (rjson) {
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
-        setUserKey(rjson.userKey);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            return signupGuestUser();
+          }
+        })
+        .then((rjson) => {
+          console.log(rjson);
+          if (rjson) {
+            setAccessToken(rjson.accessToken);
+            setRefreshToken(rjson.refreshToken);
+            setUserKey(rjson.userKey);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   } catch (error) {
     console.log(error);
   }
@@ -122,34 +168,34 @@ export const grantFacebookUser = async (facebookToken) => {
       headers,
       body
     })
-    .then((response) => {
-      console.log(response);
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        return signupFacebookUser(facebookToken);
-      }
-    })
-    .then((rjson) => {
-      console.log(rjson);
-      if (rjson) {
-        console.log('setting tokens after facebook grant');
-        getUserKey().then((userKey) => {
-          if (userKey === null) {
-            console.log('userkey not found. signing up again');
-            return signupFacebookUser(facebookToken);
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            return response.json();
           } else {
-            setAccessToken(rjson.accessToken);
-            setRefreshToken(rjson.refreshToken);
-            setUserKey(rjson.userKey);
+            return signupFacebookUser(facebookToken);
           }
+        })
+        .then((rjson) => {
+          console.log(rjson);
+          if (rjson) {
+            console.log('setting tokens after facebook grant');
+            getUserKey().then((userKey) => {
+              if (userKey === null) {
+                console.log('userkey not found. signing up again');
+                return signupFacebookUser(facebookToken);
+              } else {
+                setAccessToken(rjson.accessToken);
+                setRefreshToken(rjson.refreshToken);
+                setUserKey(rjson.userKey);
+              }
+            });
+          }
+        })
+        .then()
+        .catch((error) => {
+          console.log(error);
         });
-      }
-    })
-    .then()
-    .catch((error) => {
-      console.log(error);
-    });
   } catch (error) {
     console.log(error);
   }
@@ -242,21 +288,21 @@ export const requestRefreshTokenFacebook = async (refreshToken) => {
     headers,
     body
   })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    } else {
-      removeUserToken();
-    }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          removeUserToken();
+        }
+      })
+      .then((rjson) => {
+        console.log(rjson);
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 };
 
 export const requestRefreshTokenGuest = async (refreshToken) => {
@@ -270,31 +316,31 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
     headers,
     body
   })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    } else {
-      getSecretToken().then((secret) => {
-        if (secret !== null) {
-          getUserKey().then((userId) => {
-            if (userId !== null) {
-              grantAnonymousUser(secret, userId);
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          getSecretToken().then((secret) => {
+            if (secret !== null) {
+              getUserKey().then((userId) => {
+                if (userId !== null) {
+                  grantAnonymousUser(secret, userId);
+                }
+              });
+            } else {
+              signupGuestUser();
             }
           });
-        } else {
-          signupGuestUser();
         }
-      });
-    }
-  })
-  .then((rjson) => {
-    console.log(rjson);
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+      })
+      .then((rjson) => {
+        console.log(rjson);
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 };
 
 export const getUserInformation = async (userKey, accessToken) => {
@@ -305,19 +351,19 @@ export const getUserInformation = async (userKey, accessToken) => {
       method: 'GET',
       headers
     })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error(response.status);
-      }
-    })
-    .then((rjson) => {
-      return rjson;
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error(response.status);
+          }
+        })
+        .then((rjson) => {
+          return rjson;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
   } catch (error) {
     console.log(error);
   }
