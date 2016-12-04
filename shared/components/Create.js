@@ -322,7 +322,8 @@ class Create extends Component {
         body: data
       })
       .then((response) => response.json())
-      .then(() => {
+      .then((json) => {
+        console.log(json);
         this.props.setCurrentScene('map');
         Actions.pop({popNum: 2});
       })
