@@ -37,3 +37,33 @@ export const queryBuilder = (arr) => {
   });
   return `?${queryString}`;
 };
+
+export const HTTPUtil = {
+  get: (address, headers) => {
+    return fetch(address, {
+      method: 'GET',
+      headers
+    }).then(response => response.json());
+  },
+  post: (address, headers, body) => {
+    return fetch(address, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body)
+    }).then(response => response.json());
+  },
+  put: (address, headers, body) => {
+    return fetch(address, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body)
+    }).then(response => response.json());
+  },
+  delete: (address, headers, body) => {
+    return fetch(address, {
+      method: 'DELETE',
+      headers,
+      body: JSON.stringify(body)
+    }).then(response => response.json());
+  },
+};
