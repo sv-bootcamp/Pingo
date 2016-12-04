@@ -8,7 +8,8 @@ import {
   ENDPOINT_GRANT,
   ENDPOINT_REFRESH,
   DEFAULT_HEADERS,
-  getAuthHeaders
+  getAuthHeaders,
+  HTTPUtil
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
@@ -17,6 +18,51 @@ const STORAGE_KEY_refreshToken = 'refreshToken';
 const STORAGE_KEY_userKey = 'userKey';
 const STORAGE_KEY_secret = 'secret';
 const STORAGE_KEY_loginType = 'loginType';
+
+const SIGNUP_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
+const GRANT_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
+const REFRESH_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
+const USER_INFO_ADDRESS = `${HTTPS}${SERVER_ADDR}${ENDPOINT_USER}`;
+export const RESTManager = {
+  signup: (body) => {
+    return HTTPUtil.post(SIGNUP_ADDRESS, DEFAULT_HEADERS, body);
+  },
+  signupFacebook: (facebookToken) => {
+    return RESTManager.signup({
+      userType: 'facebook',
+      facebookToken: facebookToken
+    });
+  },
+  signupGuest: () => {
+    return RESTManager.signup({
+      userType: 'anonymous'
+    });
+  },
+  grant: (body) => {
+    return HTTPUtil.post(GRANT_ADDRESS, DEFAULT_HEADERS, body);
+  },
+  grantFacebook: (facebookToken) => {
+    return RESTManager.grant({
+      grantType: 'facebook',
+      facebookToken
+    });
+  },
+  grantGuest: (userKey, userSecret) => {
+    return RESTManager.grant({
+      grantType: 'anonymous',
+      userSecret,
+      userKey
+    });
+  },
+  refresh: (body) => {
+    return HTTPUtil.post(REFRESH_ADDRESS, DEFAULT_HEADERS, body);
+  },
+  getUserInfo: (userKey, accessToken) => {
+    const address = `${USER_INFO_ADDRESS}/${userKey}`;
+    const header = getAuthHeaders(accessToken);
+    return HTTPUtil.get(address, header);
+  }
+};
 
 export const signupFacebookUser = async (FacebookToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
