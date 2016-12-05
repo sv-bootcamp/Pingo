@@ -320,6 +320,7 @@ export default class Map extends Component {
           onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
           onPress={this.onMapClick}
+          rotateEnabled={false}
         >
           {(!this.state.items) ? null : this.state.items.map(item => (
             <MapView.Marker
