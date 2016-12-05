@@ -28,6 +28,8 @@ import { getAccessToken, getUserKey } from '../actions/authActions';
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
 
+const DatePickerHeight = 46;
+
 const styles = {
   preview: {
     height: 104,
@@ -100,6 +102,7 @@ const styles = {
     fontSize: 14,
     alignSelf: 'flex-end',
     marginRight: 16,
+    marginTop: 2,
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
@@ -143,7 +146,7 @@ const styles = {
     padding: 16
   },
   DatePicker: {
-    height: 46,
+    height: DatePickerHeight,
     width: Dimensions.get('window').width - 32,
     borderColor: '#e7e7e7',
     borderWidth: 1,
@@ -389,14 +392,14 @@ class Create extends Component {
   handleOnDateChangeStart(datetime) {
     const a = new Date(datetime);
     this.setState({dateStart: a.toISOString()});
-    const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
+    const txtDate = `${this.convertMonth(a.format('MM'))} ${a.format('DD')}, ${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderStart: txtDate});
   }
 
   handleOnDateChangeEnd(datetime) {
     const a = new Date(datetime);
     this.setState({dateEnd: a.toISOString()});
-    const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
+    const txtDate = `${this.convertMonth(a.format('MM'))} ${a.format('DD')}, ${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderEnd: txtDate});
   }
 
@@ -406,7 +409,7 @@ class Create extends Component {
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
           <Text style={[styles.fontRobotoRegular,
-            {marginTop: 12, color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            {marginTop: 14, color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Starts
           </Text>
         </View>
@@ -439,7 +442,7 @@ class Create extends Component {
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
           <Text style={[styles.fontRobotoRegular,
-            {marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            {marginTop: 14 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Ends
           </Text>
         </View>
