@@ -55,6 +55,7 @@ const styles = {
     })
   },
   myPageTextLogInFacebook: {
+    fontSize: 16,
     color: '#2c8cff',
     marginLeft: 16
   }

@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Animated, Easing, StyleSheet, View, Text, Image, Dimensions, Platform} from 'react-native';
+import {Animated, Easing, StyleSheet, View, Text, Dimensions, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -328,6 +328,7 @@ export default class Map extends Component {
               coordinate={{latitude: item.lat, longitude: item.lng}}
               anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
               centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
+              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
               onPress={()=>{
                 this.setMarkerClickTime();
                 this.props.onMarkerClick(item);
@@ -336,26 +337,17 @@ export default class Map extends Component {
                 this.setState({markerSelect: item.key});
               }}
             >
-              <Image
-                style={{
-                  height: (this.state.markerSelect === item.key) ? Dimensions.get('window').height * 103 / 640
-                    : Dimensions.get('window').width * 28 / 360,
-                  width: (this.state.markerSelect === item.key) ? Dimensions.get('window').width * 88.6 / 360
-                    : Dimensions.get('window').width * 28 / 360
-                }}
-                source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
-              >
                 {(this.state.markerSelect === item.key) ?
                   <Text style={[{
                     alignSelf: 'center',
                     top: Dimensions.get('window').height * 23 / 640,
+                    left: Dimensions.get('window').width * 69 / 640,
                     fontSize: 14,
                     color: '#ffffff'
                   }, styles.fontRobotoMedium]}>
                     {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
                   </Text>
                   : null}
-              </Image>
             </MapView.Marker>
           ))}
           {(this.state.userLocationEnabled === true) ?
