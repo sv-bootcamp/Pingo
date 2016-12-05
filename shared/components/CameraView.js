@@ -145,7 +145,7 @@ class CameraView extends Component {
   }
 
   handleUse() {
-    Actions.createForm();
+    Actions.createForm({lastScene: this.props.lastScene});
   }
 
   switchType() {

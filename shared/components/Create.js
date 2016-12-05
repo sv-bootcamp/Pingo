@@ -262,12 +262,7 @@ class Create extends Component {
       });
     })
     .then((response) => response.json())
-    .then((rjson) => {
-      console.log(rjson);
-      this.props.setLoadingLoginAnimating(false);
-      this.props.setCurrentScene('map');
-      Actions.pop({popNum: 2});
-    })
+    .then(() => this.handleSceneTransition())
     .catch((error) => {
       this.props.setLoadingLoginAnimating(false);
       console.warn(error);
@@ -349,16 +344,23 @@ class Create extends Component {
         body: data
       })
       .then((response) => response.json())
-      .then(() => {
-        this.props.setLoadingLoginAnimating(false);
-        this.props.setCurrentScene('map');
-        Actions.pop({popNum: 2});
-      })
+      .then(() => this.handleSceneTransition())
       .catch((error) => {
         this.props.setLoadingLoginAnimating(false);
         console.warn(error);
       });
     });
+  }
+
+  handleSceneTransition() {
+    this.props.setLoadingLoginAnimating(false);
+    this.props.setCurrentScene(this.props.lastScene);
+    if (this.props.lastScene === 'list') {
+      // todo: change the ugly scene transition of popping two consecutive scenes animation
+      Actions.pop({popNum: 2});
+    } else {
+      Actions.map({type: 'reset'});
+    }
   }
 
   handleCategoryButton(select) {
@@ -793,6 +795,7 @@ class Create extends Component {
 
 Create.propTypes = {
   pic: PropTypes.string,
+  lastScene: PropTypes.string,
   getAllItems: PropTypes.func,
   setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
