@@ -20,26 +20,14 @@ const styles = {
   container: {
     flex: 1
   },
-  preview: {
-    flex: 1,
-    left: 0,
-    top: 67
-  },
   top: {
-    height: 67,
-    width: Dimensions.get('window').width,
-    backgroundColor: '#2b2b2b',
-    position: 'absolute',
-    left: 0,
-    top: 0
+    flex: 67,
+    backgroundColor: '#2b2b2b'
   },
   bottom: {
-    height: 573 - 360,
+    flex: 573 - 360,
     flexDirection: 'row',
-    width: Dimensions.get('window').width,
-    backgroundColor: '#2b2b2b',
-    position: 'absolute',
-    bottom: 0
+    backgroundColor: '#2b2b2b'
   },
   btnTakingPhoto: {
     alignSelf: 'center',
@@ -206,13 +194,13 @@ class CameraView extends Component {
   renderCameraOrAfter() {
     return (
       (this.state.Done === true) ?
-        <Image source={{uri: this.props.pic}} style={styles.preview} />
+        <Image source={{uri: this.props.pic}} style={{flex: 1}} />
       :
         <Camera
           ref={(cam) => {
             this.camera = cam;
           }}
-          style={styles.preview}
+          style={{flex: 1}}
           type={this.state.camera.type}
           aspect={this.state.camera.aspect}
           flashMode={this.state.camera.flashMode}
@@ -281,10 +269,12 @@ class CameraView extends Component {
           <Text style={styles.textTop}> Photo </Text>
           {this.renderBtnUse()}
         </View>
-        {this.renderCameraOrAfter()}
+        <View style={{flex: 360}}>
+          {this.renderCameraOrAfter()}
+        </View>
         {(this.state.Done === true) ?
-          <View>{this.renderBottomAfter()}</View> :
-          <View>{this.renderBottom()}</View>
+          <View style={{flex: 213}}>{this.renderBottomAfter()}</View> :
+          <View style={{flex: 213}}>{this.renderBottom()}</View>
         }
       </View>
     );
