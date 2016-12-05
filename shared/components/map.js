@@ -70,6 +70,7 @@ export default class Map extends Component {
     this.buttonAnimationSlideUp = this.buttonAnimationSlideUp.bind(this);
     this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
     this.renderUserIndicatorMarker = this.renderUserIndicatorMarker.bind(this);
+    this.renderMarkers = this.renderMarkers.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -300,7 +301,46 @@ export default class Map extends Component {
     this.setState({mapViewHeight: evt.nativeEvent.layout.height});
   }
 
-  // todo: use centerOffset for IOS
+  renderMarkers() {
+    if (!this.state.items) {
+      return null;
+    }
+    return (
+      this.state.items.map(item =>
+        (this.props.categoryFilter === 'SHOW_ALL' || item.category === this.props.categoryFilter) ?
+        (
+          <MapView.Marker
+            key={item.key}
+            style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
+            coordinate={{latitude: item.lat, longitude: item.lng}}
+            anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
+            centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
+            image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
+            onPress={()=>{
+              this.setMarkerClickTime();
+              this.props.onMarkerClick(item);
+              this.cardAnimationSlideUp();
+              this.buttonAnimationSlideUp();
+              this.setState({markerSelect: item.key});
+            }}
+          >
+            {(this.state.markerSelect === item.key) ?
+              <Text style={[{
+                alignSelf: 'center',
+                top: Dimensions.get('window').height * 23 / 640,
+                left: Dimensions.get('window').width * 69 / 640,
+                fontSize: 14,
+                color: '#ffffff'
+              }, styles.fontRobotoMedium]}>
+                {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+              </Text>
+              : null}
+          </MapView.Marker>
+        ) : null
+      )
+    );
+  }
+
   render() {
     const cardTranslateY = this.state.cardTranslateY.interpolate({
       inputRange: [0, 1],
@@ -322,35 +362,7 @@ export default class Map extends Component {
           onPress={this.onMapClick}
           rotateEnabled={false}
         >
-          {(!this.state.items) ? null : this.state.items.map(item => (
-            <MapView.Marker
-              key={item.key}
-              style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
-              coordinate={{latitude: item.lat, longitude: item.lng}}
-              anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
-              centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
-              image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
-              onPress={()=>{
-                this.setMarkerClickTime();
-                this.props.onMarkerClick(item);
-                this.cardAnimationSlideUp();
-                this.buttonAnimationSlideUp();
-                this.setState({markerSelect: item.key});
-              }}
-            >
-                {(this.state.markerSelect === item.key) ?
-                  <Text style={[{
-                    alignSelf: 'center',
-                    top: Dimensions.get('window').height * 23 / 640,
-                    left: Dimensions.get('window').width * 69 / 640,
-                    fontSize: 14,
-                    color: '#ffffff'
-                  }, styles.fontRobotoMedium]}>
-                    {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
-                  </Text>
-                  : null}
-            </MapView.Marker>
-          ))}
+          {this.renderMarkers()}
           {(this.state.userLocationEnabled === true) ?
             <MapView.Marker
               coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
@@ -415,6 +427,7 @@ Map.propTypes = {
   currentLocation: PropTypes.object,
   userLocation: PropTypes.object,
   selectedItem: PropTypes.any,
+  categoryFilter: PropTypes.string,
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,

@@ -210,13 +210,13 @@ export default class MainHeader extends Component {
                   this.props.categorizeItems('SHOW_ALL');
                   return;
                 case 1:
-                  this.props.categorizeItems('EVENTS');
+                  this.props.categorizeItems('event');
                   return;
                 case 2:
-                  this.props.categorizeItems('FACILITIES');
+                  this.props.categorizeItems('facility');
                   return;
                 case 3:
-                  this.props.categorizeItems('WARNING');
+                  this.props.categorizeItems('warning');
                   return;
                 default:
                   return;
