@@ -13,6 +13,13 @@ import {
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
+const STORAGE_KEY = {
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
+  USER_KEY: 'userKey',
+  SECRET: 'secret',
+  LOGIN_TYPE: 'loginType'
+};
 const STORAGE_KEY_accessToken = 'accessToken';
 const STORAGE_KEY_refreshToken = 'refreshToken';
 const STORAGE_KEY_userKey = 'userKey';
