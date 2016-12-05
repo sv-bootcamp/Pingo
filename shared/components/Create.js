@@ -612,7 +612,7 @@ class Create extends Component {
     return (
       <View style={{backgroundColor: 'white'}}>
         <Text style={styles.textCaption}> Location </Text>
-        <View style={{backgroundColor: 'white'}}>
+        <View style={{backgroundColor: 'white', height: 46}}>
           {this.state.addingNewLocation === true ?
             <View style={{
               height: 24,
