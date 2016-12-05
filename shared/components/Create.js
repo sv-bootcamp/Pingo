@@ -275,18 +275,37 @@ class Create extends Component {
   }
 
   getAddressData() {
-    const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
-    try {
-      fetch(uri)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"', '');
-        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"', '');
-        this.setState({streetName: streetName, streetNumber: streetNumber});
-      });
-    } catch (error) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const uri = `${API_GEODATA}?latlng=${position.coords.latitude},${position.coords.longitude}&key=${API_KEY}`;
+      try {
+        fetch(uri)
+        .then((response) => response.json())
+        .then((rjson) => {
+          let streetNumber;
+          let streetName;
+          if (rjson.results[0].address_components[0].short_name) {
+            streetNumber = JSON.stringify(rjson.results[0].address_components[0].short_name);
+          } else {
+            streetNumber = JSON.stringify(rjson.results[0].address_components[0].long_name);
+          }
+          if (rjson.results[0].address_components[1].short_name) {
+            streetName = JSON.stringify(rjson.results[0].address_components[1].short_name);
+          } else {
+            streetName = JSON.stringify(rjson.results[0].address_components[1].long_name);
+          }
+          this.setState({
+            streetName: streetName.replace('"', '').replace('"', ''),
+            streetNumber: streetNumber.replace('"', '').replace('"', '')
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    (error) => {
+      // todo: handle this error
       console.log(error);
-    }
+    });
   }
 
   checkDone() {
