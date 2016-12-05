@@ -20,16 +20,16 @@ export const receiveItems = (json) => {
 };
 
 export const getMapItems = (zoomLevel, lat, long) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     const queries = [];
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', long));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', true));
-    return await getAccessToken().then(async (accessToken) => {
+    return getAccessToken().then((accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
-      return await fetch(address, {
+      return fetch(address, {
         method: 'GET',
         headers
       })
@@ -38,7 +38,8 @@ export const getMapItems = (zoomLevel, lat, long) => {
       })
       .then(json => {
         dispatch(setLoadingLoginAnimating(false));
-        return dispatch(receiveItems(json));
+        dispatch(receiveItems(json));
+        return;
       })
       .catch((error) => console.log(error));
     });
