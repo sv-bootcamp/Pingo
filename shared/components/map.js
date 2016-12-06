@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Animated, Easing, StyleSheet, View, Text, Dimensions, Platform} from 'react-native';
+import {Animated, Easing, StyleSheet, View, Text, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
