@@ -108,7 +108,9 @@ export default class EventReportView extends Component {
             Actions.pop();
           }}
           handleBtnRight={()=>{
-            this.reportEvent();
+            if (this.state.currentIndex !== -1) {
+              this.reportEvent();
+            }
           }}
           btnRight={
             <Text style={[styles.textDone, {color: (this.state.currentIndex !== -1) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
