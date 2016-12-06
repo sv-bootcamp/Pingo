@@ -5,7 +5,9 @@ import {
   Image,
   Text,
   Platform,
-  ListView
+  ListView,
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
@@ -13,7 +15,6 @@ import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import LoadingLayout from '../containers/loadingLayout';
 import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '../actions/authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_CREATEDPOST } from '../utils';
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 import ImgGuest from '../resources/myPage/guest.png';
 
@@ -60,6 +61,7 @@ class MyPage extends Component {
     this.renderTabViewContents = this.renderTabViewContents.bind(this);
     this.renderTabView = this.renderTabView.bind(this);
     this.renderTextNothingFound = this.renderTextNothingFound.bind(this);
+    this.renderModal = this.renderModal.bind(this);
     getAccessToken().then((accessToken) => {
       if (accessToken !== null) {
         getUserKey().then((userKey) => {
@@ -91,25 +93,7 @@ class MyPage extends Component {
       }
     });
     this.props.getSavedPosts();
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_CREATEDPOST}`;
-    getAccessToken().then((accessToken) => {
-      const headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${accessToken}`
-      };
-      fetch(address, {
-        method: 'GET',
-        headers: headers
-      })
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        this.props.setCreatedPosts(json);
-      })
-      .catch((error) => console.log(error));
-    });
+    this.props.getCreatedPosts();
   }
 
   renderImageButtonSetting() {
@@ -314,6 +298,14 @@ class MyPage extends Component {
     />);
   }
 
+  renderModal() {
+    return (
+      <TouchableOpacity style={{width: Dimensions.get('window').width,
+              height: (Dimensions.get('window').height) * 136 / (440 + 136) + 64 + 22, zIndex: 100, position: 'absolute', top: 0}}
+              onPress = {() => this.props.toggleModalVisible()}/>
+    )
+  }
+
   render() {
     return (
       <View style={{flexDirection: 'column', flex: 1, overflow: 'hidden'}}>
@@ -324,11 +316,13 @@ class MyPage extends Component {
           headerText={'My Page'}
         />
         {this.renderUserBox()}
+        {this.props.modalVisible && this.renderModal()}
         <View
           style={{backgroundColor: 'white', flex: 440, borderTopWidth: 1, borderTopColor: '#e7e7e7'}}
           onLayout={this.handleTabViewWrapperLayout.bind(this)}
         >
           {this.renderTabView()}
+
         </View>
         <LoadingLayout/>
       </View>
@@ -343,7 +337,7 @@ MyPage.propTypes = {
   setUserName: PropTypes.func,
   setUserEmail: PropTypes.func,
   setProfileImgUrl: PropTypes.func,
-  setCreatedPosts: PropTypes.func,
+  getCreatedPosts: PropTypes.func,
   myPageTabViewIndex: PropTypes.number,
   token: PropTypes.string,
   userName: PropTypes.string,
@@ -352,7 +346,9 @@ MyPage.propTypes = {
   items: PropTypes.any,
   getSavedPosts: PropTypes.func,
   savedPosts: PropTypes.any,
-  createdPosts: PropTypes.array
+  createdPosts: PropTypes.array,
+  toggleModalVisible: PropTypes.func,
+  modalVisible: PropTypes.bool
 };
 
 export default MyPage;

@@ -1,12 +1,14 @@
 import Card from '../components/Card';
 import { getDetailImage } from '../actions/listActions';
 import { setCurrentScene } from '../actions/fluxActions';
-import { saveEvent, deleteEvent } from '../actions/myPageActions';
+import { saveEvent, deleteEvent, toggleModalVisible, deleteMyphoto } from '../actions/myPageActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-    currentScene: state.flux.currentScene
+    currentScene: state.flux.currentScene,
+    myPageTabViewIndex: state.myPage.myPageTabViewIndex,
+    modalVisible: state.myPage.modalVisible
   };
 };
 
@@ -23,6 +25,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteEvent: (eventKey) => {
       return dispatch(deleteEvent(eventKey));
+    },
+    toggleModalVisible: () => {
+      return dispatch(toggleModalVisible());
+    },
+    deleteMyphoto: (key) => {
+      return dispatch(deleteMyphoto(key));
     }
   };
 };

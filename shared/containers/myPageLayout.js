@@ -1,14 +1,14 @@
 import MyPage from '../components/myPage';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
-import { setMyPageTabViewIndex, getSavedPosts } from '../actions/myPageActions';
+import { setMyPageTabViewIndex, getSavedPosts, toggleModalVisible } from '../actions/myPageActions';
 import {
   setToken,
   setUserName,
   setUserEmail,
   setProfileImgUrl
 } from '../actions/authActions';
-import { setCreatedPosts } from '../actions/userActions';
+import { getCreatedPosts } from '../actions/userActions';
 
 // todo: change items later
 const mapStateToProps = (state) => {
@@ -21,7 +21,8 @@ const mapStateToProps = (state) => {
     profileImgUrl: state.auth.profileImgUrl,
     savedPosts: state.myPage.savedPosts,
     createdPosts: state.user.createdPosts,
-    loadingLoginAnimating: state.user.loadingLoginAnimating
+    loadingLoginAnimating: state.user.loadingLoginAnimating,
+    modalVisible: state.myPage.modalVisible
   };
 };
 
@@ -48,8 +49,11 @@ const mapDispatchToProps = (dispatch) => {
     getSavedPosts: () => {
       return dispatch(getSavedPosts());
     },
-    setCreatedPosts: (createdPosts) => {
-      return dispatch(setCreatedPosts(createdPosts));
+    getCreatedPosts: () => {
+      return dispatch(getCreatedPosts());
+    },
+    toggleModalVisible: () => {
+      return dispatch(toggleModalVisible());
     }
   };
 };
