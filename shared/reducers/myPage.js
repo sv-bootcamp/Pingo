@@ -7,7 +7,8 @@ const initialState = {
     {key: '1', title: 'Activity'},
     {key: '2', title: 'Favorite'}
   ],
-  savedPosts: []
+  savedPosts: [],
+  modalVisible: false
 };
 
 const myPage = (state = initialState, action) => {
@@ -19,6 +20,10 @@ const myPage = (state = initialState, action) => {
   case types.getSavedPosts:
     return update(state, {
       savedPosts: { $set: action.savedPosts }
+    });
+  case types.toggleModalVisible:
+    return update(state, {
+      modalVisible: { $set: !state.modalVisible }
     });
   default:
     return state;
