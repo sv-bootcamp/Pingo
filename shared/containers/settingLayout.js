@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
+import { setToken } from '../actions/authActions';
 import Setting from '../components/Setting';
 
 const mapStateToProps = (state) => {
@@ -12,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    setToken: (token) => {
+      return dispatch(setToken(token));
     }
   };
 };

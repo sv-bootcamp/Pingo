@@ -11,7 +11,8 @@ import {
   setLoginType,
   grantFacebookUser,
   removeUserToken,
-  removeLoginType
+  removeLoginType,
+  signupGuestUser
 } from '../actions/authActions';
 
 const WindowHeight = 477.8 + 162;
@@ -56,13 +57,12 @@ class LoginFacebook extends Component {
         setLoginType('facebook');
         grantFacebookUser(data.credentials.token).then(() => {
           this.props.setToken('facebook');
-          console.log(this.props.currentScene);
           this.props.setLoadingLoginAnimating(false);
           if (this.props.currentScene === 'initialScene') {
             this.props.setCurrentScene('map');
             Actions.map({type: 'replace'});
           }
-        });
+        }).catch(() => this.props.setLoadingLoginAnimating(false));
       } else {
         this.props.setLoadingLoginAnimating(false);
         console.log(error, data);
@@ -74,8 +74,9 @@ class LoginFacebook extends Component {
     FBLoginManager.logout((error, data) => {
       if (!error) {
         this.props.setToken('');
-        removeUserToken();
-        removeLoginType();
+        removeUserToken()
+        .then(() => removeLoginType())
+        .then(() => signupGuestUser());
       } else {
         console.log(error, data);
       }

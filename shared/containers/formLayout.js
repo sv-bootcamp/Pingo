@@ -1,6 +1,7 @@
 import Create from '../components/Create';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
+import { setLoadingLoginAnimating } from '../actions/userActions';
 
 const mapStateToProps = (state) => {
   return {
@@ -19,6 +20,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    setLoadingLoginAnimating: (loadingLoginAnimating) => {
+      return dispatch(setLoadingLoginAnimating(loadingLoginAnimating));
     }
   };
 };

@@ -1,8 +1,9 @@
 import React, {PropTypes, Component} from 'react';
-import {Animated, Easing, StyleSheet, View, Text, Image, Dimensions, Platform} from 'react-native';
+import {Animated, Easing, StyleSheet, View, Text, Dimensions, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
+import LoadingLayout from '../containers/loadingLayout';
 import MapButton from './MapButton';
 import eventPng from '../resources/marker/event_small.png';
 import facilityPng from '../resources/marker/facility_small.png';
@@ -69,6 +70,7 @@ export default class Map extends Component {
     this.buttonAnimationSlideUp = this.buttonAnimationSlideUp.bind(this);
     this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
     this.renderUserIndicatorMarker = this.renderUserIndicatorMarker.bind(this);
+    this.renderMarkers = this.renderMarkers.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -76,7 +78,10 @@ export default class Map extends Component {
       markerSelect: '',
       cardTranslateY: new Animated.Value(0),
       buttonTranslateY: new Animated.Value(0),
-      userLocationEnabled: false
+      userLocationEnabled: false,
+      itemLength: 0,
+      items: [],
+      mapViewHeight: 0
     };
     this.watchID = null;
   }
@@ -90,8 +95,7 @@ export default class Map extends Component {
         ok: 'YES',
         cancel: 'NO'
       })
-      .then((success) => {
-        console.log(success);
+      .then(() => {
         this.setCurrentPosition();
         this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
         this.props.getMapItems(this.props.zoomLevel,
@@ -101,6 +105,14 @@ export default class Map extends Component {
       .catch((error) => {
         console.log(error.message);
       });
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.items) {
+      if (props.items.length !== this.state.itemLength) {
+        this.setState({items: props.items});
+      }
     }
   }
 
@@ -223,11 +235,16 @@ export default class Map extends Component {
     if (!needToFetch()) {
       return;
     }
+    this.props.setLoadingLoginAnimating(true);
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
-    this.updatePrevValues();
-    this.props.onLocationChange(region);
+      this.props.currentLocation.longitude)
+    .then(() => {
+      this.updatePrevValues();
+      this.props.onLocationChange(region);
+      this.setState({itemLength: this.props.items.length});
+      this.props.setLoadingLoginAnimating(false);
+    });
   }
 
   onMapClick() {
@@ -280,7 +297,50 @@ export default class Map extends Component {
     return (this.props.selectedItem && this.props.selectedItem.title === undefined);
   }
 
-  // todo: use centerOffset for IOS
+  handleViewLayout(evt) {
+    this.setState({mapViewHeight: evt.nativeEvent.layout.height});
+  }
+
+  renderMarkers() {
+    if (!this.state.items) {
+      return null;
+    }
+    return (
+      this.state.items.map(item =>
+        (this.props.categoryFilter === 'SHOW_ALL' || item.category === this.props.categoryFilter) ?
+        (
+          <MapView.Marker
+            key={item.key}
+            style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
+            coordinate={{latitude: item.lat, longitude: item.lng}}
+            anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
+            centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
+            image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
+            onPress={()=>{
+              this.setMarkerClickTime();
+              this.props.onMarkerClick(item);
+              this.cardAnimationSlideUp();
+              this.buttonAnimationSlideUp();
+              this.setState({markerSelect: item.key});
+            }}
+          >
+            {(this.state.markerSelect === item.key) ?
+              <Text style={[{
+                alignSelf: 'center',
+                top: Dimensions.get('window').height * 23 / 640,
+                left: Dimensions.get('window').width * 69 / 640,
+                fontSize: 14,
+                color: '#ffffff'
+              }, styles.fontRobotoMedium]}>
+                {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+              </Text>
+              : null}
+          </MapView.Marker>
+        ) : null
+      )
+    );
+  }
+
   render() {
     const cardTranslateY = this.state.cardTranslateY.interpolate({
       inputRange: [0, 1],
@@ -291,7 +351,7 @@ export default class Map extends Component {
       outputRange: [0, 199 + 16]
     });
     return (
-      <View style ={styles.container}>
+      <View style ={styles.container} onLayout={this.handleViewLayout.bind(this)}>
         <MapView
           ref={ref => {
             this.map = ref;
@@ -300,44 +360,9 @@ export default class Map extends Component {
           onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
           onPress={this.onMapClick}
+          rotateEnabled={false}
         >
-          {(!this.props.items) ? null : this.props.items.map(item => (
-            <MapView.Marker
-              key={item.key}
-              style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
-              coordinate={{latitude: item.lat, longitude: item.lng}}
-              anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
-              centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
-              onPress={()=>{
-                this.setMarkerClickTime();
-                this.props.onMarkerClick(item);
-                this.cardAnimationSlideUp();
-                this.buttonAnimationSlideUp();
-                this.setState({markerSelect: item.key});
-              }}
-            >
-              <Image
-                style={{
-                  height: (this.state.markerSelect === item.key) ? Dimensions.get('window').height * 103 / 640
-                    : Dimensions.get('window').width * 28 / 360,
-                  width: (this.state.markerSelect === item.key) ? Dimensions.get('window').width * 88.6 / 360
-                    : Dimensions.get('window').width * 28 / 360
-                }}
-                source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
-              >
-                {(this.state.markerSelect === item.key) ?
-                  <Text style={[{
-                    alignSelf: 'center',
-                    top: Dimensions.get('window').height * 23 / 640,
-                    fontSize: 14,
-                    color: '#ffffff'
-                  }, styles.fontRobotoMedium]}>
-                    {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
-                  </Text>
-                  : null}
-              </Image>
-            </MapView.Marker>
-          ))}
+          {this.renderMarkers()}
           {(this.state.userLocationEnabled === true) ?
             <MapView.Marker
               coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
@@ -390,6 +415,9 @@ export default class Map extends Component {
               />
             </Animated.View>
         }
+        <LoadingLayout
+          customWrapperHeight={this.state.mapViewHeight}
+        />
       </View>
     );
   }
@@ -399,6 +427,7 @@ Map.propTypes = {
   currentLocation: PropTypes.object,
   userLocation: PropTypes.object,
   selectedItem: PropTypes.any,
+  categoryFilter: PropTypes.string,
   onLocationChange: PropTypes.func,
   getMapItems: PropTypes.func,
   setLocation: PropTypes.func,
@@ -408,6 +437,7 @@ Map.propTypes = {
   hideMapCard: PropTypes.func,
   setCurrentScene: PropTypes.func,
   getZoomLevel: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     coordinate: PropTypes.object,
     description: PropTypes.string,
