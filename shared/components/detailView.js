@@ -342,7 +342,7 @@ export default class DetailView extends Component {
             {
               (this.state.profileImgUrl) ?
               <Image
-                style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3}}
+                style={{height: this.state.profileImageWidth, width: this.state.profileImageWidth, borderRadius: 3}}
                 source={{uri: this.state.profileImgUrl}}
               />
               :
