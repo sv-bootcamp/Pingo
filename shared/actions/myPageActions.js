@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 import { getAccessToken } from './authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST, getAuthHeaders, ENDPOINT_ITEM, createQueryObject } from '../utils';
+import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST, getAuthHeaders, ENDPOINT_ITEM } from '../utils';
 import { getCreatedPosts } from './userActions';
 
 export const setMyPageTabViewIndex = (myPageTabViewIndex) => {
@@ -98,8 +98,6 @@ export const toggleModalVisible = () => {
 
 export const deleteMyphoto = (key) => {
   return (dispatch) => {
-    const queries = [];
-    queries.push(createQueryObject('item', key));
     getAccessToken(dispatch).then((accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${key}`;
       const headers = getAuthHeaders(accessToken);
