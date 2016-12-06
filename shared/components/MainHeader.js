@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Text, View, TouchableOpacity, Image, Platform, Animated, Easing} from 'react-native';
+import {Text, View, TouchableOpacity, Image, Platform, Animated, Easing, Dimensions} from 'react-native';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import {Actions} from 'react-native-router-flux';
 
@@ -8,9 +8,13 @@ import IMG_BUTTON_REFRESH from '../resources/header/btn_refresh.png';
 import IMG_BUTTON_SWITCH_MAP from '../resources/header/btn_switch_map.png';
 import IMG_BUTTON_SWITCH_LIST from '../resources/header/btn_switch_list.png';
 
+const TabViewHeight = 96 - 62;
+const WindowHeightRatio = 640;
+
 const styles = {
   container: {
-    flex: 1,
+    height: TabViewHeight,
+    width: 100,
     marginTop: 0
   },
   text: {
@@ -120,12 +124,13 @@ export default class MainHeader extends Component {
       renderLabel={(routes) =>
         <Text style={[{ margin: 0, color: '#2b2b2b' }, styles.fontRobotoMedium]}>{routes.route.title}</Text>
       }
-      style={{backgroundColor: 'white'}}
+      style={{backgroundColor: 'white', height: Dimensions.get('window').height * TabViewHeight / WindowHeightRatio}}
       indicatorStyle={{backgroundColor: '#2b2b2b'}}
     />);
   }
 
   handleSwitchButton() {
+    this.props.setLoadingLoginAnimating(false);
     if (this.props.currentScene === 'map') {
       this.props.showListCard();
       this.props.setCurrentScene('list');
@@ -145,6 +150,7 @@ export default class MainHeader extends Component {
   }
 
   handleButtonMyPage() {
+    this.props.setLoadingLoginAnimating(false);
     this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
@@ -186,7 +192,10 @@ export default class MainHeader extends Component {
             </TouchableOpacity>
           </View>
           <TabViewAnimated
-            style={styles.container}
+            style={[styles.container, {
+              height: Dimensions.get('window').height * TabViewHeight / WindowHeightRatio,
+              width: Dimensions.get('window').width}
+            ]}
             navigationState={{
               index: this.props.tabviewIndex,
               routes: this.props.tabviewRoutes
@@ -201,13 +210,13 @@ export default class MainHeader extends Component {
                   this.props.categorizeItems('SHOW_ALL');
                   return;
                 case 1:
-                  this.props.categorizeItems('EVENTS');
+                  this.props.categorizeItems('event');
                   return;
                 case 2:
-                  this.props.categorizeItems('FACILITIES');
+                  this.props.categorizeItems('facility');
                   return;
                 case 3:
-                  this.props.categorizeItems('WARNING');
+                  this.props.categorizeItems('warning');
                   return;
                 default:
                   return;
@@ -229,6 +238,7 @@ MainHeader.propTypes = {
   categorizeItems: PropTypes.func,
   setTabViewIndex: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   tabviewIndex: PropTypes.any,
   tabviewRoutes: PropTypes.any,
   currentScene: PropTypes.string,

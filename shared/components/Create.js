@@ -22,10 +22,13 @@ import {
   API_KEY
 } from '../utils';
 import SmallHeader from '../components/smallHeader';
+import LoadingLayout from '../containers/loadingLayout';
 import { getAccessToken, getUserKey } from '../actions/authActions';
 
 import ImgBtnCheck from '../resources/camera/btn_check.png';
 import ImgLocation from '../resources/create/btn_location.png';
+
+const DatePickerHeight = 46;
 
 const styles = {
   preview: {
@@ -99,6 +102,7 @@ const styles = {
     fontSize: 14,
     alignSelf: 'flex-end',
     marginRight: 16,
+    marginTop: 2,
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Medium'
@@ -142,7 +146,7 @@ const styles = {
     padding: 16
   },
   DatePicker: {
-    height: 46,
+    height: DatePickerHeight,
     width: Dimensions.get('window').width - 32,
     borderColor: '#e7e7e7',
     borderWidth: 1,
@@ -227,6 +231,7 @@ class Create extends Component {
   postNewItem() {
     let dataFlag;
     getUserKey().then((userKey) => {
+      this.props.setLoadingLoginAnimating(true);
       return JSON.stringify({
         title: this.state.inputTextTitle,
         lat: this.props.currentLocation.latitude,
@@ -257,29 +262,45 @@ class Create extends Component {
       });
     })
     .then((response) => response.json())
-    .then((rjson) => {
-      console.log(rjson);
-      this.props.setCurrentScene('map');
-      Actions.pop({popNum: 2});
-    })
+    .then(() => this.handleSceneTransition())
     .catch((error) => {
+      this.props.setLoadingLoginAnimating(false);
       console.warn(error);
     });
   }
 
   getAddressData() {
-    const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;
-    try {
-      fetch(uri)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        const streetNumber = JSON.stringify(responseJson.results[0].address_components[0].short_name).replace('"', '').replace('"', '');
-        const streetName = JSON.stringify(responseJson.results[0].address_components[1].short_name).replace('"', '').replace('"', '');
-        this.setState({streetName: streetName, streetNumber: streetNumber});
-      });
-    } catch (error) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const uri = `${API_GEODATA}?latlng=${position.coords.latitude},${position.coords.longitude}&key=${API_KEY}`;
+      try {
+        fetch(uri)
+        .then((response) => response.json())
+        .then((rjson) => {
+          let streetNumber;
+          let streetName;
+          if (rjson.results[0].address_components[0].short_name) {
+            streetNumber = JSON.stringify(rjson.results[0].address_components[0].short_name);
+          } else {
+            streetNumber = JSON.stringify(rjson.results[0].address_components[0].long_name);
+          }
+          if (rjson.results[0].address_components[1].short_name) {
+            streetName = JSON.stringify(rjson.results[0].address_components[1].short_name);
+          } else {
+            streetName = JSON.stringify(rjson.results[0].address_components[1].long_name);
+          }
+          this.setState({
+            streetName: streetName.replace('"', '').replace('"', ''),
+            streetNumber: streetNumber.replace('"', '').replace('"', '')
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    (error) => {
+      // todo: handle this error
       console.log(error);
-    }
+    });
   }
 
   checkDone() {
@@ -312,6 +333,7 @@ class Create extends Component {
     });
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
     getAccessToken().then((accessToken) => {
+      this.props.setLoadingLoginAnimating(true);
       fetch(address, {
         method: 'POST',
         headers: {
@@ -322,14 +344,23 @@ class Create extends Component {
         body: data
       })
       .then((response) => response.json())
-      .then(() => {
-        this.props.setCurrentScene('map');
-        Actions.pop({popNum: 2});
-      })
+      .then(() => this.handleSceneTransition())
       .catch((error) => {
+        this.props.setLoadingLoginAnimating(false);
         console.warn(error);
       });
     });
+  }
+
+  handleSceneTransition() {
+    this.props.setLoadingLoginAnimating(false);
+    this.props.setCurrentScene(this.props.lastScene);
+    if (this.props.lastScene === 'list') {
+      // todo: change the ugly scene transition of popping two consecutive scenes animation
+      Actions.pop({popNum: 2});
+    } else {
+      Actions.map({type: 'reset'});
+    }
   }
 
   handleCategoryButton(select) {
@@ -382,14 +413,14 @@ class Create extends Component {
   handleOnDateChangeStart(datetime) {
     const a = new Date(datetime);
     this.setState({dateStart: a.toISOString()});
-    const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
+    const txtDate = `${this.convertMonth(a.format('MM'))} ${a.format('DD')}, ${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderStart: txtDate});
   }
 
   handleOnDateChangeEnd(datetime) {
     const a = new Date(datetime);
     this.setState({dateEnd: a.toISOString()});
-    const txtDate = `${this.convertMonth(a.format('MM'))}${a.format('DD')},${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
+    const txtDate = `${this.convertMonth(a.format('MM'))} ${a.format('DD')}, ${a.format('hh')}:${a.format('mm')}${a.format('a')}`;
     this.setState({placeholderEnd: txtDate});
   }
 
@@ -399,7 +430,7 @@ class Create extends Component {
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
           <Text style={[styles.fontRobotoRegular,
-            {marginTop: 12, color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            {marginTop: 14, color: (this.state.dateStart === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Starts
           </Text>
         </View>
@@ -432,7 +463,7 @@ class Create extends Component {
       <View>
         <View style={{marginLeft: 32, zIndex: 1, position: 'absolute'}}>
           <Text style={[styles.fontRobotoRegular,
-            {marginTop: 12 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
+            {marginTop: 14 + 8, color: (this.state.dateEnd === '') ? '#8e8e8e' : '#2b2b2b'}]}>
             Ends
           </Text>
         </View>
@@ -602,7 +633,7 @@ class Create extends Component {
     return (
       <View style={{backgroundColor: 'white'}}>
         <Text style={styles.textCaption}> Location </Text>
-        <View style={{backgroundColor: 'white'}}>
+        <View style={{backgroundColor: 'white', height: 46}}>
           {this.state.addingNewLocation === true ?
             <View style={{
               height: 24,
@@ -756,6 +787,7 @@ class Create extends Component {
             }
           </ScrollView>
         </View>
+        <LoadingLayout/>
       </View>
     );
   }
@@ -763,8 +795,10 @@ class Create extends Component {
 
 Create.propTypes = {
   pic: PropTypes.string,
+  lastScene: PropTypes.string,
   getAllItems: PropTypes.func,
   setCurrentScene: PropTypes.func,
+  setLoadingLoginAnimating: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
   currentLocation: PropTypes.any

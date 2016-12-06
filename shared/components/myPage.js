@@ -191,7 +191,7 @@ class MyPage extends Component {
               this.props.token !== '' &&
               this.props.token !== 'guest') ?
               this.props.userName :
-              'guest'
+              'Guest'
             }
           </Text>
         </View>
@@ -239,7 +239,10 @@ class MyPage extends Component {
 
   renderTabViewContents({ route }) {
     if (route.key === '2') {
-      if (this.props.token !== '' && this.props.token !== 'guest' && this.props.savedPosts.length !== 0) {
+      if (this.props.token !== '' &&
+        this.props.token !== 'guest' &&
+        this.props.savedPosts.length !== 0 &&
+        !this.props.savedPosts.error) {
         let dataSource = this.props.savedPosts.map((post) => {
           return (
             Object.assign(post, {isSaved: true})
@@ -263,7 +266,11 @@ class MyPage extends Component {
       );
     }
     if (route.key === '1') {
-      if (this.props.token !== '' && this.props.token !== 'guest' && this.props.createdPosts && this.props.createdPosts.length !== 0) {
+      if (this.props.token !== '' &&
+        this.props.token !== 'guest' &&
+        this.props.createdPosts &&
+        this.props.createdPosts.length !== 0
+        && !this.props.createdPosts.error) {
         return (
           <ListView
             dataSource={
@@ -271,7 +278,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.createdPosts)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />

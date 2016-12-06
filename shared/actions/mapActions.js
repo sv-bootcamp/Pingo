@@ -3,6 +3,7 @@ import {
   queryBuilder, createQueryObject} from '../utils';
 import { getAccessToken } from './authActions';
 import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, getAuthHeaders } from '../utils';
+import { setLoadingLoginAnimating } from './userActions';
 
 export const onLocationChange = (region) => {
   return {
@@ -25,9 +26,7 @@ export const getMapItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('lng', long));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', true));
-    // todo: recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
-    // const address = `https://goober.herokuapp.com/api/items${queryBuilder(queries)}`;
-    getAccessToken().then((accessToken) => {
+    return getAccessToken().then((accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
       return fetch(address, {
@@ -37,9 +36,11 @@ export const getMapItems = (zoomLevel, lat, long) => {
       .then(response => {
         return response.json();
       })
-      .then(json =>
-        dispatch(receiveItems(json))
-      )
+      .then(json => {
+        dispatch(setLoadingLoginAnimating(false));
+        dispatch(receiveItems(json));
+        return;
+      })
       .catch((error) => console.log(error));
     });
   };

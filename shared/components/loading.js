@@ -10,14 +10,16 @@ class Loading extends Component {
     if (!this.props.loadingLoginAnimating) {
       return null;
     }
+    const height = !this.props.customWrapperHeight ? Dimensions.get('window').height : this.props.customWrapperHeight;
+    const width = !this.props.customWrapperWidth ? Dimensions.get('window').width : this.props.customWrapperWidth;
     return (
       <View
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
-          height: Dimensions.get('window').height,
-          width: Dimensions.get('window').width,
+          height: height,
+          width: width,
           zIndex: 40,
           backgroundColor: 'white',
           opacity: 0.5
@@ -27,8 +29,8 @@ class Loading extends Component {
           animating={this.props.loadingLoginAnimating}
           style={{
             position: 'absolute',
-            top: Dimensions.get('window').height / 2 - 40,
-            left: Dimensions.get('window').width / 2 - 40 + 3,
+            top: height / 2 - 40,
+            left: width / 2 - 40 + 3,
             height: 80,
             width: 80,
             zIndex: 50
@@ -42,7 +44,9 @@ class Loading extends Component {
 }
 
 Loading.propTypes = {
-  loadingLoginAnimating: PropTypes.bool
+  loadingLoginAnimating: PropTypes.bool,
+  customWrapperHeight: PropTypes.number,
+  customWrapperWidth: PropTypes.number
 };
 
 export default Loading;

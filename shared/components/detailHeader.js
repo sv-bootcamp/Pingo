@@ -9,7 +9,7 @@ import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/b
 const styles = {
   wrapper: {
     flex: 1,
-    flexDirection : 'row',
+    flexDirection: 'row',
     backgroundColor: '#f8f8f8',
     borderBottomWidth: 1,
     borderBottomColor: '#e7e7e7'

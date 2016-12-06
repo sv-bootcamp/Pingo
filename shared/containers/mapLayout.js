@@ -2,32 +2,19 @@ import Map from '../components/map';
 import { onLocationChange, getMapItems, setLocation, onMarkerClick, hideMapCard, getZoomLevel } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setCurrentCity, setUserLocation } from '../actions/mapActions';
+import { setLoadingLoginAnimating } from '../actions/userActions';
 import { connect } from 'react-redux';
-
-const getCategorizedItems = (items, categoryFilter) => {
-  switch (categoryFilter) {
-  case 'SHOW_ALL':
-    return items;
-  case 'EVENTS':
-    return items.filter(item => item.category === 'event');
-  case 'FACILITIES':
-    return items.filter(item => item.category === 'facility');
-  case 'WARNING':
-    return items.filter(item => item.category === 'warning');
-  default:
-    return items;
-  }
-};
 
 const mapStateToProps = (state) => {
   return {
-    items: getCategorizedItems(state.map.items, state.map.categoryFilter),
+    items: state.map.items,
     selectedItem: state.map.selectedItem,
     currentLocation: state.map.currentLocation,
     detailSource: state.map.detailSource,
     setCurrentScene: state.flux.setCurrentScene,
     userLocation: state.map.userLocation,
-    zoomLevel: state.map.zoomLevel
+    zoomLevel: state.map.zoomLevel,
+    categoryFilter: state.map.categoryFilter
   };
 };
 
@@ -59,6 +46,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setUserLocation: (userLocation) => {
       return dispatch(setUserLocation(userLocation));
+    },
+    setLoadingLoginAnimating: (loadingLoginAnimating) => {
+      return dispatch(setLoadingLoginAnimating(loadingLoginAnimating));
     }
   };
 };
