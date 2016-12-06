@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Animated, Easing, StyleSheet, View, Text, Dimensions, Platform} from 'react-native';
+import {Animated, Easing, StyleSheet, View, Text, Platform} from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -325,15 +325,21 @@ export default class Map extends Component {
             }}
           >
             {(this.state.markerSelect === item.key) ?
-              <Text style={[{
-                alignSelf: 'center',
-                top: Dimensions.get('window').height * 23 / 640,
-                left: Dimensions.get('window').width * 69 / 640,
-                fontSize: 14,
-                color: '#ffffff'
-              }, styles.fontRobotoMedium]}>
-                {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
-              </Text>
+              <View
+                style={{height: 103, width: 89}}
+                onLayout={(evt) => {
+                  this.selectedMarkerViewHeight = evt.nativeEvent.layout.height;
+                }}
+              >
+                <Text style={[{
+                  alignSelf: 'center',
+                  top: this.selectedMarkerViewHeight * 25 / 103,
+                  fontSize: 14,
+                  color: '#ffffff'
+                }, styles.fontRobotoMedium]}>
+                  {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+                </Text>
+              </View>
               : null}
           </MapView.Marker>
         ) : null
