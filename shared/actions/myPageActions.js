@@ -1,6 +1,7 @@
 import * as types from './actionTypes';
 import { getAccessToken } from './authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST, getAuthHeaders } from '../utils';
+import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST, getAuthHeaders, ENDPOINT_ITEM } from '../utils';
+import { getCreatedPosts } from './userActions';
 
 export const setMyPageTabViewIndex = (myPageTabViewIndex) => {
   return {
@@ -52,7 +53,7 @@ export const saveEvent = (eventKey) => {
       })
       .then(response => response.json())
       .then(json => {
-        if(json.message){
+        if (json.message) {
           dispatch(getSavedPosts());
         }
       })
@@ -78,8 +79,35 @@ export const deleteEvent = (eventKey) => {
       })
       .then(response => response.json())
       .then(json => {
-        if(json.message){
+        if (json.message) {
           dispatch(getSavedPosts());
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    });
+  };
+};
+
+export const toggleModalVisible = () => {
+  return {
+    type: types.toggleModalVisible
+  };
+};
+
+export const deleteMyphoto = (key) => {
+  return (dispatch) => {
+    getAccessToken(dispatch).then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${key}`;
+      const headers = getAuthHeaders(accessToken);
+      return fetch(address, {
+        method: 'DELETE',
+        headers
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(getCreatedPosts());
         }
       })
       .catch((error) => {
