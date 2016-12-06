@@ -51,7 +51,7 @@ class LoginFacebook extends Component {
   }
 
   handleLogin() {
-    FBLoginManager.login((error, data) => {
+    FBLoginManager.loginWithPermissions(["email", "user_about_me"],(error, data) => {
       if (!error) {
         this.props.setLoadingLoginAnimating(true);
         setLoginType('facebook');
