@@ -300,6 +300,11 @@ export default class Map extends Component {
             centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
             image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
             onPress={()=>{
+              this.map.animateToRegion({
+                ...this.props.currentLocation,
+                latitude: item.lat,
+                longitude: item.lng
+              });
               this.setMarkerClickTime();
               this.props.onMarkerClick(item);
               this.cardAnimationSlideUp();
