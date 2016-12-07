@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import Swiper from 'react-native-swiper';
 import DetailHeaderLayout from '../containers/detailHeaderLayout';
 import DetailLitemap from './detailLitemap';
-import { View, Image, Text, Modal, TouchableOpacity, Platform, TouchableHighlight } from 'react-native';
+import { View, Image, Text, Modal, TouchableOpacity, Platform } from 'react-native';
 import IMG_BUTTON_LEFT from '../resources/arrow_left/drawable-xxxhdpi/arrow.png';
 import IMG_BUTTON_RIGHT from '../resources/arrow_right/drawable-xxxhdpi/arrow.png';
 import IMG_BUTTON_FLAG from '../resources/btn_flag/drawable-xxxhdpi/btn_flag.png';
@@ -70,21 +70,19 @@ export default class DetailView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isClicked: false,
       modalVisible: false,
       photoRepored: false,
       locationReported: false,
       messageVisible: false,
       currentReport: '',
       data: [],
-      currentIndex: this.props.rowID * 1 + 1,
+      currentIndex: this.props.rowID * 1,
       name: 'name',
       profileImgUrl: '',
       profileImageHeight: 0,
       profileImageWidth: 0
     };
     this.renderDate = this.renderDate.bind(this);
-    this.handleClick = this.handleClick.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
     this.toggleModalVisible = this.toggleModalVisible.bind(this);
     this.renderModal = this.renderModal.bind(this);
@@ -93,7 +91,6 @@ export default class DetailView extends Component {
     this.messageUnvisible = this.messageUnvisible.bind(this);
     this.renderSlide = this.renderSlide.bind(this);
     this.renderInfoSlide = this.renderInfoSlide.bind(this);
-    this.firstTry = true;
   }
 
   componentDidMount() {
@@ -123,17 +120,6 @@ export default class DetailView extends Component {
     : this.setState({locationReported: true});
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.isClicked !== prevState.isClicked && prevState.isClicked) {
-      this.swiper.scrollBy(1, false);
-    }
-  }
-
-  handleClick(i) {
-    this.setState({isClicked: !this.state.isClicked});
-    this.setState({currentIndex: i});
-  }
-
   handleMessage(value) {
     this.handleReport(value);
     this.setState({messageVisible: true});
@@ -146,9 +132,6 @@ export default class DetailView extends Component {
   }
 
   renderPagination(index, total) {
-    if (this.state.isClicked) {
-      return (<View style ={{flex: 0.3, backgroundColor: 'black'}}/>);
-    }
     return (
       <View style={{
         flexDirection: 'row',
@@ -197,11 +180,6 @@ export default class DetailView extends Component {
   }
 
   renderModal() {
-    if (this.state.isClicked) {
-      return (
-        <View style = {{flex: 1, backgroundColor: 'black'}}/>
-      );
-    }
     return (
         <View style = {{flex: 1}}>
           <Modal
@@ -324,57 +302,50 @@ export default class DetailView extends Component {
 
   renderSlide(value, i) {
     return (
-      <View style = {{flex: 1}}>
-        {
-          (this.state.isClicked) ? <View style = {{flex: 68, backgroundColor: 'black'}}/> :
-          <View style = {{flex: 68, flexDirection: 'row'}}>
-            <View style = {{flex: 16}}/>
-            <View
-              style = {{flex: 32, justifyContent: 'center'}}
-              onLayout={(evt) => this.setState({
-                profileImageWidth: evt.nativeEvent.layout.width
-              })}
-            >
-            {
-              (this.state.profileImgUrl) ?
-              <Image
-                style={{height: this.state.profileImageWidth, width: this.state.profileImageWidth, borderRadius: 3}}
-                source={{uri: this.state.profileImgUrl}}
-              />
-              :
-              <View style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3, backgroundColor: 'purple'}}/>
-            }
-            </View>
-            <View style = {{flex: 274}}>
-              <View style = {{flex: 16}}/>
-              <View style = {{flex: 14}}>
-                <Text style = {styles.name}>{this.state.name}</Text>
-              </View>
-              <View style = {{flex: 4}}/>
-              <View style = {{flex: 14}}>
-                {this.renderDate(value.createdDate)}
-              </View>
-              <View style = {{flex: 16}}/>
-            </View>
-            <View style = {styles.btnFlag}>
-              <TouchableOpacity onPress = {()=>{
-                this.setState({currentReport: 'photo'});
-                Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage, eventKey: this.props.dataSource.key});
-              }}>
-                <Image source = {IMG_BUTTON_FLAG}
-                       style = {{height: 24, width: 24}}/>
-              </TouchableOpacity>
-            </View>
+      <View style = {{flex: 1}} key = {i.toString()}>
+        <View style = {{flex: 68, flexDirection: 'row'}}>
+          <View style = {{flex: 16}}/>
+          <View
+            style = {{flex: 32, justifyContent: 'center'}}
+            onLayout={(evt) => this.setState({
+              profileImageWidth: evt.nativeEvent.layout.width
+            })}
+          >
+          {
+            (this.state.profileImgUrl) ?
+            <Image
+              style={{height: this.state.profileImageWidth, width: this.state.profileImageWidth, borderRadius: 3}}
+              source={{uri: this.state.profileImgUrl}}
+            />
+            :
+            <View style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3, backgroundColor: 'purple'}}/>
+          }
           </View>
-        }
-        <View style={styles.slide}>
-          <TouchableHighlight style = {{flex: 1}}
-                              onPress = {()=>this.handleClick(i)}>
-            <Image source = {{uri: value.url}}
-                   style = {{flex: 1}}/>
-          </TouchableHighlight>
+          <View style = {{flex: 274}}>
+            <View style = {{flex: 16}}/>
+            <View style = {{flex: 14}}>
+              <Text style = {styles.name}>{this.state.name}</Text>
+            </View>
+            <View style = {{flex: 4}}/>
+            <View style = {{flex: 14}}>
+              {this.renderDate(value.createdDate)}
+            </View>
+            <View style = {{flex: 16}}/>
+          </View>
+          <View style = {styles.btnFlag}>
+            <TouchableOpacity onPress = {()=>{
+              this.setState({currentReport: 'photo'});
+              Actions.eventReportView({aboutPhoto: true, handleReport: this.handleMessage, eventKey: this.props.dataSource.key});
+            }}>
+              <Image source = {IMG_BUTTON_FLAG}
+                     style = {{height: 24, width: 24}}/>
+            </TouchableOpacity>
+          </View>
         </View>
-        {(this.state.isClicked) ? <View style = {{flex: 103, backgroundColor: 'black'}}/> :
+        <View style={styles.slide}>
+          <Image source = {{uri: value.url}}
+                 style = {{flex: 1}}/>
+        </View>
         <View style = {{flex: 103, flexDirection: 'row'}}>
           <View style = {{flex: 16}}/>
           <View style = {{flex: 328}}>
@@ -385,7 +356,6 @@ export default class DetailView extends Component {
           </View>
           <View style = {{flex: 16}}/>
         </View>
-        }
       </View>
     );
   }
@@ -406,28 +376,24 @@ export default class DetailView extends Component {
   }
 
   render() {
+    console.log(this.props.rowID * 1);
     let pages = [];
-    if (!this.state.isClicked) {
-      pages.push(this.renderInfoSlide(this.props.detailSource[0]));
-    }
+    pages.push(this.renderInfoSlide(this.props.detailSource[0]));
     for (let i = 0; i < this.props.detailSource.length; i = i + 1) {
       pages.push(this.renderSlide(this.props.detailSource[i], i));
     }
     return (
       <View style = {{ flex: 1, backgroundColor: 'black'}}>
-      {
-        (this.state.isClicked) ? <View style = {{height: 67, backgroundColor: 'black'}}/> :
-          <View style = {{height: 67}}>
-            <DetailHeaderLayout title = {this.props.dataSource.title}
-                                itemKey = {this.props.dataSource.key}
-                                date = {this.props.date}
-                                lastScene = {this.props.lastScene}
-                                setModalVisible = {this.toggleModalVisible}
-                                messageUnvisible = {this.messageUnvisible}
-                                isSaved = {this.props.isSaved}
-                                toggleStar = {this.props.toggleStar}/>
-          </View>
-      }
+        <View style = {{height: 67}}>
+          <DetailHeaderLayout title = {this.props.dataSource.title}
+                              itemKey = {this.props.dataSource.key}
+                              date = {this.props.date}
+                              lastScene = {this.props.lastScene}
+                              setModalVisible = {this.toggleModalVisible}
+                              messageUnvisible = {this.messageUnvisible}
+                              isSaved = {this.props.isSaved}
+                              toggleStar = {this.props.toggleStar}/>
+        </View>
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
           <Swiper ref={(swiper) => {
             this.swiper = swiper;
@@ -436,7 +402,9 @@ export default class DetailView extends Component {
             renderPagination={this.renderPagination}
             height={549}
             loop={false}
-            index={this.state.currentIndex}>
+            index={this.state.currentIndex}
+            enableEmptySections={true}
+            removeClippedSubviews={false}>
               {pages}
           </Swiper>
           {this.renderModal()}
