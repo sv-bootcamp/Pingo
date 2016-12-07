@@ -128,16 +128,16 @@ export default class Map extends Component {
         ok: 'YES',
         cancel: 'NO'
       })
-        .then(() => {
-          this.setCurrentPosition();
-          this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-          this.props.getMapItems(this.props.zoomLevel,
-            this.props.currentLocation.latitude,
-            this.props.currentLocation.longitude);
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+      .then(() => {
+        this.setCurrentPosition();
+        this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+        this.props.getMapItems(this.props.zoomLevel,
+          this.props.currentLocation.latitude,
+          this.props.currentLocation.longitude);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
     }
     this.watchID = navigator.geolocation.watchPosition((position) => {
       const userLocation = {
