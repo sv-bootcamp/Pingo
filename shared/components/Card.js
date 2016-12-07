@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
@@ -244,9 +244,16 @@ class Card extends Component {
         flexDirection: 'column'
       }}>
         <View style={{flex: FLEX_TEXT_TITLE + FLEX_MARGIN_TEXT_ROW, flexDirection: 'row'}}>
-          <View style={{flex: 4, justifyContent: 'flex-start'}}>
-            <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
-          </View>
+          <TouchableWithoutFeedback onPress = {()=>{
+            this.props.setCurrentScene('detail');
+            this.props.getDetailImage(this.props.dataSource.key);
+            Actions.detailView({ rowID: -1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
+              date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
+          }}>
+            <View style={{flex: 4, justifyContent: 'flex-start'}}>
+              <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
+            </View>
+          </TouchableWithoutFeedback>
           <View style={{position: 'absolute', right: Dimensions.get('window').width * 16 / 360}}>
             {(this.fromActivity) ?
               <TouchableOpacity onPress = {() => {
