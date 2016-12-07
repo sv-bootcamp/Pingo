@@ -120,25 +120,11 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
-    if (Platform.OS === 'android') {
-      LocationServicesDialogBox.checkLocationServicesIsEnabled({
-        message: '<h2>Use Location ?</h2>' +
-        'This app wants to change your device settings:<br/><br/>' +
-        'Use GPS, Wi-Fi, and cell network for location<br/><br/>',
-        ok: 'YES',
-        cancel: 'NO'
-      })
-      .then(() => {
-        this.setCurrentPosition();
-        this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-        this.props.getMapItems(this.props.zoomLevel,
-          this.props.currentLocation.latitude,
-          this.props.currentLocation.longitude);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-    }
+    this.setCurrentPosition();
+    this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+    this.props.getMapItems(this.props.zoomLevel,
+      this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
     this.watchID = navigator.geolocation.watchPosition((position) => {
       const userLocation = {
         latitude: position.coords.latitude,

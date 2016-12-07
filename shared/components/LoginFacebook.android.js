@@ -91,9 +91,9 @@ class LoginFacebook extends Component {
           setLoginType('facebook');
           grantFacebookUser(data.credentials.token).then(() => {
             this.props.setToken('facebook');
+            this.props.setLoadingLoginAnimating(false);
             if (this.props.currentScene === 'initialScene') {
               this.props.setCurrentScene('map');
-              this.props.setLoadingLoginAnimating(false);
               Actions.map({type: 'replace'});
             }
           }).catch(() => this.props.setLoadingLoginAnimating(false));
