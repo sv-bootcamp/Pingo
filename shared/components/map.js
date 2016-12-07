@@ -14,7 +14,6 @@ import warningClickPng from '../resources/marker/warning_big.png';
 import userPng from '../resources/marker/user.png';
 import userSmallPng from '../resources/marker/user_small.png';
 import {API_GEODATA, API_KEY} from '../utils';
-import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 const styles = StyleSheet.create({
   container: {
