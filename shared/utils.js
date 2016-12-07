@@ -20,8 +20,9 @@ export const DEFAULT_HEADERS = {
 };
 
 export const getAuthHeaders = (accessToken) => {
-  DEFAULT_HEADERS.Authorization = `bearer ${accessToken}`;
-  return DEFAULT_HEADERS;
+  const headers = JSON.parse(JSON.stringify(DEFAULT_HEADERS));
+  headers.Authorization =  `bearer ${accessToken}`;
+  return headers;
 };
 
 export const createQueryObject = (key, value) => {
