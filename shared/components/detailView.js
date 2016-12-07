@@ -77,7 +77,7 @@ export default class DetailView extends Component {
       messageVisible: false,
       currentReport: '',
       data: [],
-      currentIndex: 0,
+      currentIndex: this.props.rowID * 1 + 1,
       name: 'name',
       profileImgUrl: '',
       profileImageHeight: 0,
@@ -124,12 +124,8 @@ export default class DetailView extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.firstTry) {
-      this.swiper.scrollBy(prevProps.rowID * 1 + 1, false);
-      this.firstTry = false;
-    }
-    if (this.state.isClicked !== prevState.isClicked) {
-      (prevState.isClicked) ? this.swiper.scrollBy(this.state.currentIndex + 1, false) : this.swiper.scrollBy(this.state.currentIndex, false);
+    if (this.state.isClicked !== prevState.isClicked && prevState.isClicked) {
+      this.swiper.scrollBy(1, false);
     }
   }
 
@@ -428,8 +424,9 @@ export default class DetailView extends Component {
           }}
             showsButtons = {false}
             renderPagination={this.renderPagination}
-            height= {549}
-            loop = {false}>
+            height={549}
+            loop={false}
+            index={this.state.currentIndex}>
               {pages}
           </Swiper>
           {this.renderModal()}
