@@ -9,12 +9,12 @@
     "test": "eslint shared/**/*.js && eslint __tests__/**/*.js && jest"
   },
   "jest": {
-    "preset": "jest-react-native"
+    "preset": "react-native"
   },
   "dependencies": {
     "buffer": "^5.0.0",
     "moment": "^2.15.2",
-    "react": "~15.3.2",
+    "react": "~15.4.0",
     "react-addons-shallow-compare": "^15.3.2",
     "react-addons-update": "^15.3.2",
     "react-native": "0.38.0",
