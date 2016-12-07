@@ -157,7 +157,7 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
+        Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
           date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
       }}>
         <Image style={styles.CardImage}
@@ -247,7 +247,7 @@ class Card extends Component {
           <TouchableWithoutFeedback onPress = {()=>{
             this.props.setCurrentScene('detail');
             this.props.getDetailImage(this.props.dataSource.key);
-            Actions.detailView({ rowID: -1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
+            Actions.detailView({ rowID: 0, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
               date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
           }}>
             <View style={{flex: 4, justifyContent: 'flex-start'}}>
