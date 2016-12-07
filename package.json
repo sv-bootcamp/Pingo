@@ -9,7 +9,7 @@
     "test": "eslint shared/**/*.js && eslint __tests__/**/*.js && jest"
   },
   "jest": {
-    "preset": "jest-react-native"
+    "preset": "react-native"
   },
   "dependencies": {
     "buffer": "^5.0.0",
