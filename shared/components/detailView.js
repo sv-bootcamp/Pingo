@@ -298,10 +298,15 @@ export default class DetailView extends Component {
                 profileImageWidth: evt.nativeEvent.layout.width
               })}
             >
+            {
+              (this.state.profileImgUrl) ?
               <Image
                 style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3}}
                 source={{uri: this.state.profileImgUrl}}
               />
+              :
+              <View style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3, backgroundColor: 'purple'}}/>
+            }
             </View>
             <View style = {{flex: 7}}/>
             <View style = {{flex: 305, justifyContent: 'center'}}>
@@ -334,15 +339,20 @@ export default class DetailView extends Component {
                 profileImageWidth: evt.nativeEvent.layout.width
               })}
             >
+            {
+              (this.state.profileImgUrl) ?
               <Image
                 style={{height: this.state.profileImageWidth, width: this.state.profileImageWidth, borderRadius: 3}}
                 source={{uri: this.state.profileImgUrl}}
               />
+              :
+              <View style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3, backgroundColor: 'purple'}}/>
+            }
             </View>
             <View style = {{flex: 274}}>
               <View style = {{flex: 16}}/>
               <View style = {{flex: 14}}>
-                <Text style = {styles.name}> {this.state.name} </Text>
+                <Text style = {styles.name}>{this.state.name}</Text>
               </View>
               <View style = {{flex: 4}}/>
               <View style = {{flex: 14}}>
