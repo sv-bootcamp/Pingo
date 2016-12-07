@@ -74,6 +74,7 @@ export default class Map extends Component {
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
+    this.selectedMarkerViewHeight = 103;
     this.state = {
       markerSelect: '',
       cardTranslateY: new Animated.Value(0),
