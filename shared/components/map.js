@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import {Animated, Easing, StyleSheet, View, Text, Platform} from 'react-native';
+import React, { PropTypes, Component } from 'react';
+import { Animated, Easing, StyleSheet, View, Text, Platform } from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -71,6 +71,7 @@ export default class Map extends Component {
     this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
     this.renderUserIndicatorMarker = this.renderUserIndicatorMarker.bind(this);
     this.renderMarkers = this.renderMarkers.bind(this);
+    this.renderMarkerSelectImage = this.renderMarkerSelectImage.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -84,28 +85,6 @@ export default class Map extends Component {
       mapViewHeight: 0
     };
     this.watchID = null;
-  }
-
-  componentWillMount() {
-    if (Platform.OS === 'android') {
-      LocationServicesDialogBox.checkLocationServicesIsEnabled({
-        message: '<h2>Use Location ?</h2>' +
-        'This app wants to change your device settings:<br/><br/>' +
-        'Use GPS, Wi-Fi, and cell network for location<br/><br/>',
-        ok: 'YES',
-        cancel: 'NO'
-      })
-      .then(() => {
-        this.setCurrentPosition();
-        this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
-        this.props.getMapItems(this.props.zoomLevel,
-          this.props.currentLocation.latitude,
-          this.props.currentLocation.longitude);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-    }
   }
 
   componentWillReceiveProps(props) {
@@ -141,6 +120,25 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
+    if (Platform.OS === 'android') {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message: '<h2>Use Location ?</h2>' +
+        'This app wants to change your device settings:<br/><br/>' +
+        'Use GPS, Wi-Fi, and cell network for location<br/><br/>',
+        ok: 'YES',
+        cancel: 'NO'
+      })
+        .then(() => {
+          this.setCurrentPosition();
+          this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
+          this.props.getMapItems(this.props.zoomLevel,
+            this.props.currentLocation.latitude,
+            this.props.currentLocation.longitude);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
     this.watchID = navigator.geolocation.watchPosition((position) => {
       const userLocation = {
         latitude: position.coords.latitude,
@@ -321,10 +319,10 @@ export default class Map extends Component {
               this.props.onMarkerClick(item);
               this.cardAnimationSlideUp();
               this.buttonAnimationSlideUp();
-              this.setState({markerSelect: item.key});
+              this.state.markerSelect = item.key;
             }}
           >
-            {(this.state.markerSelect === item.key) ?
+            {(Platform.OS === 'ios' && this.state.markerSelect === item.key) ?
               <View
                 style={{height: 103, width: 89}}
                 onLayout={(evt) => {
