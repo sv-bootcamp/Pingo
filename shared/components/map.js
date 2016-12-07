@@ -319,7 +319,7 @@ export default class Map extends Component {
               this.props.onMarkerClick(item);
               this.cardAnimationSlideUp();
               this.buttonAnimationSlideUp();
-              this.state.markerSelect = item.key;
+              this.setState({markerSelect: item.key});
             }}
           >
             {(Platform.OS === 'ios' && this.state.markerSelect === item.key) ?
