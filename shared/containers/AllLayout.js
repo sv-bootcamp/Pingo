@@ -1,5 +1,5 @@
 import { View, StyleSheet, Platform } from 'react-native';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
 import FormLayout from './formLayout';
@@ -12,6 +12,8 @@ import SettingLayout from './settingLayout';
 import EventReportView from '../components/eventReportView';
 import InitialSceneLayout from './InitialSceneLayout';
 import PingoLayout from './PingoLayout';
+import { connect } from 'react-redux';
+import { setCurrentScene } from '../actions/fluxActions';
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
     <Scene key="pingo" hideNavBar={true} component={
@@ -59,9 +61,31 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class AllLayout extends Component {
+class All extends Component {
   constructor(props) {
     super(props);
+  }
+
+  backAndroidHandler() {
+    if (this.props.currentScene === 'list') {
+      this.props.setCurrentScene('map');
+      Actions.pop();
+    } else if (this.props.currentScene === 'cameraView') {
+      // todo: change the following to know the prev scene
+      this.props.setCurrentScene('map');
+      Actions.pop();
+    } else if (this.props.currentScene === 'createForm') {
+      Actions.pop({popNum: 2});
+    } else if (this.props.currentScene === 'myPage') {
+      this.props.setCurrentScene('map');
+      Actions.map({type: 'replace'});
+    } else if (this.props.currentScene === 'setting') {
+      this.props.setCurrentScene('myPage');
+      Actions.myPage({type: 'replace'});
+    } else if (this.props.currentScene === 'DetailView') {
+      Actions.pop();
+    }
+    return true;
   }
 
   render() {
@@ -71,9 +95,34 @@ export default class AllLayout extends Component {
         <View style={{flex: 1}}>
           <Router
             scenes={scenes}
+            backAndroidHandler={() => this.backAndroidHandler()}
           />
         </View>
       </View>
     );
   }
 }
+
+All.propTypes = {
+  currentScene: PropTypes.string,
+  setCurrentScene: PropTypes.func
+};
+
+function mapStateToProps(state) {
+  return { currentScene: state.flux.currentScene };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentScene: (currentScene) => {
+      return dispatch(setCurrentScene(currentScene));
+    }
+  };
+};
+
+const AllLayout = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(All);
+
+export default AllLayout;
