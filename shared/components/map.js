@@ -74,6 +74,7 @@ export default class Map extends Component {
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
+    this.mapClickCntIOS = 0;
     this.state = {
       markerSelect: '',
       cardTranslateY: new Animated.Value(0),
@@ -235,8 +236,14 @@ export default class Map extends Component {
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
       this.props.hideMapCard();
     }
-    if (this.state.markerSelect !== '') {
-      this.setState({markerSelect: ''});
+    this.mapClickCntIOS = this.mapClickCntIOS + 1;
+    if (Platform.OS === 'ios') {
+      if (this.mapClickCntIOS >= 2) {
+        this.state.markerSelect = '';
+        this.mapClickCntIOS = 0;
+      }
+    } else if (Platform.OS === 'android' && this.state.markerSelect) {
+      this.state.markerSelect = '';
     }
   }
 
@@ -300,27 +307,31 @@ export default class Map extends Component {
             centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
             image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
             onPress={()=>{
+              this.map.animateToRegion({
+                ...this.props.currentLocation,
+                latitude: item.lat,
+                longitude: item.lng
+              });
               this.setMarkerClickTime();
               this.props.onMarkerClick(item);
               this.cardAnimationSlideUp();
               this.buttonAnimationSlideUp();
-              this.setState({markerSelect: item.key});
+              this.state.markerSelect = item.key;
+              this.mapClickCntIOS = 0;
             }}
           >
             {(Platform.OS === 'ios' && this.state.markerSelect === item.key) ?
               <View
                 style={{height: 103, width: 89}}
-                onLayout={(evt) => {
-                  this.selectedMarkerViewHeight = evt.nativeEvent.layout.height;
-                }}
               >
                 <Text style={[{
                   alignSelf: 'center',
-                  top: this.selectedMarkerViewHeight * 25 / 103,
+                  top: 25,
                   fontSize: 14,
                   color: '#ffffff'
                 }, styles.fontRobotoMedium]}>
-                  {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+                  {(this.props.selectedItem && this.props.selectedItem.imageUrls) ?
+                    this.props.selectedItem.imageUrls.length : null}
                 </Text>
               </View>
               : null}
