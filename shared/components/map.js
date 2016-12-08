@@ -237,9 +237,13 @@ export default class Map extends Component {
       this.props.hideMapCard();
     }
     this.mapClickCntIOS = this.mapClickCntIOS + 1;
-    if (this.mapClickCntIOS >= 2) {
+    if (Platform.OS === 'ios') {
+      if (this.mapClickCntIOS >= 2) {
+        this.state.markerSelect = '';
+        this.mapClickCntIOS = 0;
+      }
+    } else if (Platform.OS === 'android' && this.state.markerSelect) {
       this.state.markerSelect = '';
-      this.mapClickCntIOS = 0;
     }
   }
 
