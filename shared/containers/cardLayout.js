@@ -1,4 +1,4 @@
-import Card from '../components/Card';
+import Card from '../components/card';
 import { getDetailImage } from '../actions/listActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { saveEvent, deleteEvent, toggleModalVisible, deleteMyphoto } from '../actions/myPageActions';

@@ -1,4 +1,4 @@
-import CameraView from '../components/CameraView';
+import CameraView from '../components/cameraView';
 import { setCurrentPic } from '../actions/formActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setUserLocation } from '../actions/mapActions';

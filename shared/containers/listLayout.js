@@ -1,4 +1,4 @@
-import EventList from '../components/EventList';
+import EventList from '../components/eventList';
 import { getAllItems } from '../actions/listActions';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';

@@ -11,7 +11,7 @@ import MyPageLayout from './myPageLayout';
 import SettingLayout from './settingLayout';
 import EventReportView from '../components/eventReportView';
 import InitialSceneLayout from './InitialSceneLayout';
-import PingoLayout from './PingoLayout';
+import PingoLayout from './pingoLayout';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 const scenes = Actions.create(

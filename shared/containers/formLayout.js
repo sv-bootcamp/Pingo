@@ -1,4 +1,4 @@
-import Create from '../components/Create';
+import Create from '../components/create';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setLoadingLoginAnimating } from '../actions/userActions';
