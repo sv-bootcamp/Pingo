@@ -1,4 +1,4 @@
-import LoginFacebook from '../components/LoginFacebook';
+import LoginFacebook from '../components/loginFacebook';
 import { connect } from 'react-redux';
 import { setToken } from '../actions/authActions';
 import { setCurrentScene } from '../actions/fluxActions';
