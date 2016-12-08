@@ -1,4 +1,4 @@
-import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS, createQueryObject, queryBuilder} from '../utils';
+import {HTTPUtil, createQueryObject, queryBuilder} from '../utils';
 
 export const API_KEY = 'AIzaSyAyPPoj64FoqPCqFTDQBkR9aNM493v_xH4';
 
@@ -7,7 +7,7 @@ const ADDRESS = {
 };
 
 const RESTManager = {
-  getAddressData: () => {
+  getAddressData: (lat, lng) => {
     const queries = [];
     queries.push(createQueryObject('latlng', `${lat},${lng}`));
     queries.push(createQueryObject('key', `${API_KEY}`));
