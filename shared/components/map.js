@@ -74,7 +74,6 @@ export default class Map extends Component {
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
-    this.selectedMarkerViewHeight = 103;
     this.mapClickCntIOS = 0;
     this.state = {
       markerSelect: '',
@@ -320,13 +319,10 @@ export default class Map extends Component {
             {(Platform.OS === 'ios' && this.state.markerSelect === item.key) ?
               <View
                 style={{height: 103, width: 89}}
-                onLayout={(evt) => {
-                  this.selectedMarkerViewHeight = evt.nativeEvent.layout.height;
-                }}
               >
                 <Text style={[{
                   alignSelf: 'center',
-                  top: this.selectedMarkerViewHeight * 25 / 103,
+                  top: 25,
                   fontSize: 14,
                   color: '#ffffff'
                 }, styles.fontRobotoMedium]}>
