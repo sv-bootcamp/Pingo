@@ -35,7 +35,7 @@ class DetailLitemap extends Component {
     return (
       <View style={{alignItems: 'center'}}>
         <MapView
-          style ={{height: 100, width: 333}}
+          style ={{height: 100, width: 333, borderRadius: 5}}
           region={this.props.currentLocation}
           litemode={true}
           scrollEnabled = {false}
