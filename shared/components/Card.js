@@ -91,7 +91,6 @@ class Card extends Component {
     };
     this.renderImg = this.renderImg.bind(this);
     this.toggleStar = this.toggleStar.bind(this);
-<<<<<<< HEAD
     this.renderOwnership = this.renderOwnership.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
     this.renderModal = this.renderModal.bind(this);
@@ -119,8 +118,6 @@ class Card extends Component {
       this.fromActivity = false;
       this.aboutItem = false;
     }
-=======
->>>>>>> date bug fix
   }
 
   componentDidMount() {
@@ -139,54 +136,16 @@ class Card extends Component {
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
       'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
-    let meridiem = 'am';
-    let hour = startTime.getHours();
-    if (hour === 0) {
-      hour = 12;
-    }
-    else if (hour === 12) {
-      meridiem = 'pm';
-    }
-    else if (hour > 12) {
-      hour %= 12;
-      meridiem = 'pm';
-    }
-    if (hour < 10) {
-      hour = '0' + hour;
-    }
-    let minute = startTime.getMinutes();
-    if (minute === 0) {
-      minute = '00';
-    }
-    else if (minute < 10) {
-      minute = '0' + minute;
-    }
     date += monthNames[startTime.getMonth()] + '. ' + startTime.getDate() + ', ';
-    date += hour + ':' + minute + meridiem + ' - ';
+    (startTime.getHours() === 0) ? date += '12:' + startTime.getMinutes() + 'am' :
+    (startTime.getHours() > 12) ? date += startTime.getHours() % 12 + ':' + startTime.getMinutes() + 'pm' :
+    date += startTime.getHours() + ':' + startTime.getMinutes() + 'am';
+    date += ' - ';
     if (endTime) {
-      meridiem = 'am';
-      hour = endTime.getHours();
-      if (hour === 0) {
-        hour = 12;
-      }
-      else if (hour === 12) {
-        meridiem = 'pm';
-      }
-      else if (hour > 12) {
-        hour %= 12;
-        meridiem = 'pm';
-      }
-      if (hour < 10) {
-        hour = '0' + hour;
-      }
-      minute = endTime.getMinutes();
-      if (minute === 0) {
-        minute = '00';
-      }
-      else if (minute < 10) {
-        minute = '0' + minute;
-      }
-      date += hour + ':' + minute + meridiem;
+      date += monthNames[endTime.getMonth()] + '. ' + endTime.getDate() + ', ';
+      (endTime.getHours() === 0) ? date += '12:' + endTime.getMinutes() + 'am' :
+      (endTime.getHours() > 12) ? date += endTime.getHours() % 12 + ':' + endTime.getMinutes() + 'pm' :
+      date += endTime.getHours() + ':' + endTime.getMinutes() + 'am';
     } else {
       date += '?';
     }
@@ -198,13 +157,8 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-<<<<<<< HEAD
         Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
           date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
-=======
-        Actions.detailView({ rowID: rowID, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
-        date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
->>>>>>> date bug fix
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>
@@ -226,7 +180,6 @@ class Card extends Component {
     this.setState({isSaved: !this.state.isSaved});
   }
 
-<<<<<<< HEAD
   renderMenu() {
     return (
           <View
@@ -280,8 +233,6 @@ class Card extends Component {
       </TouchableOpacity>
     );
   }
-=======
->>>>>>> date bug fix
   renderCardText() {
     let wrapperFlex = (this.props.dataSource.category === 'facility') ? FLEX_TEXT_WRAPPER : FLEX_TEXT_WRAPPER + FLEX_MARGIN_ROW;
     if (this.fromActivity && this.aboutItem) {
