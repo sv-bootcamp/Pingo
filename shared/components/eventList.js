@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { ListView, View, Dimensions, Platform } from 'react-native';
 import CardLayout from '../containers/cardLayout';
-import MapButton from './MapButton';
+import MapButton from './mapButton';
 import { Actions } from 'react-native-router-flux';
 
 class EventList extends Component {

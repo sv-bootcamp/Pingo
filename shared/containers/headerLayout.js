@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { categorizeItems, setTabViewIndex, showListCard, hideMapCard } from '../actions/mapActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setLoadingLoginAnimating } from '../actions/userActions';
-import MainHeader from '../components/MainHeader';
+import MainHeader from '../components/mainHeader';
 
 const mapStateToProps = (state) => {
   return {

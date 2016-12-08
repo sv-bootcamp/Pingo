@@ -4,7 +4,7 @@ import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
 import LoadingLayout from '../containers/loadingLayout';
-import MapButton from './MapButton';
+import MapButton from './mapButton';
 import eventPng from '../resources/marker/event_small.png';
 import facilityPng from '../resources/marker/facility_small.png';
 import warningPng from '../resources/marker/warning_small.png';
@@ -137,7 +137,7 @@ export default class Map extends Component {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
-  // todo: this is duplicate from Create.js. refactoring required
+  // todo: this is duplicate from create.js. refactoring required
   getAddressData() {
     const DEFAULT_CURRENT_CITY = 'PINGO';
     const uri = `${API_GEODATA}?latlng=${this.props.currentLocation.latitude},${this.props.currentLocation.longitude}&key=${API_KEY}`;

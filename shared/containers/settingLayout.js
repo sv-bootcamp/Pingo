@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setToken } from '../actions/authActions';
-import Setting from '../components/Setting';
+import Setting from '../components/setting';
 
 const mapStateToProps = (state) => {
   return {
