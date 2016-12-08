@@ -400,11 +400,24 @@ export default class DetailView extends Component {
           }}
             showsButtons = {false}
             renderPagination={this.renderPagination}
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+            height= {549}
+            loop = {false}>
+=======
+>>>>>>> e88e0f20c310d2925d743f5720cc54dfc98bfc00
             height={549}
             loop={false}
             index={this.state.currentIndex}
             enableEmptySections={true}
+<<<<<<< HEAD
             removeClippedSubviews={false}>
+=======
+            removeClippedSubviews={false}
+            a>
+>>>>>>> Stashed changes
+>>>>>>> e88e0f20c310d2925d743f5720cc54dfc98bfc00
               {pages}
           </Swiper>
           {this.renderModal()}
