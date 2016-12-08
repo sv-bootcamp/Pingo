@@ -1,4 +1,4 @@
-import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS, getAuthHeaders, queryBuilder,
+import {HTTPS, SERVER_ADDR, HTTPUtil, getAuthHeaders, queryBuilder,
   createQueryObject} from '../utils';
 
 const ENDPOINT = '/api/items';

@@ -1,4 +1,4 @@
-import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS, createQueryObject, queryBuilder, getAuthHeaders}
+import {HTTPS, SERVER_ADDR, HTTPUtil,  createQueryObject, queryBuilder, getAuthHeaders}
   from '../utils';
 
 const ENDPOINT = '/api/images';
