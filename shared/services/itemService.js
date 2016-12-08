@@ -9,19 +9,19 @@ const ADDRESS = {
 
 const RESTManager = {
   add: (body) => {
-      const {title, lat, lng, address, category, image, userKey, startTime, endTime, caption} = body;
-      return HTTPUtil.post(ADDRESS.DEFAULT, getAuthHeaders(), body);
+    // const {title, lat, lng, address, category, image, userKey, startTime, endTime, caption} = body;
+    return HTTPUtil.post(ADDRESS.DEFAULT, getAuthHeaders(), body);
   },
   get: (itemKey) => {
-      return HTTPUtil.get(`${ADDRESS.DEFAULT}/${itemKey}`);
+    return HTTPUtil.get(`${ADDRESS.DEFAULT}/${itemKey}`);
   },
   getAll: (zoomLevel, lat, lng, isThumbnail = true) => {
-      const queries = [];
-      queries.push(createQueryObject('lat', lat));
-      queries.push(createQueryObject('lng', lng));
-      queries.push(createQueryObject('zoom', zoomLevel));
-      queries.push(createQueryObject('isThumbnail', isThumbnail));
-      return HTTPUtil.get(`${ADDRESS.DEFAULT}${queryBuilder(queries)}`, getAuthHeaders())
+    const queries = [];
+    queries.push(createQueryObject('lat', lat));
+    queries.push(createQueryObject('lng', lng));
+    queries.push(createQueryObject('zoom', zoomLevel));
+    queries.push(createQueryObject('isThumbnail', isThumbnail));
+    return HTTPUtil.get(`${ADDRESS.DEFAULT}${queryBuilder(queries)}`, getAuthHeaders())
   }
 };
 export default RESTManager;

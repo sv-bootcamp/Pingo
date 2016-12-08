@@ -30,8 +30,8 @@ const RESTManager = {
   },
   signupFacebook: (facebookToken) => {
     return RESTManager.signup({
-        userType: USER_TYPE.FACEBOOK,
-        facebookToken
+      userType: USER_TYPE.FACEBOOK,
+      facebookToken
     });
   },
   getUserInfo: (userKey, accessToken) => {

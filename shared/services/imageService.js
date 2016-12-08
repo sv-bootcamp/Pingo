@@ -9,8 +9,8 @@ const ADDRESS = {
 
 const RESTManager = {
   add: (body) => {
-    const {itemKey, userKey, caption, image} = body;
-        return HTTPUtil.post(`${ADDRESS.DEFAULT}`, getAuthHeaders(), body);
+    // const {itemKey, userKey, caption, image} = body;
+    return HTTPUtil.post(`${ADDRESS.DEFAULT}`, getAuthHeaders(), body);
   },
   get: (imageKey) => {
     return HTTPUtil.get(`${ADDRESS.DEFAULT}/${imageKey}`, getAuthHeaders());
