@@ -10,7 +10,7 @@ import DetailViewLayout from './detailViewLayout';
 import MyPageLayout from './myPageLayout';
 import SettingLayout from './settingLayout';
 import EventReportView from '../components/eventReportView';
-import InitialSceneLayout from './InitialSceneLayout';
+import InitialSceneLayout from './initialSceneLayout';
 import PingoLayout from './pingoLayout';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
