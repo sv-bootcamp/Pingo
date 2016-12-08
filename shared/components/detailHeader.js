@@ -57,7 +57,8 @@ export default class DetailHeader extends Component {
     this.handlePressStar = this.handlePressStar.bind(this);
   }
 
-  handlePressStar() { // todo: I will apply this function to redux soon!
+  handlePressStar() {
+    // todo: I will apply this function to redux soon!
     if (this.state.isSaved === true) {
       this.setState({isSaved: false});
       this.props.deleteEvent(this.props.itemKey);
@@ -83,7 +84,13 @@ export default class DetailHeader extends Component {
           </TouchableOpacity>
         </View>
         <View style = {styles.info}>
-          <Text style = {styles.title}> {this.props.title} </Text>
+          <Text
+            style = {styles.title}
+            onLayout={(evt) => {
+              this.props.setModalPosition(evt.nativeEvent.layout.y);
+            }}>
+            {this.props.title}
+          </Text>
           {(this.props.date) ? <Text> {this.props.date} </Text> : null}
         </View>
           <View style = {styles.btn_star}>
@@ -95,7 +102,7 @@ export default class DetailHeader extends Component {
                        style = {{height: 24, width: 24}}/>
               </TouchableOpacity>
           </View>
-          <View style = {{flex: 19.2}}/>
+          <View style = {{flex: 16}}/>
           <View style = {styles.btn_more}>
               <TouchableOpacity onPress = {() => {
                 this.props.messageUnvisible();
@@ -122,5 +129,6 @@ DetailHeader.propTypes = {
   itemKey: PropTypes.string,
   saveEvent: PropTypes.func,
   deleteEvent: PropTypes.func,
-  toggleStar: PropTypes.func
+  toggleStar: PropTypes.func,
+  setModalPosition: PropTypes.func
 };
