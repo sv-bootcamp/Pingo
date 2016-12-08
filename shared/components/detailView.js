@@ -251,7 +251,7 @@ export default class DetailView extends Component {
             <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.dataSource.title } </Text>
           </View>
           <View style = {{flex: 24}}/>
-          <View style = {{flex: 100, backgroundColor: 'green', borderRadius: 5}}>
+          <View style = {{flex: 100, borderRadius: 5}}>
             <DetailLitemap currentLocation = {currentLocation}
                            category = {this.props.dataSource.category}/>
           </View>
