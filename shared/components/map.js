@@ -75,6 +75,7 @@ export default class Map extends Component {
     this.prevLng = null;
     this.prevZoom = null;
     this.selectedMarkerViewHeight = 103;
+    this.mapClickCntIOS = 0;
     this.state = {
       markerSelect: '',
       cardTranslateY: new Animated.Value(0),
@@ -236,8 +237,10 @@ export default class Map extends Component {
     if (this.markerClickTime && curTime - this.markerClickTime > 100) {
       this.props.hideMapCard();
     }
-    if (this.state.markerSelect !== '') {
-      this.setState({markerSelect: ''});
+    this.mapClickCntIOS = this.mapClickCntIOS + 1;
+    if (this.mapClickCntIOS >= 2) {
+      this.state.markerSelect = '';
+      this.mapClickCntIOS = 0;
     }
   }
 
@@ -310,7 +313,8 @@ export default class Map extends Component {
               this.props.onMarkerClick(item);
               this.cardAnimationSlideUp();
               this.buttonAnimationSlideUp();
-              this.setState({markerSelect: item.key});
+              this.state.markerSelect = item.key;
+              this.mapClickCntIOS = 0;
             }}
           >
             {(Platform.OS === 'ios' && this.state.markerSelect === item.key) ?
@@ -326,7 +330,8 @@ export default class Map extends Component {
                   fontSize: 14,
                   color: '#ffffff'
                 }, styles.fontRobotoMedium]}>
-                  {(this.props.selectedItem) ? this.props.selectedItem.imageUrls.length : null}
+                  {(this.props.selectedItem && this.props.selectedItem.imageUrls) ?
+                    this.props.selectedItem.imageUrls.length : null}
                 </Text>
               </View>
               : null}
