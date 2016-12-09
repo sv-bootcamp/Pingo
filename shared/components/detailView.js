@@ -80,7 +80,10 @@ export default class DetailView extends Component {
       name: 'name',
       profileImgUrl: '',
       profileImageHeight: 0,
-      profileImageWidth: 0
+      profileImageWidth: 0,
+      modalPosition: 0,
+      titleWidth: 0,
+      lineHeight: 0
     };
     this.renderDate = this.renderDate.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
@@ -91,6 +94,7 @@ export default class DetailView extends Component {
     this.messageUnvisible = this.messageUnvisible.bind(this);
     this.renderSlide = this.renderSlide.bind(this);
     this.renderInfoSlide = this.renderInfoSlide.bind(this);
+    this.setModalPosition = this.setModalPosition.bind(this);
   }
 
   componentDidMount() {
@@ -103,6 +107,11 @@ export default class DetailView extends Component {
         profileImgUrl: rjson.profileImgUrl
       });
     });
+
+  }
+
+  setModalPosition(y) {
+    this.setState({modalPosition: y});
   }
 
   toggleModalVisible() {
@@ -188,7 +197,7 @@ export default class DetailView extends Component {
             visible={this.state.modalVisible}
             onRequestClose={() => {}}
             >
-            <TouchableOpacity style = {{flex: 17}}
+            <TouchableOpacity style = {{flex: this.state.modalPosition + 20}}
                               onPress = {() => this.toggleModalVisible()}/>
             <View style = {{flex: 96.6, flexDirection: 'row'}}>
               <TouchableOpacity style = {{flex: 210.2}}
@@ -197,24 +206,28 @@ export default class DetailView extends Component {
                 (this.state.messageVisible) ?
                 <TouchableOpacity style = {{flex: 114.1}}
                                   onPress = {() => this.toggleModalVisible()}/> :
-              <View style = {{flex: 114.1, backgroundColor: '#fafafa', elevation: 4}}>
-                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <View style = {{flex: 114.1, backgroundColor: '#fafafa', shadowOpacity: 0.2, zIndex: 10, shadowRadius: 3, shadowOffset: {
+                width: 0,
+                height: 3
+              }}}>
+                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <TouchableOpacity onPress = {() => {
                     this.toggleModalVisible();
                     this.setState({currentReport: 'location'});
                     Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage,
-                      eventKey: this.props.detailSource[this.state.currentIndex].key});
-                  }}>
-                  <Text> Report an Issue</Text>
+                      eventKey: this.props.detailSource[this.state.currentIndex - 1].key});
+                  }} >
+                    <Text style = {{flex: 1, textAligh: 'center'}}>Report an Issue</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                   <TouchableOpacity>
-                    <Text> Suggest an Edit</Text>
+                    <Text>Suggest an Edit</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             }
+            <View style = {{flex: 5.6}}/>
             </View>
             <TouchableOpacity style = {{flex: 481.4}}
                               onPress = {() => this.toggleModalVisible()}/>
@@ -241,19 +254,30 @@ export default class DetailView extends Component {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421
     };
-
     return (
       <View style = {{flexDirection: 'row', flex: 1}}>
         <View style = {{flex: 16}}/>
         <View style = {{flex: 328}}>
           <View style = {{flex: 64}}/>
-          <View style = {{flex: 80}}>
-            <Text style = {{fontSize: 40, fontWeight: 'bold'}}> {this.props.dataSource.title } </Text>
+          <View style = {{flex: 80, justifyContent: 'center'}}>
+          {
+            (this.state.lineHeight <= 35) ?
+            <View style = {{flex: 1}}/> : null
+          }
+
+            <Text style = {{fontSize: 30, fontWeight: 'bold', lineHeight: 35}}
+              onLayout={(evt) => {
+                this.setState({titleWidth: evt.nativeEvent.layout.width});
+                this.setState({lineHeight: evt.nativeEvent.layout.height});
+              }}>
+              {this.props.dataSource.title}
+            </Text>
           </View>
           <View style = {{flex: 24}}/>
           <View style = {{flex: 100, borderRadius: 5}}>
             <DetailLitemap currentLocation = {currentLocation}
-                           category = {this.props.dataSource.category}/>
+                           category = {this.props.dataSource.category}
+                           numOfEvent = {this.props.detailSource.length}/>
           </View>
           <View style = {{flex: 26}}/>
           <View style = {{flex: 17}}>
@@ -275,7 +299,7 @@ export default class DetailView extends Component {
             {
               (this.state.profileImgUrl) ?
               <Image
-                style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3}}
+                style={{height: this.state.profileImageWidth, width: this.state.profileImageWidth, borderRadius: 3}}
                 source={{uri: this.state.profileImgUrl}}
               />
               :
@@ -321,6 +345,7 @@ export default class DetailView extends Component {
             <View style={{height: this.state.profileImageHeight, width: this.state.profileImageWidth, borderRadius: 3, backgroundColor: 'purple'}}/>
           }
           </View>
+          <View style = {{flex: 7}}/>
           <View style = {{flex: 274}}>
             <View style = {{flex: 16}}/>
             <View style = {{flex: 14}}>
@@ -383,7 +408,7 @@ export default class DetailView extends Component {
       pages.push(this.renderSlide(this.props.detailSource[i], i));
     }
     return (
-      <View style = {{ flex: 1, backgroundColor: 'black'}}>
+      <View style = {{ flex: 1}}>
         <View style = {{height: 67}}>
           <DetailHeaderLayout title = {this.props.dataSource.title}
                               itemKey = {this.props.dataSource.key}
@@ -392,7 +417,8 @@ export default class DetailView extends Component {
                               setModalVisible = {this.toggleModalVisible}
                               messageUnvisible = {this.messageUnvisible}
                               isSaved = {this.props.isSaved}
-                              toggleStar = {this.props.toggleStar}/>
+                              toggleStar = {this.props.toggleStar}
+                              setModalPosition = {this.setModalPosition}/>
         </View>
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
           <Swiper ref={(swiper) => {
