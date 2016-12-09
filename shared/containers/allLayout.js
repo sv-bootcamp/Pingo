@@ -12,6 +12,7 @@ import SettingLayout from './settingLayout';
 import EventReportView from '../components/eventReportView';
 import InitialSceneLayout from './initialSceneLayout';
 import PingoLayout from './pingoLayout';
+import PrivacyPolicyLayout from './privacyPolicyLayout';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 const scenes = Actions.create(
@@ -45,6 +46,9 @@ const scenes = Actions.create(
     }/>
     <Scene key="eventReportView" hideNavBar={true} component={
       EventReportView
+    }/>
+    <Scene key="privacyPolicy" hideNavBar={true} component={
+      PrivacyPolicyLayout
     }/>
   </Scene>
 );
@@ -83,6 +87,9 @@ class All extends Component {
       this.props.setCurrentScene('myPage');
       Actions.myPage({type: 'replace'});
     } else if (this.props.currentScene === 'DetailView') {
+      Actions.pop();
+    } else if (this.props.currentScene === 'privacyPolicy') {
+      this.props.setCurrentScene('setting');
       Actions.pop();
     }
     return true;

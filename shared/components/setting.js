@@ -64,6 +64,7 @@ const styles = {
 class Setting extends Component {
   constructor(props) {
     super(props);
+    this.renderSettingListBoxLeftButton = this.renderSettingListBoxLeftButton.bind(this);
     this.renderSettingList = this.renderSettingList.bind(this);
     this.renderSignOut = this.renderSignOut.bind(this);
     this.renderGuestView = this.renderGuestView.bind(this);
@@ -91,6 +92,20 @@ class Setting extends Component {
         }
       </View>
     </View>
+    );
+  }
+
+  renderSettingListBoxLeftButton(textLeft, handleButton) {
+    return (
+      <View style={styles.settingListBox}>
+        <View style={{flex: 1}}>
+          <TouchableOpacity
+            onPress={handleButton}
+          >
+            <Text style={[styles.settingTextList, styles.fontRobotoRegular]}>{textLeft}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
 
@@ -162,6 +177,10 @@ class Setting extends Component {
     // todo
   }
 
+  renderPrivacyPolicy() {
+    Actions.privacyPolicy();
+  }
+
   renderSettingList() {
     return (
       <ScrollView style={{backgroundColor: '#e7e7e7', flex: 1}}>
@@ -177,7 +196,7 @@ class Setting extends Component {
           </View>
           : null}
         <View style={[styles.settingGreyBox, {height: 16}]}/>
-        {this.renderSettingListBox('Privacy & Terms', '', ()=>{})}
+        {this.renderSettingListBoxLeftButton('Privacy & Terms', this.renderPrivacyPolicy.bind(this))}
         {this.renderSettingListBox('Help', '', ()=>{})}
         {this.renderSettingListBox('Send Feedback', '', ()=>{})}
         {(this.props.token !== 'guest' && this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
