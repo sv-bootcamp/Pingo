@@ -8,7 +8,7 @@ import { HTTPS, SERVER_ADDR, ENDPOINT_REPORT } from '../utils';
 
 const photoReportOption = ['Wrong place', 'Poor Image quality', 'Pornography or explicit sexual content',
   'Hate speech or graphic violence', 'Spam', 'Copyrighted content'];
-const locationReportOption = ['Permanently closed', 'Doesn\'t exist anymall', 'Spam', 'Private', 'Moved elsewhere', 'Duplicate of another place'];
+const locationReportOption = ['Permanently closed', 'Doesn\'t exist anymore', 'Spam', 'Private', 'Moved elsewhere', 'Duplicate of another place'];
 const styles = {
   textStyle: {
     flex: 1,
@@ -23,10 +23,7 @@ const styles = {
     fontSize: 17,
     ...Platform.select({
       android: {
-        fontFamily: 'Roboto-Medium'
-      },
-      ios: {
-        fontWeight: 'bold'
+        fontFamily: 'Roboto-Regular'
       }
     })
   }
@@ -72,7 +69,7 @@ export default class EventReportView extends Component {
 
   renderOption(title, i) {
     return (
-      <View style = {{flex: 46}} key = {i}>
+      <View style = {{flex: 46}} key = {i.toString()}>
         <View style = {{flex: 20}}/>
         <View style = {{flex: 26, flexDirection: 'row'}}>
           <View style = {{flex: 304}}>
@@ -116,6 +113,7 @@ export default class EventReportView extends Component {
             <Text style={[styles.textDone, {color: (this.state.currentIndex !== -1) ? '#2c8cff' : '#8e8e8e'}]}> Done </Text>
           }
           headerText={'Report an Issue'}
+          activeOpacity={(this.state.currentIndex !== -1) ? 0.2 : 1}
         />
       <View style = {{flexDirection: 'row', flex: 1}}>
           <View style = {{flex: 16}}/>
@@ -123,8 +121,8 @@ export default class EventReportView extends Component {
             <View style = {{flex: 32}}/>
             <View style = {{flex: 16}}>
               {
-                <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}> {(this.props.aboutPhoto) ?
-                    'What\'s wrong this photo?' : 'What\'s wrong this location?' } </Text>
+                <Text style = {[styles.textStyle, {color: '#8e8e8e'}]}>{(this.props.aboutPhoto) ?
+                    'What\'s wrong this photo?' : 'What\'s wrong this location?' }</Text>
               }
             </View>
             {

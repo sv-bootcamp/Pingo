@@ -217,10 +217,10 @@ export default class DetailView extends Component {
                     Actions.eventReportView({aboutPhoto: false, handleReport: this.handleMessage,
                       eventKey: this.props.detailSource[this.state.currentIndex - 1].key});
                   }} >
-                    <Text style = {{flex: 1, textAligh: 'center'}}>Report an Issue</Text>
+                    <Text style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>Report an Issue</Text>
                   </TouchableOpacity>
                 </View>
-                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <TouchableOpacity>
                     <Text>Suggest an Edit</Text>
                   </TouchableOpacity>
@@ -255,7 +255,7 @@ export default class DetailView extends Component {
       longitudeDelta: 0.0421
     };
     return (
-      <View style = {{flexDirection: 'row', flex: 1}}>
+      <View style = {{flexDirection: 'row', flex: 1}} key = {'0'}>
         <View style = {{flex: 16}}/>
         <View style = {{flex: 328}}>
           <View style = {{flex: 64}}/>
