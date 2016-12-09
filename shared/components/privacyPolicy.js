@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import SmallHeader from './smallHeader';
 import {
   View,
-  ScrollView
+  ScrollView,
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import HTMLView from 'react-native-htmlview';
@@ -10,8 +12,25 @@ import HTMLView from 'react-native-htmlview';
 const styles = {
   privacyTextStyle: {
     flex: 1,
-    fontWeight: '300',
-    color: '#FF3366'
+    fontWeight: '300'
+  },
+  settingListBox: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderColor: '#e7e7e7',
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  settingTextList: {
+    color: '#2b2b2b',
+    marginLeft: 16,
+    fontSize: 16
+  },
+  settingGreyBox: {
+    backgroundColor: '#e7e7e7',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 };
 
@@ -86,20 +105,62 @@ class PrivacyPolicy extends Component {
   constructor(props) {
     super(props);
     this.renderTextPrivacyPolicy = this.renderTextPrivacyPolicy.bind(this);
+    this.state = {
+      content: 'menu'
+    };
   }
 
   handleButtonPrev() {
-    this.props.setCurrentScene('setting');
-    Actions.pop();
+    if (this.state.content === 'privacy') {
+      this.setState({content: 'menu'});
+    } else {
+      this.props.setCurrentScene('setting');
+      Actions.pop();
+    }
   }
 
   renderTextPrivacyPolicy() {
     return (
-      <HTMLView
-        value={htmlContent}
-        stylesheet={styles.privacyTextStyle}
-      />
+      <ScrollView style={{flex: 1, marginLeft: 25, marginRight: 25}}>
+        <HTMLView
+          value={htmlContent}
+          stylesheet={styles.privacyTextStyle}
+        />
+      </ScrollView>
     );
+  }
+
+  renderSettingListBoxLeftButton(textLeft, handleButton) {
+    return (
+      <View style={styles.settingListBox}>
+        <View style={{flex: 1}}>
+          <TouchableOpacity
+            onPress={handleButton}
+          >
+            <Text style={[styles.settingTextList, styles.fontRobotoRegular]}>{textLeft}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  renderMenu() {
+    return (
+      <View style={{backgroundColor: '#e7e7e7', flex: 1}}>
+        <View style={[styles.settingGreyBox, {height: 16}]}/>
+        {this.renderSettingListBoxLeftButton('Privacy', () => this.setState({content: 'privacy'}))}
+        {this.renderSettingListBoxLeftButton('Terms of Service', () => {})}
+      </View>
+    );
+  }
+
+  renderContent() {
+    if (this.state.content === 'menu') {
+      return this.renderMenu();
+    } else if (this.state.content === 'privacy') {
+      return this.renderTextPrivacyPolicy();
+    }
+    return null;
   }
 
   render() {
@@ -110,9 +171,7 @@ class PrivacyPolicy extends Component {
           handleBtnLeft={this.handleButtonPrev.bind(this)}
           handleBtnRight={()=>{}}
           headerText='Privacy Policy'/>
-        <ScrollView style={{flex: 1, marginLeft: 25, marginRight: 25}}>
-        {this.renderTextPrivacyPolicy()}
-        </ScrollView>
+        {this.renderContent()}
       </View>
     );
   }
