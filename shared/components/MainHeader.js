@@ -11,6 +11,13 @@ import IMG_BUTTON_SWITCH_LIST from '../resources/header/btn_switch_list.png';
 const TabViewHeight = 96 - 62;
 const WindowHeightRatio = 640;
 
+const tabBarLabelColors = [
+  ['#2b2b2b', '#8e8e8e', '#8e8e8e', '#8e8e8e'],
+  ['#8e8e8e', '#f6a302', '#8e8e8e', '#8e8e8e'],
+  ['#8e8e8e', '#8e8e8e', '#2c8cff', '#8e8e8e'],
+  ['#8e8e8e', '#8e8e8e', '#8e8e8e', '#ff5250']
+];
+
 const styles = {
   container: {
     height: TabViewHeight,
@@ -88,6 +95,14 @@ const styles = {
         fontWeight: 'bold'
       }
     })
+  },
+  indicator: {
+    backgroundColor: 'white',
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 2
   }
 };
 
@@ -98,7 +113,9 @@ export default class MainHeader extends Component {
     this.renderHeaderTabBar = this.renderHeaderTabBar.bind(this);
     this.spin = this.spin.bind(this);
     this.state = {
-      spinValue: new Animated.Value(0)
+      spinValue: new Animated.Value(0),
+      tabViewLabelFade: new Animated.Value(0),
+      changingTab: 0
     };
   }
 
@@ -118,15 +135,45 @@ export default class MainHeader extends Component {
     this.spin();
   }
 
+  colorTabViewLabel(index) {
+    if (index === 0) {
+      return '#2b2b2b';
+    } else if (index === 1) {
+      return '#f6a302';
+    } else if (index === 2) {
+      return '#2c8cff';
+    }
+    return '#ff5250';
+  }
+
   renderHeaderTabBar(props) {
-    return (<TabBarTop
-      {...props}
-      renderLabel={(routes) =>
-        <Text style={[{ margin: 0, color: '#2b2b2b' }, styles.fontRobotoMedium]}>{routes.route.title}</Text>
-      }
-      style={{backgroundColor: 'white', height: Dimensions.get('window').height * TabViewHeight / WindowHeightRatio}}
-      indicatorStyle={{backgroundColor: '#2b2b2b'}}
-    />);
+    return (
+      <TabBarTop
+        {...props}
+        onTabPress={(route) => {
+          this.setState({changingTab: route});
+        }}
+        renderLabel={({route, index }) => {
+          console.log(this.state.changingTab);
+          const inputRange = props.navigationState.routes.map((x, i) => i);
+          const opacity = props.position.interpolate({
+            inputRange,
+            outputRange: inputRange.map(i => i === index ? 1 : 0.5)
+          });
+          const color = props.position.interpolate({
+            inputRange,
+            outputRange: tabBarLabelColors[this.state.changingTab['key'] - 1]
+          });
+          return (
+            <Animated.Text style={[{ opacity, margin: 8, color, fontSize: 14 }, styles.fontRobotoMedium]}>
+              {route.title}
+            </Animated.Text>
+          );
+        }}
+        style={{backgroundColor: 'white', height: Dimensions.get('window').height * TabViewHeight / WindowHeightRatio}}
+        indicatorStyle={{backgroundColor: '#2b2b2b'}}
+      />
+    );
   }
 
   handleSwitchButton() {
