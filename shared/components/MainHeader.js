@@ -135,17 +135,6 @@ export default class MainHeader extends Component {
     this.spin();
   }
 
-  colorTabViewLabel(index) {
-    if (index === 0) {
-      return '#2b2b2b';
-    } else if (index === 1) {
-      return '#f6a302';
-    } else if (index === 2) {
-      return '#2c8cff';
-    }
-    return '#ff5250';
-  }
-
   renderHeaderTabBar(props) {
     return (
       <TabBarTop
@@ -154,7 +143,6 @@ export default class MainHeader extends Component {
           this.setState({changingTab: route});
         }}
         renderLabel={({route, index }) => {
-          console.log(this.state.changingTab);
           const inputRange = props.navigationState.routes.map((x, i) => i);
           const opacity = props.position.interpolate({
             inputRange,
@@ -162,7 +150,7 @@ export default class MainHeader extends Component {
           });
           const color = props.position.interpolate({
             inputRange,
-            outputRange: tabBarLabelColors[this.state.changingTab['key'] - 1]
+            outputRange: tabBarLabelColors[1]
           });
           return (
             <Animated.Text style={[{ opacity, margin: 8, color, fontSize: 14 }, styles.fontRobotoMedium]}>
