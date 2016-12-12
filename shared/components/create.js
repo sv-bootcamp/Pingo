@@ -261,7 +261,10 @@ class Create extends Component {
         body: dataFlag
       });
     })
-    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+      response.json()
+    })
     .then(() => this.handleSceneTransition())
     .catch((error) => {
       this.props.setLoadingLoginAnimating(false);
@@ -357,6 +360,11 @@ class Create extends Component {
     this.props.setCurrentScene(this.props.lastScene);
     if (this.props.lastScene === 'list') {
       // todo: change the ugly scene transition of popping two consecutive scenes animation
+      this.props.setPostedUri(this.props.pic);
+      if(this.state.addingExistingLocation) {
+        this.props.setPostedKey(this.state.selectItemKey);
+      }
+      this.props.needUpdate();
       Actions.pop({popNum: 2});
     } else {
       Actions.map({type: 'reset'});
@@ -801,7 +809,10 @@ Create.propTypes = {
   setLoadingLoginAnimating: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
-  currentLocation: PropTypes.any
+  currentLocation: PropTypes.any,
+  needUpdate: PropTypes.func,
+  setPostedUri: PropTypes.func,
+  setPostedKey: PropTypes.func
 };
 
 export default Create;

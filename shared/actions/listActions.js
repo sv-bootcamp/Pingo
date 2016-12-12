@@ -54,6 +54,18 @@ export const receiveImages = (json) => {
   };
 };
 
+export const needUpdate = () => {
+  return {
+    type: types.needUpdate
+  };
+};
+
+export const updateDone = () => {
+  return {
+    type: types.updateDone
+  };
+};
+
 export const getDetailImage = (key) => {
   return (dispatch) => {
     const queries = [];
