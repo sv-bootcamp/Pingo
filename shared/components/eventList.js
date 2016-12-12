@@ -15,6 +15,14 @@ class EventList extends Component {
     );
   }
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.needUpdate) {
+      this.props.getAllItems(this.props.zoomLevel, this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
+    }
+    this.props.updateDone();
+  }
+
   componentDidMount() {
     this.props.getAllItems(this.props.zoomLevel, this.props.currentLocation.latitude,
     this.props.currentLocation.longitude);
@@ -28,10 +36,16 @@ class EventList extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
+<<<<<<< HEAD
         {(this.props.dataSource) ?
           <ListView
             dataSource={new ListView.DataSource({
           rowHasChanged: (r1, r2) => r1 !== r2
+=======
+        <ListView
+          dataSource={new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+>>>>>>> sync up between list and create action
           }).cloneWithRows(this.props.dataSource)}
             renderRow={this.renderRowTxt.bind(this)}
             removeClippedSubviews={false}
@@ -63,7 +77,9 @@ EventList.propTypes = {
   getItems: PropTypes.any,
   currentLocation: PropTypes.object,
   zoomLevel: PropTypes.any,
-  setCurrentScene: PropTypes.func
+  setCurrentScene: PropTypes.func,
+  updateDone: PropTypes.func,
+  needUpdate: PropTypes.bool
 };
 
 export default EventList;

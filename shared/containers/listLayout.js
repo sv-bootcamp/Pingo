@@ -1,5 +1,5 @@
 import EventList from '../components/eventList';
-import { getAllItems } from '../actions/listActions';
+import { getAllItems, updateDone } from '../actions/listActions';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 
@@ -22,7 +22,8 @@ const mapStateToProps = (state) => {
   return {
     dataSource: getCategorizedItems(state.list.dataSource, state.map.categoryFilter),
     currentLocation: state.map.currentLocation,
-    zoomLevel: state.map.zoomLevel
+    zoomLevel: state.map.zoomLevel,
+    needUpdate: state.list.needUpdate
   };
 };
 
@@ -33,6 +34,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
+    },
+    updateDone: () => {
+      return dispatch(updateDone());
     }
   };
 };
