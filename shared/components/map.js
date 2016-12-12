@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Animated, Easing, StyleSheet, View, Text, Platform } from 'react-native';
+import { Animated, Easing, StyleSheet, View, Text, Platform, Image, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -305,7 +305,6 @@ export default class Map extends Component {
             coordinate={{latitude: item.lat, longitude: item.lng}}
             anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
             centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
-            image={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
             onPress={()=>{
               this.map.animateToRegion({
                 ...this.props.currentLocation,
@@ -320,21 +319,25 @@ export default class Map extends Component {
               this.mapClickCntIOS = 0;
             }}
           >
-            {(Platform.OS === 'ios' && this.state.markerSelect === item.key) ?
-              <View
-                style={{height: 103, width: 89}}
-              >
+            <Image
+              style={{
+                height: (this.state.markerSelect === item.key) ? 103 : 28,
+                width: (this.state.markerSelect === item.key) ?89 : 28}}
+              source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
+            >
+              {(this.state.markerSelect === item.key) ?
                 <Text style={[{
                   alignSelf: 'center',
                   top: 25,
                   fontSize: 14,
-                  color: '#ffffff'
+                  color: '#ffffff',
+                  backgroundColor: 'black'
                 }, styles.fontRobotoMedium]}>
                   {(this.props.selectedItem && this.props.selectedItem.imageUrls) ?
                     this.props.selectedItem.imageUrls.length : null}
                 </Text>
-              </View>
-              : null}
+                : null}
+            </Image>
           </MapView.Marker>
         ) : null
       )
