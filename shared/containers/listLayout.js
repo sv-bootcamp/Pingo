@@ -7,11 +7,11 @@ const getCategorizedItems = (items, categoryFilter) => {
   switch (categoryFilter) {
   case 'SHOW_ALL':
     return items;
-  case 'EVENTS':
+  case 'event':
     return items.filter(item => item.category === 'event');
-  case 'FACILITIES':
+  case 'facility':
     return items.filter(item => item.category === 'facility');
-  case 'WARNING':
+  case 'warning':
     return items.filter(item => item.category === 'warning');
   default:
     return items;
