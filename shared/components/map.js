@@ -153,11 +153,11 @@ export default class Map extends Component {
               .replace('"', '')
               .substring(0, 30);
     })
-    .catch(() => {
-      return DEFAULT_CURRENT_CITY;
-    })
     .then(cityName => {
       return this.props.setCurrentCity(cityName);
+    })
+    .catch(() => {
+      return DEFAULT_CURRENT_CITY;
     });
   }
 
@@ -234,8 +234,11 @@ export default class Map extends Component {
     .then(() => {
       this.updatePrevValues();
       this.props.onLocationChange(region);
-      this.setState({itemLength: this.props.items.length});
+      this.setState({itemLength: (this.props.items) ? this.props.items.length : 0});
       this.props.setLoadingLoginAnimating(false);
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }
 
