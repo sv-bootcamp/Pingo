@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 const mapStateToProps = (state) => {
   return {
     currentScene: state.flux.currentScene,
-    myPageTabViewIndex: state.myPage.myPageTabViewIndex,
     modalVisible: state.myPage.modalVisible
   };
 };

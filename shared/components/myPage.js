@@ -181,7 +181,8 @@ class MyPage extends Component {
         </View>
         <View style={{flex: 8}}/>
         <View style={{flex: 28}}>
-          {(this.props.token !== '' && this.props.token !== 'guest') ? this.renderTextAfterLogin('Change Profile Photo') :
+          {(this.props.token !== '' && this.props.token !== 'guest') ?
+            this.renderTextAfterLogin('Change Profile Photo') :
             <LoginFacebookLayout/>
           }
         </View>
@@ -239,7 +240,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(dataSource)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}} myPageTabViewIndex={1}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
@@ -262,7 +263,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.createdPosts)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}} myPageTabViewIndex={0}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
@@ -300,10 +301,16 @@ class MyPage extends Component {
 
   renderModal() {
     return (
-      <TouchableOpacity style={{width: Dimensions.get('window').width,
-              height: (Dimensions.get('window').height) * 136 / (440 + 136) + 64 + 22, zIndex: 100, position: 'absolute', top: 0}}
-              onPress = {() => this.props.toggleModalVisible()}/>
-    )
+      <TouchableOpacity
+        style={{
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').height * 136 / (440 + 136) + 64 + 22,
+          zIndex: 100,
+          position: 'absolute',
+          top: 0
+        }}
+        onPress = {() => this.props.toggleModalVisible()}/>
+    );
   }
 
   render() {
