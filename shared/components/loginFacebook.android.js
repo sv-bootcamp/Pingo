@@ -193,7 +193,7 @@ FBLoginView.contextTypes = {
 };
 
 FBLoginView.propTypes = {
-  currentScene: PropTypes.string,
+  currentScene: PropTypes.string
 };
 
 LoginFacebook.propTypes = {
