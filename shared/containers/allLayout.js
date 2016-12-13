@@ -28,54 +28,6 @@ const styles = StyleSheet.create({
   }
 });
 
-class All extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  backAndroidHandler() {
-    if (this.props.currentScene === 'list') {
-      this.props.setCurrentScene('map');
-      Actions.pop();
-    } else if (this.props.currentScene === 'cameraView') {
-      // todo: change the following to know the prev scene
-      this.props.setCurrentScene('map');
-      Actions.pop();
-    } else if (this.props.currentScene === 'createForm') {
-      Actions.pop({popNum: 2});
-    } else if (this.props.currentScene === 'myPage') {
-      this.props.setCurrentScene('map');
-      Actions.map({type: 'replace'});
-    } else if (this.props.currentScene === 'setting') {
-      this.props.setCurrentScene('myPage');
-      Actions.myPage({type: 'replace'});
-    } else if (this.props.currentScene === 'DetailView') {
-      Actions.pop();
-    } else if (this.props.currentScene === 'privacyPolicy') {
-      this.props.setCurrentScene('setting');
-      Actions.pop();
-    }
-    return true;
-  }
-
-  render() {
-    return (
-      <View style={styles.iosMargin}>
-        <HeaderLayout/>
-        <View style={{flex: 1}}>
-          <Router
-            backAndroidHandler={() => this.backAndroidHandler()}
-          >
-            <Scene key={SCENE_KEY.ROOT} hideNavBar={true}>
-              {SCENE_PROPS.map(props => <Scene {...props}/>)}
-            </Scene>
-          </Router>
-        </View>
-      </View>
-    );
-  }
-}
-
 export const SCENE_KEY = {
   ROOT: 'root',
   PINGO: 'pingo',
@@ -149,14 +101,57 @@ const SCENE_PROPS = [
   }
 ];
 
+class All extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  backAndroidHandler() {
+    if (this.props.currentScene === 'list') {
+      this.props.setCurrentScene('map');
+      Actions.pop();
+    } else if (this.props.currentScene === 'cameraView') {
+      // todo: change the following to know the prev scene
+      this.props.setCurrentScene('map');
+      Actions.pop();
+    } else if (this.props.currentScene === 'createForm') {
+      Actions.pop({popNum: 2});
+    } else if (this.props.currentScene === 'myPage') {
+      this.props.setCurrentScene('map');
+      Actions.map({type: 'replace'});
+    } else if (this.props.currentScene === 'setting') {
+      this.props.setCurrentScene('myPage');
+      Actions.myPage({type: 'replace'});
+    } else if (this.props.currentScene === 'DetailView') {
+      Actions.pop();
+    } else if (this.props.currentScene === 'privacyPolicy') {
+      this.props.setCurrentScene('setting');
+      Actions.pop();
+    }
+    return true;
+  }
+
+  render() {
+    return (
+      <View style={styles.iosMargin}>
+        <HeaderLayout/>
+        <View style={{flex: 1}}>
+          <Router
+            backAndroidHandler={() => this.backAndroidHandler()}
+          >
+            <Scene key={SCENE_KEY.ROOT} hideNavBar={true}>
+              {SCENE_PROPS.map(props => <Scene {...props}/>)}
+            </Scene>
+          </Router>
+        </View>
+      </View>
+    );
+  }
+}
 
 All.propTypes = {
   currentScene: PropTypes.string,
   setCurrentScene: PropTypes.func
-};
-
-const initScenes = () => {
-  return SCENE_PROPS.map(props => <Scene {...props}/>);
 };
 
 function mapStateToProps(state) {
