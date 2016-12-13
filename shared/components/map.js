@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Animated, Easing, StyleSheet, View, Text, Platform, Image } from 'react-native';
+import { Animated, Easing, StyleSheet, View, Text, Platform, Image, Alert } from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -178,8 +178,13 @@ export default class Map extends Component {
       this.setState({userLocationEnabled: true});
     },
     (error) => {
-      // todo: handle this error when gps is off
-      console.log(error);
+      Alert.alert(
+        'Unable to get your location',
+        error,
+        [
+          {text: 'Cancel'}
+        ]
+      );
       this.setState({userLocationEnabled: false});
     });
   }
@@ -336,8 +341,7 @@ export default class Map extends Component {
                   alignSelf: 'center',
                   top: 25,
                   fontSize: 14,
-                  color: '#ffffff',
-                  backgroundColor: 'black'
+                  color: '#ffffff'
                 }, styles.fontRobotoMedium]}>
                   {(this.props.selectedItem && this.props.selectedItem.imageUrls) ?
                     this.props.selectedItem.imageUrls.length : null}
