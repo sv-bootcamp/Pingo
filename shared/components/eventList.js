@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { ListView, View, Dimensions, Platform } from 'react-native';
+import {SCENE_KEY} from '../containers/allLayout';
 import CardLayout from '../containers/cardLayout';
 import MapButton from './mapButton';
 import { Actions } from 'react-native-router-flux';
@@ -7,6 +8,7 @@ import { Actions } from 'react-native-router-flux';
 class EventList extends Component {
   constructor(props) {
     super(props);
+    this.props.setCurrentScene(SCENE_KEY.LIST);
   }
 
   renderRowTxt(rowData) {

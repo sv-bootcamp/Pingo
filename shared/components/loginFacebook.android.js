@@ -62,7 +62,6 @@ class LoginFacebook extends Component {
           getAccessToken().then((accessToken) => {
             if (accessToken !== null) {
               this.props.setToken(accessToken);
-              this.props.setCurrentScene('map');
               Actions.map({type: 'replace'});
             } else {
               removeLoginType();
@@ -79,7 +78,6 @@ class LoginFacebook extends Component {
         buttonView={
           <FBLoginView
             currentScene={this.props.currentScene}
-            setCurrentScene={this.props.setCurrentScene}
           />}
         ref={(fbLogin) => {
           this.fbLogin = fbLogin;
@@ -93,7 +91,6 @@ class LoginFacebook extends Component {
             this.props.setToken('facebook');
             this.props.setLoadingLoginAnimating(false);
             if (this.props.currentScene === 'initialScene') {
-              this.props.setCurrentScene('map');
               Actions.map({type: 'replace'});
             }
           }).catch(() => this.props.setLoadingLoginAnimating(false));
@@ -168,7 +165,6 @@ class FBLoginView extends Component {
               this.context.login();
             }
             if (this.context.isLoggedIn) {
-              this.props.setCurrentScene('map');
               Actions.map({type: 'replace'});
             }
           }}
@@ -198,13 +194,11 @@ FBLoginView.contextTypes = {
 
 FBLoginView.propTypes = {
   currentScene: PropTypes.string,
-  setCurrentScene: PropTypes.func
 };
 
 LoginFacebook.propTypes = {
   style: PropTypes.any,
   setToken: PropTypes.func,
-  setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
   token: PropTypes.string,
   currentScene: PropTypes.string

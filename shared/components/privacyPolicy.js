@@ -114,7 +114,6 @@ class PrivacyPolicy extends Component {
     if (this.state.content === 'privacy') {
       this.setState({content: 'menu'});
     } else {
-      this.props.setCurrentScene('setting');
       Actions.pop();
     }
   }

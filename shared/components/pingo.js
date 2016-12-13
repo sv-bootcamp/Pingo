@@ -34,18 +34,15 @@ export default class Pingo extends Component {
           getAccessToken().then((accessToken) => {
             if (accessToken !== null) {
               this.props.setToken(accessToken);
-              this.props.setCurrentScene('map');
               Actions.map({type: 'replace'});
             } else {
               removeLoginType();
               this.animationFadeOut();
-              this.props.setCurrentScene('initialScene');
             }
           });
         });
       } else {
         this.animationFadeOut();
-        this.props.setCurrentScene('initialScene');
       }
     });
   }
@@ -82,6 +79,5 @@ export default class Pingo extends Component {
 }
 
 Pingo.propTypes = {
-  setCurrentScene: PropTypes.func,
   setToken: PropTypes.func
 };

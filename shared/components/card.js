@@ -193,7 +193,6 @@ class Card extends Component {
   renderImg(rowData, sectionID, rowID) {
     return (
       <TouchableOpacity onPress={()=>{
-        this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
           date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
@@ -283,7 +282,6 @@ class Card extends Component {
       }}>
         <View style={{flex: FLEX_TEXT_TITLE + FLEX_MARGIN_TEXT_ROW, flexDirection: 'row'}}>
           <TouchableWithoutFeedback onPress = {()=>{
-            this.props.setCurrentScene('detail');
             this.props.getDetailImage(this.props.dataSource.key);
             Actions.detailView({ rowID: 0, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
               date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
@@ -414,7 +412,6 @@ Card.propTypes = {
   })),
   getDetailImage: PropTypes.func,
   currentScene: PropTypes.string,
-  setCurrentScene: PropTypes.func,
   saveEvent: PropTypes.func,
   deleteEvent: PropTypes.func,
   style: PropTypes.object,

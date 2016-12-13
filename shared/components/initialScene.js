@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import { Image, Platform, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
+import {SCENE_KEY} from '../containers/allLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import LoadingLayout from '../containers/loadingLayout';
 import {
@@ -113,6 +114,7 @@ const styles = {
 class InitialScene extends Component {
   constructor(props) {
     super(props);
+    this.props.setCurrentScene(SCENE_KEY.INITIAL);
   }
 
   renderSlide(style, upperText, belowText, image) {
@@ -212,7 +214,6 @@ class InitialScene extends Component {
     }).then(() => {
       setLoginType('guest');
       this.props.setToken('guest');
-      this.props.setCurrentScene('map');
       this.props.setLoadingLoginAnimating(false);
       Actions.map({type: 'replace'});
     });

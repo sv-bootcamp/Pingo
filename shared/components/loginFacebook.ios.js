@@ -59,7 +59,6 @@ class LoginFacebook extends Component {
           this.props.setToken('facebook');
           this.props.setLoadingLoginAnimating(false);
           if (this.props.currentScene === 'initialScene') {
-            this.props.setCurrentScene('map');
             Actions.map({type: 'replace'});
           }
         }).catch(() => this.props.setLoadingLoginAnimating(false));
@@ -155,7 +154,6 @@ class LoginFacebook extends Component {
 LoginFacebook.propTypes = {
   style: PropTypes.any,
   setToken: PropTypes.func,
-  setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
   token: PropTypes.string,
   currentScene: PropTypes.string

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Animated, Easing, StyleSheet, View, Text, Platform } from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
+import {SCENE_KEY} from '../containers/allLayout';
 import CardLayout from '../containers/cardLayout';
 import LoadingLayout from '../containers/loadingLayout';
 import MapButton from './mapButton';
@@ -85,6 +86,7 @@ export default class Map extends Component {
       mapViewHeight: 0
     };
     this.watchID = null;
+    this.props.setCurrentScene(SCENE_KEY.MAP);
   }
 
   componentWillReceiveProps(props) {
@@ -188,7 +190,6 @@ export default class Map extends Component {
   }
 
   handleCameraButton() {
-    this.props.setCurrentScene('cameraView');
     Actions.cameraView({lastScene: 'map'});
   }
 
