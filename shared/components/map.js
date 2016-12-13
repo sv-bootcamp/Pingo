@@ -83,6 +83,7 @@ export default class Map extends Component {
       buttonTranslateY: new Animated.Value(0),
       userLocationEnabled: false,
       itemLength: 0,
+      itemCategory: '',
       items: [],
       mapViewHeight: 0
     };
@@ -326,6 +327,7 @@ export default class Map extends Component {
               this.props.onMarkerClick(item);
               this.cardAnimationSlideUp();
               this.buttonAnimationSlideUp();
+              this.setState({itemCategory: item.category});
               this.state.markerSelect = item.key;
               this.mapClickCntIOS = 0;
             }}
@@ -333,7 +335,7 @@ export default class Map extends Component {
             <Image
               style={{
                 height: (this.state.markerSelect === item.key) ? 103 : 28,
-                width: (this.state.markerSelect === item.key) ?89 : 28}}
+                width: (this.state.markerSelect === item.key) ? 89 : 28}}
               source={this.renderMarkerImage(item.key, this.state.markerSelect, item.category)}
             >
               {(this.state.markerSelect === item.key) ?
@@ -381,7 +383,7 @@ export default class Map extends Component {
     });
     const buttonTranslateY = this.state.buttonTranslateY.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, 199 + 16]
+      outputRange: [16, ((this.state.itemCategory === 'facility') ? 175 + 16 : 199 + 16)]
     });
     return (
       <View style ={styles.container} onLayout={this.handleViewLayout.bind(this)}>
