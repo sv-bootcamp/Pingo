@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Animated, Easing, StyleSheet, View, Text, Platform, Image, Dimensions } from 'react-native';
+import { Animated, Easing, StyleSheet, View, Text, Platform, Image } from 'react-native';
 import MapView from 'react-native-maps';
 import {Actions} from 'react-native-router-flux';
 import CardLayout from '../containers/cardLayout';
@@ -69,8 +69,10 @@ export default class Map extends Component {
     this.buttonAnimationSlideUp = this.buttonAnimationSlideUp.bind(this);
     this.checkMarkerClicked = this.checkMarkerClicked.bind(this);
     this.renderUserIndicatorMarker = this.renderUserIndicatorMarker.bind(this);
+    this.renderUserIndicatorMarkerImage = this.renderUserIndicatorMarkerImage.bind(this);
     this.renderMarkers = this.renderMarkers.bind(this);
     this.renderMarkerSelectImage = this.renderMarkerSelectImage.bind(this);
+    this.checkUserZoomLevel = this.checkUserZoomLevel.bind(this);
     this.prevLat = null;
     this.prevLng = null;
     this.prevZoom = null;
@@ -276,8 +278,12 @@ export default class Map extends Component {
     return null;
   }
 
-  renderUserIndicatorMarker() {
-    if (this.props.zoomLevel <= 18 && this.props.zoomLevel > 17) {
+  checkUserZoomLevel() {
+    return (this.props.zoomLevel <= 18 && this.props.zoomLevel > 17);
+  }
+
+  renderUserIndicatorMarkerImage() {
+    if (this.checkUserZoomLevel()) {
       return userPng;
     }
     return userSmallPng;
@@ -344,6 +350,26 @@ export default class Map extends Component {
     );
   }
 
+  renderUserIndicatorMarker() {
+    if (this.state.userLocationEnabled === true) {
+      return (
+        <MapView.Marker
+          coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
+          anchor={{x: 0.5, y: 0.5}}
+        >
+          <Image
+            style={{
+              height: (this.checkUserZoomLevel() ? 89 : 20),
+              width: (this.checkUserZoomLevel() ? 89 : 20)
+            }}
+            source={this.renderUserIndicatorMarkerImage()}
+          />
+        </MapView.Marker>
+      );
+    }
+    return null;
+  }
+
   render() {
     const cardTranslateY = this.state.cardTranslateY.interpolate({
       inputRange: [0, 1],
@@ -366,13 +392,7 @@ export default class Map extends Component {
           rotateEnabled={false}
         >
           {this.renderMarkers()}
-          {(this.state.userLocationEnabled === true) ?
-            <MapView.Marker
-              coordinate={{latitude: this.props.userLocation.latitude, longitude: this.props.userLocation.longitude}}
-              image={this.renderUserIndicatorMarker()}
-              anchor={{x: 0.5, y: 0.5}}
-            />
-          : null}
+          {this.renderUserIndicatorMarker()}
         </MapView>
         {
           (this.checkMarkerClicked()) ?
