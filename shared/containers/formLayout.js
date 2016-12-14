@@ -2,13 +2,13 @@ import Create from '../components/create';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setLoadingLoginAnimating } from '../actions/userActions';
-import { needUpdate } from '../actions/listActions';
+import { needUpdate, setPostedKey, setPostedUri } from '../actions/listActions';
 
 const mapStateToProps = (state) => {
   return {
     pic: state.form.pic,
     zoomLevel: state.map.zoomLevel,
-    dataSource: state.list.dataSource,
+    dataSource: state.map.items,
     currentLocation: state.map.currentLocation,
     userLocation: state.map.userLocation
   };
@@ -27,6 +27,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     needUpdate: () => {
       return dispatch(needUpdate());
+    },
+    setPostedKey: (itemKey) => {
+      return dispatch(setPostedKey(itemKey));
+    },
+    setPostedUri: (uri) => {
+      return dispatch(setPostedUri(uri));
     }
   };
 };

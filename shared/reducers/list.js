@@ -4,7 +4,9 @@ import update from 'react-addons-update';
 const initialState = {
   dataSource: [],
   detailSource: [],
-  needUpdate: false
+  needUpdate: false,
+  currentPostedKey: '',
+  currentPostedUri: ''
 };
 
 const list = (state = initialState, action) => {
@@ -22,8 +24,27 @@ const list = (state = initialState, action) => {
       needUpdate: { $set: true }
     });
   case types.updateDone:
+    let newState = state;
+    if (state.currentPostedKey === '') {
+      newState.dataSource[0].imageUrls[0] = state.currentPostedUri;
+    }
+    else {
+      let index = state.dataSource.findIndex((event)=>{
+        return (event.key === state.currentPostedKey)
+      });
+      newState.dataSource[index].imageUrls[0] = state.currentPostedUri;
+    }
+    newState.needUpdate = false;
+    newState.currentPostedUri = '';
+    newState.currentPostedKey = '';
+    return newState;
+  case types.setPostedKey:
     return update(state, {
-      needUpdate: { $set: false}
+      currentPostedKey: { $set: action.itemKey }
+    });
+  case types.setPostedUri:
+    return update(state, {
+      currentPostedUri: { $set: action.uri }
     });
   default:
     return state;

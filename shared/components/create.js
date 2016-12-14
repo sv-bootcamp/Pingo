@@ -356,9 +356,11 @@ class Create extends Component {
   }
 
   handleSceneTransition() {
+    console.log(this.props.pic);
     this.props.setLoadingLoginAnimating(false);
     this.props.setCurrentScene(this.props.lastScene);
     if (this.props.lastScene === 'list') {
+      console.log(this.props.pic);
       // todo: change the ugly scene transition of popping two consecutive scenes animation
       this.props.setPostedUri(this.props.pic);
       if(this.state.addingExistingLocation) {

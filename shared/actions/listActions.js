@@ -66,6 +66,20 @@ export const updateDone = () => {
   };
 };
 
+export const setPostedKey = (itemKey) => {
+  return {
+    type: types.setPostedKey,
+    itemKey
+  };
+};
+
+export const setPostedUri = (uri) => {
+  return {
+    type: types.setPostedUri,
+    uri
+  };
+};
+
 export const getDetailImage = (key) => {
   return (dispatch) => {
     const queries = [];
