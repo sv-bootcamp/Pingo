@@ -12,7 +12,10 @@ import {
   grantFacebookUser,
   removeUserToken,
   removeLoginType,
-  signupGuestUser
+  signupGuestUser,
+  getUserInformation,
+  getUserKey,
+  getAccessToken
 } from '../actions/authActions';
 
 const WindowHeight = 477.8 + 162;
@@ -51,18 +54,36 @@ class LoginFacebook extends Component {
   }
 
   handleLogin() {
-    FBLoginManager.loginWithPermissions(["email", "user_about_me"],(error, data) => {
+    FBLoginManager.loginWithPermissions(['email', 'user_about_me'], (error, data) => {
       if (!error) {
         this.props.setLoadingLoginAnimating(true);
+        let accessTokenTmp;
         setLoginType('facebook');
-        grantFacebookUser(data.credentials.token).then(() => {
+        grantFacebookUser(data.credentials.token)
+        .then(() => {
           this.props.setToken('facebook');
           this.props.setLoadingLoginAnimating(false);
           if (this.props.currentScene === 'initialScene') {
             this.props.setCurrentScene('map');
             Actions.map({type: 'replace'});
           }
-        }).catch(() => this.props.setLoadingLoginAnimating(false));
+        })
+        .then(() => getAccessToken())
+        .then((accessToken) => {
+          accessTokenTmp = accessToken;
+          return getUserKey();
+        })
+        .then((userKey) => {
+          return getUserInformation(userKey, accessTokenTmp);
+        })
+        .then((rjson) => {
+          if (rjson) {
+            this.props.setUserName(rjson.name);
+            this.props.setUserEmail(rjson.email);
+            this.props.setProfileImgUrl(rjson.profileImgUrl);
+          }
+        })
+        .catch(() => this.props.setLoadingLoginAnimating(false));
       } else {
         this.props.setLoadingLoginAnimating(false);
         console.log(error, data);
@@ -157,6 +178,9 @@ LoginFacebook.propTypes = {
   setToken: PropTypes.func,
   setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
+  setUserName: PropTypes.func,
+  setUserEmail: PropTypes.func,
+  setProfileImgUrl: PropTypes.func,
   token: PropTypes.string,
   currentScene: PropTypes.string
 };
