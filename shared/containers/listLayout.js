@@ -23,7 +23,9 @@ const mapStateToProps = (state) => {
     dataSource: getCategorizedItems(state.list.dataSource, state.map.categoryFilter),
     currentLocation: state.map.currentLocation,
     zoomLevel: state.map.zoomLevel,
-    needUpdate: state.list.needUpdate
+    needUpdate: state.list.needUpdate,
+    currentPostedKey: state.list.currentPostedKey,
+    currentPostedUri: state.list.currentPostedUri
   };
 };
 

@@ -19,8 +19,9 @@ class EventList extends Component {
     if (nextProps.needUpdate) {
       this.props.getAllItems(this.props.zoomLevel, this.props.currentLocation.latitude,
       this.props.currentLocation.longitude);
+      this.props.updateDone();
+      console.log(JSON.stringify(this.props.dataSource));
     }
-    this.props.updateDone();
   }
 
   componentDidMount() {
