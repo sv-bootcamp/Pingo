@@ -39,7 +39,10 @@ export const getAllItems = (zoomLevel, lat, long) => {
       .then(response => response.json())
       .then(json =>
         dispatch(receiveItems(json))
-      );
+      )
+      .catch((error) => {
+        console.log(error);
+      });
     });
   };
 };
