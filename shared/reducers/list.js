@@ -20,20 +20,16 @@ const list = (state = initialState, action) => {
       detailSource: { $set: action.items }
     });
   case types.needUpdate:
-    console.log('hhh');
-    console.log(action.items);
     let newDataSource = action.items;
-    console.log(newDataSource);
     let index = newDataSource.findIndex((event)=>{
-      return (event.key === state.currentPostedKey)
+      return (event.key === state.currentPostedKey);
     });
-    console.log(index);
     newDataSource[index].imageUrls[0] = state.currentPostedUri;
     return update(state, {
       dataSource: { $set: newDataSource },
       currentPostedUri: { $set: ''},
       currentPostedKey: { $set: ''}
-    })
+    });
   case types.setPostedKey:
     return update(state, {
       currentPostedKey: { $set: action.itemKey }

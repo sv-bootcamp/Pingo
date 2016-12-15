@@ -63,7 +63,6 @@ export const receiveUpdate = (json) => {
 
 
 export const needUpdate = (zoomLevel, lat, long) => {
-  console.log('hi');
   return (dispatch) => {
     const queries = [];
     queries.push(createQueryObject('isThumbnail', true));
@@ -80,7 +79,6 @@ export const needUpdate = (zoomLevel, lat, long) => {
       })
       .then(response => response.json())
       .then(json => {
-        console.log(json);
         dispatch(receiveUpdate(json))
         }
       )
@@ -92,7 +90,6 @@ export const needUpdate = (zoomLevel, lat, long) => {
 };
 
 export const setPostedKey = (itemKey) => {
-  console.log(itemKey);
   return {
     type: types.setPostedKey,
     itemKey
