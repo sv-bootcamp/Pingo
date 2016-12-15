@@ -63,8 +63,7 @@ EventList.propTypes = {
   getItems: PropTypes.any,
   currentLocation: PropTypes.object,
   zoomLevel: PropTypes.any,
-  setCurrentScene: PropTypes.func,
-  needUpdate: PropTypes.bool
+  setCurrentScene: PropTypes.func
 };
 
 export default EventList;
