@@ -1,5 +1,5 @@
 import EventList from '../components/eventList';
-import { getAllItems, updateDone } from '../actions/listActions';
+import { getAllItems } from '../actions/listActions';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 
@@ -36,9 +36,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));
-    },
-    updateDone: () => {
-      return dispatch(updateDone());
     }
   };
 };
