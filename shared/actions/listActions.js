@@ -29,7 +29,7 @@ export const getAllItems = (zoomLevel, lat, long) => {
 
     // todo recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
     // const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
-    getAccessToken().then((accessToken) => {
+    return getAccessToken().then((accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
       return fetch(address, {
@@ -54,19 +54,45 @@ export const receiveImages = (json) => {
   };
 };
 
-export const needUpdate = () => {
+export const receiveUpdate = (json) => {
   return {
-    type: types.needUpdate
+    type: types.needUpdate,
+    items: json.items
   };
 };
 
-export const updateDone = () => {
-  return {
-    type: types.updateDone
+
+export const needUpdate = (zoomLevel, lat, long) => {
+  console.log('hi');
+  return (dispatch) => {
+    const queries = [];
+    queries.push(createQueryObject('isThumbnail', true));
+    queries.push(createQueryObject('zoom', zoomLevel));
+    queries.push(createQueryObject('lat', lat));
+    queries.push(createQueryObject('lng', long));
+
+    getAccessToken().then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
+      const headers = getAuthHeaders(accessToken);
+      return fetch(address, {
+        method: 'GET',
+        headers
+      })
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        dispatch(receiveUpdate(json))
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    });
   };
 };
 
 export const setPostedKey = (itemKey) => {
+  console.log(itemKey);
   return {
     type: types.setPostedKey,
     itemKey

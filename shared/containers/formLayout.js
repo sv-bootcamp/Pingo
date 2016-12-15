@@ -25,8 +25,8 @@ const mapDispatchToProps = (dispatch) => {
     setLoadingLoginAnimating: (loadingLoginAnimating) => {
       return dispatch(setLoadingLoginAnimating(loadingLoginAnimating));
     },
-    needUpdate: () => {
-      return dispatch(needUpdate());
+    needUpdate: (zoomLevel, lat, long) => {
+      return dispatch(needUpdate(zoomLevel, lat, long));
     },
     setPostedKey: (itemKey) => {
       return dispatch(setPostedKey(itemKey));

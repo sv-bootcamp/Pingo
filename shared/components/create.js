@@ -261,11 +261,11 @@ class Create extends Component {
         body: dataFlag
       });
     })
-    .then((response) => {
-      console.log(response);
-      response.json()
+    .then((response) => response.json())
+    .then((json) => {
+      this.props.setPostedKey(json.data.itemKey);
+      this.handleSceneTransition()
     })
-    .then(() => this.handleSceneTransition())
     .catch((error) => {
       this.props.setLoadingLoginAnimating(false);
       console.warn(error);
@@ -328,6 +328,7 @@ class Create extends Component {
   // Check out APIDoc
   // https://goober.herokuapp.com/docs/#api-Image-addAnImage
   handleAddExistingLocation(itemKey, userKey, caption, image) {
+    this.props.setPostedKey(this.state.selectItemKey);
     const data = JSON.stringify({
       itemKey: itemKey,
       userKey: userKey,
@@ -356,17 +357,13 @@ class Create extends Component {
   }
 
   handleSceneTransition() {
-    console.log(this.props.pic);
     this.props.setLoadingLoginAnimating(false);
     this.props.setCurrentScene(this.props.lastScene);
     if (this.props.lastScene === 'list') {
-      console.log(this.props.pic);
       // todo: change the ugly scene transition of popping two consecutive scenes animation
       this.props.setPostedUri(this.props.pic);
-      if(this.state.addingExistingLocation) {
-        this.props.setPostedKey(this.state.selectItemKey);
-      }
-      this.props.needUpdate();
+      this.props.needUpdate(this.props.zoomLevel, this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
       Actions.pop({popNum: 2});
     } else {
       Actions.map({type: 'reset'});
