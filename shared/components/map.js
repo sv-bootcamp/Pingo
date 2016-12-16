@@ -88,6 +88,7 @@ export default class Map extends Component {
       mapViewHeight: 0
     };
     this.watchID = null;
+    this.setCurrentPosition();
   }
 
   componentWillReceiveProps(props) {
@@ -122,8 +123,7 @@ export default class Map extends Component {
     ).start();
   }
 
-  componentDidMount() {
-    this.setCurrentPosition();
+  componentWillMount() {
     this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
@@ -187,7 +187,7 @@ export default class Map extends Component {
         ]
       );
       this.setState({userLocationEnabled: false});
-    });
+    }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
   }
 
   handleLocationButton() {
@@ -317,6 +317,7 @@ export default class Map extends Component {
           <MapView.Marker
             key={item.key}
             style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
+            initialRegion={this.props.currentLocation}
             coordinate={{latitude: item.lat, longitude: item.lng}}
             anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
             centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}

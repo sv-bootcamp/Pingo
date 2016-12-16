@@ -10,14 +10,14 @@ const initialState = {
     {key: '4', title: 'Warning'}
   ],
   currentLocation: {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0,
+    longitudeDelta: 0
   },
   userLocation: {
-    latitude: 37.78825,
-    longitude: -122.4324
+    latitude: 0,
+    longitude: 0
   },
   zoomLevel: 14,
   items: [],
