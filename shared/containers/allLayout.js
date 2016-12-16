@@ -1,4 +1,4 @@
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, BackAndroid} from 'react-native';
 import React, { Component, PropTypes } from 'react';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
@@ -74,6 +74,8 @@ class All extends Component {
     if (this.props.currentScene === 'list') {
       this.props.setCurrentScene('map');
       Actions.pop();
+    } else if (this.props.currentScene === 'map') {
+      BackAndroid.exitApp();
     } else if (this.props.currentScene === 'cameraView') {
       // todo: change the following to know the prev scene
       this.props.setCurrentScene('map');
