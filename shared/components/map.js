@@ -317,7 +317,6 @@ export default class Map extends Component {
           <MapView.Marker
             key={item.key}
             style={{zIndex: (this.state.markerSelect === item.key) ? 10 : 0}}
-            initialRegion={this.props.currentLocation}
             coordinate={{latitude: item.lat, longitude: item.lng}}
             anchor={(Platform.OS === 'android' && this.state.markerSelect === item.key) ? {x: 0.5, y: 0.8} : null}
             centerOffset={(Platform.OS === 'ios' && this.state.markerSelect === item.key) ? {x: 0, y: -10} : null}
@@ -396,6 +395,7 @@ export default class Map extends Component {
             this.map = ref;
           }}
           style ={styles.map}
+          initialRegion={this.props.currentLocation}
           onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
           onPress={this.onMapClick}
