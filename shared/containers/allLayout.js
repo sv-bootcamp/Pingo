@@ -17,37 +17,37 @@ import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 const scenes = Actions.create(
   <Scene key="root" hideNavBar={true}>
-    <Scene key="pingo" hideNavBar={true} component={
+    <Scene key="pingo" hideNavBar={true} panHandlers={null} component={
       PingoLayout
     }/>
-    <Scene key="map" hideNavBar={true} component={
+    <Scene key="map" hideNavBar={true} panHandlers={null} component={
       MapLayout
     }/>
-    <Scene key="initialScene" hideNavBar={true} component={
+    <Scene key="initialScene" hideNavBar={true} panHandlers={null} component={
       InitialSceneLayout
     }/>
-    <Scene key="list" hideNavBar={true} component={
+    <Scene key="list" hideNavBar={true} panHandlers={null} component={
       ListLayout
     }/>
-    <Scene key="createForm" hideNavBar={true} component={
+    <Scene key="createForm" hideNavBar={true} panHandlers={null} component={
       FormLayout
     }/>
-    <Scene key="cameraView" hideNavBar={true} component={
+    <Scene key="cameraView" hideNavBar={true} panHandlers={null} component={
       CameraLayout
     }/>
-    <Scene key="detailView" hideNavBar={true} component={
+    <Scene key="detailView" hideNavBar={true} panHandlers={null} component={
       DetailViewLayout
     }/>
-    <Scene key="myPage" hideNavBar={true} component={
+    <Scene key="myPage" hideNavBar={true} panHandlers={null} component={
       MyPageLayout
     }/>
-    <Scene key="setting" hideNavBar={true} component={
+    <Scene key="setting" hideNavBar={true} panHandlers={null} component={
       SettingLayout
     }/>
-    <Scene key="eventReportView" hideNavBar={true} component={
+    <Scene key="eventReportView" hideNavBar={true} panHandlers={null} component={
       EventReportView
     }/>
-    <Scene key="privacyPolicy" hideNavBar={true} component={
+    <Scene key="privacyPolicy" hideNavBar={true} panHandlers={null} component={
       PrivacyPolicyLayout
     }/>
   </Scene>
