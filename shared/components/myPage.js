@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import ActivityCardLayout from '../containers/activityCardLayout';
 import { Actions } from 'react-native-router-flux';
 import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
@@ -17,8 +18,6 @@ import LoadingLayout from '../containers/loadingLayout';
 import { getLoginType, getUserInformation, getUserKey, getAccessToken } from '../actions/authActions';
 import ImgBtnSetting from '../resources/smallHeader/btnSetting.png';
 import ImgGuest from '../resources/myPage/guest.png';
-import IMG_BUTTON_RED_FLAG from '../resources/btn_flag_red/drawable-mdpi/btn_flag.png';
-import IMG_BUTTON_EDIT from '../resources/btn_edit/btn_edit.png';
 
 const styles = {
   myPageTextUserName: {
@@ -42,15 +41,6 @@ const styles = {
   },
   address: {
     fontSize: 14,
-    ...Platform.select({
-      android: {
-        fontFamily: 'Roboto-Regular'
-      }
-    })
-  },
-  option: {
-    fontSize: 14,
-    color: '#828282',
     ...Platform.select({
       android: {
         fontFamily: 'Roboto-Regular'
@@ -93,10 +83,6 @@ class MyPage extends Component {
     this.renderTabView = this.renderTabView.bind(this);
     this.renderTextNothingFound = this.renderTextNothingFound.bind(this);
     this.renderModal = this.renderModal.bind(this);
-    this.renderActivityCard = this.renderActivityCard.bind(this);
-    this.transformTodate = this.transformTodate.bind(this);
-    this.renderActivityInfo = this.renderActivityInfo.bind(this);
-    this.renderEventOption = this.renderEventOption.bind(this);
     getAccessToken().then((accessToken) => {
       if (accessToken !== null) {
         getUserKey().then((userKey) => {
@@ -298,7 +284,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.createdPosts)
           }
-            renderRow={this.renderActivityCard}
+            renderRow={(rowData) => <ActivityCardLayout dataSource = {rowData}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
@@ -313,122 +299,6 @@ class MyPage extends Component {
       );
     }
     return null;
-  }
-
-  renderActivityInfo(rowData) {
-    return (
-      <View style = {{height: 107}}>
-        <View style={{flex: 19, justifyContent: 'flex-start'}}>
-          <Text style = {styles.TextTitle}>{rowData.title}</Text>
-        </View>
-        <View style={{flex: 8}}/>
-        <View style={{
-          flex: 14,
-          justifyContent: 'center'}}>
-          <Text numberOfLines={1}
-                style={styles.address}>{rowData.address}</Text>
-        </View>
-        <View style={{flex: 8}}/>
-        <View style={{flex: 14}}>
-          <Text>{this.transformTodate(rowData)}</Text>
-        </View>
-        <View style={{flex: 8}}/>
-        { (rowData.category === 'event') &&
-            <View style = {{flex: 14}}>
-              <Text style = {{flex: 14}}>Created by me</Text>
-            </View>
-        }
-        <View style={{flex: 8}}/>
-      </View>
-    );
-  }
-
-  renderActivityCard(rowData) {
-    return (
-      <View style = {{height: 490.5, borderBottomColor: '#e7e7e7', borderBottomWidth: 1}}>
-        <View style = {{flexDirection: 'row', flex: 1}}>
-          <View style = {{flex: 16}}/>
-          <View style = {{flex: 344}}>
-            <View style = {{flex: 32}}/>
-            {this.renderActivityInfo(rowData)}
-            {(rowData.category === 'event') && this.renderEventOption()}
-            <View style = {{flex: 176}}>
-              <ListView
-                dataSource={new ListView.DataSource({
-                  rowHasChanged: (r1, r2) => r1 !== r2
-                }).cloneWithRows(rowData.images)}
-                renderRow={this.renderImg.bind(this)}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                horizontal={true}
-                removeClippedSubviews={false}
-              />
-            </View>
-            {this.renderPhotoOption()}
-          </View>
-        </View>
-      </View>
-    );
-  }
-
-  renderImg(rowData) {
-    return (
-      <TouchableOpacity onPress={()=>{
-      }}>
-        <Image style={{width: 328, height: 176}}
-               source = {{uri: rowData.imageUrl}}/>
-      </TouchableOpacity>
-    );
-  }
-
-  renderPhotoOption() {
-    return (
-      <View style = {{flex: 64}}>
-        <View style = {{flex: 1}}/>
-        <View style = {{flex: 3, flexDirection: 'row'}}>
-          <View style = {{flex: 24}}>
-            <Image source = {IMG_BUTTON_RED_FLAG} style = {{width: 24, height: 24}}/>
-          </View>
-          <View style = {{flex: 10}}/>
-          <View style = {{flex: 328}}>
-            <View style = {{flex: 1 }}>
-              <Text style = {styles.option}>Photo Reported</Text>
-            </View>
-            <View style = {{flex: 1}}/>
-            <View style = {{flex: 0.5}}/>
-          </View>
-        </View>
-      </View>
-    );
-  }
-
-  renderEventOption() {
-    return (
-      <View style = {{flex: 111}}>
-        <View style = {{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-          <View style = {{flex: 16}}>
-            <Image source = {IMG_BUTTON_EDIT} style = {{width: 16, height: 16}}/>
-          </View>
-          <View style = {{flex: 15.5}}/>
-          <View style = {{flex: 296}}>
-            <Text style = {styles.option}>Edit Suggestion</Text>
-          </View>
-        </View>
-        <View style = {{flex: 1, flexDirection: 'row'}}>
-          <View style = {{flex: 24}}>
-            <Image source = {IMG_BUTTON_RED_FLAG} style = {{width: 24, height: 24}}/>
-          </View>
-          <View style = {{flex: 10}}/>
-          <View style = {{flex: 328}}>
-            <View style = {{flex: 1 }}>
-              <Text style = {styles.option}>Event Reported</Text>
-            </View>
-            <View style = {{flex: 1}}/>
-            <View style = {{flex: 1}}/>
-          </View>
-        </View>
-      </View>
-    );
   }
 
   renderTabViewHeader(props) {
@@ -462,64 +332,6 @@ class MyPage extends Component {
         }}
         onPress = {() => this.props.toggleModalVisible()}/>
     );
-  }
-
-  transformTodate(rowData) {
-    let startTime = new Date(rowData.startTime);
-    let endTime = '';
-    if (rowData.endTime) {
-      endTime = new Date(rowData.endTime);
-    }
-    let date = '';
-    let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
-      'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    let meridiem = 'am';
-    let hour = startTime.getHours();
-    if (hour === 0) {
-      hour = 12;
-    } else if (hour === 12) {
-      meridiem = 'pm';
-    } else if (hour > 12) {
-      hour %= 12;
-      meridiem = 'pm';
-    }
-    if (hour < 10) {
-      hour = '0' + hour;
-    }
-    let minute = startTime.getMinutes();
-    if (minute === 0) {
-      minute = '00';
-    } else if (minute < 10) {
-      minute = '0' + minute;
-    }
-    date += monthNames[startTime.getMonth()] + '. ' + startTime.getDate() + ', ';
-    date += hour + ':' + minute + meridiem + ' - ';
-    if (endTime) {
-      meridiem = 'am';
-      hour = endTime.getHours();
-      if (hour === 0) {
-        hour = 12;
-      } else if (hour === 12) {
-        meridiem = 'pm';
-      } else if (hour > 12) {
-        hour %= 12;
-        meridiem = 'pm';
-      }
-      if (hour < 10) {
-        hour = '0' + hour;
-      }
-      minute = endTime.getMinutes();
-      if (minute === 0) {
-        minute = '00';
-      } else if (minute < 10) {
-        minute = '0' + minute;
-      }
-      date += hour + ':' + minute + meridiem;
-    } else {
-      date += '?';
-    }
-    return date;
   }
 
   render() {

@@ -99,7 +99,7 @@ export const getDetailImage = (key) => {
     queries.push(createQueryObject('item', key));
     // const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
     // const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
-    getAccessToken().then((accessToken) => {
+    return getAccessToken().then((accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
       return fetch(address, {
@@ -107,9 +107,12 @@ export const getDetailImage = (key) => {
         headers
       })
       .then(response => response.json())
-      .then(json =>
-        dispatch(receiveImages(json))
-      );
+      .then(json => {
+        return new Promise((resolve) => {
+          dispatch(receiveImages(json));
+          resolve(json.values);
+        });
+      });
     });
   };
 };
