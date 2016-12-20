@@ -19,6 +19,7 @@ export const receiveItems = (json) => {
 };
 
 // todo: refactor getting item function in mapActions
+// TODO: remove console statement
 export const getAllItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
     const queries = [];
@@ -27,9 +28,7 @@ export const getAllItems = (zoomLevel, lat, long) => {
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', long));
 
-    // todo recover this when aws is ready: const address = `${HTTP}${SERVER_ADDR}${ENDPOINT_ITEM}${queryBuilder(queries)}`;
-    // const address = `https://goober.herokuapp.com/api/items/${queryBuilder(queries)}`;
-    getAccessToken().then((accessToken) => {
+    return getAccessToken().then((accessToken) => {
       const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
       const headers = getAuthHeaders(accessToken);
       return fetch(address, {
@@ -37,12 +36,8 @@ export const getAllItems = (zoomLevel, lat, long) => {
         headers
       })
       .then(response => response.json())
-      .then(json =>
-        dispatch(receiveItems(json))
-      )
-      .catch((error) => {
-        console.log(error);
-      });
+      .then(json => dispatch(receiveItems(json)))
+      .catch(console.log); // eslint-disable-line no-console
     });
   };
 };
@@ -51,6 +46,52 @@ export const receiveImages = (json) => {
   return {
     type: types.getDetailImage,
     items: json.values
+  };
+};
+
+export const receiveUpdate = (json) => {
+  return {
+    type: types.needUpdate,
+    items: json.items
+  };
+};
+
+
+export const needUpdate = (zoomLevel, lat, long) => {
+  return (dispatch) => {
+    const queries = [];
+    queries.push(createQueryObject('isThumbnail', true));
+    queries.push(createQueryObject('zoom', zoomLevel));
+    queries.push(createQueryObject('lat', lat));
+    queries.push(createQueryObject('lng', long));
+
+    getAccessToken().then((accessToken) => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
+      const headers = getAuthHeaders(accessToken);
+      return fetch(address, {
+        method: 'GET',
+        headers
+      })
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveUpdate(json));
+      })
+      .catch(console.log); // eslint-disable-line no-console
+    });
+  };
+};
+
+export const setPostedKey = (itemKey) => {
+  return {
+    type: types.setPostedKey,
+    itemKey
+  };
+};
+
+export const setPostedUri = (uri) => {
+  return {
+    type: types.setPostedUri,
+    uri
   };
 };
 

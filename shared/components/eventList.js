@@ -27,32 +27,32 @@ class EventList extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
-        {(this.props.dataSource) ?
-          <ListView
-            dataSource={new ListView.DataSource({
-          rowHasChanged: (r1, r2) => r1 !== r2
-          }).cloneWithRows(this.props.dataSource)}
-            renderRow={this.renderRowTxt.bind(this)}
-            removeClippedSubviews={false}
-            enableEmptySections={true} />
-          : null
-        }
-        <MapButton
-          handleOnPress={this.handleCameraButton.bind(this)}
-          imageSource={'camera'}
-          style={Platform.OS === 'android' ? {
-            position: 'absolute', zIndex: 10, elevation: 4,
-            bottom: Dimensions.get('window').width * 16 / 360,
-            right: Dimensions.get('window').width * 16 / 360
-          } : {
-            position: 'absolute', zIndex: 10,
-            bottom: Dimensions.get('window').width * 16 / 360,
-            right: Dimensions.get('window').width * 16 / 360
-          }}
-        />
-      </View>
-    );
+       <View style={{flex: 1}}>
+         {(this.props.dataSource) ?
+           <ListView
+             dataSource={new ListView.DataSource({
+           rowHasChanged: (r1, r2) => r1 !== r2
+           }).cloneWithRows(this.props.dataSource)}
+             renderRow={this.renderRowTxt.bind(this)}
+             removeClippedSubviews={false}
+             enableEmptySections={true} />
+           : null
+         }
+         <MapButton
+           handleOnPress={this.handleCameraButton.bind(this)}
+           imageSource={'camera'}
+           style={Platform.OS === 'android' ? {
+             position: 'absolute', zIndex: 10, elevation: 4,
+             bottom: Dimensions.get('window').width * 16 / 360,
+             right: Dimensions.get('window').width * 16 / 360
+           } : {
+             position: 'absolute', zIndex: 10,
+             bottom: Dimensions.get('window').width * 16 / 360,
+             right: Dimensions.get('window').width * 16 / 360
+           }}
+         />
+       </View>
+     );
   }
 }
 
