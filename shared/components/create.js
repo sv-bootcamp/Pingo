@@ -262,7 +262,10 @@ class Create extends Component {
       });
     })
     .then((response) => response.json())
-    .then(() => this.handleSceneTransition())
+    .then((json) => {
+      this.props.setPostedKey(json.data.itemKey);
+      this.handleSceneTransition()
+    })
     .catch((error) => {
       this.props.setLoadingLoginAnimating(false);
       console.warn(error);
@@ -325,6 +328,7 @@ class Create extends Component {
   // Check out APIDoc
   // https://goober.herokuapp.com/docs/#api-Image-addAnImage
   handleAddExistingLocation(itemKey, userKey, caption, image) {
+    this.props.setPostedKey(this.state.selectItemKey);
     const data = JSON.stringify({
       itemKey: itemKey,
       userKey: userKey,
@@ -357,6 +361,9 @@ class Create extends Component {
     this.props.setCurrentScene(this.props.lastScene);
     if (this.props.lastScene === 'list') {
       // todo: change the ugly scene transition of popping two consecutive scenes animation
+      this.props.setPostedUri(this.props.pic);
+      this.props.needUpdate(this.props.zoomLevel, this.props.currentLocation.latitude,
+      this.props.currentLocation.longitude);
       Actions.pop({popNum: 2});
     } else {
       Actions.map({type: 'reset'});
@@ -801,7 +808,10 @@ Create.propTypes = {
   setLoadingLoginAnimating: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
-  currentLocation: PropTypes.any
+  currentLocation: PropTypes.any,
+  needUpdate: PropTypes.func,
+  setPostedUri: PropTypes.func,
+  setPostedKey: PropTypes.func
 };
 
 export default Create;
