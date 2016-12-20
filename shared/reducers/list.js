@@ -20,10 +20,8 @@ const list = (state = initialState, action) => {
       detailSource: { $set: action.items }
     });
   case types.needUpdate:
-    let newDataSource = action.items;
-    let index = newDataSource.findIndex((event)=>{
-      return (event.key === state.currentPostedKey);
-    });
+    const newDataSource = action.items;
+    const index = newDataSource.findIndex(event => event.key === state.currentPostedKey);
     newDataSource[index].imageUrls[0] = state.currentPostedUri;
     return update(state, {
       dataSource: { $set: newDataSource },
