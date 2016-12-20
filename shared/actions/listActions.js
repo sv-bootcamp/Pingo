@@ -73,9 +73,7 @@ export const needUpdate = (zoomLevel, lat, long) => {
         headers
       })
       .then(response => response.json())
-      .then(json => {
-        dispatch(receiveUpdate(json));
-      })
+      .then(json => dispatch(receiveUpdate(json)))
       .catch(console.log); // eslint-disable-line no-console
     });
   };
