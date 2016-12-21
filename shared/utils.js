@@ -1,4 +1,4 @@
-import {STORAGE_NAME, STORAGE_KEY} from 'actions/authActions';
+import {STORAGE_NAME, STORAGE_KEY} from './actions/authActions';
 import {AsyncStorage} from 'react-native';
 export const HTTP = 'http://';
 export const HTTPS = 'https://';
