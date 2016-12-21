@@ -112,7 +112,8 @@ export const getDetailImage = (key) => {
           dispatch(receiveImages(json));
           resolve(json.values);
         });
-      });
+      })
+      .catch(console.log);
     });
   };
 };
