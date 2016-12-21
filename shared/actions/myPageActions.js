@@ -43,7 +43,7 @@ export const deleteEvent = (eventKey) => {
       itemKey: eventKey
     })
     .then(() => dispatch(getSavedPosts()))
-    .catch(console.log(error));
+    .catch(console.log);
   };
 };
 
@@ -57,6 +57,6 @@ export const deleteMyphoto = (key) => {
   return (dispatch) => {
     return ItemRESTManager.remove(key)
       .then(() => dispatch(getCreatedPosts()))
-      .catch(console.log(error));
+      .catch(console.log);
   };
 };
