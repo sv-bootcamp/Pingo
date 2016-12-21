@@ -34,7 +34,7 @@ export const saveEvent = (eventKey) => {
       entity: POST_ENTITY.ITEM,
       itemKey: eventKey
     })
-    .then(json => {
+    .then(() => {
         dispatch(getSavedPosts());
     })
     .catch((error) => {
@@ -48,7 +48,7 @@ export const deleteEvent = (eventKey) => {
     UserRESTManager.deleteSavedPost({
       itemKey: eventKey
     })
-    .then(json => {
+    .then(() => {
       dispatch(getSavedPosts());
     })
     .catch((error) => {
@@ -66,7 +66,7 @@ export const toggleModalVisible = () => {
 export const deleteMyphoto = (key) => {
   return (dispatch) => {
     return ItemRESTManager.remove(key)
-      .then(json => {
+      .then(() => {
         dispatch(getCreatedPosts());
       })
       .catch((error) => {

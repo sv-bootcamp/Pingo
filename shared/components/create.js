@@ -16,7 +16,6 @@ import RNFS from 'react-native-fs';
 import {
   HTTPS,
   SERVER_ADDR,
-  ENDPOINT_ITEM,
   ENDPOINT_IMAGE,
   API_GEODATA,
   API_KEY
@@ -229,7 +228,6 @@ class Create extends Component {
   }
 
   postNewItem() {
-    let dataFlag;
     getUserKey().then((userKey) => {
       this.props.setLoadingLoginAnimating(true);
       return JSON.stringify({
