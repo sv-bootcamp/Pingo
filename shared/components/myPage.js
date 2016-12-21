@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import ActivityCardLayout from '../containers/activityCardLayout';
 import { Actions } from 'react-native-router-flux';
-import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
+import {TabViewAnimated, TabBarTop, TabViewPagerPan} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import LoadingLayout from '../containers/loadingLayout';
@@ -211,6 +211,12 @@ class MyPage extends Component {
     );
   }
 
+  renderPager(props) {
+    return (
+      <TabViewPagerPan {...props} swipeEnabled={false} />
+    );
+  }
+
   renderTabView() {
     return (
       <TabViewAnimated
@@ -219,6 +225,7 @@ class MyPage extends Component {
           index: this.props.myPageTabViewIndex,
           routes: this.props.myPageTabViewRoutes
         }}
+        renderPager={this.renderPager}
         renderScene={this.renderTabViewContents.bind(this)}
         renderHeader={this.renderTabViewHeader}
         onRequestChangeTab={
