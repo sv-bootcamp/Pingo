@@ -15,13 +15,16 @@ const RESTManager = {
   get: (itemKey) => {
     return HTTPUtil.get(`${ADDRESS.DEFAULT}/${itemKey}`);
   },
-  getAll: (zoomLevel, lat, lng, isThumbnail = true) => {
+  getByArea: (zoomLevel, lat, lng, isThumbnail = true) => {
     const queries = [];
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', lng));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', isThumbnail));
     return HTTPUtil.get(`${ADDRESS.DEFAULT}${queryBuilder(queries)}`, getAuthHeaders())
+  },
+  remove: (itemKey) => {
+    return HTTPUtil.delete(`${ADDRESS.DEFAULT}/${itemKey}`);
   }
 };
 export default RESTManager;

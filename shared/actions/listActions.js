@@ -1,9 +1,7 @@
 import * as types from './actionTypes';
 // import {SERVER_ADDR, ENDPOINT_IMAGE, HTTP,
 //   queryBuilder, createQueryObject} from '../utils'; We will use later
-import {queryBuilder, createQueryObject} from '../utils';
-import { getAccessToken } from './authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, ENDPOINT_IMAGE, getAuthHeaders} from '../utils';
+import ItemRESTManager from '../services/itemService';
 
 export function TBD() {
   return {
@@ -22,23 +20,13 @@ export const receiveItems = (json) => {
 // TODO: remove console statement
 export const getAllItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
-    const queries = [];
-    queries.push(createQueryObject('isThumbnail', true));
-    queries.push(createQueryObject('zoom', zoomLevel));
-    queries.push(createQueryObject('lat', lat));
-    queries.push(createQueryObject('lng', long));
-
-    return getAccessToken().then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'GET',
-        headers
+    return ItemRESTManager.getByArea(zoomLevel, lat, long)
+      .then(json => {
+        dispatch(receiveItems(json));
       })
-      .then(response => response.json())
-      .then(json => dispatch(receiveItems(json)))
-      .catch(console.log); // eslint-disable-line no-console
-    });
+      .catch(error => {
+        console.log(error);
+      });
   };
 };
 
@@ -59,23 +47,9 @@ export const receiveUpdate = (json) => {
 
 export const needUpdate = (zoomLevel, lat, long) => {
   return (dispatch) => {
-    const queries = [];
-    queries.push(createQueryObject('isThumbnail', true));
-    queries.push(createQueryObject('zoom', zoomLevel));
-    queries.push(createQueryObject('lat', lat));
-    queries.push(createQueryObject('lng', long));
-
-    getAccessToken().then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'GET',
-        headers
-      })
-      .then(response => response.json())
+    ItemRESTManager.getByArea(zoomLevel, lat, long)
       .then(json => dispatch(receiveUpdate(json)))
       .catch(console.log); // eslint-disable-line no-console
-    });
   };
 };
 
@@ -95,25 +69,10 @@ export const setPostedUri = (uri) => {
 
 export const getDetailImage = (key) => {
   return (dispatch) => {
-    const queries = [];
-    queries.push(createQueryObject('item', key));
-    // const address = `${HTTP}${'SERVER_ADDR'}${ENDPOINT_IMAGE}${queryBuilder(queries)}`;
-    // const address = `https://goober.herokuapp.com/api/images/${queryBuilder(queries)}`;
-    return getAccessToken().then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}/${queryBuilder(queries)}`;
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'GET',
-        headers
-      })
-      .then(response => response.json())
+    return ItemRESTManager.get(key)
       .then(json => {
-        return new Promise((resolve) => {
-          dispatch(receiveImages(json));
-          resolve(json.values);
-        });
+        return dispatch(receiveImages(json));
       })
-      .catch(console.log); // eslint-disable-line no-console
-    });
+      .catch(console.log);
   };
 };

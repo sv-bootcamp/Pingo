@@ -9,7 +9,7 @@ const ADDRESS = {
   CREATED_POSTS: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/createdposts`
 };
 
-const USER_TYPE = {
+export const USER_TYPE = {
   FACEBOOK: 'facebook',
   ANONYMOUS: 'anonymous'
 };

@@ -88,7 +88,7 @@ class MyPage extends Component {
         getUserKey().then((userKey) => {
           if (userKey !== null) {
             // TODO: now it gets user information every time. improve this
-            getUserInformation(userKey, accessToken).then((rjson) => {
+            getUserInformation(userKey).then((rjson) => {
               if (rjson) {
                 this.props.setUserName(rjson.name);
                 this.props.setUserEmail(rjson.email);
