@@ -21,12 +21,8 @@ export const receiveItems = (json) => {
 export const getAllItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
     return ItemRESTManager.getByArea(zoomLevel, lat, long)
-      .then(json => {
-        dispatch(receiveItems(json));
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      .then(json => dispatch(receiveItems(json)))
+      .catch(console.log);
   };
 };
 
@@ -70,9 +66,7 @@ export const setPostedUri = (uri) => {
 export const getDetailImage = (key) => {
   return (dispatch) => {
     return ItemRESTManager.get(key)
-      .then(json => {
-        return dispatch(receiveImages(json));
-      })
+      .then(json => dispatch(receiveImages(json)))
       .catch(console.log);
   };
 };

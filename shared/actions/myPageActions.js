@@ -20,9 +20,7 @@ export const receiveSavedPosts = (json) => {
 export const getSavedPosts = () => {
   return (dispatch) => {
     return UserRESTManager.getSavedPosts()
-      .then(json => {
-        dispatch(receiveSavedPosts(json));
-      })
+      .then(json => dispatch(receiveSavedPosts(json)))
       .catch(console.log);
   };
 };
@@ -34,12 +32,8 @@ export const saveEvent = (eventKey) => {
       entity: POST_ENTITY.ITEM,
       itemKey: eventKey
     })
-    .then(() => {
-        dispatch(getSavedPosts());
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    .then(() => dispatch(getSavedPosts()))
+    .catch(console.log);
   };
 };
 
@@ -48,12 +42,8 @@ export const deleteEvent = (eventKey) => {
     UserRESTManager.deleteSavedPost({
       itemKey: eventKey
     })
-    .then(() => {
-      dispatch(getSavedPosts());
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    .then(() => dispatch(getSavedPosts()))
+    .catch(console.log(error));
   };
 };
 
@@ -66,11 +56,7 @@ export const toggleModalVisible = () => {
 export const deleteMyphoto = (key) => {
   return (dispatch) => {
     return ItemRESTManager.remove(key)
-      .then(() => {
-        dispatch(getCreatedPosts());
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+      .then(() => dispatch(getCreatedPosts()))
+      .catch(console.log(error));
+  };
 };

@@ -11,10 +11,8 @@ export const setCreatedPosts = (createdPosts) => {
 export const getCreatedPosts = () => {
   return (dispatch) => {
     UserRESTManager.getCreatedPosts()
-      .then(json => {
-        dispatch(setCreatedPosts(json));
-      })
-      .catch((error) => console.log(error));
+      .then(json => dispatch(setCreatedPosts(json)))
+      .catch(console.log);
   };
 };
 
