@@ -241,19 +241,16 @@ export const requestRefreshTokenGuest = (refreshToken) => {
     })
     .catch((error) => {
       if (error.message === 'Not a valid refresh token') {
-        getSecretToken().then((secret) => {
-          if (secret !== null) {
-            getUserKey().then((userId) => {
-              if (userId !== null) {
-                grantAnonymousUser(secret, userId);
-              }
-            });
-          } else {
-            signupGuestUser();
-          }
-        });
+        console.log(error);
+        return;
       }
-      console.log(error);
+
+      let secret;
+      getSecretToken().then((secretToken) => {
+        secret = secretToken;
+        return secret ? getUserKey() : signupGuestUser();
+      }).then(userId => (userId && secret) ?
+        grantAnonymousUser(secret, userId) : null);
     });
 };
 
