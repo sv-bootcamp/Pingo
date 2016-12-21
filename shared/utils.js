@@ -50,7 +50,7 @@ export const HTTPUtil = {
       headers
     }).then(response => {
       if(!response.ok) throw Error(response.json().error);
-      return response.json()
+      return response.json();
     });
   },
   post: (address, headers, body) => {
@@ -60,7 +60,7 @@ export const HTTPUtil = {
       body: JSON.stringify(body)
     }).then(response => {
       if(!response.ok) throw Error(response.json().error);
-      return response.json()
+      return response.json();
     });
   },
   put: (address, headers, body) => {
@@ -70,7 +70,7 @@ export const HTTPUtil = {
       body: JSON.stringify(body)
     }).then(response => {
       if(!response.ok) throw Error(response.json().error);
-      return response.json()
+      return response.json();
     });
   },
   delete: (address, headers, body) => {
@@ -80,7 +80,7 @@ export const HTTPUtil = {
       body: JSON.stringify(body)
     }).then(response => {
       if(!response.ok) throw Error(response.json().error);
-      return response.json()
+      return response.json();
     });
   },
 };
