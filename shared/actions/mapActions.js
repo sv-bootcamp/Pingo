@@ -33,15 +33,12 @@ export const getMapItems = (zoomLevel, lat, long) => {
         method: 'GET',
         headers
       })
-      .then(response => {
-        return response.json();
-      })
+      .then(response => response.json())
       .then(json => {
         dispatch(setLoadingLoginAnimating(false));
         dispatch(receiveItems(json));
-        return;
       })
-      .catch((error) => console.log(error));
+      .catch(console.log);
     });
   };
 };

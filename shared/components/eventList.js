@@ -30,13 +30,16 @@ class EventList extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <ListView
-          dataSource={new ListView.DataSource({
-          rowHasChanged: (r1, r2) => r1 !== r2
-          }).cloneWithRows(this.props.dataSource)}
-          renderRow={this.renderRowTxt.bind(this)}
-          removeClippedSubviews={false}
-          enableEmptySections={true} />
+        {(this.props.dataSource) ?
+          <ListView
+            dataSource={new ListView.DataSource({
+              rowHasChanged: (r1, r2) => r1 !== r2
+            }).cloneWithRows(this.props.dataSource)}
+            renderRow={this.renderRowTxt.bind(this)}
+            removeClippedSubviews={false}
+            enableEmptySections={true} />
+          : null
+        }
         <MapButton
           handleOnPress={this.handleCameraButton.bind(this)}
           imageSource={'camera'}
