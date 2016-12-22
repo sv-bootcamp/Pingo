@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 
 let prevAndroidExitBtnClickTime = new Date().getTime();
 const ANDROID_EXIT = {
-  CLICK_TERM: 2000,
+  CLICK_TERM: ToastAndroid.SHORT,
   MESSAGE: 'Touch again. If you want to leave.',
   MESSAGE_DURATION: ToastAndroid.SHORT
 };
