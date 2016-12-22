@@ -1,4 +1,4 @@
-import { View, StyleSheet, Platform, BackAndroid} from 'react-native';
+import { View, StyleSheet, Platform, BackAndroid, ToastAndroid} from 'react-native';
 import React, { Component, PropTypes } from 'react';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import HeaderLayout from './headerLayout';
@@ -65,6 +65,13 @@ const styles = StyleSheet.create({
   }
 });
 
+let prevAndroidExitBtnClickTime = new Date().getTime();
+const ANDROID_EXIT = {
+  CLICK_TERM: 2000,
+  MESSAGE: 'Touch again. If you want to leave.',
+  MESSAGE_DURATION: ToastAndroid.SHORT
+};
+
 class All extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +82,13 @@ class All extends Component {
       this.props.setCurrentScene('map');
       Actions.pop();
     } else if (this.props.currentScene === 'map') {
-      BackAndroid.exitApp();
+      const currentTime = new Date().getTime();
+      if (currentTime - prevAndroidExitBtnClickTime > ANDROID_EXIT.CLICK_TERM) {
+        prevAndroidExitBtnClickTime = currentTime;
+        ToastAndroid.show(ANDROID_EXIT.MESSAGE, ANDROID_EXIT.MESSAGE_DURATION);
+      } else {
+        BackAndroid.exitApp();
+      }
     } else if (this.props.currentScene === 'cameraView') {
       // todo: change the following to know the prev scene
       this.props.setCurrentScene('map');
