@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   }
 });
 
-<<<<<<< HEAD
 export const SCENE_KEY = {
   ROOT: 'root',
   PINGO: 'pingo',
@@ -102,7 +101,6 @@ const SCENE_PROPS = [
   }
 ];
 
-=======
 let prevAndroidExitBtnClickTime = new Date().getTime();
 const ANDROID_EXIT = {
   CLICK_TERM: ToastAndroid.SHORT,
@@ -110,7 +108,6 @@ const ANDROID_EXIT = {
   MESSAGE_DURATION: ToastAndroid.SHORT
 };
 
->>>>>>> e6a3470214a056e41e6132cd6cf92b393c47ba4c
 class All extends Component {
   constructor(props) {
     super(props);
