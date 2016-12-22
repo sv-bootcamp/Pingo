@@ -23,3 +23,6 @@ export const setCreatedPosts = 'SET_CREATED_POSTS';
 export const setUserLocation = 'SET_USER_LOCATION';
 export const setLoadingLoginAnimating = 'SET_LOADING_LOGIN_ANIMATING';
 export const toggleModalVisible = 'TOGGLE_MODAL_VISIBLE';
+export const needUpdate = 'NEED_UPDATE';
+export const setPostedKey = 'SET_POSTED_KEY';
+export const setPostedUri = 'SET_POSTED_URI';

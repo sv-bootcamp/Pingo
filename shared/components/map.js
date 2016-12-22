@@ -178,10 +178,10 @@ export default class Map extends Component {
       this.props.setUserLocation(userLocation);
       this.setState({userLocationEnabled: true});
     },
-    (error) => {
+    (err) => {
       Alert.alert(
         'Unable to get your location',
-        error,
+        err.message,
         [
           {text: 'Cancel'}
         ]
