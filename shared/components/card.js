@@ -85,12 +85,10 @@ class Card extends Component {
     this.state = {
       date: '',
       numOfImage: 0,
-      isSaved: this.props.dataSource.isSaved,
       menuVisible: false,
       cardY: 0
     };
     this.renderImg = this.renderImg.bind(this);
-    this.toggleStar = this.toggleStar.bind(this);
     this.renderOwnership = this.renderOwnership.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
     this.renderModal = this.renderModal.bind(this);
@@ -195,8 +193,8 @@ class Card extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
-        Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
-          date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
+        Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene,
+          date: this.state.date, dataSource: this.props.dataSource, isSaved: this.props.dataSource.isSaved});
       }}>
         <Image style={styles.CardImage}
              source = {{uri: rowData}}/>
@@ -205,17 +203,11 @@ class Card extends Component {
   }
 
   handlePressStar() {
-    if (this.state.isSaved === true) {
-      this.setState({isSaved: false});
+    if (this.props.dataSource.isSaved) {
       this.props.deleteEvent(this.props.dataSource.key);
     } else {
-      this.setState({isSaved: true});
       this.props.saveEvent(this.props.dataSource.key);
     }
-  }
-
-  toggleStar() {
-    this.setState({isSaved: !this.state.isSaved});
   }
 
   renderMenu() {
@@ -285,8 +277,8 @@ class Card extends Component {
           <TouchableWithoutFeedback onPress = {()=>{
             this.props.setCurrentScene('detail');
             this.props.getDetailImage(this.props.dataSource.key);
-            Actions.detailView({ rowID: 0, lastScene: this.props.currentScene, toggleStar: this.toggleStar,
-              date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
+            Actions.detailView({ rowID: 0, lastScene: this.props.currentScene,
+              date: this.state.date, dataSource: this.props.dataSource, isSaved: this.props.dataSource.isSaved});
           }}>
             <View style={{flex: 4, justifyContent: 'flex-start'}}>
               <Text style={styles.TextTitle}>{this.props.dataSource.title}</Text>
@@ -314,7 +306,7 @@ class Card extends Component {
                       height: Dimensions.get('window').height * 24 / 640,
                       width: Dimensions.get('window').height * 24 / 640
                     }}
-                    source={(this.state.isSaved === true) ? IMG_BUTTON_YELLOW_STAR : IMG_BUTTON_STAR}
+                    source={(this.props.dataSource.isSaved) ? IMG_BUTTON_YELLOW_STAR : IMG_BUTTON_STAR}
                   />
               </TouchableOpacity>
             }
