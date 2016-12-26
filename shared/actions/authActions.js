@@ -66,6 +66,7 @@ export const signupFacebookUser = (FacebookToken) => {
       return null;
     })
     .catch((error) => {
+      // TODO : need to change error checking method
       if (error.message === 'Already exist.') {
         // TDOO: TBD
       }
@@ -97,6 +98,7 @@ export const grantAnonymousUser = (secret, userKey) => {
       }
     })
     .catch((error) => {
+      // TODO : need to change error checking method
       if (error.message === 'wrong secret') {
         signupGuestUser();
       }
@@ -224,6 +226,7 @@ export const requestRefreshTokenFacebook = (refreshToken) => {
       setRefreshToken(rjson.refreshToken);
     })
     .catch((error) => {
+      // TODO : need to change error checking method
       if (error.message === 'Not a valid refresh token') {
         removeUserToken();
       }
@@ -238,6 +241,7 @@ export const requestRefreshTokenGuest = (refreshToken) => {
       setRefreshToken(rjson.refreshToken);
     })
     .catch((error) => {
+      // TODO : need to change error checking method
       if (error.message === 'Not a valid refresh token') {
         console.log(error); // eslint-disable-line no-console
         return;
