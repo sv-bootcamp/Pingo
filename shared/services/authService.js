@@ -2,35 +2,36 @@ import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS} from '../utils';
 
 const ENDPOINT = '/api/auth';
 
-const ADDRESS = {
-  GRANT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/grant`,
-  REFRESH: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/refresh`
-};
+const GRANT = '/grant';
+const REFRESH = '/refresh';
 
 const GRANT_TYPE = {
   ANONYMOUS: 'anonymous',
   FACEBOOK: 'facebook'
-}
+};
 
 const RESTManager = {
   grant: (body) => {
-      return HTTPUtil.post(ADDRESS.GRANT, DEFAULT_HEADERS, body);
+    // TODO : if you want to ensure all elements provided, Refactoring with assert or something
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${GRANT}`;
+    return HTTPUtil.post(address, DEFAULT_HEADERS, body);
   },
   grantFacebook: (facebookToken) => {
-      return RESTManager.grant({
-          grantType: GRANT_TYPE.FACEBOOK,
-          facebookToken
-      });
+    return RESTManager.grant({
+      grantType: GRANT_TYPE.FACEBOOK,
+      facebookToken
+    });
   },
   grantGuest: (userKey, userSecret) => {
-      return RESTManager.grant({
-          grantType: GRANT_TYPE.ANONYMOUS,
-          userSecret,
-          userKey
-      });
+    return RESTManager.grant({
+      grantType: GRANT_TYPE.ANONYMOUS,
+      userSecret,
+      userKey
+    });
   },
   refresh: (refreshToken) => {
-      return HTTPUtil.post(ADDRESS.REFRESH, DEFAULT_HEADERS, {refreshToken});
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${REFRESH}`;
+    return HTTPUtil.post(address, DEFAULT_HEADERS, {refreshToken});
   }
 };
 export default RESTManager;
