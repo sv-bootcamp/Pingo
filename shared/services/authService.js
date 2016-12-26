@@ -10,10 +10,10 @@ undefinedundefined/api/auth/grant
 
 I think, The making time of constant is not guaranteed the sequence.
 */
-const ADDRESS = {
-  GRANT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/grant`,
-  REFRESH: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/refresh`
-};
+// const ADDRESS = {
+//   GRANT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/grant`,
+//   REFRESH: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/refresh`
+// };
 
 const GRANT_TYPE = {
   ANONYMOUS: 'anonymous',

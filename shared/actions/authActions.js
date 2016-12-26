@@ -66,10 +66,10 @@ export const signupFacebookUser = (FacebookToken) => {
       return null;
     })
     .catch((error) => {
-      if(error.message === 'Already exist.') {
-
+      if (error.message === 'Already exist.') {
+        // TDOO: TBD
       }
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     });
 };
 
@@ -82,9 +82,7 @@ export const signupGuestUser = async () => {
       setSecretToken(rjson.userSecret);
       return null;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch(console.log); // eslint-disable-line no-console
 };
 
 // todo: refactor the below two functions
@@ -102,7 +100,7 @@ export const grantAnonymousUser = (secret, userKey) => {
       if (error.message === 'wrong secret') {
         signupGuestUser();
       }
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     });
 };
 
@@ -115,7 +113,7 @@ export const grantFacebookUser = async (facebookToken) => {
       setUserKey(rjson.userKey);
     })
     .catch(error => {
-      console.log(error.message);
+      console.log(error.message); // eslint-disable-line no-console
       return signupFacebookUser(facebookToken);
     });
 };
@@ -229,7 +227,7 @@ export const requestRefreshTokenFacebook = (refreshToken) => {
       if (error.message === 'Not a valid refresh token') {
         removeUserToken();
       }
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     });
 };
 
@@ -241,7 +239,7 @@ export const requestRefreshTokenGuest = (refreshToken) => {
     })
     .catch((error) => {
       if (error.message === 'Not a valid refresh token') {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
         return;
       }
 
@@ -256,9 +254,7 @@ export const requestRefreshTokenGuest = (refreshToken) => {
 
 export const getUserInformation = (userKey) => {
   return UserRESTManager.getUserInfo(userKey)
-    .catch((error) => {
-      console.log(error);
-    })
+    .catch(console.log); // eslint-disable-line no-console
 };
 
 // todo: this is for developing. It should not be used in release. remove later if possible
