@@ -268,7 +268,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(dataSource)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}} myPageTabViewIndex={1}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
