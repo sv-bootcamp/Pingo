@@ -2,12 +2,6 @@ import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS, getAuthHeaders} from '../
 
 const ENDPOINT = '/api/users';
 
-// const ADDRESS = {
-//   DEFAULT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}`,
-//   SIGNUP: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/signup`,
-//   SAVED_POSTS: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/savedposts`,
-//   CREATED_POSTS: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/createdposts`
-// };
 const SIGNUP = '/signup';
 const SAVEDPOSTS = '/savedposts';
 const CREATEDPOSTS = '/createdposts';

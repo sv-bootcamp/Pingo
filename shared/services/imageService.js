@@ -3,10 +3,6 @@ import {HTTPS, SERVER_ADDR, HTTPUtil, createQueryObject, queryBuilder, getAuthHe
 
 const ENDPOINT = '/api/images';
 
-// const ADDRESS = {
-//   DEFAULT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}`
-// };
-
 const RESTManager = {
   add: (body) => {
     // TODO : if you want to ensure all elements provided, Refactoring with assert or something
