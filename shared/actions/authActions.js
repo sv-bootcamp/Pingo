@@ -8,30 +8,70 @@ import {
   ENDPOINT_GRANT,
   ENDPOINT_REFRESH,
   DEFAULT_HEADERS,
-  getAuthHeaders,
-  HTTPUtil
+  getAuthHeaders
 } from '../utils';
 
 const STORAGE_NAME = '@PingoStorage:';
-const STORAGE_KEY = {
-  ACCESS_TOKEN: 'accessToken',
-  REFRESH_TOKEN: 'refreshToken',
-  USER_KEY: 'userKey',
-  SECRET: 'secret',
-  LOGIN_TYPE: 'loginType'
-};
+// const STORAGE_KEY = {
+//   ACCESS_TOKEN: 'accessToken',
+//   REFRESH_TOKEN: 'refreshToken',
+//   USER_KEY: 'userKey',
+//   SECRET: 'secret',
+//   LOGIN_TYPE: 'loginType'
+// };
+
 const STORAGE_KEY_accessToken = 'accessToken';
 const STORAGE_KEY_refreshToken = 'refreshToken';
 const STORAGE_KEY_userKey = 'userKey';
 const STORAGE_KEY_secret = 'secret';
 const STORAGE_KEY_loginType = 'loginType';
 
+const setAccessToken = async (accessToken) => {
+  try {
+    if (accessToken) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`, accessToken);
+    }
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+};
+
+const setRefreshToken = async (refreshToken) => {
+  try {
+    if (refreshToken) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`, refreshToken);
+    }
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+};
+
+const setUserKey = async (userKey) => {
+  try {
+    if (userKey) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`, userKey);
+    }
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+};
+
+const setSecretToken = async (secret) => {
+  try {
+    if (secret) {
+      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`, secret);
+    }
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+};
+
 export const signupFacebookUser = async (FacebookToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
   const headers = DEFAULT_HEADERS;
   const body = JSON.stringify({
-    'userType': 'facebook',
-    'facebookToken': FacebookToken
+    userType: 'facebook',
+    facebookToken: FacebookToken
   });
   await fetch(address, {
     method: 'POST',
@@ -51,7 +91,7 @@ export const signupFacebookUser = async (FacebookToken) => {
     return null;
   })
   .catch((error) => {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   });
 };
 
@@ -59,7 +99,7 @@ export const signupGuestUser = async () => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
   const headers = DEFAULT_HEADERS;
   const body = JSON.stringify({
-    'userType': 'anonymous'
+    userType: 'anonymous'
   });
   await fetch(address, {
     method: 'POST',
@@ -75,7 +115,7 @@ export const signupGuestUser = async () => {
     return null;
   })
   .catch((error) => {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   });
 };
 
@@ -85,9 +125,9 @@ export const grantAnonymousUser = async (secret, userKey) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
     const headers = DEFAULT_HEADERS;
     const body = JSON.stringify({
-      'grantType': 'anonymous',
-      'userSecret': secret,
-      'userKey': userKey
+      grantType: 'anonymous',
+      userSecret: secret,
+      userKey: userKey
     });
     await fetch(address, {
       method: 'POST',
@@ -97,9 +137,8 @@ export const grantAnonymousUser = async (secret, userKey) => {
     .then((response) => {
       if (response.status === 200) {
         return response.json();
-      } else {
-        return signupGuestUser();
       }
+      return signupGuestUser();
     })
     .then((rjson) => {
       if (rjson) {
@@ -109,10 +148,10 @@ export const grantAnonymousUser = async (secret, userKey) => {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     });
   } catch (error) {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
 };
 
@@ -121,8 +160,8 @@ export const grantFacebookUser = async (facebookToken) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
     const headers = DEFAULT_HEADERS;
     const body = JSON.stringify({
-      'grantType': 'facebook',
-      'facebookToken': facebookToken
+      grantType: 'facebook',
+      facebookToken: facebookToken
     });
     await fetch(address, {
       method: 'POST',
@@ -132,66 +171,24 @@ export const grantFacebookUser = async (facebookToken) => {
     .then((response) => {
       if (response.status === 200) {
         return response.json();
-      } else {
-        return null;
       }
+      return null;
     })
     .then((rjson) => {
       if (rjson) {
         setAccessToken(rjson.accessToken);
         setRefreshToken(rjson.refreshToken);
         setUserKey(rjson.userKey);
-      } else {
-        return signupFacebookUser(facebookToken);
+        return null;
       }
+      return signupFacebookUser(facebookToken);
     })
-    .then()
     .catch((error) => {
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
       throw new Error();
     });
   } catch (error) {
-    console.log(error);
-  }
-};
-
-const setAccessToken = async (accessToken) => {
-  try {
-    if (accessToken) {
-      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`, accessToken);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const setRefreshToken = async (refreshToken) => {
-  try {
-    if (refreshToken) {
-      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`, refreshToken);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const setUserKey = async (userKey) => {
-  try {
-    if (userKey) {
-      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`, userKey);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const setSecretToken = async (secret) => {
-  try {
-    if (secret) {
-      await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`, secret);
-    }
-  } catch (error) {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
 };
 
@@ -199,7 +196,7 @@ export const setLoginType = async (loginType) => {
   try {
     await AsyncStorage.setItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`, loginType);
   } catch (error) {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
 };
 
@@ -207,62 +204,121 @@ export const setToken = (token) => {
   return {
     type: types.setToken,
     token
-  }
+  };
 };
 
 export const setUserName = (userName) => {
   return {
     type: types.setUserName,
     userName
-  }
+  };
 };
 
 export const setUserEmail = (userEmail) => {
   return {
     type: types.setUserEmail,
     userEmail
-  }
+  };
 };
 
 export const setProfileImgUrl = (profileImgUrl) => {
   return {
     type: types.setProfileImgUrl,
     profileImgUrl
+  };
+};
+
+export const getAccessToken = async () => {
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+  return null;
+};
+
+export const getRefreshToken = async () => {
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+  return null;
+};
+
+export const getUserKey = async () => {
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+  return null;
+};
+
+export const getSecretToken = async () => {
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+  return null;
+};
+
+export const getLoginType = async () => {
+  try {
+    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+  return null;
+};
+
+export const removeUserToken = async () => {
+  try {
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
   }
 };
+
+export const removeLoginType = async () => {
+  try {
+    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
+  } catch (error) {
+    console.log(error); // eslint-disable-line no-console
+  }
+};
+
 // todo : pass it to grantfbuser after receiving 400
 export const requestRefreshTokenFacebook = async (refreshToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
   const headers = DEFAULT_HEADERS;
   const body = JSON.stringify({
-    'refreshToken': refreshToken
+    refreshToken: refreshToken
   });
   return fetch(address, {
     method: 'POST',
     headers,
     body
-  })
-  .then((response) => {
+  }).then((response) => {
     if (response.status === 200) {
       return response.json();
-    } else {
-      removeUserToken();
     }
+    return removeUserToken();
   })
   .then((rjson) => {
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
   })
-  .catch((error) => {
-    console.log(error);
-  })
+  .catch(console.log); // eslint-disable-line no-console
 };
 
 export const requestRefreshTokenGuest = async (refreshToken) => {
   const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
   const headers = DEFAULT_HEADERS;
   const body = JSON.stringify({
-    'refreshToken': refreshToken
+    refreshToken: refreshToken
   });
   fetch(address, {
     method: 'POST',
@@ -272,27 +328,24 @@ export const requestRefreshTokenGuest = async (refreshToken) => {
   .then((response) => {
     if (response.status === 200) {
       return response.json();
-    } else {
-      getSecretToken().then((secret) => {
-        if (secret !== null) {
-          getUserKey().then((userId) => {
-            if (userId !== null) {
-              grantAnonymousUser(secret, userId);
-            }
-          });
-        } else {
-          signupGuestUser();
-        }
-      });
     }
+    return getSecretToken().then((secret) => {
+      if (secret !== null) {
+        getUserKey().then((userId) => {
+          if (userId !== null) {
+            grantAnonymousUser(secret, userId);
+          }
+        });
+      } else {
+        signupGuestUser();
+      }
+    });
   })
   .then((rjson) => {
     setAccessToken(rjson.accessToken);
     setRefreshToken(rjson.refreshToken);
   })
-  .catch((error) => {
-    console.log(error);
-  })
+  .catch(console.log); // eslint-disable-line no-console
 };
 
 export const getUserInformation = async (userKey, accessToken) => {
@@ -306,77 +359,19 @@ export const getUserInformation = async (userKey, accessToken) => {
     .then((response) => {
       if (response.status === 200) {
         return response.json();
-      } else {
-        throw new Error(response.status);
       }
+      throw new Error(response.status);
     })
     .then((rjson) => {
       return rjson;
     })
-    .catch((error) => {
-      console.log(error);
-    })
+    .catch(console.log); // eslint-disable-line no-console
   } catch (error) {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
+  return null;
 };
 
-export const getAccessToken = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getRefreshToken = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getUserKey = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getSecretToken = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getLoginType = async () => {
-  try {
-    return await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const removeLoginType = async () => {
-  try {
-    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_loginType}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const removeUserToken = async () => {
-  try {
-    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_accessToken}`);
-    await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_refreshToken}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
 // todo: this is for developing. It should not be used in release. remove later if possible
 export const removeAllDev = async () => {
   try {
@@ -386,6 +381,6 @@ export const removeAllDev = async () => {
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_userKey}`);
     await AsyncStorage.removeItem(`${STORAGE_NAME}${STORAGE_KEY_secret}`);
   } catch (error) {
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
 };
