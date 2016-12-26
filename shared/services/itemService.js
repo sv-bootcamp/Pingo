@@ -21,7 +21,7 @@ const RESTManager = {
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', isThumbnail));
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${queryBuilder(queries)}`;
-    return HTTPUtil.get(address, getAuthHeaders())
+    return HTTPUtil.get(address, getAuthHeaders());
   }
 };
 export default RESTManager;
