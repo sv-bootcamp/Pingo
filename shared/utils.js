@@ -25,7 +25,7 @@ export const getAuthHeaders = async (accessToken) => {
     accessToken = await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY.ACCESS_TOKEN}`);
   }
   const headers = JSON.parse(JSON.stringify(DEFAULT_HEADERS));
-  headers.Authorization =  `bearer ${accessToken}`;
+  headers.Authorization = `bearer ${accessToken}`;
   return headers;
 };
 
