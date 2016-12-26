@@ -9,6 +9,8 @@ const ENDPOINT = '/api/items';
 
 const RESTManager = {
   add: (body) => {
+    // TODO : if you want to ensure all elements provided, Refactoring with assert or something
+    // const {title, lat, lng, address, category, image, userKey, startTime, endTime, caption} = body;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}`;
     return HTTPUtil.post(address, getAuthHeaders(), body);
   },
