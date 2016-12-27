@@ -104,7 +104,7 @@ class Card extends Component {
     );
   }
 
-  handlePressStar() { // it will deleted another pr. please ignore this function!
+  handlePressStar() { // it will be deleted another pr. please ignore this function!
     if (this.state.isSaved === true) {
       if (this.props.currentScene !== 'myPage') {
         this.setState({isSaved: false});
