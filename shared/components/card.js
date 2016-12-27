@@ -3,6 +3,7 @@ import { Text, View, ListView, Image, Platform, TouchableOpacity, Dimensions, To
 import {Actions} from 'react-native-router-flux';
 import IMG_BUTTON_STAR from '../resources/btn_star/drawable-xxxhdpi/btn_star.png';
 import IMG_BUTTON_YELLOW_STAR from '../resources/btn_star_yellow/drawable-mdpi/btn_star.png';
+import { transformTodate } from '../utils';
 
 const FLEX_MARGIN_ROW = 16;
 const FLEX_MARGIN_TEXT_ROW = 8;
@@ -85,72 +86,8 @@ class Card extends Component {
 
   componentDidMount() {
     if (this.props.dataSource.category !== 'facility') {
-      this.transformTodate();
+      this.setState({date: transformTodate(this.props.dataSource)};
     }
-  }
-
-  transformTodate() {
-    let startTime = new Date(this.props.dataSource.startTime);
-    let endTime = '';
-    if (this.props.dataSource.endTime) {
-      endTime = new Date(this.props.dataSource.endTime);
-    }
-    let date = '';
-    let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
-      'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    let meridiem = 'am';
-    let hour = startTime.getHours();
-    if (hour === 0) {
-      hour = 12;
-    }
-    else if (hour === 12) {
-      meridiem = 'pm';
-    }
-    else if (hour > 12) {
-      hour %= 12;
-      meridiem = 'pm';
-    }
-    if (hour < 10) {
-      hour = '0' + hour;
-    }
-    let minute = startTime.getMinutes();
-    if (minute === 0) {
-      minute = '00';
-    }
-    else if (minute < 10) {
-      minute = '0' + minute;
-    }
-    date += monthNames[startTime.getMonth()] + '. ' + startTime.getDate() + ', ';
-    date += hour + ':' + minute + meridiem + ' - ';
-    if (endTime) {
-      meridiem = 'am';
-      hour = endTime.getHours();
-      if (hour === 0) {
-        hour = 12;
-      }
-      else if (hour === 12) {
-        meridiem = 'pm';
-      }
-      else if (hour > 12) {
-        hour %= 12;
-        meridiem = 'pm';
-      }
-      if (hour < 10) {
-        hour = '0' + hour;
-      }
-      minute = endTime.getMinutes();
-      if (minute === 0) {
-        minute = '00';
-      }
-      else if (minute < 10) {
-        minute = '0' + minute;
-      }
-      date += hour + ':' + minute + meridiem;
-    } else {
-      date += '?';
-    }
-    this.setState({ date: date });
   }
 
   renderImg(rowData, sectionID, rowID) {
@@ -162,12 +99,12 @@ class Card extends Component {
           date: this.state.date, dataSource: this.props.dataSource, isSaved: this.state.isSaved});
       }}>
         <Image style={styles.CardImage}
-               source = {{uri: rowData}}/>
+               source={{uri: rowData}}/>
       </TouchableOpacity>
     );
   }
 
-  handlePressStar() {
+  handlePressStar() { // it will deleted another pr. please ignore this function!
     if (this.state.isSaved === true) {
       if (this.props.currentScene !== 'myPage') {
         this.setState({isSaved: false});
@@ -198,22 +135,22 @@ class Card extends Component {
           backgroundColor: '#FAFAFA'
         }}
       >
-        <TouchableOpacity style = {{flex: 1}}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
-            <View style = {{flex: 18.7}}/>
-            <View style = {{flex: 205.5, justifyContent: 'center'}}>
+        <TouchableOpacity style={{flex: 1}}>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{flex: 18.7}}/>
+            <View style={{flex: 205.5, justifyContent: 'center'}}>
               <Text> Edit detail </Text>
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style = {{flex: 1}}
-                          onPress = {() => {
+        <TouchableOpacity style={{flex: 1}}
+                          onPress={() => {
                             this.props.toggleModalVisible();
                             this.props.deleteMyphoto(this.props.dataSource.key);
                           }}>
-          <View style = {{flex: 1, flexDirection: 'row'}}>
-            <View style = {{flex: 18.7}}/>
-            <View style = {{flex: 205.5, justifyContent: 'center'}}>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{flex: 18.7}}/>
+            <View style={{flex: 205.5, justifyContent: 'center'}}>
               <Text> Delete my photo </Text>
             </View>
           </View>
@@ -230,7 +167,7 @@ class Card extends Component {
         opacity: 1,
         zIndex: 60,
         borderBottomWidth: 1}}
-        onPress = {()=> {
+        onPress={()=> {
           this.props.toggleModalVisible();
         }}
       >
@@ -246,7 +183,7 @@ class Card extends Component {
         flexDirection: 'column'
       }}>
         <View style={{flex: FLEX_TEXT_TITLE + FLEX_MARGIN_TEXT_ROW, flexDirection: 'row'}}>
-          <TouchableWithoutFeedback onPress = {()=>{
+          <TouchableWithoutFeedback onPress={()=>{
             this.props.setCurrentScene('detail');
             this.props.getDetailImage(this.props.dataSource.key);
             Actions.detailView({ rowID: 0, lastScene: this.props.currentScene, toggleStar: this.toggleStar,

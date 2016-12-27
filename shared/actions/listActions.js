@@ -113,7 +113,7 @@ export const getDetailImage = (key) => {
           resolve(json.values);
         });
       })
-      .catch(console.log);
+      .catch(console.log); // eslint-disable-line no-console
     });
   };
 };
