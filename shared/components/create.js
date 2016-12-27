@@ -16,6 +16,7 @@ import RNFS from 'react-native-fs';
 import {
   HTTPS,
   SERVER_ADDR,
+  ENDPOINT_ITEM,
   ENDPOINT_IMAGE,
   API_GEODATA,
   API_KEY
@@ -202,12 +203,10 @@ class Create extends Component {
 
   encodePictureBase64() {
     RNFS.readFile(this.props.pic.replace('file:///', ''), 'base64')
-      .then((file) =>{
+      .then(file => {
         this.setState({img: file});
       })
-      .catch((err) => {
-        console.log(err.message, err.code);
-      });
+      .catch(err => console.log(err.message, err.code)); // eslint-disable-line no-console
   }
 
   handleBefore() {
@@ -228,7 +227,8 @@ class Create extends Component {
   }
 
   postNewItem() {
-    getUserKey().then((userKey) => {
+    let dataFlag;
+    getUserKey().then(userKey => {
       this.props.setLoadingLoginAnimating(true);
       return JSON.stringify({
         title: this.state.inputTextTitle,
@@ -243,11 +243,30 @@ class Create extends Component {
         caption: this.state.inputTextCaption
       });
     })
-    .then(this.props.requestAddItem)
-    .then(() => this.handleSceneTransition())
-    .catch((error) => {
+    .then(data => {
+      dataFlag = data;
+      return getAccessToken();
+    })
+    .then(accessToken => {
+      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}`;
+      return fetch(address, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authorization: `bearer ${accessToken}`
+        },
+        body: dataFlag
+      });
+    })
+    .then(response => response.json())
+    .then(json => {
+      this.props.setPostedKey(json.data.itemKey);
+      this.handleSceneTransition();
+    })
+    .catch(error => {
       this.props.setLoadingLoginAnimating(false);
-      console.warn(error);
+      console.warn(error); // eslint-disable-line no-console
     });
   }
 
@@ -256,8 +275,8 @@ class Create extends Component {
       const uri = `${API_GEODATA}?latlng=${position.coords.latitude},${position.coords.longitude}&key=${API_KEY}`;
       try {
         fetch(uri)
-        .then((response) => response.json())
-        .then((rjson) => {
+        .then(response => response.json())
+        .then(rjson => {
           let streetNumber;
           let streetName;
           if (rjson.results[0].address_components[0].short_name) {
@@ -276,12 +295,12 @@ class Create extends Component {
           });
         });
       } catch (error) {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       }
     },
-    (error) => {
+    error => {
       // todo: handle this error
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     });
   }
 
@@ -315,7 +334,7 @@ class Create extends Component {
       image: image
     });
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_IMAGE}`;
-    getAccessToken().then((accessToken) => {
+    getAccessToken().then(accessToken => {
       this.props.setLoadingLoginAnimating(true);
       fetch(address, {
         method: 'POST',
@@ -326,11 +345,11 @@ class Create extends Component {
         },
         body: data
       })
-      .then((response) => response.json())
+      .then(response => response.json())
       .then(() => this.handleSceneTransition())
-      .catch((error) => {
+      .catch(error => {
         this.props.setLoadingLoginAnimating(false);
-        console.warn(error);
+        console.warn(error); // eslint-disable-line no-console
       });
     });
   }
@@ -338,11 +357,11 @@ class Create extends Component {
   handleSceneTransition() {
     this.props.setLoadingLoginAnimating(false);
     this.props.setCurrentScene(this.props.lastScene);
+    this.props.setPostedUri(this.props.pic);
+    this.props.needUpdate(this.props.zoomLevel, this.props.currentLocation.latitude,
+    this.props.currentLocation.longitude);
     if (this.props.lastScene === 'list') {
       // todo: change the ugly scene transition of popping two consecutive scenes animation
-      this.props.setPostedUri(this.props.pic);
-      this.props.needUpdate(this.props.zoomLevel, this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
       Actions.pop({popNum: 2});
     } else {
       Actions.map({type: 'reset'});
@@ -519,9 +538,9 @@ class Create extends Component {
             autoFocus={true}
           />
           <TouchableOpacity
-            onPress={()=>{
+            onPress={() => {
               this.setState({picClicked: true});
-          }}>
+            }}>
             <Image
               source={{uri: this.props.pic}}
               style={[styles.preview, {marginRight: 16}]}
@@ -692,7 +711,7 @@ class Create extends Component {
             style={[styles.btnCategory,
               {marginLeft: 16, marginRight: 8, backgroundColor: this.state.category.colorEvent,
                 borderColor: (this.state.category.select === 'event') ? 'white' : '#e7e7e7'}]}
-            onPress={()=>{
+            onPress={() => {
               this.handleCategoryButton('event');
             }}>
             <Text style={[styles.textDone, styles.fontRobotoRegular, { fontSize: 14,
@@ -702,7 +721,7 @@ class Create extends Component {
             style={[styles.btnCategory,
               {marginRight: 8, backgroundColor: this.state.category.colorFacility,
                 borderColor: (this.state.category.select === 'facility') ? 'white' : '#e7e7e7'}]}
-            onPress={()=>{
+            onPress={() => {
               this.handleCategoryButton('facility');
             }}>
             <Text style={[styles.textDone, styles.fontRobotoRegular, { fontSize: 14,
@@ -712,7 +731,7 @@ class Create extends Component {
             style={[styles.btnCategory,
               {marginRight: 16, backgroundColor: this.state.category.colorWarning,
                 borderColor: (this.state.category.select === 'warning') ? 'white' : '#e7e7e7'}]}
-            onPress={()=>{
+            onPress={() => {
               this.handleCategoryButton('warning');
             }}>
             <Text style={[styles.textDone, styles.fontRobotoRegular, { fontSize: 14,
@@ -785,7 +804,6 @@ Create.propTypes = {
   getAllItems: PropTypes.func,
   setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
-  requestAddItem: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
   currentLocation: PropTypes.any,
