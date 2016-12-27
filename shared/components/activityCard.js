@@ -130,7 +130,7 @@ export default class ActivityCard extends Component {
             isSaved: false
           });
         })
-        .catch(console.log) // eslint-disable-line no-console
+        .catch(console.log); // eslint-disable-line no-console
       }}>
         <Image style={{width: 328, height: 176, marginRight: 8}}
                source={{uri: rowData.imageUrl}}/>

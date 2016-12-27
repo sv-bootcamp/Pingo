@@ -84,9 +84,9 @@ class Card extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.dataSource.category !== 'facility') {
-      this.setState({date: transformTodate(this.props.dataSource)};
+      this.setState({date: transformTodate(this.props.dataSource)});
     }
   }
 
