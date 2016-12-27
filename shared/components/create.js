@@ -207,7 +207,7 @@ class Create extends Component {
         this.setState({img: file});
       })
       .catch((err) => {
-        console.log(err.message, err.code);
+        console.log(err.message, err.code); // eslint-disable-line no-console
       });
   }
 
@@ -264,11 +264,11 @@ class Create extends Component {
     .then((response) => response.json())
     .then((json) => {
       this.props.setPostedKey(json.data.itemKey);
-      this.handleSceneTransition()
+      this.handleSceneTransition();
     })
     .catch((error) => {
       this.props.setLoadingLoginAnimating(false);
-      console.warn(error);
+      console.warn(error); // eslint-disable-line no-console
     });
   }
 
@@ -297,12 +297,12 @@ class Create extends Component {
           });
         });
       } catch (error) {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       }
     },
     (error) => {
       // todo: handle this error
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     });
   }
 
@@ -351,7 +351,7 @@ class Create extends Component {
       .then(() => this.handleSceneTransition())
       .catch((error) => {
         this.props.setLoadingLoginAnimating(false);
-        console.warn(error);
+        console.warn(error); // eslint-disable-line no-console
       });
     });
   }
@@ -359,11 +359,11 @@ class Create extends Component {
   handleSceneTransition() {
     this.props.setLoadingLoginAnimating(false);
     this.props.setCurrentScene(this.props.lastScene);
+    this.props.setPostedUri(this.props.pic);
+    this.props.needUpdate(this.props.zoomLevel, this.props.currentLocation.latitude,
+    this.props.currentLocation.longitude);
     if (this.props.lastScene === 'list') {
       // todo: change the ugly scene transition of popping two consecutive scenes animation
-      this.props.setPostedUri(this.props.pic);
-      this.props.needUpdate(this.props.zoomLevel, this.props.currentLocation.latitude,
-      this.props.currentLocation.longitude);
       Actions.pop({popNum: 2});
     } else {
       Actions.map({type: 'reset'});
@@ -542,7 +542,7 @@ class Create extends Component {
           <TouchableOpacity
             onPress={()=>{
               this.setState({picClicked: true});
-          }}>
+            }}>
             <Image
               source={{uri: this.props.pic}}
               style={[styles.preview, {marginRight: 16}]}
