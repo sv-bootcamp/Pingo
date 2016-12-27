@@ -107,7 +107,6 @@ export default class DetailView extends Component {
         profileImgUrl: rjson.profileImgUrl
       });
     });
-
   }
 
   setModalPosition(y) {
