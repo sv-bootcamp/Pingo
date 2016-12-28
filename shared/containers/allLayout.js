@@ -15,43 +15,6 @@ import PingoLayout from './pingoLayout';
 import PrivacyPolicyLayout from './privacyPolicyLayout';
 import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
-const scenes = Actions.create(
-  <Scene key="root" hideNavBar={true}>
-    <Scene key="pingo" hideNavBar={true} panHandlers={null} component={
-      PingoLayout
-    }/>
-    <Scene key="map" hideNavBar={true} panHandlers={null} component={
-      MapLayout
-    }/>
-    <Scene key="initialScene" hideNavBar={true} panHandlers={null} component={
-      InitialSceneLayout
-    }/>
-    <Scene key="list" hideNavBar={true} panHandlers={null} component={
-      ListLayout
-    }/>
-    <Scene key="createForm" hideNavBar={true} panHandlers={null} component={
-      FormLayout
-    }/>
-    <Scene key="cameraView" hideNavBar={true} panHandlers={null} component={
-      CameraLayout
-    }/>
-    <Scene key="detailView" hideNavBar={true} panHandlers={null} component={
-      DetailViewLayout
-    }/>
-    <Scene key="myPage" hideNavBar={true} panHandlers={null} component={
-      MyPageLayout
-    }/>
-    <Scene key="setting" hideNavBar={true} panHandlers={null} component={
-      SettingLayout
-    }/>
-    <Scene key="eventReportView" hideNavBar={true} panHandlers={null} component={
-      EventReportView
-    }/>
-    <Scene key="privacyPolicy" hideNavBar={true} panHandlers={null} component={
-      PrivacyPolicyLayout
-    }/>
-  </Scene>
-);
 
 const styles = StyleSheet.create({
   iosMargin: {
@@ -64,6 +27,79 @@ const styles = StyleSheet.create({
     })
   }
 });
+
+export const SCENE_KEY = {
+  ROOT: 'root',
+  PINGO: 'pingo',
+  MAP: 'map',
+  INITIAL: 'initialScene',
+  LIST: 'list',
+  CREATE_FORM: 'createForm',
+  CAMERA_VIEW: 'cameraView',
+  DETAIL_VIEW: 'detailView',
+  MY_PAGE: 'myPage',
+  SETTING: 'setting',
+  EVENT_REPORT_VIEW: 'eventReportView',
+  PRIVACY_POLICY: 'privacyPolicy'
+};
+
+const SCENE_PROPS = [
+  {
+    key: SCENE_KEY.PINGO,
+    hideNavBar: true,
+    component: PingoLayout
+  },
+  {
+    key: SCENE_KEY.MAP,
+    hideNavBar: true,
+    component: MapLayout
+  },
+  {
+    key: SCENE_KEY.INITIAL,
+    hideNavBar: true,
+    component: InitialSceneLayout
+  },
+  {
+    key: SCENE_KEY.LIST,
+    hideNavBar: true,
+    component: ListLayout
+  },
+  {
+    key: SCENE_KEY.CREATE_FORM,
+    hideNavBar: true,
+    component: FormLayout
+  },
+  {
+    key: SCENE_KEY.CAMERA_VIEW,
+    hideNavBar: true,
+    component: CameraLayout
+  },
+  {
+    key: SCENE_KEY.DETAIL_VIEW,
+    hideNavBar: true,
+    component: DetailViewLayout
+  },
+  {
+    key: SCENE_KEY.MY_PAGE,
+    hideNavBar: true,
+    component: MyPageLayout
+  },
+  {
+    key: SCENE_KEY.SETTING,
+    hideNavBar: true,
+    component: SettingLayout
+  },
+  {
+    key: SCENE_KEY.EVENT_REPORT_VIEW,
+    hideNavBar: true,
+    component: EventReportView
+  },
+  {
+    key: SCENE_KEY.PRIVACY_POLICY,
+    hideNavBar: true,
+    component: PrivacyPolicyLayout
+  }
+];
 
 let prevAndroidExitBtnClickTime = new Date().getTime();
 const ANDROID_EXIT = {
@@ -113,12 +149,15 @@ class All extends Component {
   render() {
     return (
       <View style={styles.iosMargin}>
-          <HeaderLayout/>
+        <HeaderLayout/>
         <View style={{flex: 1}}>
           <Router
-            scenes={scenes}
             backAndroidHandler={() => this.backAndroidHandler()}
-          />
+          >
+            <Scene key={SCENE_KEY.ROOT} hideNavBar={true}>
+              {SCENE_PROPS.map(props => <Scene {...props}/>)}
+            </Scene>
+          </Router>
         </View>
       </View>
     );
