@@ -2,12 +2,9 @@ import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS, getAuthHeaders} from '../
 
 const ENDPOINT = '/api/users';
 
-const ADDRESS = {
-  DEFAULT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}`,
-  SIGNUP: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/signup`,
-  SAVED_POSTS: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/savedposts`,
-  CREATED_POSTS: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/createdposts`
-};
+const SIGNUP = '/signup';
+const SAVEDPOSTS = '/savedposts';
+const CREATEDPOSTS = '/createdposts';
 
 export const USER_TYPE = {
   FACEBOOK: 'facebook',
@@ -21,11 +18,12 @@ export const POST_ENTITY = {
 
 const RESTManager = {
   signup: (body) => {
-    return HTTPUtil.post(ADDRESS.SIGNUP, DEFAULT_HEADERS, body);
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SIGNUP}`;
+    return HTTPUtil.post(address, DEFAULT_HEADERS, body);
   },
   signupGuest: () => {
     return RESTManager.signup({
-        userType: USER_TYPE.ANONYMOUS
+      userType: USER_TYPE.ANONYMOUS
     });
   },
   signupFacebook: (facebookToken) => {
@@ -35,21 +33,26 @@ const RESTManager = {
     });
   },
   getUserInfo: (userKey) => {
-    return HTTPUtil.get(`${ADDRESS.DEFAULT}/${userKey}`, getAuthHeaders());
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${userKey}`;
+    return HTTPUtil.get(address, getAuthHeaders());
   },
   addSavedPosts: (body) => {
     // const {entity, itemKey} = body;
-    return HTTPUtil.post(`${ADDRESS.SAVED_POSTS}`, getAuthHeaders(), body);
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SAVEDPOSTS}`;
+    return HTTPUtil.post(address, getAuthHeaders(), body);
   },
   getSavedPosts: () => {
-    return HTTPUtil.get(`${ADDRESS.SAVED_POSTS}`, getAuthHeaders());
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SAVEDPOSTS}`;
+    return HTTPUtil.get(address, getAuthHeaders());
   },
   deleteSavedPost: (body) => {
     // const {itemKey} = body;
-    return HTTPUtil.delete(`${ADDRESS.SAVED_POSTS}`, getAuthHeaders(), body);
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SAVEDPOSTS}`;
+    return HTTPUtil.delete(address, getAuthHeaders(), body);
   },
   getCreatedPosts: () => {
-    return HTTPUtil.get(`${ADDRESS.CREATED_POSTS}`, getAuthHeaders());
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${CREATEDPOSTS}`;
+    return HTTPUtil.get(address, getAuthHeaders());
   }
 };
 export default RESTManager;

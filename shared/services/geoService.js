@@ -3,7 +3,7 @@ import {HTTPUtil, createQueryObject, queryBuilder} from '../utils';
 export const API_KEY = 'AIzaSyAyPPoj64FoqPCqFTDQBkR9aNM493v_xH4';
 
 const ADDRESS = {
-  GET_ADDRESS: `https://maps.googleapis.com/maps/api/geocode/json`
+  GET_ADDRESS: 'https://maps.googleapis.com/maps/api/geocode/json'
 };
 
 const RESTManager = {

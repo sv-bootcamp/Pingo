@@ -2,18 +2,8 @@ import {HTTPS, SERVER_ADDR, HTTPUtil, DEFAULT_HEADERS} from '../utils';
 
 const ENDPOINT = '/api/auth';
 
-/*
-TODO : checkout ADDRESS constant below
-It does not work now, The log said something like
-cannot fetch from...
-undefinedundefined/api/auth/grant
-
-I think, The making time of constant is not guaranteed the sequence.
-*/
-// const ADDRESS = {
-//   GRANT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/grant`,
-//   REFRESH: `${HTTPS}${SERVER_ADDR}${ENDPOINT}/refresh`
-// };
+const GRANT = '/grant';
+const REFRESH = '/refresh';
 
 const GRANT_TYPE = {
   ANONYMOUS: 'anonymous',
@@ -22,7 +12,8 @@ const GRANT_TYPE = {
 
 const RESTManager = {
   grant: (body) => {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/grant`;
+    // TODO : if you want to ensure all elements provided, Refactoring with assert or something
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${GRANT}`;
     return HTTPUtil.post(address, DEFAULT_HEADERS, body);
   },
   grantFacebook: (facebookToken) => {
@@ -39,7 +30,7 @@ const RESTManager = {
     });
   },
   refresh: (refreshToken) => {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/refresh`;
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${REFRESH}`;
     return HTTPUtil.post(address, DEFAULT_HEADERS, {refreshToken});
   }
 };
