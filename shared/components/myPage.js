@@ -9,8 +9,9 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import ActivityCardLayout from '../containers/activityCardLayout';
 import { Actions } from 'react-native-router-flux';
-import {TabViewAnimated, TabBarTop} from 'react-native-tab-view';
+import {TabViewAnimated, TabBarTop, TabViewPagerPan} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
 import LoadingLayout from '../containers/loadingLayout';
@@ -38,6 +39,14 @@ const styles = {
       }
     })
   },
+  address: {
+    fontSize: 14,
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Regular'
+      }
+    })
+  },
   fontRobotoMedium: {
     ...Platform.select({
       android: {
@@ -52,6 +61,18 @@ const styles = {
     alignSelf: 'center',
     fontSize: 14,
     color: '#8e8e8e'
+  },
+  TextTitle: {
+    fontSize: 19,
+    color: '#2b2b2b',
+    ...Platform.select({
+      android: {
+        fontFamily: 'Roboto-Medium'
+      },
+      ios: {
+        fontWeight: 'bold'
+      }
+    })
   }
 };
 
@@ -190,6 +211,12 @@ class MyPage extends Component {
     );
   }
 
+  renderPager(props) {
+    return (
+      <TabViewPagerPan {...props} swipeEnabled={false} />
+    );
+  }
+
   renderTabView() {
     return (
       <TabViewAnimated
@@ -198,6 +225,7 @@ class MyPage extends Component {
           index: this.props.myPageTabViewIndex,
           routes: this.props.myPageTabViewRoutes
         }}
+        renderPager={this.renderPager}
         renderScene={this.renderTabViewContents.bind(this)}
         renderHeader={this.renderTabViewHeader}
         onRequestChangeTab={
@@ -240,7 +268,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(dataSource)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}} myPageTabViewIndex={1}/>}
+            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
@@ -263,7 +291,7 @@ class MyPage extends Component {
               rowHasChanged: (r1, r2) => r1 !== r2
             }).cloneWithRows(this.props.createdPosts)
           }
-            renderRow={(rowData) => <CardLayout dataSource = {rowData} style={{}} myPageTabViewIndex={0}/>}
+            renderRow={(rowData) => <ActivityCardLayout dataSource = {rowData}/>}
             enableEmptySections={true}
             removeClippedSubviews={false}
           />
