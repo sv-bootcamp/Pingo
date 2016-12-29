@@ -108,10 +108,8 @@ export const getDetailImage = (key) => {
       })
       .then(response => response.json())
       .then(json => {
-        return new Promise((resolve) => {
-          dispatch(receiveImages(json));
-          resolve(json.values);
-        });
+        dispatch(receiveImages(json));
+        return json.values;
       })
       .catch(console.log); // eslint-disable-line no-console
     });
