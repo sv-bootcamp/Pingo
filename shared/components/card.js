@@ -69,7 +69,7 @@ class Card extends Component {
     this.state = {
       date: '',
       numOfImage: 0,
-      menuVisible: false,
+      menuVisible: false
     };
     this.renderImg = this.renderImg.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
