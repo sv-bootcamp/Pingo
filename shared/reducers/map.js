@@ -68,6 +68,10 @@ const map = (state = initialState, action = {}) => {
     return update(state, {
       selectedItem: { $set: {} }
     });
+  case types.toggleSaved:
+    return update(state, {
+      selectedItem: {isSaved: {$set: action.bool}}
+    });
   case types.showListCard:
     return state;
   default:

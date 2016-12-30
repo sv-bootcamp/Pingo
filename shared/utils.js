@@ -67,3 +67,37 @@ export const HTTPUtil = {
     }).then(response => response.json());
   },
 };
+
+export const transformTodate = (data) => {
+  const startTime = new Date(data.startTime);
+  const endTime = (data.endTIme) ? new Date(data.endTime) : '';
+  let date = '';
+  function transform(date){
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
+      'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    let meridiem = 'am';
+    let hour = date.getHours();
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour === 12) {
+      meridiem = 'pm';
+    } else if (hour > 12) {
+      hour %= 12;
+      meridiem = 'pm';
+    }
+    if (hour < 10) {
+      hour = `0${hour}`;
+    }
+    let minute = date.getMinutes();
+    if (minute === 0) {
+      minute = '00';
+    } else if (minute < 10) {
+      minute = `0${minute}`;
+    }
+    return monthNames[startTime.getMonth()] + '. ' + startTime.getDate() + ', ' + hour + ':' + minute + meridiem;
+  }
+  date += transform(startTime) + ' - ';
+  date += (endTime) ? transform(endTime) : '?';
+  return date;
+}

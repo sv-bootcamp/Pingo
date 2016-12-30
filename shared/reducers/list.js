@@ -36,6 +36,11 @@ const list = (state = initialState, action) => {
     return update(state, {
       currentPostedUri: { $set: action.uri }
     });
+  case types.toggleSaved:
+    const eventIndex = state.dataSource.findIndex(post => post.key === action.eventKey);
+    return update(state, {
+      dataSource: {[eventIndex]: {isSaved: {$set: action.bool}}}
+    });
   default:
     return state;
   }

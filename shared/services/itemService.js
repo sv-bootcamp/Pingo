@@ -3,17 +3,16 @@ import {HTTPS, SERVER_ADDR, HTTPUtil, getAuthHeaders, queryBuilder,
 
 const ENDPOINT = '/api/items';
 
-const ADDRESS = {
-  DEFAULT: `${HTTPS}${SERVER_ADDR}${ENDPOINT}`
-};
-
 const RESTManager = {
   add: (body) => {
+    // TODO : if you want to ensure all elements provided, Refactoring with assert or something
     // const {title, lat, lng, address, category, image, userKey, startTime, endTime, caption} = body;
-    return HTTPUtil.post(ADDRESS.DEFAULT, getAuthHeaders(), body);
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}`;
+    return HTTPUtil.post(address, getAuthHeaders(), body);
   },
   get: (itemKey) => {
-    return HTTPUtil.get(`${ADDRESS.DEFAULT}/${itemKey}`);
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
+    return HTTPUtil.get(address);
   },
   getAll: (zoomLevel, lat, lng, isThumbnail = true) => {
     const queries = [];
@@ -21,7 +20,8 @@ const RESTManager = {
     queries.push(createQueryObject('lng', lng));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', isThumbnail));
-    return HTTPUtil.get(`${ADDRESS.DEFAULT}${queryBuilder(queries)}`, getAuthHeaders())
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${queryBuilder(queries)}`;
+    return HTTPUtil.get(address, getAuthHeaders());
   }
 };
 export default RESTManager;
