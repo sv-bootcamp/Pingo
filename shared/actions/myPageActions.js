@@ -37,6 +37,14 @@ export const getSavedPosts = () => {
   };
 };
 
+export const toggleSaved = (eventKey, bool) => {
+  return {
+    type: types.toggleSaved,
+    eventKey,
+    bool
+  };
+};
+
 export const saveEvent = (eventKey) => {
   return (dispatch) => {
     getAccessToken().then((accessToken) => {
@@ -55,6 +63,7 @@ export const saveEvent = (eventKey) => {
       .then(json => {
         if (json.message) {
           dispatch(getSavedPosts());
+          dispatch(toggleSaved(eventKey, true));
         }
       })
       .catch((error) => {
@@ -81,6 +90,7 @@ export const deleteEvent = (eventKey) => {
       .then(json => {
         if (json.message) {
           dispatch(getSavedPosts());
+          dispatch(toggleSaved(eventKey, false));
         }
       })
       .catch((error) => {

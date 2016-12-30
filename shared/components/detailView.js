@@ -426,7 +426,6 @@ export default class DetailView extends Component {
                               setModalVisible = {this.toggleModalVisible}
                               messageUnvisible = {this.messageUnvisible}
                               isSaved = {this.props.isSaved}
-                              toggleStar = {this.props.toggleStar}
                               setModalPosition = {this.setModalPosition}/>
         </View>
         <View style = {{flex: 573, backgroundColor: '#ffffff'}}>
