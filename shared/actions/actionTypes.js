@@ -26,3 +26,4 @@ export const toggleModalVisible = 'TOGGLE_MODAL_VISIBLE';
 export const needUpdate = 'NEED_UPDATE';
 export const setPostedKey = 'SET_POSTED_KEY';
 export const setPostedUri = 'SET_POSTED_URI';
+export const toggleSaved = 'TOGGLE_SAVED'

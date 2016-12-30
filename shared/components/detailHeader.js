@@ -66,7 +66,6 @@ export default class DetailHeader extends Component {
       this.setState({isSaved: true});
       this.props.saveEvent(this.props.itemKey);
     }
-    this.props.toggleStar();
   }
 
 
