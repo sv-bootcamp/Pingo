@@ -23,8 +23,6 @@ const RESTManager = {
     });
   },
   grantGuest: (userKey, userSecret) => {
-    console.log(userKey);
-    console.log(userSecret);
     return RESTManager.grant({
       grantType: GRANT_TYPE.ANONYMOUS,
       userSecret,

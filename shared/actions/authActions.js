@@ -77,7 +77,6 @@ export const signupFacebookUser = (FacebookToken) => {
 export const signupGuestUser = async () => {
   return UserRESTManager.signupGuest()
     .then((rjson) => {
-      console.log(rjson);
       setAccessToken(rjson.accessToken);
       setRefreshToken(rjson.refreshToken);
       setUserKey(rjson.userKey);
@@ -91,7 +90,6 @@ export const signupGuestUser = async () => {
 // @TODO need to change this function's name.
 export const grantAnonymousUser = (secret, userKey) => {
   if (!secret || !userKey) {
-    console.log('asdf');
     return signupGuestUser();
   }
   return AuthRESTManager.grantGuest(userKey, secret)
