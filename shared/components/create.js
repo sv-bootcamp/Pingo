@@ -16,7 +16,6 @@ import RNFS from 'react-native-fs';
 import {
   HTTPS,
   SERVER_ADDR,
-  ENDPOINT_ITEM,
   ENDPOINT_IMAGE,
   API_GEODATA,
   API_KEY
@@ -229,7 +228,6 @@ class Create extends Component {
   }
 
   postNewItem() {
-    let dataFlag;
     getUserKey().then((userKey) => {
       this.props.setLoadingLoginAnimating(true);
       return JSON.stringify({
@@ -245,27 +243,8 @@ class Create extends Component {
         caption: this.state.inputTextCaption
       });
     })
-    .then((data) => {
-      dataFlag = data;
-      return getAccessToken();
-    })
-    .then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}`;
-      return fetch(address, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authorization: `bearer ${accessToken}`
-        },
-        body: dataFlag
-      });
-    })
-    .then((response) => response.json())
-    .then((json) => {
-      this.props.setPostedKey(json.data.itemKey);
-      this.handleSceneTransition()
-    })
+    .then(this.props.requestAddItem)
+    .then(() => this.handleSceneTransition())
     .catch((error) => {
       this.props.setLoadingLoginAnimating(false);
       console.warn(error);
@@ -806,6 +785,7 @@ Create.propTypes = {
   getAllItems: PropTypes.func,
   setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
+  requestAddItem: PropTypes.func,
   zoomLevel: PropTypes.any,
   dataSource: PropTypes.any,
   currentLocation: PropTypes.any,

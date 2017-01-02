@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setLoadingLoginAnimating } from '../actions/userActions';
 import { needUpdate, setPostedKey, setPostedUri } from '../actions/listActions';
+import { requestAddItem } from '../actions/formActions';
 
 const mapStateToProps = (state) => {
   return {
@@ -33,6 +34,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setPostedUri: (uri) => {
       return dispatch(setPostedUri(uri));
+    },
+    requestAddItem: (body) => {
+      return dispatch(requestAddItem(body));
     }
   };
 };

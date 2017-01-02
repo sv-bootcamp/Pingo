@@ -1,25 +1,16 @@
 import * as types from './actionTypes';
 import { AsyncStorage } from 'react-native';
-import {
-  HTTPS,
-  SERVER_ADDR,
-  ENDPOINT_USER,
-  ENDPOINT_SIGNUP,
-  ENDPOINT_GRANT,
-  ENDPOINT_REFRESH,
-  DEFAULT_HEADERS,
-  getAuthHeaders
-} from '../utils';
+import AuthRESTManager from '../services/authService';
+import UserRESTManager from '../services/userService';
 
-const STORAGE_NAME = '@PingoStorage:';
-// const STORAGE_KEY = {
-//   ACCESS_TOKEN: 'accessToken',
-//   REFRESH_TOKEN: 'refreshToken',
-//   USER_KEY: 'userKey',
-//   SECRET: 'secret',
-//   LOGIN_TYPE: 'loginType'
-// };
-
+export const STORAGE_NAME = '@PingoStorage:';
+export const STORAGE_KEY = {
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
+  USER_KEY: 'userKey',
+  SECRET: 'secret',
+  LOGIN_TYPE: 'loginType'
+};
 const STORAGE_KEY_accessToken = 'accessToken';
 const STORAGE_KEY_refreshToken = 'refreshToken';
 const STORAGE_KEY_userKey = 'userKey';
@@ -66,80 +57,39 @@ const setSecretToken = async (secret) => {
   }
 };
 
-export const signupFacebookUser = async (FacebookToken) => {
-  const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
-  const headers = DEFAULT_HEADERS;
-  const body = JSON.stringify({
-    userType: 'facebook',
-    facebookToken: FacebookToken
-  });
-  await fetch(address, {
-    method: 'POST',
-    headers,
-    body
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    throw new Error(response.status);
-  })
-  .then((rjson) => {
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-    setUserKey(rjson.userKey);
-    return null;
-  })
-  .catch((error) => {
-    console.log(error); // eslint-disable-line no-console
-  });
+export const signupFacebookUser = (FacebookToken) => {
+  return UserRESTManager.signupFacebook(FacebookToken)
+    .then((rjson) => {
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+      setUserKey(rjson.userKey);
+      return null;
+    })
+    .catch((error) => {
+      // TODO : need to change error checking method
+      if (error.message === 'Already exist.') {
+        // TDOO: TBD
+      }
+      console.log(error); // eslint-disable-line no-console
+    });
 };
 
 export const signupGuestUser = async () => {
-  const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SIGNUP}`;
-  const headers = DEFAULT_HEADERS;
-  const body = JSON.stringify({
-    userType: 'anonymous'
-  });
-  await fetch(address, {
-    method: 'POST',
-    headers,
-    body
-  })
-  .then((response) => response.json())
-  .then((rjson) => {
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-    setUserKey(rjson.userKey);
-    setSecretToken(rjson.userSecret);
-    return null;
-  })
-  .catch((error) => {
-    console.log(error); // eslint-disable-line no-console
-  });
+  return UserRESTManager.signupGuest()
+    .then((rjson) => {
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+      setUserKey(rjson.userKey);
+      setSecretToken(rjson.userSecret);
+      return null;
+    })
+    .catch(console.log); // eslint-disable-line no-console
 };
 
 // todo: refactor the below two functions
-export const grantAnonymousUser = async (secret, userKey) => {
-  try {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
-    const headers = DEFAULT_HEADERS;
-    const body = JSON.stringify({
-      grantType: 'anonymous',
-      userSecret: secret,
-      userKey: userKey
-    });
-    await fetch(address, {
-      method: 'POST',
-      headers,
-      body
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      return signupGuestUser();
-    })
+// @TODO need to change this function's name.
+export const grantAnonymousUser = (secret, userKey) => {
+  return AuthRESTManager.grantGuest(userKey, secret)
     .then((rjson) => {
       if (rjson) {
         setAccessToken(rjson.accessToken);
@@ -148,48 +98,26 @@ export const grantAnonymousUser = async (secret, userKey) => {
       }
     })
     .catch((error) => {
+      // TODO : need to change error checking method
+      if (error.message === 'wrong secret') {
+        signupGuestUser();
+      }
       console.log(error); // eslint-disable-line no-console
     });
-  } catch (error) {
-    console.log(error); // eslint-disable-line no-console
-  }
 };
 
+// @TODO need to change this function's name.
 export const grantFacebookUser = async (facebookToken) => {
-  try {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_GRANT}`;
-    const headers = DEFAULT_HEADERS;
-    const body = JSON.stringify({
-      grantType: 'facebook',
-      facebookToken: facebookToken
-    });
-    await fetch(address, {
-      method: 'POST',
-      headers,
-      body
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      return null;
-    })
+  return AuthRESTManager.grantFacebook(facebookToken)
     .then((rjson) => {
-      if (rjson) {
-        setAccessToken(rjson.accessToken);
-        setRefreshToken(rjson.refreshToken);
-        setUserKey(rjson.userKey);
-        return null;
-      }
-      return signupFacebookUser(facebookToken);
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+      setUserKey(rjson.userKey);
     })
-    .catch((error) => {
-      console.log(error); // eslint-disable-line no-console
-      throw new Error();
+    .catch(error => {
+      console.log(error.message); // eslint-disable-line no-console
+      return signupFacebookUser(facebookToken);
     });
-  } catch (error) {
-    console.log(error); // eslint-disable-line no-console
-  }
 };
 
 export const setLoginType = async (loginType) => {
@@ -291,85 +219,46 @@ export const removeLoginType = async () => {
 };
 
 // todo : pass it to grantfbuser after receiving 400
-export const requestRefreshTokenFacebook = async (refreshToken) => {
-  const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
-  const headers = DEFAULT_HEADERS;
-  const body = JSON.stringify({
-    refreshToken: refreshToken
-  });
-  return fetch(address, {
-    method: 'POST',
-    headers,
-    body
-  }).then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    return removeUserToken();
-  })
-  .then((rjson) => {
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-  })
-  .catch(console.log); // eslint-disable-line no-console
-};
-
-export const requestRefreshTokenGuest = async (refreshToken) => {
-  const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_REFRESH}`;
-  const headers = DEFAULT_HEADERS;
-  const body = JSON.stringify({
-    refreshToken: refreshToken
-  });
-  fetch(address, {
-    method: 'POST',
-    headers,
-    body
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    return getSecretToken().then((secret) => {
-      if (secret !== null) {
-        getUserKey().then((userId) => {
-          if (userId !== null) {
-            grantAnonymousUser(secret, userId);
-          }
-        });
-      } else {
-        signupGuestUser();
-      }
-    });
-  })
-  .then((rjson) => {
-    setAccessToken(rjson.accessToken);
-    setRefreshToken(rjson.refreshToken);
-  })
-  .catch(console.log); // eslint-disable-line no-console
-};
-
-export const getUserInformation = async (userKey, accessToken) => {
-  try {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_USER}/${userKey}`;
-    const headers = getAuthHeaders(accessToken);
-    return await fetch(address, {
-      method: 'GET',
-      headers
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error(response.status);
-    })
+export const requestRefreshTokenFacebook = (refreshToken) => {
+  return AuthRESTManager.refresh(refreshToken)
     .then((rjson) => {
-      return rjson;
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
     })
+    .catch((error) => {
+      // TODO : need to change error checking method
+      if (error.message === 'Not a valid refresh token') {
+        removeUserToken();
+      }
+      console.log(error); // eslint-disable-line no-console
+    });
+};
+
+export const requestRefreshTokenGuest = (refreshToken) => {
+  return AuthRESTManager.refresh(refreshToken)
+    .then((rjson) => {
+      setAccessToken(rjson.accessToken);
+      setRefreshToken(rjson.refreshToken);
+    })
+    .catch((error) => {
+      // TODO : need to change error checking method
+      if (error.message === 'Not a valid refresh token') {
+        console.log(error); // eslint-disable-line no-console
+        return;
+      }
+
+      let secret;
+      getSecretToken().then((secretToken) => {
+        secret = secretToken;
+        return secret ? getUserKey() : signupGuestUser();
+      }).then(userId => (userId && secret) ?
+        grantAnonymousUser(secret, userId) : null);
+    });
+};
+
+export const getUserInformation = (userKey) => {
+  return UserRESTManager.getUserInfo(userKey)
     .catch(console.log); // eslint-disable-line no-console
-  } catch (error) {
-    console.log(error); // eslint-disable-line no-console
-  }
-  return null;
 };
 
 // todo: this is for developing. It should not be used in release. remove later if possible

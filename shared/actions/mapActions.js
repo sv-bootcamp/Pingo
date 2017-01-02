@@ -1,9 +1,6 @@
 import * as types from './actionTypes';
-import {
-  queryBuilder, createQueryObject} from '../utils';
-import { getAccessToken } from './authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_ITEM, getAuthHeaders } from '../utils';
 import { setLoadingLoginAnimating } from './userActions';
+import ItemRESTManager from '../services/itemService';
 
 export const onLocationChange = (region) => {
   return {
@@ -21,25 +18,12 @@ export const receiveItems = (json) => {
 
 export const getMapItems = (zoomLevel, lat, long) => {
   return (dispatch) => {
-    const queries = [];
-    queries.push(createQueryObject('lat', lat));
-    queries.push(createQueryObject('lng', long));
-    queries.push(createQueryObject('zoom', zoomLevel));
-    queries.push(createQueryObject('isThumbnail', true));
-    return getAccessToken().then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${queryBuilder(queries)}`;
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'GET',
-        headers
-      })
-      .then(response => response.json())
+    return ItemRESTManager.getByArea(zoomLevel, lat, long)
       .then(json => {
         dispatch(setLoadingLoginAnimating(false));
         dispatch(receiveItems(json));
       })
       .catch(console.log);
-    });
   };
 };
 

@@ -1,7 +1,7 @@
 import * as types from './actionTypes';
-import { getAccessToken } from './authActions';
-import { HTTPS, SERVER_ADDR, ENDPOINT_SAVEDPOST, getAuthHeaders, ENDPOINT_ITEM } from '../utils';
 import { getCreatedPosts } from './userActions';
+import UserRESTManager, {POST_ENTITY} from '../services/userService';
+import ItemRESTManager from '../services/itemService';
 
 export const setMyPageTabViewIndex = (myPageTabViewIndex) => {
   return {
@@ -19,84 +19,31 @@ export const receiveSavedPosts = (json) => {
 
 export const getSavedPosts = () => {
   return (dispatch) => {
-    getAccessToken().then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'GET',
-        headers
-      })
-      .then(response => response.json())
-      .then(json =>
-        dispatch(receiveSavedPosts(json))
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-    });
+    return UserRESTManager.getSavedPosts()
+      .then(json => dispatch(receiveSavedPosts(json)))
+      .catch(console.log);
   };
 };
 
-export const toggleSaved = (eventKey, bool) => {
-  return {
-    type: types.toggleSaved,
-    eventKey,
-    bool
-  };
-};
-
+// @TODO need to remove unnecessary flow.
 export const saveEvent = (eventKey) => {
   return (dispatch) => {
-    getAccessToken().then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const body = JSON.stringify({
-        'entity': 'item',
-        'itemKey': `${eventKey}`
-      });
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'POST',
-        headers,
-        body
-      })
-      .then(response => response.json())
-      .then(json => {
-        if (json.message) {
-          dispatch(getSavedPosts());
-          dispatch(toggleSaved(eventKey, true));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    });
+    return UserRESTManager.addSavedPosts({
+      entity: POST_ENTITY.ITEM,
+      itemKey: eventKey
+    })
+    .then(() => dispatch(getSavedPosts()))
+    .catch(console.log);
   };
 };
 
 export const deleteEvent = (eventKey) => {
   return (dispatch) => {
-    getAccessToken(dispatch).then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_SAVEDPOST}`;
-      const headers = getAuthHeaders(accessToken);
-      const body = JSON.stringify({
-        'itemKey': `${eventKey}`
-      });
-      return fetch(address, {
-        method: 'DELETE',
-        headers,
-        body
-      })
-      .then(response => response.json())
-      .then(json => {
-        if (json.message) {
-          dispatch(getSavedPosts());
-          dispatch(toggleSaved(eventKey, false));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    });
+    UserRESTManager.deleteSavedPost({
+      itemKey: eventKey
+    })
+    .then(() => dispatch(getSavedPosts()))
+    .catch(console.log);
   };
 };
 
@@ -108,21 +55,8 @@ export const toggleModalVisible = () => {
 
 export const deleteMyphoto = (key) => {
   return (dispatch) => {
-    getAccessToken(dispatch).then((accessToken) => {
-      const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_ITEM}/${key}`;
-      const headers = getAuthHeaders(accessToken);
-      return fetch(address, {
-        method: 'DELETE',
-        headers
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          dispatch(getCreatedPosts());
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    });
+    return ItemRESTManager.remove(key)
+      .then(() => dispatch(getCreatedPosts()))
+      .catch(console.log);
   };
 };
