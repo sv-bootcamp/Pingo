@@ -6,7 +6,7 @@ const SIGNUP = '/signup';
 const SAVEDPOSTS = '/savedposts';
 const CREATEDPOSTS = '/createdposts';
 
-const USER_TYPE = {
+export const USER_TYPE = {
   FACEBOOK: 'facebook',
   ANONYMOUS: 'anonymous'
 };

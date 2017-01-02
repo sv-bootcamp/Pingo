@@ -1,3 +1,5 @@
+import {STORAGE_NAME, STORAGE_KEY} from './actions/authActions';
+import {AsyncStorage} from 'react-native';
 export const HTTP = 'http://';
 export const HTTPS = 'https://';
 export const SERVER_ADDR = 'pn-go.com';
@@ -18,9 +20,12 @@ export const DEFAULT_HEADERS = {
   'Content-Type': 'application/json'
 };
 
-export const getAuthHeaders = (accessToken) => {
+export const getAuthHeaders = async (accessToken) => {
+  if (!accessToken) {
+    accessToken = await AsyncStorage.getItem(`${STORAGE_NAME}${STORAGE_KEY.ACCESS_TOKEN}`);
+  }
   const headers = JSON.parse(JSON.stringify(DEFAULT_HEADERS));
-  headers.Authorization =  `bearer ${accessToken}`;
+  headers.Authorization = `bearer ${accessToken}`;
   return headers;
 };
 
@@ -43,28 +48,40 @@ export const HTTPUtil = {
     return fetch(address, {
       method: 'GET',
       headers
-    }).then(response => response.json());
+    }).then(response => {
+      if(!response.ok) throw Error(response.json().error);
+      return response.json();
+    });
   },
   post: (address, headers, body) => {
     return fetch(address, {
       method: 'POST',
       headers,
       body: JSON.stringify(body)
-    }).then(response => response.json());
+    }).then(response => {
+      if(!response.ok) throw Error(response.json().error);
+      return response.json();
+    });
   },
   put: (address, headers, body) => {
     return fetch(address, {
       method: 'PUT',
       headers,
       body: JSON.stringify(body)
-    }).then(response => response.json());
+    }).then(response => {
+      if(!response.ok) throw Error(response.json().error);
+      return response.json();
+    });
   },
   delete: (address, headers, body) => {
     return fetch(address, {
       method: 'DELETE',
       headers,
       body: JSON.stringify(body)
-    }).then(response => response.json());
+    }).then(response => {
+      if(!response.ok) throw Error(response.json().error);
+      return response.json();
+    });
   },
 };
 

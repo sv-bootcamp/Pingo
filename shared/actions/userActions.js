@@ -1,6 +1,5 @@
 import * as types from './actionTypes';
-import { HTTPS, SERVER_ADDR, ENDPOINT_CREATEDPOST } from '../utils';
-import { getAccessToken } from '../actions/authActions';
+import UserRESTManager from '../services/userService';
 
 export const setCreatedPosts = (createdPosts) => {
   return {
@@ -11,25 +10,9 @@ export const setCreatedPosts = (createdPosts) => {
 
 export const getCreatedPosts = () => {
   return (dispatch) => {
-    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT_CREATEDPOST}`;
-    getAccessToken().then((accessToken) => {
-      const headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${accessToken}`
-      };
-      fetch(address, {
-        method: 'GET',
-        headers: headers
-      })
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        dispatch(setCreatedPosts(json));
-      })
-      .catch((error) => console.log(error));
-    });
+    UserRESTManager.getCreatedPosts()
+      .then(json => dispatch(setCreatedPosts(json)))
+      .catch(console.log);
   };
 };
 

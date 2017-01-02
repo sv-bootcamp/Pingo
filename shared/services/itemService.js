@@ -14,7 +14,7 @@ const RESTManager = {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
     return HTTPUtil.get(address);
   },
-  getAll: (zoomLevel, lat, lng, isThumbnail = true) => {
+  getByArea: (zoomLevel, lat, lng, isThumbnail = true) => {
     const queries = [];
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', lng));
@@ -22,6 +22,10 @@ const RESTManager = {
     queries.push(createQueryObject('isThumbnail', isThumbnail));
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${queryBuilder(queries)}`;
     return HTTPUtil.get(address, getAuthHeaders());
+  },
+  remove: (itemKey) => {
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
+    return HTTPUtil.delete(address, getAuthHeaders());
   }
 };
 export default RESTManager;
