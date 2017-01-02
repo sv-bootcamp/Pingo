@@ -77,6 +77,7 @@ export const signupFacebookUser = (FacebookToken) => {
 export const signupGuestUser = async () => {
   return UserRESTManager.signupGuest()
     .then((rjson) => {
+      console.log(rjson);
       setAccessToken(rjson.accessToken);
       setRefreshToken(rjson.refreshToken);
       setUserKey(rjson.userKey);
@@ -89,6 +90,10 @@ export const signupGuestUser = async () => {
 // todo: refactor the below two functions
 // @TODO need to change this function's name.
 export const grantAnonymousUser = (secret, userKey) => {
+  if (!secret || !userKey) {
+    console.log('asdf');
+    return signupGuestUser();
+  }
   return AuthRESTManager.grantGuest(userKey, secret)
     .then((rjson) => {
       if (rjson) {
@@ -110,9 +115,11 @@ export const grantAnonymousUser = (secret, userKey) => {
 export const grantFacebookUser = async (facebookToken) => {
   return AuthRESTManager.grantFacebook(facebookToken)
     .then((rjson) => {
-      setAccessToken(rjson.accessToken);
-      setRefreshToken(rjson.refreshToken);
-      setUserKey(rjson.userKey);
+      if (rjson) {
+        setAccessToken(rjson.accessToken);
+        setRefreshToken(rjson.refreshToken);
+        setUserKey(rjson.userKey);
+      }
     })
     .catch(error => {
       console.log(error.message); // eslint-disable-line no-console

@@ -55,11 +55,10 @@ class LoginFacebook extends Component {
 
   handleLogin() {
     FBLoginManager.loginWithPermissions(['email', 'user_about_me'], (error, data) => {
-      if (!error) {
-        this.props.setLoadingLoginAnimating(true);
-        let accessTokenTmp;
-        setLoginType('facebook');
-        grantFacebookUser(data.credentials.token)
+      this.props.setLoadingLoginAnimating(true);
+      let accessTokenTmp;
+      setLoginType('facebook');
+      grantFacebookUser(data.credentials.token)
         .then(() => {
           this.props.setToken('facebook');
           this.props.setLoadingLoginAnimating(false);
@@ -69,25 +68,20 @@ class LoginFacebook extends Component {
           }
         })
         .then(() => getAccessToken())
-        .then((accessToken) => {
+        .then(accessToken => {
           accessTokenTmp = accessToken;
           return getUserKey();
         })
-        .then((userKey) => {
-          return getUserInformation(userKey, accessTokenTmp);
-        })
-        .then((rjson) => {
+        .then(userKey => getUserInformation(userKey, accessTokenTmp))
+        .then(rjson => {
           if (rjson) {
             this.props.setUserName(rjson.name);
             this.props.setUserEmail(rjson.email);
             this.props.setProfileImgUrl(rjson.profileImgUrl);
           }
+          throw Error();
         })
         .catch(() => this.props.setLoadingLoginAnimating(false));
-      } else {
-        this.props.setLoadingLoginAnimating(false);
-        console.log(error, data);
-      }
     });
   }
 
@@ -96,8 +90,8 @@ class LoginFacebook extends Component {
       if (!error) {
         this.props.setToken('');
         removeUserToken()
-        .then(() => removeLoginType())
-        .then(() => signupGuestUser());
+          .then(() => removeLoginType())
+          .then(() => signupGuestUser());
       } else {
         console.log(error, data);
       }
