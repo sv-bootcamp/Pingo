@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Camera from 'react-native-camera';
-
+import {SCENE_KEY} from '../containers/allLayout';
 import ImgBtnClose from '../resources/camera/btn_close.png';
 import ImgCameraSwitch from '../resources/camera/icon_camera_switch.png';
 import ImgBtnTakingPhoto from '../resources/camera/btn_taking_photo.png';
@@ -97,6 +97,7 @@ class CameraView extends Component {
       isRecording: false,
       Done: false
     };
+    this.props.setCurrentScene(SCENE_KEY.CAMERA_VIEW);
   }
 
   componentDidMount() {
@@ -111,7 +112,6 @@ class CameraView extends Component {
       (error) => {
         // todo: implement what to do when GPS is off
         console.log(error);
-        this.props.setCurrentScene('map');
         Actions.pop();
       });
   }
@@ -140,7 +140,6 @@ class CameraView extends Component {
   }
 
   handleClose() {
-    this.props.setCurrentScene(this.props.lastScene);
     Actions.pop();
   }
 

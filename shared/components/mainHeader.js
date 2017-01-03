@@ -133,13 +133,11 @@ export default class MainHeader extends Component {
     this.props.setLoadingLoginAnimating(false);
     if (this.props.currentScene === 'map') {
       this.props.showListCard();
-      this.props.setCurrentScene('list');
       Actions.list();
     } else if (this.props.currentScene === 'list') {
       if (this.props.selectedItem.title === undefined) {
         this.props.hideMapCard();
       }
-      this.props.setCurrentScene('map');
       Actions.pop();
     }
   }

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import ActivityCardLayout from '../containers/activityCardLayout';
 import { Actions } from 'react-native-router-flux';
+import {SCENE_KEY} from '../containers/allLayout';
 import {TabViewAnimated, TabBarTop, TabViewPagerPan} from 'react-native-tab-view';
 import CardLayout from '../containers/cardLayout';
 import LoginFacebookLayout from '../containers/loginFacebookLayout';
@@ -103,6 +104,7 @@ class MyPage extends Component {
       imageHeight: 0,
       tabViewWrapperHeight: 0
     };
+    this.props.setCurrentScene(SCENE_KEY.MY_PAGE);
   }
 
   componentDidMount() {
@@ -127,12 +129,10 @@ class MyPage extends Component {
   }
 
   handleButtonPrev() {
-    this.props.setCurrentScene('map');
     Actions.map({type: 'replace'});
   }
 
   handleButtonSetting() {
-    this.props.setCurrentScene('setting');
     Actions.setting({type: 'replace'});
   }
 

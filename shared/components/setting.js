@@ -9,6 +9,7 @@ import {
   Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import {SCENE_KEY} from '../containers/allLayout';
 import { removeUserToken, removeLoginType } from '../actions/authActions';
 import {FBLoginManager} from 'react-native-facebook-login';
 
@@ -69,10 +70,10 @@ class Setting extends Component {
     this.renderSignOut = this.renderSignOut.bind(this);
     this.renderGuestView = this.renderGuestView.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.props.setCurrentScene(SCENE_KEY.SETTING);
   }
 
   handleButtonPrev() {
-    this.props.setCurrentScene('myPage');
     Actions.myPage({type: 'replace'});
   }
 

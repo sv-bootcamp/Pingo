@@ -91,7 +91,6 @@ class Card extends Component {
   renderImg(rowData, sectionID, rowID) {
     return (
       <TouchableOpacity onPress={()=>{
-        this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key);
         Actions.detailView({ rowID: (rowID * 1) + 1, lastScene: this.props.currentScene,
           date: this.state.date, dataSource: this.props.dataSource, isSaved: this.props.dataSource.isSaved});
@@ -262,7 +261,6 @@ Card.propTypes = {
   })),
   getDetailImage: PropTypes.func,
   currentScene: PropTypes.string,
-  setCurrentScene: PropTypes.func,
   saveEvent: PropTypes.func,
   deleteEvent: PropTypes.func,
   style: PropTypes.object,
