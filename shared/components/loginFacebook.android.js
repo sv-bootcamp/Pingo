@@ -10,7 +10,9 @@ import {
   getLoginType,
   setLoginType,
   removeLoginType,
-  signupGuestUser
+  signupGuestUser,
+  getUserInformation,
+  getUserKey
 } from '../actions/authActions';
 import { Actions } from 'react-native-router-flux';
 
@@ -88,23 +90,40 @@ class LoginFacebook extends Component {
         permissions={['email', 'user_about_me']}
         onLogin={(data) => {
           this.props.setLoadingLoginAnimating(true);
+          let accessTokenTmp;
           setLoginType('facebook');
-          grantFacebookUser(data.credentials.token).then(() => {
-            this.props.setToken('facebook');
-            this.props.setLoadingLoginAnimating(false);
-            if (this.props.currentScene === 'initialScene') {
-              this.props.setCurrentScene('map');
-              Actions.map({type: 'replace'});
-            }
-          }).catch(() => this.props.setLoadingLoginAnimating(false));
+          grantFacebookUser(data.credentials.token)
+            .then(() => {
+              this.props.setToken('facebook');
+              this.props.setLoadingLoginAnimating(false);
+              if (this.props.currentScene === 'initialScene') {
+                this.props.setCurrentScene('map');
+                Actions.map({type: 'replace'});
+              }
+            })
+            .then(() => getAccessToken())
+            .then(accessToken => {
+              accessTokenTmp = accessToken;
+              return getUserKey();
+            })
+            .then(userKey => getUserInformation(userKey, accessTokenTmp))
+            .then(rjson => {
+              if (rjson) {
+                this.props.setUserName(rjson.name);
+                this.props.setUserEmail(rjson.email);
+                this.props.setProfileImgUrl(rjson.profileImgUrl);
+              }
+              throw Error();
+            })
+            .catch(() => this.props.setLoadingLoginAnimating(false));
         }}
         onLoginFound={()=>{}}
         onLoginNotFound={()=>{}}
         onLogout={() => {
           this.props.setToken('');
           removeUserToken()
-          .then(() => removeLoginType())
-          .then(() => signupGuestUser());
+            .then(() => removeLoginType())
+            .then(() => signupGuestUser());
           // todo : handle accessToken for getting items after logout
         }}
         onCancel={()=>{}}
@@ -204,6 +223,9 @@ FBLoginView.propTypes = {
 LoginFacebook.propTypes = {
   style: PropTypes.any,
   setToken: PropTypes.func,
+  setUserName: PropTypes.func,
+  setUserEmail: PropTypes.func,
+  setProfileImgUrl: PropTypes.func,
   setCurrentScene: PropTypes.func,
   setLoadingLoginAnimating: PropTypes.func,
   token: PropTypes.string,

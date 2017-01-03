@@ -49,7 +49,9 @@ export const HTTPUtil = {
       method: 'GET',
       headers
     }).then(response => {
-      if(!response.ok) throw Error(response.json().error);
+      if (!response.ok) {
+        throw Error(response.json().error);
+      }
       return response.json();
     });
   },
@@ -59,7 +61,9 @@ export const HTTPUtil = {
       headers,
       body: JSON.stringify(body)
     }).then(response => {
-      if(!response.ok) throw Error(response.json().error);
+      if (!response.ok) {
+        throw Error(response.json().error);
+      }
       return response.json();
     });
   },
@@ -69,7 +73,9 @@ export const HTTPUtil = {
       headers,
       body: JSON.stringify(body)
     }).then(response => {
-      if(!response.ok) throw Error(response.json().error);
+      if (!response.ok) {
+        throw Error(response.json().error);
+      }
       return response.json();
     });
   },
@@ -79,7 +85,9 @@ export const HTTPUtil = {
       headers,
       body: JSON.stringify(body)
     }).then(response => {
-      if(!response.ok) throw Error(response.json().error);
+      if (!response.ok) {
+        throw Error(response.json().error);
+      }
       return response.json();
     });
   },
@@ -117,4 +125,4 @@ export const transformTodate = (data) => {
   date += transform(startTime) + ' - ';
   date += (endTime) ? transform(endTime) : '?';
   return date;
-}
+};
