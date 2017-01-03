@@ -9,7 +9,7 @@ import {
   Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { removeUserToken, removeLoginType } from '../actions/authActions';
+import { removeUserToken, removeLoginType, signupGuestUser } from '../actions/authActions';
 import {FBLoginManager} from 'react-native-facebook-login';
 
 const styles = {
@@ -125,10 +125,12 @@ class Setting extends Component {
     FBLoginManager.logout((error, data) => {
       if (!error) {
         this.props.setToken('');
-        removeUserToken();
-        removeLoginType();
+        removeUserToken()
+          .then(removeLoginType)
+          .then(signupGuestUser)
+          .catch(console.log); // eslint-disable-line no-console
       } else {
-        console.log(error, data);
+        console.log(error, data); // eslint-disable-line no-console
       }
     });
   }
