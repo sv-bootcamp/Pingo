@@ -198,7 +198,11 @@ export default class DetailView extends Component {
             >
             <TouchableOpacity style = {{flex: this.state.modalPosition + 20}}
                               onPress = {() => this.toggleModalVisible()}/>
-            <View style = {{flex: 96.6, flexDirection: 'row'}}>
+            <View style = {{
+              // flex: 96.6, // it will be used in next version
+              flex: 48.3,
+              flexDirection: 'row'
+            }}>
               <TouchableOpacity style = {{flex: 210.2}}
                                 onPress = {() => this.toggleModalVisible()}/>
               {
@@ -221,13 +225,16 @@ export default class DetailView extends Component {
                     <View style = {{flex: 1}}/>
                   </TouchableOpacity>
                 </View>
-                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                  <TouchableOpacity>
-                    <View style = {{flex: 1}}/>
-                    <Text style = {{flex: 1}}>Suggest an Edit</Text>
-                    <View style = {{flex: 1}}/>
-                  </TouchableOpacity>
-                </View>
+                {
+                // <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                //   <TouchableOpacity>
+                //     <View style = {{flex: 1}}/>
+                //     <Text style = {{flex: 1}}>Suggest an Edit</Text>
+                //     <View style = {{flex: 1}}/>
+                //   </TouchableOpacity>
+                // </View>
+                // it will be used in next version
+                }
               </View>
             }
             <View style = {{flex: 5.6}}/>

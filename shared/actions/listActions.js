@@ -66,7 +66,10 @@ export const setPostedUri = (uri) => {
 export const getDetailImage = (key) => {
   return (dispatch) => {
     return ItemRESTManager.get(key)
-      .then(json => dispatch(receiveImages(json)))
+      .then(json => {
+        dispatch(receiveImages(json));
+        return json.values;
+      })
       .catch(console.log);
   };
 };
