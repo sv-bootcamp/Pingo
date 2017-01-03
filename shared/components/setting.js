@@ -128,11 +128,11 @@ class Setting extends Component {
         removeUserToken()
           .then(removeLoginType)
           .then(signupGuestUser)
-          .catch(console.log);
+          .catch(console.log); // eslint-disable-line no-console
       } else {
-        console.log(error, data);
+        console.log(error, data); // eslint-disable-line no-console
       }
-    })
+    });
   }
 
   renderSignOut() {
