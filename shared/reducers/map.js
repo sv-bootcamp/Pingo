@@ -23,7 +23,9 @@ const initialState = {
   items: [],
   selectedItem: {},
   categoryFilter: 'SHOW_ALL',
-  currentCity: ''
+  currentCity: '',
+  currentPostedKey: '',
+  currentPostedUri: ''
 };
 
 const map = (state = initialState, action = {}) => {
@@ -74,6 +76,23 @@ const map = (state = initialState, action = {}) => {
     });
   case types.showListCard:
     return state;
+  case types.setPostedKey:
+    return update(state, {
+      currentPostedKey: { $set: action.itemKey }
+    });
+  case types.setPostedUri:
+    return update(state, {
+      currentPostedUri: { $set: action.uri }
+    });
+  case types.needUpdate:
+    const newDataSource = action.items;
+    const index = newDataSource.findIndex(event => event.key === state.currentPostedKey);
+    newDataSource[index].imageUrls[0] = state.currentPostedUri;
+    return update(state, {
+      items: { $set: newDataSource },
+      currentPostedUri: { $set: ''},
+      currentPostedKey: { $set: ''}
+    });
   default:
     return state;
   }
