@@ -1,6 +1,11 @@
 import LoginFacebook from '../components/loginFacebook';
 import { connect } from 'react-redux';
-import { setToken } from '../actions/authActions';
+import {
+  setToken,
+  setUserName,
+  setUserEmail,
+  setProfileImgUrl
+} from '../actions/authActions';
 import { setCurrentScene } from '../actions/fluxActions';
 import { setLoadingLoginAnimating } from '../actions/userActions';
 
@@ -15,6 +20,15 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setToken: (token) => {
       return dispatch(setToken(token));
+    },
+    setUserName: (userName) => {
+      return dispatch(setUserName(userName));
+    },
+    setUserEmail: (userEmail) => {
+      return dispatch(setUserEmail(userEmail));
+    },
+    setProfileImgUrl: (profileImgUrl) => {
+      return dispatch(setProfileImgUrl(profileImgUrl));
     },
     setCurrentScene: (currentScene) => {
       return dispatch(setCurrentScene(currentScene));

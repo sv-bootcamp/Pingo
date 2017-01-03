@@ -6,7 +6,7 @@ const SIGNUP = '/signup';
 const SAVEDPOSTS = '/savedposts';
 const CREATEDPOSTS = '/createdposts';
 
-const USER_TYPE = {
+export const USER_TYPE = {
   FACEBOOK: 'facebook',
   ANONYMOUS: 'anonymous'
 };
@@ -34,25 +34,25 @@ const RESTManager = {
   },
   getUserInfo: (userKey) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${userKey}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
   },
   addSavedPosts: (body) => {
     // const {entity, itemKey} = body;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SAVEDPOSTS}`;
-    return HTTPUtil.post(address, getAuthHeaders(), body);
+    return getAuthHeaders().then((headers) => HTTPUtil.post(address, headers, body));
   },
   getSavedPosts: () => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SAVEDPOSTS}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
   },
   deleteSavedPost: (body) => {
     // const {itemKey} = body;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${SAVEDPOSTS}`;
-    return HTTPUtil.delete(address, getAuthHeaders(), body);
+    return getAuthHeaders().then((headers) => HTTPUtil.delete(address, headers, body));
   },
   getCreatedPosts: () => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${CREATEDPOSTS}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
   }
 };
 export default RESTManager;

@@ -8,20 +8,24 @@ const RESTManager = {
     // TODO : if you want to ensure all elements provided, Refactoring with assert or something
     // const {title, lat, lng, address, category, image, userKey, startTime, endTime, caption} = body;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}`;
-    return HTTPUtil.post(address, getAuthHeaders(), body);
+    return getAuthHeaders().then((headers) => HTTPUtil.post(address, headers, body));
   },
   get: (itemKey) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
     return HTTPUtil.get(address);
   },
-  getAll: (zoomLevel, lat, lng, isThumbnail = true) => {
+  getByArea: (zoomLevel, lat, lng, isThumbnail = true) => {
     const queries = [];
     queries.push(createQueryObject('lat', lat));
     queries.push(createQueryObject('lng', lng));
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', isThumbnail));
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${queryBuilder(queries)}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
+  },
+  remove: (itemKey) => {
+    const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
+    return getAuthHeaders().then((headers) => HTTPUtil.delete(address, headers));
   }
 };
 export default RESTManager;
