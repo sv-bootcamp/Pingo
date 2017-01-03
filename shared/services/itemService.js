@@ -8,7 +8,7 @@ const RESTManager = {
     // TODO : if you want to ensure all elements provided, Refactoring with assert or something
     // const {title, lat, lng, address, category, image, userKey, startTime, endTime, caption} = body;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}`;
-    return HTTPUtil.post(address, getAuthHeaders(), body);
+    return getAuthHeaders().then((headers) => HTTPUtil.post(address, headers, body));
   },
   get: (itemKey) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
@@ -21,11 +21,11 @@ const RESTManager = {
     queries.push(createQueryObject('zoom', zoomLevel));
     queries.push(createQueryObject('isThumbnail', isThumbnail));
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${queryBuilder(queries)}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
   },
   remove: (itemKey) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${itemKey}`;
-    return HTTPUtil.delete(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.delete(address, headers));
   }
 };
 export default RESTManager;

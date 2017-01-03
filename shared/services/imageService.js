@@ -8,17 +8,17 @@ const RESTManager = {
     // TODO : if you want to ensure all elements provided, Refactoring with assert or something
     // const {itemKey, userKey, caption, image} = body;
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}`;
-    return HTTPUtil.post(address, getAuthHeaders(), body);
+    return getAuthHeaders().then((headers) => HTTPUtil.post(address, headers, body));
   },
   get: (imageKey) => {
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}/${imageKey}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
   },
   getAllByItemKey: (itemKey) => {
     const query = [];
     query.push(createQueryObject('item', itemKey));
     const address = `${HTTPS}${SERVER_ADDR}${ENDPOINT}${queryBuilder(query)}`;
-    return HTTPUtil.get(address, getAuthHeaders());
+    return getAuthHeaders().then((headers) => HTTPUtil.get(address, headers));
   }
 };
 export default RESTManager;
