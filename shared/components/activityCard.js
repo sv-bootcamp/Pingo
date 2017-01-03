@@ -92,8 +92,8 @@ export default class ActivityCard extends Component {
             <View style={{flex: 32}}/>
             {this.renderActivityInfo(rowData)}
             {
-              //(rowData.category === 'event') && this.renderEventOption()
-              //it will be used in next version
+              // (rowData.category === 'event') && this.renderEventOption()
+              // it will be used in next version
             }
             <View style={{flex: 176, flexDirection: 'row'}}>
               <View style={{flex: 16}}/>
@@ -111,8 +111,8 @@ export default class ActivityCard extends Component {
               </View>
             </View>
             {
-              //this.renderPhotoOption()
-              //it will be used in next version
+              // this.renderPhotoOption()
+              // it will be used in next version
             }
           </View>
         </View>
@@ -125,8 +125,8 @@ export default class ActivityCard extends Component {
       <TouchableOpacity onPress={()=>{
         this.props.setCurrentScene('detail');
         this.props.getDetailImage(this.props.dataSource.key)
-        .then(values => values.findIndex((image) => (image.key === rowData.imageKey)))
-        .then((index) => {
+        .then(values => values.findIndex(image => image.key === rowData.imageKey))
+        .then(index => {
           Actions.detailView({
             rowID: index + 1,
             lastScene: 'myPage',
