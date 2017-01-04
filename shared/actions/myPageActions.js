@@ -25,6 +25,15 @@ export const getSavedPosts = () => {
   };
 };
 
+
+export const toggleSaved = (eventKey, bool) => {
+  return {
+    type: types.toggleSaved,
+    eventKey,
+    bool
+  };
+};
+
 // @TODO need to remove unnecessary flow.
 export const saveEvent = (eventKey) => {
   return (dispatch) => {
@@ -32,6 +41,7 @@ export const saveEvent = (eventKey) => {
       entity: POST_ENTITY.ITEM,
       itemKey: eventKey
     })
+    .then(() => dispatch(toggleSaved(eventKey, true)))
     .then(() => dispatch(getSavedPosts()))
     .catch(console.log);
   };
@@ -42,6 +52,7 @@ export const deleteEvent = (eventKey) => {
     UserRESTManager.deleteSavedPost({
       itemKey: eventKey
     })
+    .then(() => dispatch(toggleSaved(eventKey, false)))
     .then(() => dispatch(getSavedPosts()))
     .catch(console.log);
   };
