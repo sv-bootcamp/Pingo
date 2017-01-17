@@ -48,11 +48,17 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
+        <!--api key for develop-->
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyC4rfYpApgG26zJbZKHu0XZJ1RfZTdzjzw"
       />
+        <!--api key for release
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyA8RrvdpT9Pzkj6ymROC2IDc4j0q_ikdbA"
+      />
+        -->
       <meta-data
         android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/facebook_app_id"/>
