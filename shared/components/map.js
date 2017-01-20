@@ -90,14 +90,6 @@ export default class Map extends Component {
     this.watchID = null;
   }
 
-  componentWillReceiveProps(props) {
-    if (props.items) {
-      if (props.items.length !== this.state.itemLength) {
-        this.setState({items: props.items});
-      }
-    }
-  }
-
   cardAnimationSlideUp() {
     this.state.cardTranslateY.setValue(0);
     Animated.timing(
@@ -307,11 +299,11 @@ export default class Map extends Component {
   }
 
   renderMarkers() {
-    if (!this.state.items) {
+    if (!this.props.items) {
       return null;
     }
     return (
-      this.state.items.map(item =>
+      this.props.items.map(item =>
         (this.props.categoryFilter === 'SHOW_ALL' || item.category === this.props.categoryFilter) ?
         (
           <MapView.Marker
