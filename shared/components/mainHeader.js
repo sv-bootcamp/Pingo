@@ -155,11 +155,31 @@ export default class MainHeader extends Component {
     Actions.myPage({type: 'replace'});
   }
 
-  render() {
+  // todo: recover this once refresh func is implemented
+  _renderRefreshBtn() {
     const spin = this.state.spinValue.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg']
     });
+    return (
+      <TouchableOpacity
+        style={styles.buttonRefresh}
+        onPress={this.handleRefreshButton.bind(this)}>
+        <Animated.Image
+          style={[styles.image, {transform: [{rotate: spin}]}]}
+          source={IMG_BUTTON_REFRESH}
+        />
+      </TouchableOpacity>
+    );
+  }
+
+  renderRefreshBtn() {
+    return (
+      <View style={styles.buttonRefresh}/>
+    );
+  }
+
+  render() {
     if (this.props.currentScene === 'map' || this.props.currentScene === 'list') {
       return (
         <View style= {styles.wrapper}>
@@ -174,14 +194,7 @@ export default class MainHeader extends Component {
               />
             </TouchableOpacity>
             <Text style={styles.text}>{this.props.currentCity}</Text>
-            <TouchableOpacity
-                style={styles.buttonRefresh}
-                onPress={this.handleRefreshButton.bind(this)}>
-              <Animated.Image
-                style={[styles.image, {transform: [{rotate: spin}]}]}
-                source={IMG_BUTTON_REFRESH}
-              />
-            </TouchableOpacity>
+            {this.renderRefreshBtn()}
             <TouchableOpacity
               style={styles.buttonList}
               onPress={this.handleSwitchButton.bind(this)}>
