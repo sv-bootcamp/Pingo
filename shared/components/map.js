@@ -88,6 +88,7 @@ export default class Map extends Component {
       mapViewHeight: 0
     };
     this.watchID = null;
+    this.setCurrentPosition();
   }
 
   cardAnimationSlideUp() {
@@ -114,8 +115,7 @@ export default class Map extends Component {
     ).start();
   }
 
-  componentDidMount() {
-    this.setCurrentPosition();
+  componentWillMount() {
     this.props.getZoomLevel(this.props.currentLocation.latitudeDelta);
     this.props.getMapItems(this.props.zoomLevel,
       this.props.currentLocation.latitude,
@@ -179,7 +179,7 @@ export default class Map extends Component {
         ]
       );
       this.setState({userLocationEnabled: false});
-    });
+    }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
   }
 
   handleLocationButton() {
@@ -387,6 +387,7 @@ export default class Map extends Component {
             this.map = ref;
           }}
           style ={styles.map}
+          initialRegion={this.props.currentLocation}
           onRegionChangeComplete={this.onLocationChange}
           region={this.props.currentLocation}
           onPress={this.onMapClick}
