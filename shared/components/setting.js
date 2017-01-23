@@ -183,7 +183,8 @@ class Setting extends Component {
     Actions.privacyPolicy();
   }
 
-  renderSettingList() {
+  // todo: recover this later once all features implemented
+  _renderSettingList() {
     return (
       <ScrollView style={{backgroundColor: '#e7e7e7', flex: 1}}>
         {this.renderSettingGreyBox('Map', 35)}
@@ -201,6 +202,19 @@ class Setting extends Component {
         {this.renderSettingListBoxLeftButton('Privacy & Terms', this.renderPrivacyPolicy.bind(this))}
         {this.renderSettingListBox('Help', '', ()=>{})}
         {this.renderSettingListBox('Send Feedback', '', ()=>{})}
+        {(this.props.token !== 'guest' && this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
+        <View style={[styles.settingGreyBox, {height: 42}]}>
+          <Text style={{marginLeft: 16, color: '#8e8e8e'}}>Version 1.0.0</Text>
+        </View>
+      </ScrollView>
+    );
+  }
+
+  renderSettingList() {
+    return (
+      <ScrollView style={{backgroundColor: '#e7e7e7', flex: 1}}>
+        <View style={[styles.settingGreyBox, {height: 16}]}/>
+        {this.renderSettingListBoxLeftButton('Privacy & Terms', this.renderPrivacyPolicy.bind(this))}
         {(this.props.token !== 'guest' && this.props.token !== '') ? this.renderSignOut() : this.renderGuestView()}
         <View style={[styles.settingGreyBox, {height: 42}]}>
           <Text style={{marginLeft: 16, color: '#8e8e8e'}}>Version 1.0.0</Text>

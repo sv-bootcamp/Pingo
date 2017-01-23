@@ -186,7 +186,8 @@ class MyPage extends Component {
     );
   }
 
-  renderTextBoxInUserBox() {
+  // todo: recover this later once changing profile picture is implemented
+  _renderTextBoxInUserBox() {
     return (
       <View style={{flexDirection: 'column', flex: 225}}>
         <View style={{flex: 35}}>
@@ -204,6 +205,31 @@ class MyPage extends Component {
         <View style={{flex: 28}}>
           {(this.props.token !== '' && this.props.token !== 'guest') ?
             this.renderTextAfterLogin('Change Profile Photo') :
+            <LoginFacebookLayout/>
+          }
+        </View>
+      </View>
+    );
+  }
+
+  renderTextBoxInUserBox() {
+    return (
+      <View style={{flexDirection: 'column', flex: 225}}>
+        <View style={{flex: 35}}>
+          <Text style={[styles.myPageTextUserName, styles.fontRobotoMedium]}>
+            {(
+            this.props.userName !== '' &&
+            this.props.token !== '' &&
+            this.props.token !== 'guest') ?
+              this.props.userName :
+              'Guest'
+            }
+          </Text>
+        </View>
+        <View style={{flex: 8}}/>
+        <View style={{flex: 28}}>
+          {(this.props.token !== '' && this.props.token !== 'guest') ?
+            null :
             <LoginFacebookLayout/>
           }
         </View>

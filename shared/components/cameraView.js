@@ -211,7 +211,8 @@ class CameraView extends Component {
     );
   }
 
-  renderBottom() {
+  // todo: recover this once flash is implemented
+  _renderBottom() {
     return (
       <View style={styles.bottom}>
         <TouchableOpacity
@@ -242,6 +243,32 @@ class CameraView extends Component {
             source={ImgFlash}
           />
         </TouchableOpacity>
+      </View>
+    );
+  }
+
+  renderBottom() {
+    return (
+      <View style={styles.bottom}>
+        <TouchableOpacity
+          style={styles.btnCameraSwitch}
+          onPress={this.switchType.bind(this)}>
+          <Image
+            style={{height: 48, width: 48, left: 32}}
+            source={ImgCameraSwitch}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btnTakingPhoto}
+          onPress={this.takePicture.bind(this)}>
+          <Image
+            style={{
+              height: 80, width: 80,
+              left: Dimensions.get('window').width / 6 - 40}}
+            source={ImgBtnTakingPhoto}
+          />
+        </TouchableOpacity>
+        <View style={styles.btnFlash}/>
       </View>
     );
   }
