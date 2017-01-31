@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import {Image, View, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native';
 import ImgPingo from '../resources/logo/pingo.png';
+import ImgGoober from '../resources/goober.png';
 import { Actions } from 'react-native-router-flux';
 import { getLoginType, getRefreshToken, requestRefreshTokenFacebook, getAccessToken, removeLoginType } from '../actions/authActions';
 
@@ -11,6 +12,9 @@ const styles = {
     backgroundColor: 'white'
   }
 };
+
+const HEIGHT = Dimensions.get('window').height;
+const WIDTH = Dimensions.get('window').width;
 
 export default class Pingo extends Component {
   constructor(props) {
@@ -92,7 +96,15 @@ export default class Pingo extends Component {
           width: Dimensions.get('window').width,
           opacity: opacity}]}/>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          {(this.state.clicked > 0) ? <Image source={ImgPingo} /> : null}
+          {(this.state.clicked > 0) ?
+            <Image source={ImgPingo} /> :
+            <Image
+              style={{
+                width: WIDTH * 0.7,
+                height: WIDTH * 0.7 * 510 / 1667
+              }}
+              source={ImgGoober}
+            />}
         </View>
         <TouchableOpacity
           style={{
