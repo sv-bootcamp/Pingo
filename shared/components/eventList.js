@@ -22,7 +22,7 @@ class EventList extends Component {
 
   handleCameraButton() {
     this.props.setCurrentScene('camera');
-    Actiㄹㅎons.cameraView({lastScene: 'list'});
+    Actions.cameraView({lastScene: 'list'});
   }
 
   render() {
