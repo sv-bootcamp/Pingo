@@ -13,7 +13,6 @@ const styles = {
   }
 };
 
-const HEIGHT = Dimensions.get('window').height;
 const WIDTH = Dimensions.get('window').width;
 
 export default class Pingo extends Component {
