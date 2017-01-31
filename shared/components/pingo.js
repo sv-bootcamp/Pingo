@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Image, View, Dimensions, Animated, Easing} from 'react-native';
+import {Image, View, Dimensions, Animated, Easing, TouchableOpacity} from 'react-native';
 import ImgPingo from '../resources/logo/pingo.png';
 import { Actions } from 'react-native-router-flux';
 import { getLoginType, getRefreshToken, requestRefreshTokenFacebook, getAccessToken, removeLoginType } from '../actions/authActions';
@@ -15,8 +15,9 @@ const styles = {
 export default class Pingo extends Component {
   constructor(props) {
     super(props);
-    this.animationFadeOut = this.animationFadeOut.bind(this);
+    // this.animationFadeOut = this.animationFadeOut.bind(this);
     this.state = {
+      clicked: 0,
       opacity: new Animated.Value(0)
     };
   }
@@ -44,22 +45,27 @@ export default class Pingo extends Component {
           });
         });
       } else {
-        this.animationFadeOut();
+        // this.animationFadeOut();
         this.props.setCurrentScene('initialScene');
       }
     });
   }
 
   animationFadeOut() {
-    this.state.opacity.setValue(0);
-    Animated.timing(
-      this.state.opacity,
-      {
-        toValue: 1,
-        duration: 2300,
-        easing: Easing.quad
-      }
-    ).start(()=>Actions.initialScene({type: 'replace'}));
+    const { clicked } = this.state;
+    if (clicked === 0) {
+      this.setState({clicked: 1});
+    } else if (clicked === 1) {
+      this.state.opacity.setValue(0);
+      Animated.timing(
+        this.state.opacity,
+        {
+          toValue: 1,
+          duration: 2300,
+          easing: Easing.quad
+        }
+      ).start(()=>Actions.initialScene({type: 'replace'}));
+    }
   }
 
   render() {
@@ -74,8 +80,21 @@ export default class Pingo extends Component {
           width: Dimensions.get('window').width,
           opacity: opacity}]}/>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Image source={ImgPingo} />
+          {(this.state.clicked > 0) ? <Image source={ImgPingo} /> : null}
         </View>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            zIndex: 10,
+            height: Dimensions.get('window').height,
+            width: Dimensions.get('window').width,
+            top: 0,
+            left: 0,
+            backgroundColor: 'transparent'
+          }}
+          activeOpacity={1}
+          onPress={this.animationFadeOut.bind(this)}
+        />
       </View>
     );
   }
