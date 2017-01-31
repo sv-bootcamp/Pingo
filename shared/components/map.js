@@ -14,6 +14,7 @@ import warningClickPng from '../resources/marker/warning_big.png';
 import userPng from '../resources/marker/user.png';
 import userSmallPng from '../resources/marker/user_small.png';
 import {API_GEODATA, API_KEY} from '../utils';
+import { getLoginType } from './../actions/authActions';
 
 const styles = StyleSheet.create({
   container: {
@@ -85,9 +86,14 @@ export default class Map extends Component {
       itemLength: 0,
       itemCategory: '',
       items: [],
-      mapViewHeight: 0
+      mapViewHeight: 0,
+      loginType: ''
     };
     this.watchID = null;
+
+    getLoginType().then(loginType => {
+      this.state.loginType = loginType;
+    });
   }
 
   cardAnimationSlideUp() {
@@ -410,18 +416,20 @@ export default class Map extends Component {
           </Animated.View>
         }
         {
-          (this.checkMarkerClicked()) ?
-          <View style={styles.buttonCameraSection}>
-            <MapButton
-              imageSource={'camera'}
-              handleOnPress={this.handleCameraButton.bind(this)}/>
-          </View>
-          :
-          <Animated.View style={[styles.buttonCameraSection, {bottom: buttonTranslateY}]}>
-            <MapButton
-              imageSource={'camera'}
-              handleOnPress={this.handleCameraButton.bind(this)}/>
-          </Animated.View>
+          (this.state.loginType === 'facebook') ?
+            (this.checkMarkerClicked()) ?
+              <View style={styles.buttonCameraSection}>
+                <MapButton
+                  imageSource={'camera'}
+                  handleOnPress={this.handleCameraButton.bind(this)}/>
+              </View>
+              :
+              <Animated.View style={[styles.buttonCameraSection, {bottom: buttonTranslateY}]}>
+                <MapButton
+                  imageSource={'camera'}
+                  handleOnPress={this.handleCameraButton.bind(this)}/>
+              </Animated.View>
+           : null
         }
         {
           (this.checkMarkerClicked()) ? null :
