@@ -92,8 +92,7 @@ export default class ActivityCard extends Component {
             <View style={{flex: 32}}/>
             {this.renderActivityInfo(rowData)}
             {
-              // (rowData.category === 'event') && this.renderEventOption()
-              // it will be used in next version
+              (rowData.category === 'event') && this.renderEventOption()
             }
             <View style={{flex: 176, flexDirection: 'row'}}>
               <View style={{flex: 16}}/>
@@ -111,8 +110,7 @@ export default class ActivityCard extends Component {
               </View>
             </View>
             {
-              // this.renderPhotoOption()
-              // it will be used in next version
+              this.renderPhotoOption()
             }
           </View>
         </View>

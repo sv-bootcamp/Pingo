@@ -49,6 +49,18 @@ export default class Pingo extends Component {
         this.props.setCurrentScene('initialScene');
       }
     });
+    navigator.geolocation.getCurrentPosition((position) => {
+      const newLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        latitudeDelta: 0.004724,
+        longitudeDelta: 0.004023
+      };
+      this.props.setLocation(newLocation);
+    },
+    (err) => {
+      console.log(err);
+    });
   }
 
   animationFadeOut() {
@@ -102,5 +114,6 @@ export default class Pingo extends Component {
 
 Pingo.propTypes = {
   setCurrentScene: PropTypes.func,
-  setToken: PropTypes.func
+  setToken: PropTypes.func,
+  setLocation: PropTypes.func
 };
